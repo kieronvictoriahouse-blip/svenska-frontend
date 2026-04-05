@@ -377,6 +377,23 @@ function toggleAcc(trigger) {
   if (product) renderPDP(product);
   else document.getElementById('pdp-layout').innerHTML = '<div style="grid-column:span 2;text-align:center;padding:80px 20px;font-style:italic;color:var(--dust);">Produit introuvable. <a href="boutique.html" style="color:var(--copper);">Retour à la boutique →</a></div>';
 })();
+
+// Injecter la photo après chargement API si pas encore affichée
+window.addEventListener('sdapi:ready', () => {
+  if (pdpProduct && pdpProduct.photo) {
+    const mainPhoto = document.getElementById('main-photo');
+    const mainEmoji = document.getElementById('main-emoji');
+    if (mainPhoto && mainEmoji) {
+      mainEmoji.style.display = 'none';
+      mainPhoto.style.display = 'block';
+      mainPhoto.src = pdpProduct.photo;
+      mainPhoto.onerror = () => {
+        mainPhoto.style.display = 'none';
+        mainEmoji.style.display = 'block';
+      };
+    }
+  }
+});
 </script>
   <script>const SD_API_URL = 'https://svenska-backend.vercel.app';</script>
   <script src="js/sd-api-client.js"></script>
