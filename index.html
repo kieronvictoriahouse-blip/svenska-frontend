@@ -164,8 +164,8 @@
 <!-- HERO -->
 <section class="hero">
   <div class="hero-left">
-    <p class="hero-eyebrow" data-sv="Äkta svensk epicerie sèche" data-fr="Épicerie sèche suédoise" data-en="Swedish dry grocery store">Épicerie sèche suédoise</p>
-    <h1 data-sv="De <em>torra</em> <strong>skatterna</strong> från Sverige" data-fr="Les <em>trésors</em> <strong>secs</strong> de Suède" data-en="The <em>dry</em> <strong>treasures</strong> of Sweden">Les <em>trésors</em> <strong>secs</strong> de Suède</h1>
+    <p class="hero-eyebrow" data-sv="Äkta svenska smaker" data-fr="Saveurs authentiques de Suède" data-en="Authentic Swedish flavours">Saveurs authentiques de Suède</p>
+    <h1 data-sv="Det <em>bästa</em> från <strong>Sverige</strong>" data-fr="Le meilleur de <strong>l'épicerie</strong> <em>suédoise</em>" data-en="The <em>best</em> of <strong>Swedish</strong> grocery">Le meilleur de <strong>l'épicerie</strong> <em>suédoise</em></h1>
     <p class="hero-sub" data-sv="Nordiska kryddor, havregryn, torkade bär, örter från svenska skogar — allt du behöver för att laga mat med nordens själ." data-fr="Épices nordiques, flocons d'avoine, baies séchées, herbes des forêts suédoises — tout ce qu'il faut pour cuisiner avec l'âme du nord." data-en="Nordic spices, oat flakes, dried berries, herbs from Swedish forests — everything you need to cook with the soul of the north.">Épices nordiques, flocons d'avoine, baies séchées, herbes des forêts suédoises — tout ce qu'il faut pour cuisiner avec l'âme du nord.</p>
     <div class="hero-btns">
       <a href="boutique.html" class="btn-primary" data-sv="Utforska butiken" data-fr="Explorer la boutique" data-en="Explore the shop">Explorer la boutique</a>
@@ -177,9 +177,13 @@
       <span class="trust-pill"><span class="trust-dot"></span><span data-sv="Familjeföretag" data-fr="Entreprise familiale" data-en="Family business">Entreprise familiale</span></span>
     </div>
   </div>
-  <div class="hero-right">
+  <div class="hero-right" style="position:relative;overflow:hidden;">
     <div class="hero-bg"></div>
-    <div class="hero-showcase" id="hero-showcase"></div>
+    <img src="https://images.unsplash.com/photo-1481931098730-318b6f776db0?w=800&q=80" 
+         alt="Épicerie suédoise" 
+         style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.85;"
+         onerror="this.style.display='none'">
+    <div class="hero-showcase" id="hero-showcase" style="position:relative;z-index:2;"></div>
   </div>
 </section>
 
@@ -220,7 +224,13 @@
     <p class="sect-body" data-sv="Kardemumma för lussekattor, kanel för glögg, stjärnanis och kryddnejlika — de magiska aromerna från ett jul." data-fr="Cardamome pour les lussekattor, cannelle pour le glögg, anis étoilé et clou de girofle — les arômes magiques du Jul suédois." data-en="Cardamom for lussekattor, cinnamon for glögg, star anise and cloves — the magical aromas of Swedish Jul.">Cardamome pour les lussekattor, cannelle pour le glögg, anis étoilé et clou de girofle — les arômes magiques du Jul suédois.</p>
     <div style="margin-top:32px;"><a href="boutique.html?cat=Épices" class="btn-primary" data-sv="Utforska kryddorna →" data-fr="Découvrir les épices →" data-en="Discover the spices →">Découvrir les épices →</a></div>
   </div>
-  <div class="feat-band-visual"><div class="feat-mini-grid" id="xmas-grid"></div></div>
+  <div class="feat-band-visual" style="position:relative;overflow:hidden;">
+    <img src="https://images.unsplash.com/photo-1547592166-23ac45744acd?w=800&q=80" 
+         alt="Cuisine suédoise" 
+         style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.7;"
+         onerror="this.style.display='none'">
+    <div class="feat-mini-grid" id="xmas-grid" style="position:relative;z-index:2;"></div>
+  </div>
 </section>
 
 <!-- NEW ARRIVALS -->
@@ -329,7 +339,7 @@ function renderHome() {
     const feat = PRODUCTS.filter(p=>p.bestseller).slice(0,4);
     hs.innerHTML = feat.map((p,i) => `
       <div class="showcase-card" onclick="window.location.href='produit.html?id=${p.id}'">
-        ${p.photo ? `<img src="${p.photo}" style="width:60px;height:60px;object-fit:cover;border-radius:8px;margin-bottom:10px">` : `<span class="sc-emoji">${p.emoji||'🇸🇪'}</span>`}
+        <span class="sc-emoji">${p.emoji||'🇸🇪'}</span>
         <div class="sc-name">${p.name[LANG]}</div>
         <div class="sc-price">€${p.price.toFixed(2)}</div>
       </div>`).join('');
