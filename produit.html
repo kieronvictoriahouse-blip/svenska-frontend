@@ -174,14 +174,20 @@ function renderPDP(p) {
   const mainPhoto = document.getElementById('main-photo');
   const mainEmoji = document.getElementById('main-emoji');
   if (p.photo) {
-    mainPhoto.src = p.photo;
-    mainPhoto.alt = p.name[LANG];
-    mainPhoto.style.display = 'block';
     mainEmoji.style.display = 'none';
+    mainPhoto.style.display = 'block';
+    mainPhoto.alt = p.name[LANG];
+    mainPhoto.src = p.photo;
+    // Fallback si l'image ne charge pas
+    mainPhoto.onerror = function() {
+      mainPhoto.style.display = 'none';
+      mainEmoji.style.display = 'block';
+      mainEmoji.textContent = p.emoji || '🇸🇪';
+    };
   } else {
     mainPhoto.style.display = 'none';
     mainEmoji.style.display = 'block';
-    mainEmoji.textContent = p.emoji;
+    mainEmoji.textContent = p.emoji || '🇸🇪';
   }
   document.getElementById('pdp-cat').textContent = CAT_LABELS[p.cat]?.[LANG] || p.cat;
   document.getElementById('pdp-name').textContent = p.name[LANG];
