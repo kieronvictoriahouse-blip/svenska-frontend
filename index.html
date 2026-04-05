@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Svenska Delikatessen — Épicerie sèche suédoise authentique</title>
+<meta name="description" content="Épicerie sèche suédoise authentique. Épices nordiques, baies séchées, flocons d'avoine, mélanges Glögg et Lussekattor. Livraison EU.">
+<link rel="stylesheet" href="css/style.css">
+<style>
+/* ── HOME SPECIFIC ── */
+.hero {
+  display:grid; grid-template-columns:55% 45%; min-height:90vh;
+  background:var(--moss); position:relative; overflow:hidden;
+}
+.hero-left {
+  padding:80px 60px 80px 80px;
+  display:flex; flex-direction:column; justify-content:center;
+  position:relative; z-index:2;
+}
+.hero-eyebrow {
+  font-family:var(--font-ui); font-size:10px; letter-spacing:5px; text-transform:uppercase;
+  color:var(--moss-light); margin-bottom:22px;
+  display:flex; align-items:center; gap:14px;
+}
+.hero-eyebrow::before { content:''; width:32px; height:1px; background:var(--moss-light); }
+.hero h1 {
+  font-family:var(--font-display); font-size:clamp(46px,6vw,82px);
+  font-weight:300; line-height:1.06; color:var(--snow); margin-bottom:26px;
+}
+.hero h1 em { font-style:italic; color:var(--copper-mid); }
+.hero h1 strong { font-weight:600; }
+.hero-sub {
+  font-family:var(--font-body); font-size:18px; color:rgba(255,255,255,0.65);
+  max-width:420px; line-height:1.9; margin-bottom:44px;
+}
+.hero-btns { display:flex; gap:16px; flex-wrap:wrap; }
+.hero-trust {
+  display:flex; gap:26px; margin-top:52px; flex-wrap:wrap;
+}
+.trust-pill {
+  display:flex; align-items:center; gap:8px;
+  font-family:var(--font-ui); font-size:11px; letter-spacing:1px; text-transform:uppercase;
+  color:rgba(255,255,255,0.45);
+}
+.trust-dot { width:4px; height:4px; border-radius:50%; background:var(--copper-mid); flex-shrink:0; }
+.hero-right {
+  position:relative; display:flex; align-items:center; justify-content:center;
+  background:var(--moss-mid); overflow:hidden;
+}
+.hero-bg { position:absolute; inset:0; opacity:0.04; background-image: repeating-linear-gradient(0deg,transparent,transparent 40px,rgba(255,255,255,0.5) 40px,rgba(255,255,255,0.5) 41px), repeating-linear-gradient(90deg,transparent,transparent 40px,rgba(255,255,255,0.5) 40px,rgba(255,255,255,0.5) 41px); }
+.hero-showcase { position:relative; z-index:2; display:grid; grid-template-columns:1fr 1fr; gap:2px; width:86%; max-width:440px; }
+.showcase-card {
+  background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.08);
+  padding:24px 20px; text-align:center; cursor:pointer; transition:background 0.2s;
+}
+.showcase-card:first-child { grid-column:span 2; background:rgba(255,255,255,0.10); }
+.showcase-card:hover { background:rgba(255,255,255,0.12); }
+.sc-emoji { font-size:34px; display:block; margin-bottom:10px; }
+.sc-name  { font-family:var(--font-display); font-size:14px; font-weight:600; color:rgba(255,255,255,0.9); margin-bottom:4px; }
+.sc-price { font-family:var(--font-ui); font-size:12px; color:var(--copper-mid); }
+
+/* PROMO BAR */
+.promo-bar { background:var(--parchment); border-top:1px solid var(--linen); border-bottom:1px solid var(--linen); }
+.promo-bar-inner { max-width:var(--max-width); margin:0 auto; padding:0 40px; display:grid; grid-template-columns:repeat(4,1fr); }
+.promo-item { display:flex; align-items:center; gap:14px; padding:24px 20px; border-right:1px solid var(--linen); }
+.promo-item:last-child { border-right:none; }
+.promo-icon { font-size:26px; flex-shrink:0; }
+.promo-label { font-family:var(--font-ui); font-size:12px; font-weight:600; color:var(--moss); margin-bottom:2px; }
+.promo-desc  { font-family:var(--font-body); font-size:13px; color:var(--dust); }
+
+/* CATS */
+.cats-bg { background:var(--cream); border-top:1px solid var(--linen); border-bottom:1px solid var(--linen); }
+.cats-row { display:grid; grid-template-columns:repeat(7,1fr); gap:12px; margin-top:40px; }
+.cat-card {
+  background:var(--warm-white); border:1px solid var(--linen);
+  padding:24px 14px; text-align:center; cursor:pointer; transition:all 0.25s;
+  text-decoration:none; display:block;
+}
+.cat-card:hover { background:var(--moss); border-color:var(--moss); transform:translateY(-3px); box-shadow:var(--shadow-md); }
+.cat-card:hover .cat-name, .cat-card:hover .cat-count { color:var(--snow); }
+.cat-emoji { font-size:28px; margin-bottom:10px; display:block; }
+.cat-name  { font-family:var(--font-display); font-size:13px; font-weight:600; color:var(--moss); margin-bottom:3px; line-height:1.2; transition:color 0.25s; }
+.cat-count { font-family:var(--font-ui); font-size:9px; letter-spacing:1.5px; text-transform:uppercase; color:var(--copper-mid); transition:color 0.25s; }
+
+/* FEATURED DARK BAND */
+.feat-band { background:var(--midnight); color:var(--snow); display:grid; grid-template-columns:1fr 1fr; min-height:400px; }
+.feat-band-text { padding:64px 60px; display:flex; flex-direction:column; justify-content:center; }
+.feat-band-text .sect-eyebrow { color:var(--copper-mid); }
+.feat-band-text .sect-eyebrow::after { background:var(--copper-mid); }
+.feat-band-text .sect-title { color:var(--snow); }
+.feat-band-text .sect-title em { color:var(--copper-mid); }
+.feat-band-text .sect-body { color:rgba(255,255,255,0.6); }
+.feat-band-visual { background:var(--slate); display:flex; align-items:center; justify-content:center; }
+.feat-mini-grid { display:grid; grid-template-columns:1fr 1fr; gap:2px; width:88%; }
+.fmg-item { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.07); padding:18px; text-align:center; cursor:pointer; transition:background 0.2s; }
+.fmg-item:hover { background:rgba(255,255,255,0.10); }
+.fmg-emoji { font-size:28px; display:block; margin-bottom:6px; }
+.fmg-name  { font-family:var(--font-display); font-size:13px; font-weight:600; color:rgba(255,255,255,0.85); }
+.fmg-price { font-family:var(--font-ui); font-size:11px; color:var(--copper-mid); }
+
+/* ABOUT */
+.about-two { display:grid; grid-template-columns:1fr 1fr; background:var(--cream); border-top:1px solid var(--linen); }
+.about-text { padding:80px 60px 80px 80px; display:flex; flex-direction:column; justify-content:center; }
+.about-text p { font-family:var(--font-body); font-size:17px; color:var(--slate); line-height:1.9; margin-bottom:18px; }
+.about-text p em { font-style:italic; color:var(--copper); }
+.about-stats { background:var(--moss); padding:80px 60px; display:flex; flex-direction:column; justify-content:center; gap:24px; }
+.stat-row { padding-bottom:22px; border-bottom:1px solid rgba(255,255,255,0.1); }
+.stat-row:last-child { border:none; padding:0; }
+.stat-num   { font-family:var(--font-display); font-size:54px; font-weight:300; color:var(--snow); line-height:1; }
+.stat-label { font-family:var(--font-body); font-size:16px; font-style:italic; color:rgba(255,255,255,0.5); margin-top:4px; }
+
+/* USAGE */
+.usage-bg { background:var(--parchment); border-top:1px solid var(--linen); border-bottom:1px solid var(--linen); }
+.usage-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-top:40px; }
+.usage-card { background:var(--warm-white); border:1px solid var(--linen); padding:36px 28px; }
+.usage-icon  { font-size:36px; margin-bottom:16px; display:block; }
+.usage-title { font-family:var(--font-display); font-size:22px; font-weight:600; color:var(--moss); margin-bottom:10px; }
+.usage-text  { font-family:var(--font-body); font-size:15px; color:var(--slate); line-height:1.8; }
+.usage-tag   { display:inline-block; margin-top:14px; background:var(--moss-pale); color:var(--moss); font-family:var(--font-ui); font-size:9px; letter-spacing:2px; text-transform:uppercase; padding:5px 12px; border-radius:1px; }
+
+/* TESTIMONIALS */
+.testi-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--linen); border:1px solid var(--linen); margin-top:40px; }
+.testi-card { background:var(--warm-white); padding:36px 30px; }
+.testi-stars { color:var(--copper-mid); font-size:14px; letter-spacing:2px; margin-bottom:14px; }
+.testi-quote { font-family:var(--font-body); font-size:17px; font-style:italic; color:var(--slate); line-height:1.8; margin-bottom:18px; }
+.testi-author { font-family:var(--font-ui); font-size:10px; letter-spacing:2.5px; text-transform:uppercase; color:var(--copper-mid); }
+.testi-loc    { font-family:var(--font-ui); font-size:10px; color:var(--birch); margin-top:2px; }
+
+/* NEWSLETTER */
+.nl-band { background:var(--copper); padding:64px 40px; text-align:center; }
+.nl-band h2 { font-family:var(--font-display); font-size:44px; font-weight:300; color:var(--snow); margin-bottom:10px; }
+.nl-band h2 em { font-style:italic; }
+.nl-band p { font-family:var(--font-body); font-size:17px; color:rgba(255,255,255,0.75); margin-bottom:30px; }
+.nl-form { display:flex; max-width:500px; margin:0 auto; }
+.nl-form input { flex:1; padding:16px 20px; border:none; background:rgba(255,255,255,0.18); color:var(--snow); font-family:var(--font-body); font-size:17px; outline:none; border-radius:1px 0 0 1px; }
+.nl-form input::placeholder { color:rgba(255,255,255,0.55); }
+.nl-form button { background:var(--moss); color:var(--snow); border:none; padding:16px 28px; font-family:var(--font-ui); font-size:11px; letter-spacing:2px; text-transform:uppercase; border-radius:0 1px 1px 0; transition:background 0.2s; white-space:nowrap; }
+.nl-form button:hover { background:var(--moss-mid); }
+
+@media(max-width:1024px) {
+  .hero { grid-template-columns:1fr; min-height:auto; }
+  .hero-right { display:none; }
+  .hero-left { padding:60px 24px; }
+  .cats-row { grid-template-columns:repeat(4,1fr); }
+  .promo-bar-inner { grid-template-columns:1fr 1fr; }
+  .promo-item { border-bottom:1px solid var(--linen); }
+  .feat-band { grid-template-columns:1fr; }
+  .feat-band-visual { display:none; }
+  .about-two { grid-template-columns:1fr; }
+  .about-stats { padding:48px 24px; }
+  .about-text { padding:48px 24px; }
+  .usage-grid { grid-template-columns:1fr; }
+  .testi-grid { grid-template-columns:1fr; }
+}
+@media(max-width:600px) {
+  .cats-row { grid-template-columns:repeat(3,1fr); }
+  .hero h1 { font-size:36px; }
+}
+</style>
+</head>
+<body>
+<div id="header-root"></div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <p class="hero-eyebrow" data-sv="Äkta svensk epicerie sèche" data-fr="Épicerie sèche suédoise" data-en="Swedish dry grocery store">Épicerie sèche suédoise</p>
+    <h1 data-sv="De <em>torra</em> <strong>skatterna</strong> från Sverige" data-fr="Les <em>trésors</em> <strong>secs</strong> de Suède" data-en="The <em>dry</em> <strong>treasures</strong> of Sweden">Les <em>trésors</em> <strong>secs</strong> de Suède</h1>
+    <p class="hero-sub" data-sv="Nordiska kryddor, havregryn, torkade bär, örter från svenska skogar — allt du behöver för att laga mat med nordens själ." data-fr="Épices nordiques, flocons d'avoine, baies séchées, herbes des forêts suédoises — tout ce qu'il faut pour cuisiner avec l'âme du nord." data-en="Nordic spices, oat flakes, dried berries, herbs from Swedish forests — everything you need to cook with the soul of the north.">Épices nordiques, flocons d'avoine, baies séchées, herbes des forêts suédoises — tout ce qu'il faut pour cuisiner avec l'âme du nord.</p>
+    <div class="hero-btns">
+      <a href="boutique.html" class="btn-primary" data-sv="Utforska butiken" data-fr="Explorer la boutique" data-en="Explore the shop">Explorer la boutique</a>
+      <a href="a-propos.html" class="btn-secondary" data-sv="Vår historia" data-fr="Notre histoire" data-en="Our story">Notre histoire</a>
+    </div>
+    <div class="hero-trust">
+      <span class="trust-pill"><span class="trust-dot"></span><span data-sv="100% svenska produkter" data-fr="100% produits suédois" data-en="100% Swedish products">100% produits suédois</span></span>
+      <span class="trust-pill"><span class="trust-dot"></span><span data-sv="Utan konserveringsmedel" data-fr="Sans conservateurs" data-en="No preservatives">Sans conservateurs</span></span>
+      <span class="trust-pill"><span class="trust-dot"></span><span data-sv="Familjeföretag" data-fr="Entreprise familiale" data-en="Family business">Entreprise familiale</span></span>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-bg"></div>
+    <div class="hero-showcase" id="hero-showcase"></div>
+  </div>
+</section>
+
+<!-- PROMO BAR -->
+<div class="promo-bar">
+  <div class="promo-bar-inner">
+    <div class="promo-item"><span class="promo-icon">🚚</span><div><div class="promo-label" data-sv="Fri frakt" data-fr="Livraison gratuite" data-en="Free delivery">Livraison gratuite</div><div class="promo-desc" data-sv="Från 50€ i hela EU" data-fr="Dès 50€ dans toute l'UE" data-en="From €50 across the EU">Dès 50€ dans toute l'UE</div></div></div>
+    <div class="promo-item"><span class="promo-icon">🌿</span><div><div class="promo-label" data-sv="Hantverkskvalitet" data-fr="Qualité artisanale" data-en="Artisan quality">Qualité artisanale</div><div class="promo-desc" data-sv="Direktvalt i Sverige" data-fr="Sélectionnés en Suède" data-en="Selected in Sweden">Sélectionnés en Suède</div></div></div>
+    <div class="promo-item"><span class="promo-icon">🔒</span><div><div class="promo-label" data-sv="Säker betalning" data-fr="Paiement sécurisé" data-en="Secure payment">Paiement sécurisé</div><div class="promo-desc">Visa, Mastercard, PayPal</div></div></div>
+    <div class="promo-item"><span class="promo-icon">♻️</span><div><div class="promo-label" data-sv="Eko-förpackning" data-fr="Emballage éco" data-en="Eco packaging">Emballage éco</div><div class="promo-desc" data-sv="Återvinningsbara material" data-fr="Matériaux recyclables" data-en="Recyclable materials">Matériaux recyclables</div></div></div>
+  </div>
+</div>
+
+<!-- CATEGORIES -->
+<section class="cats-bg">
+  <div class="section">
+    <div><p class="sect-eyebrow" data-sv="Sortimentet" data-fr="Notre gamme" data-en="Our range">Notre gamme</p><h2 class="sect-title" data-sv="Épicerie sèche <em>suédoise</em>" data-fr="Épicerie sèche <em>suédoise</em>" data-en="Swedish <em>dry grocery</em>">Épicerie sèche <em>suédoise</em></h2></div>
+    <div class="cats-row" id="cats-row"></div>
+  </div>
+</section>
+
+<!-- BESTSELLERS -->
+<section>
+  <div class="section">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:44px;flex-wrap:wrap;gap:16px;">
+      <div><p class="sect-eyebrow" data-sv="Kundernas favoriter" data-fr="Les préférés de nos clients" data-en="Customer favourites">Les préférés de nos clients</p><h2 class="sect-title" data-sv="Våra <em>bästsäljare</em>" data-fr="Nos <em>best-sellers</em>" data-en="Our <em>best-sellers</em>">Nos <em>best-sellers</em></h2></div>
+      <a href="boutique.html" style="font-family:var(--font-ui);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--copper);border-bottom:1px solid var(--copper);padding-bottom:2px;" data-sv="Se alla →" data-fr="Voir tout →" data-en="View all →">Voir tout →</a>
+    </div>
+    <div class="grid-3" id="bestsellers"></div>
+  </div>
+</section>
+
+<!-- FEATURED BAND -->
+<section class="feat-band">
+  <div class="feat-band-text">
+    <p class="sect-eyebrow" data-sv="Säsongens urval" data-fr="Sélection de saison" data-en="Seasonal selection">Sélection de saison</p>
+    <h2 class="sect-title" data-sv="Kryddorna till <em>svensk jul</em>" data-fr="Les épices du <em>Noël suédois</em>" data-en="The spices of <em>Swedish Christmas</em>">Les épices du <em>Noël suédois</em></h2>
+    <p class="sect-body" data-sv="Kardemumma för lussekattor, kanel för glögg, stjärnanis och kryddnejlika — de magiska aromerna från ett jul." data-fr="Cardamome pour les lussekattor, cannelle pour le glögg, anis étoilé et clou de girofle — les arômes magiques du Jul suédois." data-en="Cardamom for lussekattor, cinnamon for glögg, star anise and cloves — the magical aromas of Swedish Jul.">Cardamome pour les lussekattor, cannelle pour le glögg, anis étoilé et clou de girofle — les arômes magiques du Jul suédois.</p>
+    <div style="margin-top:32px;"><a href="boutique.html?cat=Épices" class="btn-primary" data-sv="Utforska kryddorna →" data-fr="Découvrir les épices →" data-en="Discover the spices →">Découvrir les épices →</a></div>
+  </div>
+  <div class="feat-band-visual"><div class="feat-mini-grid" id="xmas-grid"></div></div>
+</section>
+
+<!-- NEW ARRIVALS -->
+<section>
+  <div class="section">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:44px;flex-wrap:wrap;gap:16px;">
+      <div><p class="sect-eyebrow" data-sv="Precis anlänt" data-fr="Tout juste arrivé" data-en="Just arrived">Tout juste arrivé</p><h2 class="sect-title" data-sv="Nyheter" data-fr="Nouvelles <em>arrivées</em>" data-en="New <em>arrivals</em>">Nouvelles <em>arrivées</em></h2></div>
+      <a href="boutique.html?filter=new" style="font-family:var(--font-ui);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--copper);border-bottom:1px solid var(--copper);padding-bottom:2px;" data-sv="Se alla →" data-fr="Voir tout →" data-en="View all →">Voir tout →</a>
+    </div>
+    <div class="grid-4" id="new-arrivals"></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about-two" id="om-oss">
+  <div class="about-text">
+    <p class="sect-eyebrow" data-sv="Vår historia" data-fr="Notre histoire" data-en="Our story">Notre histoire</p>
+    <h2 class="sect-title" data-sv="En svensk, <em>en passion</em>" data-fr="Une Suédoise, <em>une passion</em>" data-en="A Swede, <em>a passion</em>">Une Suédoise, <em>une passion</em></h2>
+    <div class="divider-line"></div>
+    <p data-sv="Född i Göteborg, växte jag upp omgiven av doften av kardemumma från mammas ugn, torkade örtpåsar som hängde på bjälkarna i vår stuga, och kryddorna som doftade vid varje jul." data-fr="Née à Göteborg, j'ai grandi entourée des arômes de cardamome du four de ma mère, des sachets d'herbes séchées accrochés aux poutres de notre stuga, et des épices qui parfumaient chaque fête de Jul." data-en="Born in Göteborg, I grew up surrounded by the aromas of cardamom from my mother's oven, bundles of dried herbs from the beams of our stuga, and spices that scented every Jul.">Née à Göteborg, j'ai grandi entourée des arômes de cardamome du four de ma mère, des sachets d'herbes séchées accrochés aux poutres de notre stuga.</p>
+    <p data-sv="Bosatt i Frankrike med min familj kunde jag inte längre hitta <em>dessa smaker</em> som jag saknade så mycket. Så jag bestämde mig för att ta hem dem direkt från svenska producenter." data-fr="Installée en France avec ma famille, je n'arrivais plus à trouver <em>ces saveurs</em> qui me manquaient. Alors j'ai décidé de les ramener moi-même, directement auprès de producteurs suédois." data-en="Settled in France with my family, I could no longer find <em>those flavours</em> I missed. So I decided to bring them back myself, from Swedish producers I know and trust.">Installée en France avec ma famille, je n'arrivais plus à trouver <em>ces saveurs</em> qui me manquaient tant.</p>
+    <div style="margin-top:28px;"><a href="a-propos.html" class="btn-outline-dark" data-sv="Läs vår historia →" data-fr="Lire notre histoire →" data-en="Read our story →">Lire notre histoire →</a></div>
+  </div>
+  <div class="about-stats">
+    <div class="stat-row"><div class="stat-num">20+</div><div class="stat-label" data-sv="produkter i sortimentet" data-fr="produits en épicerie sèche" data-en="dry grocery products">produits en épicerie sèche</div></div>
+    <div class="stat-row"><div class="stat-num">100%</div><div class="stat-label" data-sv="Garanterat svenska" data-fr="origine suédoise garantie" data-en="guaranteed Swedish origin">origine suédoise garantie</div></div>
+    <div class="stat-row"><div class="stat-num">🇸🇪</div><div class="stat-label" data-sv="Familjeföretag med kärlek" data-fr="projet familial avec amour" data-en="family project with love">projet familial avec amour</div></div>
+    <div class="stat-row"><div class="stat-num">EU</div><div class="stat-label" data-sv="Leverans i hela Europa" data-fr="livraison dans toute l'Europe" data-en="delivery across Europe">livraison dans toute l'Europe</div></div>
+  </div>
+</section>
+
+<!-- USAGE -->
+<section class="usage-bg">
+  <div class="section">
+    <p class="sect-eyebrow" data-sv="I ditt kök" data-fr="Dans votre cuisine" data-en="In your kitchen">Dans votre cuisine</p>
+    <h2 class="sect-title" data-sv="Hur <em>använder man dem</em>?" data-fr="Comment <em>les utiliser</em> ?" data-en="How to <em>use them</em>?">Comment <em>les utiliser</em> ?</h2>
+    <div class="usage-grid">
+      <div class="usage-card">
+        <span class="usage-icon">🫙</span>
+        <div class="usage-title" data-sv="Den perfekta fikan" data-fr="La fika parfaite" data-en="The perfect fika">La fika parfaite</div>
+        <p class="usage-text" data-sv="Mald kardemumma i kanelbullsdegen, kanel att strö, pärlsocker ovanpå. Fikan är en konst, och våra kryddor är penslarna." data-fr="Cardamome moulue dans la pâte à kanelbulle, cannelle pour saupoudrer, sucre perlé sur le dessus. La fika est un art, et nos épices en sont les pinceaux." data-en="Ground cardamom in kanelbulle dough, cinnamon to dust, pearl sugar on top. Fika is an art, and our spices are the brushes.">Cardamome moulue dans la pâte à kanelbulle, cannelle pour saupoudrer, sucre perlé sur le dessus.</p>
+        <span class="usage-tag" data-sv="Bakning" data-fr="Pâtisserie" data-en="Baking">Pâtisserie</span>
+      </div>
+      <div class="usage-card">
+        <span class="usage-icon">🫖</span>
+        <div class="usage-title" data-sv="Hemmagjord glögg" data-fr="Glögg maison" data-en="Homemade glögg">Glögg maison</div>
+        <p class="usage-text" data-sv="Vår glöggblandning: ceylonkanel, kardemumma, kryddnejlika, stjärnanis, ingefära och apelsinskal. En påse till 1 liter rödvin — svensk jul i glaset." data-fr="Notre mélange Glögg : cannelle de Ceylan, cardamome, clou de girofle, anis étoilé, gingembre et peau d'orange. Un sachet pour 1 litre de vin chaud." data-en="Our Glögg blend: Ceylon cinnamon, cardamom, cloves, star anise, ginger and orange peel. One sachet per litre of warm wine.">Notre mélange Glögg — cannelle, cardamome, clou de girofle, anis étoilé, gingembre.</p>
+        <span class="usage-tag" data-sv="Drycker" data-fr="Boissons" data-en="Drinks">Boissons</span>
+      </div>
+      <div class="usage-card">
+        <span class="usage-icon">🥣</span>
+        <div class="usage-title" data-sv="Nordisk gröt" data-fr="Gröt nordique" data-en="Nordic gröt">Gröt nordique</div>
+        <p class="usage-text" data-sv="Svenska grova havregryn sakta kokade, smaksatta med kanel och torkade fläderbär. Den traditionella svenska frukosten som värmer till sjäelen." data-fr="Flocons d'avoine suédois cuits lentement, aromatisés à la cannelle et aux baies de sureau séchées. Le petit-déjeuner traditionnel suédois." data-en="Swedish oat flakes cooked slowly, flavoured with cinnamon and dried elderberries. The traditional Swedish breakfast.">Flocons d'avoine suédois, cannelle, baies de sureau séchées — le gröt authentique.</p>
+        <span class="usage-tag" data-sv="Frukost" data-fr="Petit-déjeuner" data-en="Breakfast">Petit-déjeuner</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section>
+  <div class="section">
+    <p class="sect-eyebrow" data-sv="De litar på oss" data-fr="Ils nous font confiance" data-en="They trust us">Ils nous font confiance</p>
+    <h2 class="sect-title" data-sv="Kundrecensioner" data-fr="Avis <em>clients</em>" data-en="Customer <em>reviews</em>">Avis <em>clients</em></h2>
+    <div class="testi-grid">
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-quote" data-sv='"Kardemumman är otroligt färsk, mina kanelbullar har aldrig doftat så gott. Man känner verkligen skillnaden mot butikskryddor."' data-fr='"La cardamome est d\'une fraîcheur incroyable, mes kanelbullar n\'ont jamais été aussi parfumés. On sent vraiment la différence avec les épices du supermarché."' data-en='"The cardamom is incredibly fresh, my kanelbullar have never been so fragrant. You can really feel the difference from supermarket spices."'>"La cardamome est d'une fraîcheur incroyable, mes kanelbullar n'ont jamais été aussi parfumés."</p>
+        <div class="testi-author">— Ingrid M.</div><div class="testi-loc">Stockholm, Sverige</div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-quote" data-sv='"Glöggblandningen är helt perfekt. Jag arrangerade en svensk julmiddag för mina franska vänner och alla var hänförda av dofterna."' data-fr='"Le mélange Glögg est absolument parfait. J\'ai organisé un dîner de Noël suédois pour mes amis français et tout le monde était épaté par les arômes."' data-en='"The Glögg blend is absolutely perfect. I organised a Swedish Christmas dinner for my French friends and everyone was amazed by the aromas."'>"Le mélange Glögg est absolument parfait. Mes amis français ont été épatés par les arômes."</p>
+        <div class="testi-author">— Marie-Hélène D.</div><div class="testi-loc">Lyon, France</div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-quote" data-sv='"Jag har bott i London i 15 år och inte hittat de torkade fläderbären som min farmor använde. Dessa produkter är en nordisk proust-kaka."' data-fr='"J\'habite à Londres depuis 15 ans et je n\'avais plus trouvé les baies de sureau séchées que ma grand-mère utilisait. Ces produits sont une madeleine de Proust nordique."' data-en='"I\'ve lived in London for 15 years and hadn\'t found the dried elderberries my grandmother used. These products are a Nordic madeleine de Proust."'>"Ces produits sont une madeleine de Proust nordique. Merci du fond du cœur."</p>
+        <div class="testi-author">— Lars-Erik K.</div><div class="testi-loc">London, UK</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<div class="nl-band">
+  <h2 data-sv="Håll dig <em>uppdaterad</em>" data-fr="Recevez nos <em>nouveautés</em>" data-en="Receive our <em>news</em>">Recevez nos <em>nouveautés</em></h2>
+  <p data-sv="Svenska recept, nya produkter, exklusiva erbjudanden — direkt i din inkorg." data-fr="Recettes suédoises, nouveaux produits, offres exclusives — directement dans votre boîte mail." data-en="Swedish recipes, new products, exclusive offers — directly to your inbox.">Recettes suédoises, nouveaux produits, offres exclusives — directement dans votre boîte mail.</p>
+  <div class="nl-form">
+    <input type="email" id="nl-email" data-sv-ph="Din e-postadress" data-fr-ph="Votre adresse e-mail" data-en-ph="Your email address" placeholder="Votre adresse e-mail">
+    <button onclick="nlSubscribe()" data-sv="Prenumerera" data-fr="S'inscrire" data-en="Subscribe">S'inscrire</button>
+  </div>
+</div>
+
+<div id="footer-root"></div>
+<script src="js/app.js"></script>
+<script>
+initPage('home');
+
+function onLangChange(l) { renderHome(); }
+
+function renderHome() {
+  // Hero showcase
+  const hs = document.getElementById('hero-showcase');
+  if (hs) {
+    const feat = PRODUCTS.filter(p=>p.bestseller).slice(0,4);
+    hs.innerHTML = feat.map((p,i) => `
+      <div class="showcase-card" onclick="window.location.href='produit.html?id=${p.id}'">
+        <span class="sc-emoji">${p.emoji}</span>
+        <div class="sc-name">${p.name[LANG]}</div>
+        <div class="sc-price">€${p.price.toFixed(2)}</div>
+      </div>`).join('');
+  }
+  // Categories
+  const cr = document.getElementById('cats-row');
+  if (cr) {
+    cr.innerHTML = CATS.map(c => `
+      <a href="boutique.html?cat=${encodeURIComponent(c.id)}" class="cat-card">
+        <span class="cat-emoji">${c.emoji}</span>
+        <div class="cat-name">${CAT_LABELS[c.id]?.[LANG]||c.id}</div>
+        <div class="cat-count">${c.count} produits</div>
+      </a>`).join('');
+  }
+  // Bestsellers
+  const bs = document.getElementById('bestsellers');
+  if (bs) bs.innerHTML = PRODUCTS.filter(p=>p.bestseller).slice(0,6).map(p=>productCardHTML(p)).join('');
+  // Xmas
+  const xg = document.getElementById('xmas-grid');
+  if (xg) {
+    const sp = PRODUCTS.filter(p=>p.cat==='Épices').slice(0,4);
+    xg.innerHTML = sp.map(p=>`
+      <div class="fmg-item" onclick="window.location.href='produit.html?id=${p.id}'">
+        <span class="fmg-emoji">${p.emoji}</span>
+        <div class="fmg-name">${p.name[LANG]}</div>
+        <div class="fmg-price">€${p.price.toFixed(2)}</div>
+      </div>`).join('');
+  }
+  // New arrivals
+  const na = document.getElementById('new-arrivals');
+  if (na) na.innerHTML = PRODUCTS.filter(p=>p.isNew).slice(0,4).map(p=>productCardHTML(p,'compact')).join('');
+}
+
+function nlSubscribe() {
+  const v = document.getElementById('nl-email').value;
+  if (!v) return;
+  showToast(UI[LANG].subscribe);
+  document.getElementById('nl-email').value='';
+}
+
+renderHome();
+</script>
+  <script>const SD_API_URL = 'https://svenska-backend.vercel.app';</script>
+  <script src="js/sd-api-client.js"></script>
+</body>
+</html>

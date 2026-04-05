@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact — Svenska Delikatessen</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+.page-hero { background:var(--moss); padding:64px 40px; text-align:center; }
+.page-hero h1 { font-family:var(--font-display); font-size:clamp(32px,5vw,64px); font-weight:300; color:var(--snow); }
+.page-hero h1 em { font-style:italic; color:var(--copper-mid); }
+
+.contact-layout { display:grid; grid-template-columns:1.2fr 1fr; gap:72px; align-items:start; }
+
+.contact-form { }
+.form-row { margin-bottom:20px; }
+.form-row label { display:block; font-family:var(--font-ui); font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--dust); margin-bottom:8px; }
+.form-row input, .form-row select, .form-row textarea {
+  width:100%; padding:14px 16px; border:1px solid var(--linen); background:var(--warm-white);
+  font-family:var(--font-body); font-size:17px; color:var(--midnight); outline:none;
+  transition:border-color 0.2s; border-radius:1px;
+}
+.form-row input:focus, .form-row textarea:focus, .form-row select:focus { border-color:var(--moss); }
+.form-row textarea { resize:vertical; min-height:140px; }
+.form-two { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.form-submit { background:var(--moss); color:var(--snow); border:none; padding:16px 40px; font-family:var(--font-ui); font-size:12px; letter-spacing:2.5px; text-transform:uppercase; border-radius:1px; transition:background 0.2s; margin-top:8px; }
+.form-submit:hover { background:var(--moss-mid); }
+.form-note { font-family:var(--font-body); font-size:14px; font-style:italic; color:var(--dust); margin-top:12px; }
+.form-success { display:none; text-align:center; padding:40px 20px; background:var(--moss-pale); border:1px solid var(--moss-light); }
+.form-success h3 { font-family:var(--font-display); font-size:26px; color:var(--moss); margin-bottom:10px; }
+.form-success p { font-family:var(--font-body); font-size:17px; color:var(--slate); }
+
+.contact-info { }
+.info-card { border:1px solid var(--linen); padding:32px 28px; background:var(--snow); margin-bottom:16px; display:flex; gap:18px; align-items:flex-start; }
+.info-icon { font-size:28px; flex-shrink:0; }
+.info-label { font-family:var(--font-ui); font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--copper-mid); margin-bottom:6px; }
+.info-value { font-family:var(--font-body); font-size:16px; color:var(--slate); line-height:1.7; }
+.info-value a { color:var(--copper); }
+.info-value a:hover { text-decoration:underline; }
+
+.faq-section { background:var(--cream); border-top:1px solid var(--linen); }
+.faq-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:40px; }
+.faq-item { border:1px solid var(--linen); padding:28px 24px; background:var(--snow); }
+.faq-q { font-family:var(--font-display); font-size:19px; font-weight:600; color:var(--moss); margin-bottom:10px; }
+.faq-a { font-family:var(--font-body); font-size:15px; color:var(--slate); line-height:1.8; }
+
+@media(max-width:1024px) {
+  .contact-layout { grid-template-columns:1fr; gap:40px; }
+  .faq-grid { grid-template-columns:1fr; }
+  .page-hero { padding:48px 20px; }
+  .form-two { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+<div id="header-root"></div>
+
+<div class="page-hero">
+  <h1 data-sv="Kontakta <em>oss</em>" data-fr="Contactez-<em>nous</em>" data-en="Contact <em>us</em>">Contactez-<em>nous</em></h1>
+</div>
+
+<div class="section">
+  <div class="contact-layout">
+    <!-- FORM -->
+    <div class="contact-form">
+      <p class="sect-eyebrow" data-sv="Skriv till oss" data-fr="Écrivez-nous" data-en="Write to us">Écrivez-nous</p>
+      <h2 class="sect-title" data-sv="Vi är <em>glada att höra</em> från dig" data-fr="On est <em>ravis de vous lire</em>" data-en="We're <em>happy to hear</em> from you" style="margin-bottom:28px;">On est <em>ravis de vous lire</em></h2>
+
+      <div id="contact-form">
+        <div class="form-two">
+          <div class="form-row">
+            <label data-sv="Förnamn" data-fr="Prénom" data-en="First name">Prénom</label>
+            <input type="text" id="f-prenom" data-sv-ph="Votre prénom" data-fr-ph="Votre prénom" data-en-ph="Your first name" placeholder="Votre prénom">
+          </div>
+          <div class="form-row">
+            <label data-sv="Efternamn" data-fr="Nom" data-en="Last name">Nom</label>
+            <input type="text" id="f-nom" data-sv-ph="Votre nom" data-fr-ph="Votre nom" data-en-ph="Your last name" placeholder="Votre nom">
+          </div>
+        </div>
+        <div class="form-row">
+          <label data-sv="E-post" data-fr="Adresse e-mail" data-en="Email address">Adresse e-mail</label>
+          <input type="email" id="f-email" data-sv-ph="votre@email.com" data-fr-ph="votre@email.com" data-en-ph="your@email.com" placeholder="votre@email.com">
+        </div>
+        <div class="form-row">
+          <label data-sv="Ämne" data-fr="Sujet" data-en="Subject">Sujet</label>
+          <select id="f-sujet">
+            <option data-sv="Välj ett ämne..." data-fr="Choisir un sujet..." data-en="Choose a subject...">Choisir un sujet...</option>
+            <option data-sv="Fråga om en produkt" data-fr="Question sur un produit" data-en="Product question">Question sur un produit</option>
+            <option data-sv="Beställning / Leverans" data-fr="Commande / Livraison" data-en="Order / Delivery">Commande / Livraison</option>
+            <option data-sv="Retur / Reklamation" data-fr="Retour / Réclamation" data-en="Return / Complaint">Retour / Réclamation</option>
+            <option data-sv="Partnerskap" data-fr="Partenariat" data-en="Partnership">Partenariat</option>
+            <option data-sv="Annat" data-fr="Autre" data-en="Other">Autre</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label data-sv="Meddelande" data-fr="Message" data-en="Message">Message</label>
+          <textarea id="f-msg" data-sv-ph="Skriv ditt meddelande här..." data-fr-ph="Écrivez votre message ici..." data-en-ph="Write your message here..." placeholder="Écrivez votre message ici..."></textarea>
+        </div>
+        <button class="form-submit" onclick="submitForm()" data-sv="Skicka meddelande" data-fr="Envoyer le message" data-en="Send message">Envoyer le message</button>
+        <p class="form-note" data-sv="Vi svarar inom 24-48 timmar." data-fr="Nous répondons sous 24-48h." data-en="We respond within 24-48 hours.">Nous répondons sous 24-48h.</p>
+      </div>
+
+      <div class="form-success" id="form-success">
+        <div style="font-size:48px;margin-bottom:16px;">🌿</div>
+        <h3 data-sv="Tack för ditt meddelande!" data-fr="Merci pour votre message !" data-en="Thank you for your message!">Merci pour votre message !</h3>
+        <p data-sv="Vi återkommer till dig inom 24-48 timmar." data-fr="Nous vous répondrons dans les 24-48 heures." data-en="We will reply within 24-48 hours.">Nous vous répondrons dans les 24-48 heures.</p>
+      </div>
+    </div>
+
+    <!-- INFO -->
+    <div class="contact-info">
+      <p class="sect-eyebrow" data-sv="Kontaktinformation" data-fr="Informations de contact" data-en="Contact information">Informations de contact</p>
+      <h2 class="sect-title" style="margin-bottom:28px;" data-sv="Vi är <em>här</em> för dig" data-fr="Nous sommes <em>là</em> pour vous" data-en="We're <em>here</em> for you">Nous sommes <em>là</em> pour vous</h2>
+
+      <div class="info-card">
+        <span class="info-icon">📧</span>
+        <div>
+          <div class="info-label" data-sv="E-post" data-fr="E-mail" data-en="Email">E-mail</div>
+          <div class="info-value"><a href="mailto:hej@svenska-delikatessen.com">hej@svenska-delikatessen.com</a></div>
+        </div>
+      </div>
+      <div class="info-card">
+        <span class="info-icon">📷</span>
+        <div>
+          <div class="info-label" data-sv="Instagram" data-fr="Instagram" data-en="Instagram">Instagram</div>
+          <div class="info-value"><a href="#">@svenska_delikatessen</a><br><span data-sv="Dela dina recept med oss!" data-fr="Partagez vos recettes avec nous !" data-en="Share your recipes with us!">Partagez vos recettes avec nous !</span></div>
+        </div>
+      </div>
+      <div class="info-card">
+        <span class="info-icon">🚚</span>
+        <div>
+          <div class="info-label" data-sv="Leverans" data-fr="Livraison" data-en="Delivery">Livraison</div>
+          <div class="info-value" data-sv="EU-leverans, 3-5 arbetsdagar. Fri frakt från 50€." data-fr="Livraison EU, 3-5 jours ouvrés. Gratuite dès 50€." data-en="EU delivery, 3-5 working days. Free from €50.">Livraison EU, 3-5 jours ouvrés. Gratuite dès 50€.</div>
+        </div>
+      </div>
+      <div class="info-card">
+        <span class="info-icon">⏰</span>
+        <div>
+          <div class="info-label" data-sv="Svarstid" data-fr="Délai de réponse" data-en="Response time">Délai de réponse</div>
+          <div class="info-value" data-sv="Vi svarar inom 24-48 timmar, måndag–fredag." data-fr="Nous répondons sous 24-48h, lundi au vendredi." data-en="We respond within 24-48 hours, Monday to Friday.">Nous répondons sous 24-48h, lundi au vendredi.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FAQ -->
+<section class="faq-section">
+  <div class="section">
+    <p class="sect-eyebrow" data-sv="Vanliga frågor" data-fr="Questions fréquentes" data-en="Frequently asked questions">Questions fréquentes</p>
+    <h2 class="sect-title" data-sv="<em>FAQ</em>" data-fr="<em>FAQ</em>" data-en="<em>FAQ</em>"><em>FAQ</em></h2>
+    <div class="faq-grid">
+      <div class="faq-item">
+        <div class="faq-q" data-sv="Hur lång är leveranstiden?" data-fr="Quel est le délai de livraison ?" data-en="What is the delivery time?">Quel est le délai de livraison ?</div>
+        <p class="faq-a" data-sv="Vi levererar till hela EU inom 3-5 arbetsdagar. Spårning ingår alltid. Gratis frakt från 50€." data-fr="Nous livrons dans toute l'UE en 3-5 jours ouvrés. Le suivi est toujours inclus. Livraison gratuite dès 50€." data-en="We deliver across the EU within 3-5 working days. Tracking always included. Free delivery from €50.">Nous livrons dans toute l'UE en 3-5 jours ouvrés. Le suivi est toujours inclus. Livraison gratuite dès 50€.</p>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" data-sv="Är produkterna verkligen svenska?" data-fr="Les produits sont-ils vraiment suédois ?" data-en="Are the products really Swedish?">Les produits sont-ils vraiment suédois ?</div>
+        <p class="faq-a" data-sv="Ja, absolut. Vi samarbetar direkt med svenska producenter och hantverkare. Varje produkt är vald för sin äkthet och kan spåras tillbaka till sin källa." data-fr="Oui, absolument. Nous travaillons directement avec des producteurs suédois. Chaque produit est choisi pour son authenticité et peut être tracé jusqu'à sa source." data-en="Yes, absolutely. We work directly with Swedish producers. Every product is chosen for its authenticity and can be traced back to its source.">Oui, absolument. Nous travaillons directement avec des producteurs suédois. Chaque produit peut être tracé jusqu'à sa source.</p>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" data-sv="Kan jag returnera en produkt?" data-fr="Puis-je retourner un produit ?" data-en="Can I return a product?">Puis-je retourner un produit ?</div>
+        <p class="faq-a" data-sv="Ja, du har 14 dagar på dig att returnera en produkt som du är missnöjd med. Kontakta oss på hej@svenska-delikatessen.com så ordnar vi det." data-fr="Oui, vous disposez de 14 jours pour retourner un produit dont vous n'êtes pas satisfait. Contactez-nous à hej@svenska-delikatessen.com et nous arrangerons cela." data-en="Yes, you have 14 days to return a product you are unsatisfied with. Contact us at hej@svenska-delikatessen.com and we will arrange it.">Oui, vous disposez de 14 jours. Contactez-nous à hej@svenska-delikatessen.com.</p>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" data-sv="Vilka betalningsmetoder accepteras?" data-fr="Quels modes de paiement acceptez-vous ?" data-en="What payment methods do you accept?">Quels modes de paiement acceptez-vous ?</div>
+        <p class="faq-a" data-sv="Vi accepterar Visa, Mastercard, PayPal och banköverföring. All betalning sker via krypterad anslutning (SSL)." data-fr="Nous acceptons Visa, Mastercard, PayPal et virement bancaire. Tous les paiements sont sécurisés par SSL." data-en="We accept Visa, Mastercard, PayPal and bank transfer. All payments are secured by SSL.">Nous acceptons Visa, Mastercard, PayPal et virement bancaire. Tous les paiements sont sécurisés.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="footer-root"></div>
+<script src="js/app.js"></script>
+<script>
+initPage('contact');
+function submitForm() {
+  const prenom = document.getElementById('f-prenom').value;
+  const email  = document.getElementById('f-email').value;
+  const msg    = document.getElementById('f-msg').value;
+  if (!prenom || !email || !msg) { showToast('⚠️ Veuillez remplir tous les champs.'); return; }
+  document.getElementById('contact-form').style.display='none';
+  document.getElementById('form-success').style.display='block';
+}
+</script>
+  <script>const SD_API_URL = 'https://svenska-backend.vercel.app';</script>
+  <script src="js/sd-api-client.js"></script>
+</body>
+</html>

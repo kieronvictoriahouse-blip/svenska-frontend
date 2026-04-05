@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Boutique — Svenska Delikatessen</title>
+<meta name="description" content="Épicerie suédoise : épices, OLW chips, Daim, Kalles Kaviar, Swedish Fish, kanelbullar, confiseries nordiques.">
+<link rel="stylesheet" href="css/style.css">
+<style>
+.shop-hero { background:var(--moss); padding:56px 40px; text-align:center; }
+.shop-hero h1 { font-family:var(--font-display); font-size:clamp(36px,5vw,64px); font-weight:300; color:var(--snow); }
+.shop-hero h1 em { font-style:italic; color:var(--copper-mid); }
+.shop-hero p { font-family:var(--font-body); font-size:17px; color:rgba(255,255,255,0.65); margin-top:12px; }
+
+.shop-wrap { max-width:var(--max-width); margin:0 auto; padding:48px 40px; }
+.shop-layout { display:grid; grid-template-columns:240px 1fr; gap:48px; align-items:start; }
+
+/* SIDEBAR */
+.sidebar { position:sticky; top:100px; }
+.sb-block { margin-bottom:28px; }
+.sb-title { font-family:var(--font-ui); font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--dust); margin-bottom:12px; padding-bottom:8px; border-bottom:1px solid var(--linen); }
+.sb-btn { display:flex; align-items:center; justify-content:space-between; width:100%; background:none; border:none; font-family:var(--font-body); font-size:15px; color:var(--slate); padding:7px 0; border-bottom:1px solid var(--parchment); transition:color 0.2s; cursor:pointer; }
+.sb-btn:hover { color:var(--copper); }
+.sb-btn.active { color:var(--moss); font-weight:500; }
+.sb-btn .sb-cnt { font-family:var(--font-ui); font-size:11px; color:var(--birch); background:var(--parchment); padding:1px 7px; border-radius:8px; }
+.sb-btn.active .sb-cnt { background:var(--moss-pale); color:var(--moss); }
+.price-wrap { display:flex; flex-direction:column; gap:8px; }
+.price-wrap input[type=range] { width:100%; accent-color:var(--moss); }
+.price-display { font-family:var(--font-ui); font-size:12px; color:var(--dust); display:flex; justify-content:space-between; }
+.sort-sel { width:100%; padding:9px 12px; border:1px solid var(--linen); background:var(--warm-white); font-family:var(--font-ui); font-size:12px; color:var(--slate); outline:none; cursor:pointer; }
+.tag-filter-btn { display:flex; align-items:center; gap:8px; background:none; border:none; font-family:var(--font-body); font-size:15px; color:var(--slate); padding:5px 0; transition:color 0.2s; cursor:pointer; width:100%; }
+.tag-filter-btn .check { width:16px; height:16px; border:1px solid var(--linen); border-radius:2px; flex-shrink:0; transition:all 0.2s; display:flex; align-items:center; justify-content:center; font-size:10px; }
+.tag-filter-btn.active .check { background:var(--moss); border-color:var(--moss); color:var(--snow); }
+.tag-filter-btn:hover { color:var(--moss); }
+
+/* MAIN */
+.shop-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:24px; flex-wrap:wrap; gap:12px; }
+.shop-count { font-family:var(--font-ui); font-size:12px; color:var(--dust); letter-spacing:1px; }
+.view-btns { display:flex; gap:4px; }
+.vb { background:none; border:1px solid var(--linen); padding:7px 10px; font-size:14px; transition:all 0.2s; color:var(--dust); cursor:pointer; }
+.vb.active, .vb:hover { background:var(--moss); border-color:var(--moss); color:var(--snow); }
+.active-filters { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px; }
+.af-tag { display:flex; align-items:center; gap:6px; background:var(--moss-pale); color:var(--moss); font-family:var(--font-ui); font-size:10px; letter-spacing:1px; text-transform:uppercase; padding:5px 12px; border-radius:1px; }
+.af-tag button { background:none; border:none; color:var(--moss); font-size:14px; line-height:1; padding:0 0 0 4px; cursor:pointer; }
+.empty-state { text-align:center; padding:80px 20px; }
+.empty-state p { font-family:var(--font-body); font-size:20px; font-style:italic; color:var(--dust); margin-bottom:20px; }
+
+/* LIST VIEW */
+.prod-list-item { background:var(--snow); border:1px solid var(--linen); display:grid; grid-template-columns:100px 1fr auto; cursor:pointer; transition:all 0.2s; margin-bottom:12px; }
+.prod-list-item:hover { border-color:var(--copper); box-shadow:var(--shadow-sm); }
+.pli-img { width:100px; aspect-ratio:1; overflow:hidden; }
+.pli-img img { width:100%; height:100%; object-fit:cover; }
+.pli-body { padding:14px 20px; display:flex; flex-direction:column; justify-content:center; }
+.pli-name { font-family:var(--font-display); font-size:18px; font-weight:600; color:var(--moss); margin-bottom:4px; }
+.pli-sub  { font-family:var(--font-body); font-size:14px; color:var(--dust); font-style:italic; }
+.pli-tags { display:flex; gap:6px; margin-top:8px; flex-wrap:wrap; }
+.pli-tag  { background:var(--moss-pale); color:var(--moss); font-family:var(--font-ui); font-size:9px; letter-spacing:1px; text-transform:uppercase; padding:3px 8px; }
+.pli-action { padding:16px 20px; display:flex; flex-direction:column; align-items:flex-end; justify-content:center; gap:10px; border-left:1px solid var(--parchment); min-width:110px; }
+.pli-price  { font-family:var(--font-display); font-size:22px; font-weight:600; color:var(--midnight); }
+.pli-weight { font-family:var(--font-ui); font-size:10px; color:var(--dust); letter-spacing:1px; text-transform:uppercase; }
+.btn-add-small { background:var(--moss); color:var(--snow); border:none; padding:8px 16px; font-family:var(--font-ui); font-size:10px; letter-spacing:1.5px; text-transform:uppercase; border-radius:1px; transition:background 0.2s; cursor:pointer; }
+.btn-add-small:hover { background:var(--moss-mid); }
+
+@media(max-width:1024px) {
+  .shop-layout { grid-template-columns:1fr; }
+  .sidebar { position:static; display:grid; grid-template-columns:repeat(2,1fr); gap:20px; }
+  .sb-block { margin-bottom:0; }
+  .shop-wrap { padding:32px 24px; }
+}
+@media(max-width:600px) {
+  .sidebar { grid-template-columns:1fr; }
+  .shop-hero { padding:40px 20px; }
+  .shop-wrap { padding:24px 16px; }
+}
+</style>
+</head>
+<body>
+<div id="header-root"></div>
+
+<div class="shop-hero">
+  <h1 data-sv="Hela <em>sortimentet</em>" data-fr="Toute la <em>boutique</em>" data-en="The full <em>shop</em>">Toute la <em>boutique</em></h1>
+  <p data-sv="36 äkta svenska produkter — handplockat urval" data-fr="36 produits suédois authentiques — sélection soignée" data-en="36 authentic Swedish products — carefully curated">36 produits suédois authentiques — sélection soignée</p>
+</div>
+
+<div class="shop-wrap">
+  <div class="shop-layout">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sb-block">
+        <div class="sb-title" data-sv="Kategorier" data-fr="Catégories" data-en="Categories">Catégories</div>
+        <button class="sb-btn active" onclick="setCat('Tous')" id="sb-ALL">
+          <span data-sv="Alla produkter" data-fr="Tous les produits" data-en="All products">Tous les produits</span>
+          <span class="sb-cnt" id="cnt-ALL">36</span>
+        </button>
+        <button class="sb-btn" onclick="setCat('Épices')" id="sb-Epices">
+          <span>🌶️ <span data-sv="Épices" data-fr="Épices & Aromates" data-en="Spices">Épices & Aromates</span></span>
+          <span class="sb-cnt" id="cnt-Epices">7</span>
+        </button>
+        <button class="sb-btn" onclick="setCat('Chips & Snacks')" id="sb-Chips">
+          <span>🍟 <span data-sv="Chips & Snacks" data-fr="Chips & Snacks" data-en="Chips & Snacks">Chips & Snacks</span></span>
+          <span class="sb-cnt" id="cnt-Chips">3</span>
+        </button>
+        <button class="sb-btn" onclick="setCat('Confiseries')" id="sb-Confis">
+          <span>🍬 <span data-sv="Konfektyr" data-fr="Confiseries" data-en="Confectionery">Confiseries</span></span>
+          <span class="sb-cnt" id="cnt-Confis">5</span>
+        </button>
+        <button class="sb-btn" onclick="setCat('Basics suédois')" id="sb-Basics">
+          <span>🇸🇪 <span data-sv="Svenska baser" data-fr="Basics suédois" data-en="Swedish basics">Basics suédois</span></span>
+          <span class="sb-cnt" id="cnt-Basics">4</span>
+        </button>
+        <button class="sb-btn" onclick="setCat('Fika & Boulangerie')" id="sb-Fika">
+          <span>🧁 <span data-sv="Fika & Bakning" data-fr="Fika & Boulangerie" data-en="Fika & Baking">Fika & Boulangerie</span></span>
+          <span class="sb-cnt" id="cnt-Fika">4</span>
+        </button>
+        <button class="sb-btn" onclick="setCat('Mélanges')" id="sb-Mel">
+          <span>🎄 <span data-sv="Blandningar" data-fr="Mélanges suédois" data-en="Swedish blends">Mélanges suédois</span></span>
+          <span class="sb-cnt" id="cnt-Mel">2</span>
+        </button>
+        <button class="sb-btn" onclick="setCat('Thés & Tisanes')" id="sb-Thes">
+          <span>🫖 <span data-sv="Thés & Tisanes" data-fr="Thés & Tisanes" data-en="Teas">Thés & Tisanes</span></span>
+          <span class="sb-cnt" id="cnt-Thes">2</span>
+        </button>
+        <button class="sb-btn" onclick="setCat('Baies séchées')" id="sb-Baies">
+          <span>🫐 <span data-sv="Baies séchées" data-fr="Baies séchées" data-en="Dried berries">Baies séchées</span></span>
+          <span class="sb-cnt" id="cnt-Baies">3</span>
+        </button>
+        <button class="sb-btn" onclick="setCat('Flocons & Céréales')" id="sb-Flocons">
+          <span>🌾 <span data-sv="Flocons & Céréales" data-fr="Flocons & Céréales" data-en="Oats">Flocons & Céréales</span></span>
+          <span class="sb-cnt" id="cnt-Flocons">2</span>
+        </button>
+        <button class="sb-btn" onclick="setCat('Farines & Graines')" id="sb-Farines">
+          <span>🌻 <span data-sv="Farines & Graines" data-fr="Farines & Graines" data-en="Flours">Farines & Graines</span></span>
+          <span class="sb-cnt" id="cnt-Farines">2</span>
+        </button>
+        <button class="sb-btn" onclick="setCat('Sucres & Sirops')" id="sb-Sucres">
+          <span>🍯 <span data-sv="Sucres & Sirops" data-fr="Sucres & Sirops" data-en="Sugars">Sucres & Sirops</span></span>
+          <span class="sb-cnt" id="cnt-Sucres">2</span>
+        </button>
+      </div>
+
+      <div class="sb-block">
+        <div class="sb-title" data-sv="Prisintervall" data-fr="Prix maximum" data-en="Max price">Prix maximum</div>
+        <div class="price-wrap">
+          <input type="range" min="2" max="25" value="25" step="0.5" id="price-range" oninput="setPriceMax(this.value)">
+          <div class="price-display"><span>€2</span><span>≤ €<span id="price-max-val">25</span></span></div>
+        </div>
+      </div>
+
+      <div class="sb-block">
+        <div class="sb-title" data-sv="Sortera" data-fr="Trier par" data-en="Sort by">Trier par</div>
+        <select class="sort-sel" id="sort-sel" onchange="setSort(this.value)">
+          <option value="default">Par défaut</option>
+          <option value="price-asc">Prix croissant</option>
+          <option value="price-desc">Prix décroissant</option>
+          <option value="rating">Meilleures notes</option>
+          <option value="name">Nom A→Z</option>
+        </select>
+      </div>
+
+      <div class="sb-block">
+        <div class="sb-title" data-sv="Filtrera" data-fr="Filtres" data-en="Filters">Filtres</div>
+        <button class="tag-filter-btn" onclick="toggleTag('Bio')" id="tag-Bio"><span class="check"></span><span>🌿 Bio / Naturel</span></button>
+        <button class="tag-filter-btn" onclick="toggleTag('Vegan')" id="tag-Vegan"><span class="check"></span><span>🌱 Vegan</span></button>
+        <button class="tag-filter-btn" onclick="toggleTag('Signature')" id="tag-Signature"><span class="check"></span><span>⭐ Signature</span></button>
+        <button class="tag-filter-btn" onclick="toggleTag('Saisonnier')" id="tag-Saisonnier"><span class="check"></span><span>🍂 Saisonnier</span></button>
+      </div>
+    </div>
+
+    <!-- PRODUCTS MAIN -->
+    <div>
+      <div class="shop-top">
+        <span class="shop-count" id="shop-count">— produits</span>
+        <div class="view-btns">
+          <button class="vb active" onclick="setView('grid3',this)" title="Grille 3">⊞</button>
+          <button class="vb" onclick="setView('grid4',this)" title="Grille 4">⊟</button>
+          <button class="vb" onclick="setView('list',this)" title="Liste">☰</button>
+        </div>
+      </div>
+      <div class="active-filters" id="active-filters"></div>
+      <div id="products-container"></div>
+    </div>
+  </div>
+</div>
+
+<div id="footer-root"></div>
+<script src="js/app.js"></script>
+<script>
+let currentCat = 'Tous';
+let currentMaxPrice = 25;
+let currentSort = 'default';
+let currentView = 'grid3';
+let activeTags = new Set();
+
+initPage('shop');
+
+// URL params
+const params = new URLSearchParams(window.location.search);
+if (params.get('cat')) currentCat = decodeURIComponent(params.get('cat'));
+
+function onLangChange() { render(); }
+
+const CAT_BTN_MAP = {
+  'Tous':'sb-ALL','Épices':'sb-Epices','Chips & Snacks':'sb-Chips',
+  'Confiseries':'sb-Confis','Basics suédois':'sb-Basics','Fika & Boulangerie':'sb-Fika',
+  'Mélanges':'sb-Mel','Thés & Tisanes':'sb-Thes','Baies séchées':'sb-Baies',
+  'Flocons & Céréales':'sb-Flocons','Farines & Graines':'sb-Farines','Sucres & Sirops':'sb-Sucres'
+};
+
+function setCat(cat) {
+  currentCat = cat;
+  document.querySelectorAll('.sb-btn').forEach(b => b.classList.remove('active'));
+  const el = document.getElementById(CAT_BTN_MAP[cat]);
+  if (el) el.classList.add('active');
+  render();
+}
+
+function setPriceMax(v) {
+  currentMaxPrice = parseFloat(v);
+  document.getElementById('price-max-val').textContent = v;
+  render();
+}
+
+function setSort(v) { currentSort = v; render(); }
+
+function setView(v, btn) {
+  currentView = v;
+  document.querySelectorAll('.vb').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+function toggleTag(tag) {
+  if (activeTags.has(tag)) activeTags.delete(tag);
+  else activeTags.add(tag);
+  document.getElementById('tag-'+tag)?.classList.toggle('active', activeTags.has(tag));
+  render();
+}
+
+function getFiltered() {
+  let list = [...PRODUCTS];
+  if (currentCat !== 'Tous') list = list.filter(p => p.cat === currentCat);
+  list = list.filter(p => p.price <= currentMaxPrice);
+  if (activeTags.size > 0) list = list.filter(p => [...activeTags].every(t => p.tags.includes(t)));
+  if (currentSort === 'price-asc')  list.sort((a,b) => a.price - b.price);
+  if (currentSort === 'price-desc') list.sort((a,b) => b.price - a.price);
+  if (currentSort === 'rating')     list.sort((a,b) => b.rating - a.rating);
+  if (currentSort === 'name')       list.sort((a,b) => a.name[LANG].localeCompare(b.name[LANG]));
+  return list;
+}
+
+function render() {
+  const list = getFiltered();
+  const c = document.getElementById('shop-count');
+  if (c) c.textContent = `${list.length} ${list.length <= 1 ? UI[LANG].product : UI[LANG].products}`;
+
+  // Update sidebar counts
+  const allCounts = {};
+  CATS.forEach(cat => { allCounts[cat.id] = PRODUCTS.filter(p => p.cat === cat.id).length; });
+  document.getElementById('cnt-ALL') && (document.getElementById('cnt-ALL').textContent = PRODUCTS.length);
+  document.getElementById('cnt-Epices') && (document.getElementById('cnt-Epices').textContent = allCounts['Épices']||0);
+  document.getElementById('cnt-Chips') && (document.getElementById('cnt-Chips').textContent = allCounts['Chips & Snacks']||0);
+  document.getElementById('cnt-Confis') && (document.getElementById('cnt-Confis').textContent = allCounts['Confiseries']||0);
+  document.getElementById('cnt-Basics') && (document.getElementById('cnt-Basics').textContent = allCounts['Basics suédois']||0);
+  document.getElementById('cnt-Fika') && (document.getElementById('cnt-Fika').textContent = allCounts['Fika & Boulangerie']||0);
+  document.getElementById('cnt-Mel') && (document.getElementById('cnt-Mel').textContent = allCounts['Mélanges']||0);
+  document.getElementById('cnt-Thes') && (document.getElementById('cnt-Thes').textContent = allCounts['Thés & Tisanes']||0);
+  document.getElementById('cnt-Baies') && (document.getElementById('cnt-Baies').textContent = allCounts['Baies séchées']||0);
+  document.getElementById('cnt-Flocons') && (document.getElementById('cnt-Flocons').textContent = allCounts['Flocons & Céréales']||0);
+  document.getElementById('cnt-Farines') && (document.getElementById('cnt-Farines').textContent = allCounts['Farines & Graines']||0);
+  document.getElementById('cnt-Sucres') && (document.getElementById('cnt-Sucres').textContent = allCounts['Sucres & Sirops']||0);
+
+  // Active filters strip
+  const af = document.getElementById('active-filters');
+  const afTags = [];
+  if (currentCat !== 'Tous') afTags.push(`<span class="af-tag">${CAT_LABELS[currentCat]?.[LANG]||currentCat}<button onclick="setCat('Tous')">✕</button></span>`);
+  activeTags.forEach(t => afTags.push(`<span class="af-tag">${t}<button onclick="toggleTag('${t}')">✕</button></span>`));
+  if (af) af.innerHTML = afTags.join('');
+
+  const container = document.getElementById('products-container');
+  if (!container) return;
+
+  if (list.length === 0) {
+    container.innerHTML = `<div class="empty-state"><p>Aucun produit ne correspond à ces filtres.</p><button onclick="setCat('Tous')" style="background:var(--moss);color:var(--snow);border:none;padding:12px 28px;font-family:var(--font-ui);font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;">Réinitialiser</button></div>`;
+    return;
+  }
+
+  if (currentView === 'list') {
+    container.innerHTML = list.map(p => {
+      const origin = typeof p.origin === 'object' ? p.origin[LANG] : p.origin;
+      return `<div class="prod-list-item" onclick="window.location.href='produit.html?id=${p.id}'">
+        <div class="pli-img"><img src="${p.photo}" alt="${p.name['fr']}" loading="lazy" style="width:100%;height:100%;object-fit:cover;"></div>
+        <div class="pli-body">
+          <div class="pli-name">${p.name[LANG]}</div>
+          <div class="pli-sub">${p.subtitle[LANG]}</div>
+          <div class="pli-tags">${p.tags.slice(0,3).map(t=>`<span class="pli-tag">${t}</span>`).join('')}</div>
+        </div>
+        <div class="pli-action">
+          <span class="pli-price">€${p.price.toFixed(2)}</span>
+          <span class="pli-weight">${p.weight}</span>
+          <button class="btn-add-small" onclick="event.stopPropagation();addToCart(${p.id})">Ajouter</button>
+        </div>
+      </div>`;
+    }).join('');
+  } else {
+    const cls = currentView === 'grid4' ? 'grid-4' : 'grid-3';
+    container.innerHTML = `<div class="${cls}">${list.map(p=>productCardHTML(p)).join('')}</div>`;
+  }
+}
+
+// Init
+setCat(currentCat);
+render();
+</script>
+  <script>const SD_API_URL = 'https://svenska-backend.vercel.app';</script>
+  <script src="js/sd-api-client.js"></script>
+</body>
+</html>

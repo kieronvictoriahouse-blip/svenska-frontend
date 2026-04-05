@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Produit — Svenska Delikatessen</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+.breadcrumb { max-width:var(--max-width); margin:0 auto; padding:18px 40px; display:flex; align-items:center; gap:8px; font-family:var(--font-ui); font-size:11px; letter-spacing:1px; text-transform:uppercase; }
+.breadcrumb a { color:var(--dust); transition:color 0.2s; }
+.breadcrumb a:hover { color:var(--copper); }
+.breadcrumb span { color:var(--linen); }
+.breadcrumb strong { color:var(--slate); font-weight:500; }
+
+.pdp { max-width:var(--max-width); margin:0 auto; padding:0 40px 80px; display:grid; grid-template-columns:1fr 1fr; gap:72px; align-items:start; }
+
+/* GALLERY */
+.gallery { position:sticky; top:100px; }
+.gallery-main { aspect-ratio:1; background:linear-gradient(135deg,var(--parchment) 0%,var(--cream) 100%); display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden; border:1px solid var(--linen); margin-bottom:10px; cursor:zoom-in; }
+.gallery-main-emoji { font-size:140px; line-height:1; position:relative; z-index:1; transition:transform 0.35s; }
+.gallery-main:hover .gallery-main-emoji { transform:scale(1.06); }
+.gallery-origin { position:absolute; top:16px; right:16px; background:var(--moss); color:var(--snow); font-family:var(--font-ui); font-size:9px; letter-spacing:2px; text-transform:uppercase; padding:6px 14px; border-radius:1px; }
+.gallery-thumbs { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+.g-thumb { aspect-ratio:1; background:var(--cream); border:1px solid var(--linen); display:flex; align-items:center; justify-content:center; font-size:26px; cursor:pointer; transition:border-color 0.2s; }
+.g-thumb.active, .g-thumb:hover { border-color:var(--copper); }
+
+/* INFO */
+.pdp-info {}
+.pdp-cat { font-family:var(--font-ui); font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--copper-mid); margin-bottom:10px; }
+.pdp-name { font-family:var(--font-display); font-size:clamp(30px,4vw,54px); font-weight:300; color:var(--moss); line-height:1.06; margin-bottom:6px; }
+.pdp-name em { font-style:italic; }
+.pdp-sub { font-family:var(--font-body); font-size:18px; font-style:italic; color:var(--dust); margin-bottom:18px; }
+.pdp-rating { display:flex; align-items:center; gap:10px; margin-bottom:22px; }
+.pdp-stars { color:var(--copper-mid); font-size:15px; letter-spacing:2px; }
+.pdp-rev { font-family:var(--font-ui); font-size:11px; color:var(--dust); letter-spacing:1px; }
+
+.price-row { display:flex; align-items:baseline; gap:14px; padding:18px 0; border-top:1px solid var(--parchment); border-bottom:1px solid var(--parchment); margin-bottom:22px; }
+.pdp-price { font-family:var(--font-display); font-size:42px; font-weight:300; color:var(--midnight); }
+.pdp-per { font-family:var(--font-ui); font-size:12px; color:var(--dust); letter-spacing:1px; text-transform:uppercase; }
+.pdp-per-kg { font-family:var(--font-ui); font-size:11px; color:var(--birch); letter-spacing:1px; }
+
+.pdp-desc { font-family:var(--font-body); font-size:17px; color:var(--slate); line-height:1.9; margin-bottom:26px; }
+
+.opt-label { font-family:var(--font-ui); font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--dust); margin-bottom:10px; }
+.variants { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:26px; }
+.var-btn { padding:9px 18px; border:1px solid var(--linen); background:none; font-family:var(--font-body); font-size:15px; color:var(--slate); border-radius:1px; transition:all 0.2s; }
+.var-btn:hover, .var-btn.active { background:var(--moss); border-color:var(--moss); color:var(--snow); }
+
+.add-row { display:flex; gap:10px; align-items:center; margin-bottom:26px; }
+.qty-ctrl { display:flex; align-items:center; border:1px solid var(--linen); background:var(--warm-white); }
+.qty-ctrl button { background:none; border:none; width:42px; height:50px; font-size:20px; display:flex; align-items:center; justify-content:center; color:var(--slate); transition:background 0.15s; }
+.qty-ctrl button:hover { background:var(--parchment); }
+.qty-ctrl span { padding:0 14px; font-family:var(--font-display); font-size:19px; min-width:44px; text-align:center; }
+.btn-add { flex:1; background:var(--moss); color:var(--snow); border:none; height:50px; font-family:var(--font-ui); font-size:11px; letter-spacing:2.5px; text-transform:uppercase; border-radius:1px; transition:background 0.2s; }
+.btn-add:hover { background:var(--moss-mid); }
+.btn-wish { width:50px; height:50px; border:1px solid var(--linen); background:none; font-size:20px; color:var(--linen); display:flex; align-items:center; justify-content:center; border-radius:1px; transition:all 0.2s; }
+.btn-wish:hover, .btn-wish.liked { color:var(--copper); border-color:var(--copper); }
+
+.pdp-pills { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:28px; }
+.pdp-pill { background:var(--moss-pale); color:var(--moss); font-family:var(--font-ui); font-size:9px; letter-spacing:1.5px; text-transform:uppercase; padding:5px 14px; border-radius:1px; }
+.pdp-pill.copper-pill { background:var(--copper-pale); color:var(--copper-deep); }
+
+/* SHARE / TRUST */
+.pdp-trust { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:24px; padding:16px 0; border-top:1px solid var(--parchment); }
+.trust-badge { display:flex; align-items:center; gap:6px; font-family:var(--font-ui); font-size:10px; letter-spacing:1px; text-transform:uppercase; color:var(--dust); }
+
+/* ACCORDION */
+.accordion { border-top:1px solid var(--parchment); }
+.acc-item { border-bottom:1px solid var(--parchment); }
+.acc-trigger { width:100%; background:none; border:none; padding:16px 0; display:flex; justify-content:space-between; align-items:center; font-family:var(--font-ui); font-size:12px; letter-spacing:1.5px; text-transform:uppercase; color:var(--slate); transition:color 0.2s; }
+.acc-trigger:hover { color:var(--copper); }
+.acc-arrow { transition:transform 0.22s; font-size:10px; }
+.acc-trigger.open .acc-arrow { transform:rotate(180deg); }
+.acc-body { max-height:0; overflow:hidden; transition:max-height 0.35s ease; }
+.acc-body.open { max-height:500px; }
+.acc-content { font-family:var(--font-body); font-size:16px; color:var(--slate); line-height:1.85; padding:0 0 20px; }
+
+/* RELATED */
+.related-bg { background:var(--cream); border-top:1px solid var(--linen); }
+
+@media(max-width:1024px) {
+  .pdp { grid-template-columns:1fr; gap:36px; }
+  .gallery { position:static; }
+  .breadcrumb { padding:14px 20px; }
+  .pdp { padding:0 20px 60px; }
+}
+</style>
+</head>
+<body>
+<div id="header-root"></div>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+  <a href="index.html" data-sv="Hem" data-fr="Accueil" data-en="Home">Accueil</a>
+  <span>/</span>
+  <a href="boutique.html" data-sv="Butiken" data-fr="Boutique" data-en="Shop">Boutique</a>
+  <span>/</span>
+  <strong id="bc-name">—</strong>
+</div>
+
+<!-- PDP -->
+<div class="pdp" id="pdp-layout">
+  <!-- GALLERY -->
+  <div class="gallery">
+    <div class="gallery-main">
+      <div class="gallery-origin" data-sv="🇸🇪 Sverige" data-fr="🇸🇪 Suède" data-en="🇸🇪 Sweden">🇸🇪 Suède</div>
+      <span class="gallery-main-emoji" id="main-emoji">🌿</span>
+    </div>
+    <div class="gallery-thumbs" id="gallery-thumbs"></div>
+  </div>
+
+  <!-- INFO -->
+  <div class="pdp-info">
+    <div class="pdp-cat" id="pdp-cat"></div>
+    <h1 class="pdp-name" id="pdp-name"></h1>
+    <div class="pdp-sub" id="pdp-sub"></div>
+    <div class="pdp-rating"><span class="pdp-stars" id="pdp-stars"></span><span class="pdp-rev" id="pdp-rev"></span></div>
+    <div class="price-row">
+      <span class="pdp-price" id="pdp-price"></span>
+      <div><div class="pdp-per" id="pdp-per"></div><div class="pdp-per-kg" id="pdp-per-kg"></div></div>
+    </div>
+    <p class="pdp-desc" id="pdp-desc"></p>
+    <div id="variants-block" style="margin-bottom:26px;display:none;">
+      <div class="opt-label" data-sv="Förpackning" data-fr="Conditionnement" data-en="Packaging">Conditionnement</div>
+      <div class="variants" id="variants-list"></div>
+    </div>
+    <div class="pdp-pills" id="pdp-pills"></div>
+    <div class="add-row">
+      <div class="qty-ctrl">
+        <button onclick="changeQtyPdp(-1)">−</button>
+        <span id="pdp-qty">1</span>
+        <button onclick="changeQtyPdp(1)">+</button>
+      </div>
+      <button class="btn-add" id="btn-add-pdp" onclick="pdpAdd()">
+        <span data-sv="Lägg i korg" data-fr="Ajouter au panier" data-en="Add to cart">Ajouter au panier</span>
+      </button>
+      <button class="btn-wish" id="btn-wish" onclick="toggleWish()">♡</button>
+    </div>
+    <div class="pdp-trust">
+      <div class="trust-badge">✅ <span data-sv="Säker betalning" data-fr="Paiement sécurisé" data-en="Secure payment">Paiement sécurisé</span></div>
+      <div class="trust-badge">🚚 <span data-sv="Fri frakt från 50€" data-fr="Livraison gratuite dès 50€" data-en="Free delivery from €50">Livraison dès 50€</span></div>
+      <div class="trust-badge">🌿 <span data-sv="100% Svenska produkter" data-fr="100% produits suédois" data-en="100% Swedish products">100% suédois</span></div>
+    </div>
+    <div class="accordion" id="accordion"></div>
+  </div>
+</div>
+
+<!-- RELATED -->
+<section class="related-bg">
+  <div class="section">
+    <p class="sect-eyebrow" data-sv="Du kanske också gillar" data-fr="Vous aimerez aussi" data-en="You may also like">Vous aimerez aussi</p>
+    <h2 class="sect-title" data-sv="Liknande <em>produkter</em>" data-fr="Produits <em>similaires</em>" data-en="Similar <em>products</em>">Produits <em>similaires</em></h2>
+    <div class="grid-4" id="related-grid" style="margin-top:32px;"></div>
+  </div>
+</section>
+
+<div id="footer-root"></div>
+<script src="js/app.js"></script>
+<script>
+let pdpQtyVal = 1;
+let selectedVariant = null;
+let isWished = false;
+let pdpProduct = null;
+
+initPage('shop');
+
+function onLangChange() { if (pdpProduct) renderPDP(pdpProduct); }
+
+function renderPDP(p) {
+  pdpProduct = p;
+  document.title = p.name[LANG] + ' — Svenska Delikatessen';
+  document.getElementById('bc-name').textContent = p.name[LANG];
+  // Afficher photo ou emoji
+  const mainPhoto = document.getElementById('main-photo');
+  const mainEmoji = document.getElementById('main-emoji');
+  if (p.photo) {
+    mainPhoto.src = p.photo;
+    mainPhoto.alt = p.name[LANG];
+    mainPhoto.style.display = 'block';
+    mainEmoji.style.display = 'none';
+  } else {
+    mainPhoto.style.display = 'none';
+    mainEmoji.style.display = 'block';
+    mainEmoji.textContent = p.emoji;
+  }
+  document.getElementById('pdp-cat').textContent = CAT_LABELS[p.cat]?.[LANG] || p.cat;
+  document.getElementById('pdp-name').textContent = p.name[LANG];
+  document.getElementById('pdp-sub').textContent = p.subtitle[LANG];
+  document.getElementById('pdp-desc').textContent = p.desc[LANG];
+
+  // Rating
+  const stars = '★'.repeat(Math.round(p.rating)) + '☆'.repeat(5-Math.round(p.rating));
+  document.getElementById('pdp-stars').textContent = stars;
+  document.getElementById('pdp-rev').textContent = `${p.rating} (${p.reviews} ${LANG==='sv'?'recensioner':LANG==='en'?'reviews':'avis'})`;
+
+  // Price
+  selectedVariant = p.variants[0];
+  updatePrice();
+
+  // Variants
+  const vb = document.getElementById('variants-block');
+  const vl = document.getElementById('variants-list');
+  if (p.variants.length > 1) {
+    vb.style.display = 'block';
+    vl.innerHTML = p.variants.map((v,i) => `
+      <button class="var-btn${i===0?' active':''}" onclick="selectVar(this,'${v.label}',${v.price})">${v.label} — €${v.price.toFixed(2)}</button>
+    `).join('');
+  } else {
+    vb.style.display = 'none';
+  }
+
+  // Pills
+  document.getElementById('pdp-pills').innerHTML =
+    p.tags.map(t=>`<span class="pdp-pill">${t}</span>`).join('') +
+    (p.badge ? `<span class="pdp-pill copper-pill">${getBadgeLabel(p.badge)}</span>` : '');
+
+  // Thumbs
+  const thumbEmojis = ['📦', '🌿', '🏷️'];
+  const firstThumb = p.photo
+    ? `<div class="g-thumb active" onclick="selectThumbPhoto(this,'${p.photo}')"><img src="${p.photo}" style="width:100%;height:100%;object-fit:cover;border-radius:4px"></div>`
+    : `<div class="g-thumb active" onclick="selectThumb(this,'${p.emoji}',true,'${p.emoji}')"><span>${p.emoji}</span></div>`;
+  document.getElementById('gallery-thumbs').innerHTML = firstThumb + thumbEmojis.map((e,i) => `
+    <div class="g-thumb" onclick="selectThumb(this,'${e}',false,'${p.emoji}')">
+      <span>${e}</span>
+    </div>`).join('');
+
+  // Accordion
+  const sections = [
+    { key:'usage',       sv:'Användning',        fr:'Utilisation',        en:'Usage' },
+    { key:'ingredients', sv:'Ingredienser',       fr:'Ingrédients',        en:'Ingredients' },
+    { key:'storage',     sv:'Förvaring',          fr:'Conservation',       en:'Storage' },
+  ];
+  document.getElementById('accordion').innerHTML = sections
+    .filter(s => p[s.key]?.[LANG])
+    .map((s,i) => `
+      <div class="acc-item">
+        <button class="acc-trigger${i===0?' open':''}" onclick="toggleAcc(this)">
+          <span>${LANG==='sv'?s.sv:LANG==='en'?s.en:s.fr}</span>
+          <span class="acc-arrow">▾</span>
+        </button>
+        <div class="acc-body${i===0?' open':''}">
+          <div class="acc-content">${p[s.key][LANG]}</div>
+        </div>
+      </div>`).join('');
+
+  // Related
+  const related = PRODUCTS.filter(x => x.cat === p.cat && x.id !== p.id).slice(0,4);
+  document.getElementById('related-grid').innerHTML = related.map(r => productCardHTML(r)).join('');
+
+  // Reset qty
+  pdpQtyVal = 1;
+  document.getElementById('pdp-qty').textContent = 1;
+  document.getElementById('btn-wish').textContent = isWished ? '♥' : '♡';
+}
+
+function updatePrice() {
+  if (!selectedVariant) return;
+  document.getElementById('pdp-price').textContent = '€' + selectedVariant.price.toFixed(2);
+  document.getElementById('pdp-per').textContent = selectedVariant.label;
+}
+
+function selectVar(btn, label, price) {
+  document.querySelectorAll('.var-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  selectedVariant = { label, price };
+  updatePrice();
+}
+
+function selectThumbPhoto(el) {
+  document.querySelectorAll('.g-thumb').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('main-photo').style.display = 'block';
+  document.getElementById('main-emoji').style.display = 'none';
+}
+
+function selectThumb(el, emoji, isMain, mainEmoji) {
+  document.querySelectorAll('.g-thumb').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  if (isMain && document.getElementById('main-photo').src) {
+    document.getElementById('main-photo').style.display = 'block';
+    document.getElementById('main-emoji').style.display = 'none';
+  } else {
+    document.getElementById('main-photo').style.display = 'none';
+    document.getElementById('main-emoji').style.display = 'block';
+    document.getElementById('main-emoji').textContent = emoji;
+  }
+}
+
+function changeQtyPdp(d) {
+  pdpQtyVal = Math.max(1, pdpQtyVal + d);
+  document.getElementById('pdp-qty').textContent = pdpQtyVal;
+}
+
+function pdpAdd() {
+  if (!pdpProduct) return;
+  addToCart(pdpProduct.id, pdpQtyVal, selectedVariant?.label);
+  openCart();
+}
+
+function toggleWish() {
+  isWished = !isWished;
+  const b = document.getElementById('btn-wish');
+  b.textContent = isWished ? '♥' : '♡';
+  b.classList.toggle('liked', isWished);
+}
+
+function toggleAcc(trigger) {
+  trigger.classList.toggle('open');
+  trigger.nextElementSibling.classList.toggle('open');
+}
+
+// Load product — appel direct API par UUID ou sort_order
+(async function() {
+  const _rawId = new URLSearchParams(window.location.search).get('id');
+  const _numId = parseInt(_rawId);
+  const _isUUID = _rawId && _rawId.includes('-');
+  
+  // Appel direct à l'API sans passer par PRODUCTS
+  const BASE = 'https://svenska-backend.vercel.app';
+  const CAT_EMOJI = {'Épices':'🌶️','Flocons & Céréales':'🌾','Baies séchées':'🫐','Sucres & Sirops':'🍯','Thés & Tisanes':'🫖','Farines & Graines':'🌻','Mélanges':'🎄','Chips & Snacks':'🍟','Basics suédois':'🇸🇪','Confiseries':'🍬','Fika & Boulangerie':'🧁'};
+  
+  try {
+    const url = _isUUID 
+      ? `${BASE}/api/products/${_rawId}` 
+      : `${BASE}/api/products?sort_order=${_numId}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    const raw = _isUUID ? (data.product || data) : (Array.isArray(data) ? data[0] : (data.products || [])[0]);
+    
+    if (raw) {
+      const resolveCat = (p) => {
+        const n = (p.name_fr || '').toLowerCase();
+        if (n.includes('chips')||n.includes('olw')) return 'Chips & Snacks';
+        if (n.includes('daim')||n.includes('bilar')||n.includes('fish')||n.includes('lakrits')||n.includes('skipper')) return 'Confiseries';
+        if (n.includes('kanelbulle')||n.includes('semla')||n.includes('chokladboll')||n.includes('vaniljsocker')) return 'Fika & Boulangerie';
+        if (n.includes('kanel')||n.includes('kardemumma')||n.includes('glögg')||n.includes('dill')||n.includes('peppar')||n.includes('santa maria')||n.includes('allkrydda')) return 'Épices';
+        if (n.includes('lingon')||n.includes('fläder')||n.includes('nypon')) return 'Baies séchées';
+        if (n.includes('skogste')||n.includes('sureau')) return 'Thés & Tisanes';
+        if (n.includes('pärlsocker')||n.includes('sirap')) return 'Sucres & Sirops';
+        if (n.includes('havregryn')||n.includes('müsli')) return 'Flocons & Céréales';
+        if (n.includes('mjöl')||n.includes('vallmo')) return 'Farines & Graines';
+        if (n.includes('lussekatt')||n.includes('midsommar')) return 'Mélanges';
+        if (n.includes('wasa')||n.includes('kaviar')||n.includes('kavring')||n.includes('lingonsylt')) return 'Basics suédois';
+        return 'Épices';
+      };
+      const cat = resolveCat(raw);
+      const product = {
+        id: raw.id, cat, emoji: CAT_EMOJI[cat] || '🛒',
+        badge: raw.badge || '', rating: raw.rating || 4.5, reviews: raw.reviews_count || 0,
+        photo: raw.image_url || '',
+        name: { sv: raw.name_sv, fr: raw.name_fr, en: raw.name_en },
+        subtitle: { sv: raw.subtitle_sv, fr: raw.subtitle_fr, en: raw.subtitle_en },
+        origin: { sv: raw.origin_sv, fr: raw.origin_fr, en: raw.origin_en },
+        desc: { sv: raw.desc_sv, fr: raw.desc_fr, en: raw.desc_en },
+        usage: { sv: raw.usage_sv, fr: raw.usage_fr, en: raw.usage_en },
+        ingredients: { sv: raw.ingredients_sv, fr: raw.ingredients_fr, en: raw.ingredients_en },
+        storage: { sv: raw.storage_sv, fr: raw.storage_fr, en: raw.storage_en },
+        price: raw.price, weight: raw.weight, tags: raw.tags || [],
+        variants: (raw.product_variants || []).map(v => ({ label: v.label, price: v.price })),
+        bestseller: raw.is_bestseller || false, isNew: raw.is_new || false,
+      };
+      renderPDP(product);
+      return;
+    }
+  } catch(e) {
+    console.warn('[PDP] API failed, fallback statique:', e.message);
+  }
+  
+  // Fallback statique
+  const product = PRODUCTS.find(p => p.id === _numId);
+  if (product) renderPDP(product);
+  else document.getElementById('pdp-layout').innerHTML = '<div style="grid-column:span 2;text-align:center;padding:80px 20px;font-style:italic;color:var(--dust);">Produit introuvable. <a href="boutique.html" style="color:var(--copper);">Retour à la boutique →</a></div>';
+})();
+</script>
+  <script>const SD_API_URL = 'https://svenska-backend.vercel.app';</script>
+  <script src="js/sd-api-client.js"></script>
+</body>
+</html>
