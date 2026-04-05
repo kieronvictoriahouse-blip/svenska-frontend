@@ -310,6 +310,20 @@ function render() {
 // Init
 setCat(currentCat);
 render();
+
+// Re-render quand Supabase charge
+window.addEventListener('sdapi:ready', () => {
+  setCat(currentCat);
+  render();
+});
+
+// Si SDApi déjà prêt au moment du chargement
+setTimeout(() => {
+  if (window.SDApi?.isReady) {
+    setCat(currentCat);
+    render();
+  }
+}, 100);
 </script>
   <script>const SD_API_URL = 'https://svenska-backend.vercel.app';</script>
   <script src="js/sd-api-client.js"></script>

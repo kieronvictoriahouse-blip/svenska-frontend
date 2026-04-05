@@ -65,6 +65,8 @@
   };
 
   window.SDApi = SDApi;
+  window.SDApi.isReady = false;
+  window.SDApi.products = null;
 
   // Emojis par catégorie
   const CAT_EMOJI = {
@@ -124,6 +126,8 @@
       const data = await SDApi.getProducts();
       if (data && data.length > 0) {
         window.PRODUCTS = data.map(mapProduct);
+        window.SDApi.isReady = true;
+        window.SDApi.products = window.PRODUCTS;
         console.log('[SDApi] Produits chargés depuis Supabase :', window.PRODUCTS.length);
         // Re-render selon la page
         if (typeof window.render === 'function') window.render();        // boutique
