@@ -329,7 +329,7 @@ function renderHome() {
     const feat = PRODUCTS.filter(p=>p.bestseller).slice(0,4);
     hs.innerHTML = feat.map((p,i) => `
       <div class="showcase-card" onclick="window.location.href='produit.html?id=${p.id}'">
-        <span class="sc-emoji">${p.emoji}</span>
+        ${p.photo ? `<img src="${p.photo}" style="width:60px;height:60px;object-fit:cover;border-radius:8px;margin-bottom:10px">` : `<span class="sc-emoji">${p.emoji||'🇸🇪'}</span>`}
         <div class="sc-name">${p.name[LANG]}</div>
         <div class="sc-price">€${p.price.toFixed(2)}</div>
       </div>`).join('');
@@ -353,7 +353,7 @@ function renderHome() {
     const sp = PRODUCTS.filter(p=>p.cat==='Épices').slice(0,4);
     xg.innerHTML = sp.map(p=>`
       <div class="fmg-item" onclick="window.location.href='produit.html?id=${p.id}'">
-        <span class="fmg-emoji">${p.emoji}</span>
+        ${p.photo ? `<img src="${p.photo}" style="width:48px;height:48px;object-fit:cover;border-radius:6px;margin-bottom:6px">` : `<span class="fmg-emoji">${p.emoji||'🇸🇪'}</span>`}
         <div class="fmg-name">${p.name[LANG]}</div>
         <div class="fmg-price">€${p.price.toFixed(2)}</div>
       </div>`).join('');
