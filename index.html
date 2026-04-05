@@ -383,6 +383,49 @@ function nlSubscribe() {
 renderHome();
 </script>
   <script>const SD_API_URL = 'https://svenska-backend.vercel.app';</script>
+  <script>
+  // Charger le CMS depuis Supabase
+  (async function() {
+    try {
+      const res = await fetch('https://svenska-backend.vercel.app/api/cms');
+      const data = await res.json();
+      const cms = {};
+      (data.cms || []).forEach(i => { cms[i.key] = i; });
+      const LANG = localStorage.getItem('lang') || 'fr';
+      const l = LANG === 'sv' ? 'value_sv' : LANG === 'en' ? 'value_en' : 'value_fr';
+      
+      // Hero textes
+      if (cms.hero_eyebrow) document.querySelectorAll('[data-sv="Äkta svenska smaker"]').forEach(el => el.textContent = cms.hero_eyebrow[l] || el.textContent);
+      if (cms.hero_title) {
+        const h1 = document.querySelector('.hero h1');
+        if (h1) h1.innerHTML = cms.hero_title[l] || h1.innerHTML;
+      }
+      if (cms.hero_subtitle) {
+        const sub = document.querySelector('.hero-sub');
+        if (sub) sub.textContent = cms.hero_subtitle[l] || sub.textContent;
+      }
+      // Hero photo
+      if (cms.hero_photo) {
+        const heroImg = document.querySelector('.hero-right img');
+        if (heroImg) heroImg.src = cms.hero_photo[l] || heroImg.src;
+      }
+      // Feat photo
+      if (cms.feat_photo) {
+        const featImg = document.querySelector('.feat-band-visual img');
+        if (featImg) featImg.src = cms.feat_photo[l] || featImg.src;
+      }
+      // Feat textes
+      if (cms.feat_title) {
+        const ft = document.querySelector('.feat-band-text .sect-title');
+        if (ft) ft.innerHTML = cms.feat_title[l] || ft.innerHTML;
+      }
+      if (cms.feat_subtitle) {
+        const fb = document.querySelector('.feat-band-text .sect-body');
+        if (fb) fb.textContent = cms.feat_subtitle[l] || fb.textContent;
+      }
+    } catch(e) { console.warn('[CMS] Fallback:', e.message); }
+  })();
+  </script>
   <script src="js/sd-api-client.js"></script>
 </body>
 </html>
