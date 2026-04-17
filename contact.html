@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Contact — Svenska Delikatessen</title>
 <link rel="stylesheet" href="css/style.css">
+<script>const SD_API_URL = 'https://svenska-backend.vercel.app';</script>
+<link rel="preconnect" href="https://cdn.snipcart.com">
+<link rel="stylesheet" href="https://cdn.snipcart.com/themes/v3.3.3/default/snipcart.css">
 <style>
 .page-hero { background:var(--moss); padding:64px 40px; text-align:center; }
 .page-hero h1 { font-family:var(--font-display); font-size:clamp(32px,5vw,64px); font-weight:300; color:var(--snow); }
@@ -53,6 +56,8 @@
 </style>
 </head>
 <body>
+<div id="snipcart" data-api-key="YOUR_SNIPCART_PUBLIC_API_KEY" data-config-modal-style="side" hidden></div>
+<script async src="https://cdn.snipcart.com/themes/v3.3.3/default/snipcart.js"></script>
 <div id="header-root"></div>
 
 <div class="page-hero">
@@ -183,7 +188,6 @@ function submitForm() {
   document.getElementById('form-success').style.display='block';
 }
 </script>
-  <script>const SD_API_URL = 'https://svenska-backend.vercel.app';</script>
   <script src="js/sd-api-client.js"></script>
 </body>
 </html>

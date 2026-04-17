@@ -6,6 +6,7 @@
 <title>Boutique — Svenska Delikatessen</title>
 <meta name="description" content="Épicerie suédoise : épices, OLW chips, Daim, Kalles Kaviar, Swedish Fish, kanelbullar, confiseries nordiques.">
 <link rel="stylesheet" href="css/style.css">
+<script>const SD_API_URL = 'https://svenska-backend.vercel.app';</script>
 <style>
 .shop-hero { background:var(--moss); padding:56px 40px; text-align:center; }
 .shop-hero h1 { font-family:var(--font-display); font-size:clamp(36px,5vw,64px); font-weight:300; color:var(--snow); }
@@ -73,8 +74,12 @@
   .shop-wrap { padding:24px 16px; }
 }
 </style>
+<link rel="preconnect" href="https://cdn.snipcart.com">
+<link rel="stylesheet" href="https://cdn.snipcart.com/themes/v3.3.3/default/snipcart.css">
 </head>
 <body>
+<div id="snipcart" data-api-key="YOUR_SNIPCART_PUBLIC_API_KEY" data-config-modal-style="side" hidden></div>
+<script async src="https://cdn.snipcart.com/themes/v3.3.3/default/snipcart.js"></script>
 <div id="header-root"></div>
 
 <div class="shop-hero">
@@ -311,21 +316,12 @@ function render() {
 setCat(currentCat);
 render();
 
-// Re-render quand Supabase charge
+// Re-render avec données Supabase
 window.addEventListener('sdapi:ready', () => {
   setCat(currentCat);
   render();
 });
-
-// Si SDApi déjà prêt au moment du chargement
-setTimeout(() => {
-  if (window.SDApi?.isReady) {
-    setCat(currentCat);
-    render();
-  }
-}, 100);
 </script>
-  <script>const SD_API_URL = 'https://svenska-backend.vercel.app';</script>
   <script src="js/sd-api-client.js"></script>
 </body>
 </html>

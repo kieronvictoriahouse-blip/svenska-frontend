@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Produit — Svenska Delikatessen</title>
 <link rel="stylesheet" href="css/style.css">
+<script>const SD_API_URL = 'https://svenska-backend.vercel.app';</script>
 <style>
 .breadcrumb { max-width:var(--max-width); margin:0 auto; padding:18px 40px; display:flex; align-items:center; gap:8px; font-family:var(--font-ui); font-size:11px; letter-spacing:1px; text-transform:uppercase; }
 .breadcrumb a { color:var(--dust); transition:color 0.2s; }
@@ -84,9 +85,22 @@
   .breadcrumb { padding:14px 20px; }
   .pdp { padding:0 20px 60px; }
 }
+@media(max-width:600px) {
+  .pdp { padding:0 16px 48px; gap:24px; }
+  .pdp-name { font-size:28px; }
+  .pdp-price { font-size:32px; }
+  .add-row { flex-wrap:wrap; }
+  .btn-add { min-width:100%; }
+  .gallery-thumbs { grid-template-columns:repeat(4,1fr); }
+  .breadcrumb { font-size:10px; gap:4px; padding:10px 16px; }
+}
 </style>
+<link rel="preconnect" href="https://cdn.snipcart.com">
+<link rel="stylesheet" href="https://cdn.snipcart.com/themes/v3.3.3/default/snipcart.css">
 </head>
 <body>
+<div id="snipcart" data-api-key="YOUR_SNIPCART_PUBLIC_API_KEY" data-config-modal-style="side" hidden></div>
+<script async src="https://cdn.snipcart.com/themes/v3.3.3/default/snipcart.js"></script>
 <div id="header-root"></div>
 
 <!-- BREADCRUMB -->
@@ -379,24 +393,26 @@ function toggleAcc(trigger) {
   else document.getElementById('pdp-layout').innerHTML = '<div style="grid-column:span 2;text-align:center;padding:80px 20px;font-style:italic;color:var(--dust);">Produit introuvable. <a href="boutique.html" style="color:var(--copper);">Retour à la boutique →</a></div>';
 })();
 
-// Injecter la photo après chargement API si pas encore affichée
+// Si la fiche est déjà rendue avec le fallback statique, re-render avec données Supabase
 window.addEventListener('sdapi:ready', () => {
+  if (!pdpProduct && window.PRODUCTS && window.PRODUCTS.length > 0) {
+    const _rawId = new URLSearchParams(window.location.search).get('id');
+    const _numId = parseInt(_rawId);
+    const found = window.PRODUCTS.find(p => p.id === _numId);
+    if (found) renderPDP(found);
+  }
   if (pdpProduct && pdpProduct.photo) {
     const mainPhoto = document.getElementById('main-photo');
     const mainEmoji = document.getElementById('main-emoji');
-    if (mainPhoto && mainEmoji) {
+    if (mainPhoto && mainEmoji && !mainPhoto.src) {
       mainEmoji.style.display = 'none';
       mainPhoto.style.display = 'block';
       mainPhoto.src = pdpProduct.photo;
-      mainPhoto.onerror = () => {
-        mainPhoto.style.display = 'none';
-        mainEmoji.style.display = 'block';
-      };
+      mainPhoto.onerror = () => { mainPhoto.style.display = 'none'; mainEmoji.style.display = 'block'; };
     }
   }
 });
 </script>
-  <script>const SD_API_URL = 'https://svenska-backend.vercel.app';</script>
   <script src="js/sd-api-client.js"></script>
 </body>
 </html>
