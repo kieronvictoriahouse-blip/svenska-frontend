@@ -365,19 +365,27 @@ function toggleAcc(trigger) {
         return 'Épices';
       };
       const cat = resolveCat(raw);
+      // Fallback : données hardcodées si champs absents en DB
+      const local = (window.PRODUCTS || []).find(p => p.id === _numId || p.id === raw.sort_order);
+      const fb = (apiVal, localVal) => apiVal || localVal || '';
+      const fbObj = (svKey, frKey, enKey, localField) => ({
+        sv: raw[svKey] || local?.[localField]?.sv || '',
+        fr: raw[frKey] || local?.[localField]?.fr || '',
+        en: raw[enKey] || local?.[localField]?.en || '',
+      });
       const product = {
-        id: raw.id, cat, emoji: CAT_EMOJI[cat] || '🛒',
+        id: raw.sort_order || _numId, cat, emoji: CAT_EMOJI[cat] || '🛒',
         badge: raw.badge || '', rating: raw.rating || 4.5, reviews: raw.reviews_count || 0,
-        photo: raw.image_url || '',
-        name: { sv: raw.name_sv, fr: raw.name_fr, en: raw.name_en },
-        subtitle: { sv: raw.subtitle_sv, fr: raw.subtitle_fr, en: raw.subtitle_en },
-        origin: { sv: raw.origin_sv, fr: raw.origin_fr, en: raw.origin_en },
-        desc: { sv: raw.desc_sv, fr: raw.desc_fr, en: raw.desc_en },
-        usage: { sv: raw.usage_sv, fr: raw.usage_fr, en: raw.usage_en },
-        ingredients: { sv: raw.ingredients_sv, fr: raw.ingredients_fr, en: raw.ingredients_en },
-        storage: { sv: raw.storage_sv, fr: raw.storage_fr, en: raw.storage_en },
-        price: raw.price, weight: raw.weight, tags: raw.tags || [],
-        variants: (raw.product_variants || []).map(v => ({ label: v.label, price: v.price })),
+        photo: raw.image_url || local?.photo || '',
+        name:        fbObj('name_sv',        'name_fr',        'name_en',        'name'),
+        subtitle:    fbObj('subtitle_sv',    'subtitle_fr',    'subtitle_en',    'subtitle'),
+        origin:      fbObj('origin_sv',      'origin_fr',      'origin_en',      'origin'),
+        desc:        fbObj('desc_sv',        'desc_fr',        'desc_en',        'desc'),
+        usage:       fbObj('usage_sv',       'usage_fr',       'usage_en',       'usage'),
+        ingredients: fbObj('ingredients_sv', 'ingredients_fr', 'ingredients_en', 'ingredients'),
+        storage:     fbObj('storage_sv',     'storage_fr',     'storage_en',     'storage'),
+        price: raw.price, weight: raw.weight || local?.weight || '', tags: raw.tags || local?.tags || [],
+        variants: (raw.product_variants || []).map(v => ({ label: v.label, price: v.price })) || local?.variants || [],
         bestseller: raw.is_bestseller || false, isNew: raw.is_new || false,
       };
       renderPDP(product);
