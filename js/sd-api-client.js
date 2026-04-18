@@ -117,6 +117,11 @@
       if (!res.ok) throw new Error('API error ' + res.status);
       return res.json();
     },
+    async getWhiteLabel() {
+      const res = await fetch(`${BASE}/api/white-label`);
+      if (!res.ok) throw new Error('API error ' + res.status);
+      return res.json();
+    },
     async login(email, password) {
       const res = await fetch(`${BASE}/api/auth/login`, {
         method: 'POST',
@@ -132,11 +137,60 @@
   window.SDApi.isReady = false;
   window.SDApi.BASE = BASE;
 
+  function applyWhiteLabel(cfg) {
+    if (!cfg || !cfg.id) return; // config vide = pas de white-label configuré
+    const root = document.documentElement;
+
+    // Couleurs → variables CSS
+    if (cfg.color_primary) {
+      root.style.setProperty('--heather', cfg.color_primary);
+      // Variantes dérivées (légèrement plus claires)
+      root.style.setProperty('--heather-mid', cfg.color_primary + 'CC');
+    }
+    if (cfg.color_secondary) {
+      root.style.setProperty('--lingon', cfg.color_secondary);
+      root.style.setProperty('--lingon-mid', cfg.color_secondary + 'CC');
+    }
+    if (cfg.color_bg)   root.style.setProperty('--cream', cfg.color_bg);
+    if (cfg.color_text) root.style.setProperty('--midnight', cfg.color_text);
+
+    // Polices → injection d'un <style>
+    if (cfg.font_display || cfg.font_body || cfg.font_ui) {
+      const fonts = [cfg.font_display, cfg.font_body, cfg.font_ui].filter(Boolean);
+      const googleUrl = 'https://fonts.googleapis.com/css2?family=' +
+        fonts.map(f => f.replace(/ /g, '+') + ':wght@300;400;600').join('&family=') + '&display=swap';
+      if (!document.querySelector(`link[href="${googleUrl}"]`)) {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet'; link.href = googleUrl;
+        document.head.appendChild(link);
+      }
+      if (cfg.font_display) root.style.setProperty('--font-display', `'${cfg.font_display}', Georgia, serif`);
+      if (cfg.font_body)    root.style.setProperty('--font-body', `'${cfg.font_body}', Georgia, serif`);
+      if (cfg.font_ui)      root.style.setProperty('--font-ui', `'${cfg.font_ui}', sans-serif`);
+    }
+
+    // Nom & slogan → logo dans header + footer (rendus par app.js)
+    if (cfg.site_name) {
+      document.querySelectorAll('.logo-main').forEach(el => { el.textContent = cfg.site_name; });
+      document.title = document.title.replace(/^[^—]+/, cfg.site_name + ' ');
+    }
+    if (cfg.site_slogan) {
+      document.querySelectorAll('.logo-tag').forEach(el => { el.textContent = cfg.site_slogan; });
+    }
+
+    // Email de contact dans les alertes JS
+    if (cfg.email) window._contactEmail = cfg.email;
+
+    window.SDApi.whiteLabel = cfg;
+    console.log('[SDApi] White-label appliqué :', cfg.site_name || '—');
+  }
+
   async function initFromApi() {
     try {
-      const [productsData, cmsData] = await Promise.all([
+      const [productsData, cmsData, wlData] = await Promise.all([
         SDApi.getProducts().catch(() => null),
         SDApi.getCms().catch(() => null),
+        SDApi.getWhiteLabel().catch(() => null),
       ]);
 
       // Produits
@@ -153,6 +207,11 @@
         cmsData.cms.forEach(i => { cms[i.key] = i; });
         window.SDApi.cms = cms;
         applyCms(cms);
+      }
+
+      // White-label : couleurs, polices, nom de marque
+      if (wlData && wlData.config) {
+        applyWhiteLabel(wlData.config);
       }
 
       // Déclenche un seul re-render
