@@ -4,6 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Produit — Heather & Lingon</title>
+<meta name="description" content="Produit authentique — Heather & Lingon, épicerie nordique & britannique.">
+<meta property="og:type" content="product">
+<meta property="og:url" content="https://svenska-delikatessen.vercel.app/produit.html">
+<meta property="og:title" id="og-title" content="Produit — Heather & Lingon">
+<meta property="og:description" id="og-desc" content="Produit authentique de Scandinavie ou des îles britanniques.">
+<meta property="og:image" id="og-image" content="https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=1200&q=80">
+<meta property="og:site_name" content="Heather & Lingon">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json" id="ld-product">{"@context":"https://schema.org","@type":"Product","name":"Produit","brand":{"@type":"Brand","name":"Heather & Lingon"}}</script>
 <link rel="stylesheet" href="css/style.css">
 <script>const SD_API_URL = 'https://svenska-backend.vercel.app';</script>
 <style>
@@ -102,6 +111,13 @@
 <div id="snipcart" data-api-key="YOUR_SNIPCART_PUBLIC_API_KEY" data-config-modal-style="side" hidden></div>
 <script async src="https://cdn.snipcart.com/themes/v3.3.3/default/snipcart.js"></script>
 <div id="header-root"></div>
+
+<!-- STICKY ADD TO CART -->
+<div class="sticky-atc" id="sticky-atc">
+  <span class="sticky-atc-name" id="sticky-atc-name"></span>
+  <span class="sticky-atc-price" id="sticky-atc-price"></span>
+  <button class="sticky-atc-btn" onclick="pdpAdd()" data-fr="Ajouter au panier" data-en="Add to cart" data-sv="Lägg i korg">Ajouter au panier</button>
+</div>
 
 <!-- BREADCRUMB -->
 <div class="breadcrumb">
@@ -272,6 +288,28 @@ function renderPDP(p) {
   pdpQtyVal = 1;
   document.getElementById('pdp-qty').textContent = 1;
   document.getElementById('btn-wish').textContent = isWished ? '♥' : '♡';
+
+  // Sticky ATC
+  const price = selectedVariant ? selectedVariant.price : p.price;
+  initStickyAtc(p.name[LANG], price);
+
+  // Open Graph + JSON-LD dynamiques
+  const ogTitle = document.getElementById('og-title');
+  const ogDesc = document.getElementById('og-desc');
+  const ogImg = document.getElementById('og-image');
+  const ldProd = document.getElementById('ld-product');
+  if (ogTitle) ogTitle.content = p.name[LANG] + ' — Heather & Lingon';
+  if (ogDesc && p.desc[LANG]) ogDesc.content = p.desc[LANG].slice(0,160);
+  if (ogImg && p.photo) ogImg.content = p.photo;
+  if (ldProd) ldProd.textContent = JSON.stringify({
+    '@context': 'https://schema.org', '@type': 'Product',
+    name: p.name[LANG], description: p.desc[LANG],
+    image: p.photo, brand: { '@type': 'Brand', name: 'Heather & Lingon' },
+    offers: { '@type': 'Offer', price: price, priceCurrency: 'EUR', availability: 'https://schema.org/InStock' }
+  });
+
+  // Reveal sections
+  initScrollReveal();
 }
 
 function updatePrice() {

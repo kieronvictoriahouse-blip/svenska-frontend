@@ -369,3 +369,66 @@ footer { background:var(--midnight); color:rgba(255,255,255,0.55); padding:64px 
   border-radius:1px; transition:all 0.2s;
 }
 .btn-keep-shopping:hover { border-color:var(--slate); color:var(--slate); }
+
+/* ── SCROLL REVEAL ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.65s cubic-bezier(0.4,0,0.2,1), transform 0.65s cubic-bezier(0.4,0,0.2,1);
+}
+.reveal.visible { opacity: 1; transform: none; }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+/* ── HEADER SHRINK ── */
+header { transition: box-shadow 0.3s ease; }
+header.shrunk .nav-inner { height: 58px; transition: height 0.3s ease; }
+header.shrunk .logo-main { font-size: 20px; transition: font-size 0.3s ease; }
+header.shrunk { box-shadow: 0 4px 24px rgba(28,32,40,0.13); }
+
+/* ── STICKY ADD TO CART (product page) ── */
+.sticky-atc {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 250;
+  background: var(--midnight); color: var(--snow);
+  padding: 14px 40px; display: flex; align-items: center; gap: 20px;
+  transform: translateY(100%); transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+  box-shadow: 0 -4px 24px rgba(0,0,0,0.2);
+}
+.sticky-atc.visible { transform: translateY(0); }
+.sticky-atc-name { font-family: var(--font-display); font-size: 17px; font-weight: 600; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sticky-atc-price { font-family: var(--font-display); font-size: 20px; font-weight: 600; color: var(--lingon-mid); white-space: nowrap; }
+.sticky-atc-btn {
+  background: var(--heather); color: var(--snow); border: none;
+  padding: 12px 28px; font-family: var(--font-ui); font-size: 11px;
+  letter-spacing: 2px; text-transform: uppercase; border-radius: 1px;
+  transition: background 0.2s; cursor: pointer; white-space: nowrap;
+  flex-shrink: 0;
+}
+.sticky-atc-btn:hover { background: var(--heather-mid); }
+@media(max-width:600px) {
+  .sticky-atc { padding: 12px 16px; gap: 10px; }
+  .sticky-atc-name { font-size: 14px; }
+}
+
+/* ── MOBILE FILTER TOGGLE (boutique) ── */
+.mob-filter-btn {
+  display: none; width: 100%; background: var(--heather); color: var(--snow);
+  border: none; padding: 12px 20px; font-family: var(--font-ui); font-size: 11px;
+  letter-spacing: 2px; text-transform: uppercase; border-radius: 1px;
+  margin-bottom: 20px; cursor: pointer; align-items: center; justify-content: center; gap: 8px;
+}
+@media(max-width:1024px) { .mob-filter-btn { display: flex; } }
+.sidebar.mob-hidden { display: none !important; }
+
+/* ── LEGAL PAGES ── */
+.legal-wrap { max-width: 860px; margin: 0 auto; padding: 64px 40px; }
+.legal-wrap h1 { font-family: var(--font-display); font-size: clamp(28px,4vw,48px); font-weight: 300; color: var(--heather); margin-bottom: 8px; }
+.legal-wrap .legal-date { font-family: var(--font-ui); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--dust); margin-bottom: 40px; display: block; }
+.legal-wrap h2 { font-family: var(--font-display); font-size: 22px; font-weight: 600; color: var(--midnight); margin: 36px 0 12px; }
+.legal-wrap p, .legal-wrap li { font-family: var(--font-body); font-size: 16px; color: var(--slate); line-height: 1.9; margin-bottom: 12px; }
+.legal-wrap ul { padding-left: 24px; margin-bottom: 16px; }
+.legal-wrap a { color: var(--lingon); }
+.legal-wrap .info-box { background: var(--heather-pale); border-left: 3px solid var(--heather); padding: 16px 20px; border-radius: 0 4px 4px 0; margin: 20px 0; }
+@media(max-width:600px) { .legal-wrap { padding: 40px 20px; } }

@@ -35,6 +35,69 @@ function getBadgeLabel(b){const m={'badge-new':{sv:'Ny',fr:'Nouveau',en:'New'},'
 
 function renderHeader(activePage=''){return`<div class="lang-bar"><button class="lang-btn${LANG==='sv'?' active':''}" data-lang="sv" onclick="setLang('sv')">Svenska</button><button class="lang-btn${LANG==='fr'?' active':''}" data-lang="fr" onclick="setLang('fr')">Français</button><button class="lang-btn${LANG==='en'?' active':''}" data-lang="en" onclick="setLang('en')">English</button></div><div class="announcement" data-sv="🌿 Livraison gratuite dès 50€ · Produits suédois & britanniques · Paiement sécurisé" data-fr="🌿 Livraison gratuite dès 50€ · Produits suédois & britanniques · Paiement sécurisé" data-en="🌿 Free delivery from €50 · British & Nordic products · Secure payment">🌿 Livraison gratuite dès 50€ · Produits suédois & britanniques · Paiement sécurisé</div><header><div class="nav-inner"><a href="index.html" class="logo"><span class="logo-main">Heather & Lingon</span><span class="logo-tag" data-sv="British & Nordic Pantry" data-fr="British & Nordic Pantry" data-en="British & Nordic Pantry">British & Nordic Pantry</span></a><nav><a href="index.html"${activePage==='home'?' class="active"':''} data-sv="Accueil" data-fr="Accueil" data-en="Home">Accueil</a><a href="boutique.html"${activePage==='shop'?' class="active"':''} data-sv="Boutique" data-fr="Boutique" data-en="Shop">Boutique</a><a href="a-propos.html"${activePage==='about'?' class="active"':''} data-sv="Notre histoire" data-fr="Notre histoire" data-en="Our story">Notre histoire</a><a href="contact.html"${activePage==='contact'?' class="active"':''} data-sv="Contact" data-fr="Contact" data-en="Contact">Contact</a></nav><div class="nav-actions"><button class="btn-search" onclick="openSearch()">🔍</button><button class="btn-cart" onclick="openCart()"><span data-sv="Korg" data-fr="Panier" data-en="Cart">Panier</span><span class="cart-badge">0</span></button><button class="hamburger" onclick="openMob()"><span></span><span></span><span></span></button></div></div></header><div class="mobile-nav" id="mobile-nav"><button class="mob-close" onclick="closeMob()">✕</button><a href="index.html" onclick="closeMob()" data-sv="Accueil" data-fr="Accueil" data-en="Home">Accueil</a><a href="boutique.html" onclick="closeMob()" data-sv="Boutique" data-fr="Boutique" data-en="Shop">Boutique</a><a href="a-propos.html" onclick="closeMob()" data-sv="Notre histoire" data-fr="Notre histoire" data-en="Our story">Notre histoire</a><a href="contact.html" onclick="closeMob()" data-sv="Contact" data-fr="Contact" data-en="Contact">Contact</a></div><div class="search-overlay" id="search-overlay" onclick="handleSearchClick(event)"><div class="search-box"><div class="search-row"><span style="font-size:18px;color:var(--dust);">🔍</span><input type="text" id="search-inp" oninput="doSearch(this.value)" data-sv-ph="Sök..." data-fr-ph="Rechercher..." data-en-ph="Search..." placeholder="Rechercher..."><button class="search-close" onclick="closeSearch()">✕</button></div><div class="search-results" id="search-res"></div></div></div><div class="drawer-overlay" id="drawer-overlay" onclick="closeCart()"></div><div class="cart-drawer" id="cart-drawer"><div class="drawer-head"><h3 data-sv="Din korg" data-fr="Votre panier" data-en="Your cart">Votre panier</h3><button class="drawer-close" onclick="closeCart()">✕</button></div><div class="drawer-items" id="drawer-items-list"></div><div class="drawer-foot" id="drawer-footer" style="display:none;"><div class="cart-subtotal-row"><span data-sv="Delsumma" data-fr="Sous-total" data-en="Subtotal">Sous-total</span><span id="cart-total-price">€0.00</span></div><p class="cart-free-ship" id="cart-ship-note"></p><button class="btn-checkout" onclick="openSnipcartCheckout()" data-sv="Beställ →" data-fr="Commander →" data-en="Checkout →">Commander →</button><button class="btn-keep-shopping" onclick="closeCart()" data-sv="Fortsätt handla" data-fr="Continuer mes achats" data-en="Continue shopping">Continuer mes achats</button></div></div><div class="toast" id="toast"></div>`;}
 
-function renderFooter(){return`<footer><div class="footer-inner"><div class="footer-grid"><div class="footer-logo"><a href="index.html" class="logo"><span class="logo-main">Heather & Lingon</span><span class="logo-tag">British & Nordic Pantry</span></a><p>Suède 🇸🇪 Un projet de famille né de l'amour pour la Suède 🇸🇪 Grande-Bretagne 🇬🇧 — un duo de saveurs d'exception</p><div class="footer-social"><a href="#" class="soc-link">📷</a><a href="#" class="soc-link">📘</a><a href="#" class="soc-link">📌</a></div></div><div class="footer-col"><h4>La boutique</h4><ul><li><a href="boutique.html?cat=%C3%89pices">Épices & Aromates</a></li><li><a href="boutique.html?cat=Chips+%26+Snacks">Chips & Snacks</a></li><li><a href="boutique.html?cat=Confiseries">Confiseries</a></li><li><a href="boutique.html?cat=Basics+su%C3%A9dois">Basics suédois</a></li><li><a href="boutique.html?cat=Fika+%26+Boulangerie">Fika & Boulangerie</a></li></ul></div><div class="footer-col"><h4>Service</h4><ul><li><a href="#">Livraison & retours</a></li><li><a href="#">FAQ</a></li><li><a href="#">Suivi commande</a></li><li><a href="#">CGV</a></li></ul></div><div class="footer-col"><h4>Contact</h4><ul><li><a href="contact.html">hej@heather-lingon.fr</a></li><li><a href="a-propos.html">Notre histoire</a></li></ul><div style="margin-top:18px;font-size:20px;">🇸🇪 🇫🇷 🇬🇧</div></div></div><div class="footer-bottom"><p>© 2026 Heather & Lingon · Tous droits réservés</p><div class="pay-badges"><span class="pay-badge">VISA</span><span class="pay-badge">MASTERCARD</span><span class="pay-badge">PAYPAL</span></div><p>Fait avec ❤️ pour la Suède & la Grande-Bretagne</p></div></div></footer>`;}
+function renderFooter(){return`<footer><div class="footer-inner"><div class="footer-grid"><div class="footer-logo"><a href="index.html" class="logo"><span class="logo-main">Heather & Lingon</span><span class="logo-tag">British & Nordic Pantry</span></a><p>Suède 🇸🇪 Un projet de famille né de l'amour pour la Suède 🇸🇪 Grande-Bretagne 🇬🇧 — un duo de saveurs d'exception</p><div class="footer-social"><a href="#" class="soc-link">📷</a><a href="#" class="soc-link">📘</a><a href="#" class="soc-link">📌</a></div></div><div class="footer-col"><h4>La boutique</h4><ul><li><a href="boutique.html?cat=%C3%89pices">Épices & Aromates</a></li><li><a href="boutique.html?cat=Chips+%26+Snacks">Chips & Snacks</a></li><li><a href="boutique.html?cat=Confiseries">Confiseries</a></li><li><a href="boutique.html?cat=Basics+su%C3%A9dois">Basics suédois</a></li><li><a href="boutique.html?cat=Fika+%26+Boulangerie">Fika & Boulangerie</a></li></ul></div><div class="footer-col"><h4>Service</h4><ul><li><a href="livraison.html">Livraison &amp; retours</a></li><li><a href="faq.html">FAQ</a></li><li><a href="contact.html">Suivi commande</a></li><li><a href="cgv.html">CGV</a></li></ul></div><div class="footer-col"><h4>Contact</h4><ul><li><a href="mailto:hej@heather-lingon.fr">hej@heather-lingon.fr</a></li><li><a href="a-propos.html">Notre histoire</a></li><li><a href="mentions-legales.html">Mentions légales</a></li></ul><div style="margin-top:18px;font-size:20px;">🇸🇪 🇫🇷 🇬🇧</div></div></div><div class="footer-bottom"><p>© 2026 Heather & Lingon · Tous droits réservés</p><div class="pay-badges"><span class="pay-badge">VISA</span><span class="pay-badge">MASTERCARD</span><span class="pay-badge">PAYPAL</span></div><p>Fait avec ❤️ pour la Suède & la Grande-Bretagne</p></div></div></footer>`;}
 
-function initPage(activePage){document.getElementById('header-root').innerHTML=renderHeader(activePage);document.getElementById('footer-root').innerHTML=renderFooter();setLang(LANG);updateCartBadge();renderCartDrawer();}
+function initPage(activePage){document.getElementById('header-root').innerHTML=renderHeader(activePage);document.getElementById('footer-root').innerHTML=renderFooter();setLang(LANG);updateCartBadge();renderCartDrawer();initScrollReveal();initHeaderShrink();}
+
+/* ── SCROLL REVEAL ── */
+function initScrollReveal() {
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+}
+
+// Re-observe newly rendered elements (called after dynamic renders)
+function revealNew(container) {
+  if (!container) return;
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: 0.08 });
+  container.querySelectorAll('.prod-card, .prod-list-item').forEach((el, i) => {
+    el.classList.add('reveal');
+    el.style.transitionDelay = (i * 0.06) + 's';
+    obs.observe(el);
+  });
+}
+
+/* ── HEADER SHRINK ── */
+function initHeaderShrink() {
+  const header = document.querySelector('header');
+  if (!header) return;
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        header.classList.toggle('shrunk', window.scrollY > 72);
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
+}
+
+/* ── STICKY ADD TO CART (product page) ── */
+function initStickyAtc(productName, price) {
+  const bar = document.getElementById('sticky-atc');
+  if (!bar) return;
+  document.getElementById('sticky-atc-name').textContent = productName;
+  document.getElementById('sticky-atc-price').textContent = '€' + (price || 0).toFixed(2);
+
+  const addRow = document.querySelector('.add-row');
+  if (!addRow) return;
+  const obs = new IntersectionObserver(([e]) => {
+    bar.classList.toggle('visible', !e.isIntersecting);
+  }, { threshold: 0 });
+  obs.observe(addRow);
+}
+
+/* ── MOBILE FILTER TOGGLE ── */
+function toggleMobFilter() {
+  const sb = document.querySelector('.sidebar');
+  if (!sb) return;
+  sb.classList.toggle('mob-hidden');
+  const btn = document.querySelector('.mob-filter-btn');
+  if (btn) btn.textContent = sb.classList.contains('mob-hidden') ? '🔍 Afficher les filtres' : '✕ Masquer les filtres';
+}
