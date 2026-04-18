@@ -37,28 +37,34 @@ function renderHeader(activePage=''){return`<div class="lang-bar"><button class=
 
 function renderFooter(){return`<footer><div class="footer-inner"><div class="footer-grid"><div class="footer-logo"><a href="index.html" class="logo"><span class="logo-main">Heather & Lingon</span><span class="logo-tag">British & Nordic Pantry</span></a><p>Suède 🇸🇪 Un projet de famille né de l'amour pour la Suède 🇸🇪 Grande-Bretagne 🇬🇧 — un duo de saveurs d'exception</p><div class="footer-social"><a href="#" class="soc-link">📷</a><a href="#" class="soc-link">📘</a><a href="#" class="soc-link">📌</a></div></div><div class="footer-col"><h4>La boutique</h4><ul><li><a href="boutique.html?cat=%C3%89pices">Épices & Aromates</a></li><li><a href="boutique.html?cat=Chips+%26+Snacks">Chips & Snacks</a></li><li><a href="boutique.html?cat=Confiseries">Confiseries</a></li><li><a href="boutique.html?cat=Basics+su%C3%A9dois">Basics suédois</a></li><li><a href="boutique.html?cat=Fika+%26+Boulangerie">Fika & Boulangerie</a></li></ul></div><div class="footer-col"><h4>Service</h4><ul><li><a href="livraison.html">Livraison &amp; retours</a></li><li><a href="faq.html">FAQ</a></li><li><a href="contact.html">Suivi commande</a></li><li><a href="cgv.html">CGV</a></li></ul></div><div class="footer-col"><h4>Contact</h4><ul><li><a href="mailto:hej@heather-lingon.fr">hej@heather-lingon.fr</a></li><li><a href="a-propos.html">Notre histoire</a></li><li><a href="mentions-legales.html">Mentions légales</a></li></ul><div style="margin-top:18px;font-size:20px;">🇸🇪 🇫🇷 🇬🇧</div></div></div><div class="footer-bottom"><p>© 2026 Heather & Lingon · Tous droits réservés</p><div class="pay-badges"><span class="pay-badge">VISA</span><span class="pay-badge">MASTERCARD</span><span class="pay-badge">PAYPAL</span></div><p>Fait avec ❤️ pour la Suède & la Grande-Bretagne</p></div></div></footer>`;}
 
-function initPage(activePage){document.getElementById('header-root').innerHTML=renderHeader(activePage);document.getElementById('footer-root').innerHTML=renderFooter();setLang(LANG);updateCartBadge();renderCartDrawer();initScrollReveal();initHeaderShrink();}
+function initPage(activePage){document.body.classList.add('js-ready');document.getElementById('header-root').innerHTML=renderHeader(activePage);document.getElementById('footer-root').innerHTML=renderFooter();setLang(LANG);updateCartBadge();renderCartDrawer();initScrollReveal();initHeaderShrink();}
 
 /* ── SCROLL REVEAL ── */
 function initScrollReveal() {
+  document.body.classList.add('js-ready');
   const obs = new IntersectionObserver((entries) => {
     entries.forEach(e => {
       if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
     });
-  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+  }, { threshold: 0.08, rootMargin: '0px 0px -20px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(el => {
+    const rect = el.getBoundingClientRect();
+    // Déjà visible → ajouter .visible immédiatement sans animation
+    if (rect.top < window.innerHeight && rect.bottom > 0) {
+      el.classList.add('visible');
+    } else {
+      obs.observe(el);
+    }
+  });
 }
 
-// Re-observe newly rendered elements (called after dynamic renders)
+// Anime les cartes produit après render dynamique
 function revealNew(container) {
   if (!container) return;
-  const obs = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
-  }, { threshold: 0.08 });
   container.querySelectorAll('.prod-card, .prod-list-item').forEach((el, i) => {
-    el.classList.add('reveal');
-    el.style.transitionDelay = (i * 0.06) + 's';
-    obs.observe(el);
+    el.style.animationDelay = (i * 0.07) + 's';
+    el.classList.add('prod-card-anim');
   });
 }
 

@@ -374,7 +374,7 @@ function renderHome() {
   }
   // Bestsellers
   const bs = document.getElementById('bestsellers');
-  if (bs) bs.innerHTML = PRODUCTS.filter(p=>p.bestseller).slice(0,6).map(p=>productCardHTML(p)).join('');
+  if (bs) { bs.innerHTML = PRODUCTS.filter(p=>p.bestseller).slice(0,6).map(p=>productCardHTML(p)).join(''); revealNew(bs); }
   // Xmas
   const xg = document.getElementById('xmas-grid');
   if (xg) {
@@ -388,7 +388,7 @@ function renderHome() {
   }
   // New arrivals
   const na = document.getElementById('new-arrivals');
-  if (na) na.innerHTML = PRODUCTS.filter(p=>p.isNew).slice(0,4).map(p=>productCardHTML(p,'compact')).join('');
+  if (na) { na.innerHTML = PRODUCTS.filter(p=>p.isNew).slice(0,4).map(p=>productCardHTML(p,'compact')).join(''); revealNew(na); }
 }
 
 function nlSubscribe() {

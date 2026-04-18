@@ -370,23 +370,38 @@ footer { background:var(--midnight); color:rgba(255,255,255,0.55); padding:64px 
 }
 .btn-keep-shopping:hover { border-color:var(--slate); color:var(--slate); }
 
-/* ── SCROLL REVEAL ── */
-.reveal {
+/* ── SCROLL REVEAL — seulement si JS a chargé ── */
+body.js-ready .reveal {
   opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.65s cubic-bezier(0.4,0,0.2,1), transform 0.65s cubic-bezier(0.4,0,0.2,1);
+  transform: translateY(32px);
+  transition: opacity 0.7s cubic-bezier(0.4,0,0.2,1), transform 0.7s cubic-bezier(0.4,0,0.2,1);
 }
-.reveal.visible { opacity: 1; transform: none; }
-.reveal-delay-1 { transition-delay: 0.1s; }
-.reveal-delay-2 { transition-delay: 0.2s; }
-.reveal-delay-3 { transition-delay: 0.3s; }
-.reveal-delay-4 { transition-delay: 0.4s; }
+body.js-ready .reveal.visible { opacity: 1; transform: none; }
+body.js-ready .reveal-delay-1 { transition-delay: 0.08s; }
+body.js-ready .reveal-delay-2 { transition-delay: 0.16s; }
+body.js-ready .reveal-delay-3 { transition-delay: 0.24s; }
+body.js-ready .reveal-delay-4 { transition-delay: 0.32s; }
+
+/* Animation entrée carte produit */
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.97); }
+  to   { opacity: 1; transform: none; }
+}
+.prod-card-anim { animation: cardIn 0.45s cubic-bezier(0.4,0,0.2,1) both; }
 
 /* ── HEADER SHRINK ── */
 header { transition: box-shadow 0.3s ease; }
-header.shrunk .nav-inner { height: 58px; transition: height 0.3s ease; }
-header.shrunk .logo-main { font-size: 20px; transition: font-size 0.3s ease; }
-header.shrunk { box-shadow: 0 4px 24px rgba(28,32,40,0.13); }
+header.shrunk .nav-inner { height: 56px; transition: height 0.3s ease; }
+header.shrunk .logo-main { font-size: 19px; transition: font-size 0.3s ease; }
+header.shrunk { box-shadow: 0 4px 24px rgba(28,32,40,0.15); background: var(--warm-white); }
+
+/* ── HERO GRADIENT ANIMATION ── */
+@keyframes heroShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.hero { background: linear-gradient(135deg, var(--heather) 0%, #5C2E6B 40%, var(--lingon-deep) 100%) !important; background-size: 200% 200% !important; animation: heroShift 8s ease infinite; }
 
 /* ── STICKY ADD TO CART (product page) ── */
 .sticky-atc {
