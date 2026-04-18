@@ -1,5 +1,5 @@
 /**
- * Svenska Delikatessen — API Client Bridge v2
+ * Heather & Lingon — API Client Bridge v2
  * Connecte le front Netlify/Vercel au back-end Vercel
  */
 (function () {
