@@ -266,7 +266,7 @@ function render() {
   const c = document.getElementById('shop-count');
   if (c) c.textContent = `${list.length} ${list.length <= 1 ? UI[LANG].product : UI[LANG].products}`;
 
-  // Update sidebar counts and hide empty categories
+  // Update sidebar counts — hide categories with 0 products (only once Supabase has loaded)
   const allCounts = {};
   CATS.forEach(cat => { allCounts[cat.id] = PRODUCTS.filter(p => p.cat === cat.id).length; });
   const el_ALL = document.getElementById('cnt-ALL');
@@ -277,17 +277,13 @@ function render() {
     'Thés & Tisanes':'cnt-Thes','Baies séchées':'cnt-Baies','Flocons & Céréales':'cnt-Flocons',
     'Farines & Graines':'cnt-Farines','Sucres & Sirops':'cnt-Sucres'
   };
+  const supaLoaded = !!(window.SDApi && window.SDApi.isReady);
   Object.entries(CAT_CNT_MAP).forEach(([cat, cntId]) => {
     const count = allCounts[cat] || 0;
     const cntEl = document.getElementById(cntId);
     if (cntEl) cntEl.textContent = count;
     const btnEl = document.getElementById(CAT_BTN_MAP[cat]);
-    if (btnEl) btnEl.style.display = count === 0 ? 'none' : '';
-    if (count === 0 && currentCat === cat) {
-      currentCat = 'Tous';
-      document.querySelectorAll('.sb-btn').forEach(b => b.classList.remove('active'));
-      document.getElementById('sb-ALL')?.classList.add('active');
-    }
+    if (btnEl) btnEl.style.display = (supaLoaded && count === 0) ? 'none' : '';
   });
 
   // Active filters strip
