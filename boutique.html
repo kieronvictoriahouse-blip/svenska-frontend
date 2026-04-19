@@ -204,6 +204,13 @@ let currentSort = 'default';
 let currentView = 'grid3';
 let activeTags = new Set();
 
+const CAT_BTN_MAP = {
+  'Tous':'sb-ALL','Épices':'sb-Epices','Chips & Snacks':'sb-Chips',
+  'Confiseries':'sb-Confis','Basics suédois':'sb-Basics','Fika & Boulangerie':'sb-Fika',
+  'Mélanges':'sb-Mel','Thés & Tisanes':'sb-Thes','Baies séchées':'sb-Baies',
+  'Flocons & Céréales':'sb-Flocons','Farines & Graines':'sb-Farines','Sucres & Sirops':'sb-Sucres'
+};
+
 initPage('shop');
 
 // URL params
@@ -211,13 +218,6 @@ const params = new URLSearchParams(window.location.search);
 if (params.get('cat')) currentCat = decodeURIComponent(params.get('cat'));
 
 function onLangChange() { render(); }
-
-const CAT_BTN_MAP = {
-  'Tous':'sb-ALL','Épices':'sb-Epices','Chips & Snacks':'sb-Chips',
-  'Confiseries':'sb-Confis','Basics suédois':'sb-Basics','Fika & Boulangerie':'sb-Fika',
-  'Mélanges':'sb-Mel','Thés & Tisanes':'sb-Thes','Baies séchées':'sb-Baies',
-  'Flocons & Céréales':'sb-Flocons','Farines & Graines':'sb-Farines','Sucres & Sirops':'sb-Sucres'
-};
 
 function setCat(cat) {
   currentCat = cat;
