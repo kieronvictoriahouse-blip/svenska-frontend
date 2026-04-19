@@ -269,15 +269,18 @@ function renderPDP(p) {
     p.tags.map(t=>`<span class="pdp-pill">${t}</span>`).join('') +
     (p.badge ? `<span class="pdp-pill copper-pill">${getBadgeLabel(p.badge)}</span>` : '');
 
-  // Thumbs
-  const thumbEmojis = ['📦', '🌿', '🏷️'];
-  const firstThumb = p.photo
-    ? `<div class="g-thumb active" onclick="selectThumbPhoto(this,'${p.photo}')"><img src="${p.photo}" style="width:100%;height:100%;object-fit:cover;border-radius:4px"></div>`
-    : `<div class="g-thumb active" onclick="selectThumb(this,'${p.emoji}',true,'${p.emoji}')"><span>${p.emoji}</span></div>`;
-  document.getElementById('gallery-thumbs').innerHTML = firstThumb + thumbEmojis.map((e,i) => `
-    <div class="g-thumb" onclick="selectThumb(this,'${e}',false,'${p.emoji}')">
-      <span>${e}</span>
-    </div>`).join('');
+  // Thumbs — only real images, hide section if only 1 image total
+  const thumbsEl = document.getElementById('gallery-thumbs');
+  const allImgs = [p.photo, ...(p.extra_images || [])].filter(Boolean);
+  if (allImgs.length <= 1) {
+    thumbsEl.style.display = 'none';
+  } else {
+    thumbsEl.style.display = '';
+    thumbsEl.innerHTML = allImgs.map((url, i) => `
+      <div class="g-thumb${i===0?' active':''}" onclick="selectThumbImg(this,'${url}')">
+        <img src="${url}" alt="" style="width:100%;height:100%;object-fit:contain;padding:4px;background:var(--cream);" onerror="this.parentElement.style.display='none'">
+      </div>`).join('');
+  }
 
   // Accordion — build sections including allergens and nutrition
   const allSections = [];
@@ -363,24 +366,14 @@ function selectVar(btn, label, price) {
   updatePrice();
 }
 
-function selectThumbPhoto(el) {
+function selectThumbImg(el, url) {
   document.querySelectorAll('.g-thumb').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
-  document.getElementById('main-photo').style.display = 'block';
-  document.getElementById('main-emoji').style.display = 'none';
-}
-
-function selectThumb(el, emoji, isMain, mainEmoji) {
-  document.querySelectorAll('.g-thumb').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-  if (isMain && document.getElementById('main-photo').src) {
-    document.getElementById('main-photo').style.display = 'block';
-    document.getElementById('main-emoji').style.display = 'none';
-  } else {
-    document.getElementById('main-photo').style.display = 'none';
-    document.getElementById('main-emoji').style.display = 'block';
-    document.getElementById('main-emoji').textContent = emoji;
-  }
+  const mainPhoto = document.getElementById('main-photo');
+  const mainEmoji = document.getElementById('main-emoji');
+  mainPhoto.src = url;
+  mainPhoto.style.display = 'block';
+  mainEmoji.style.display = 'none';
 }
 
 function changeQtyPdp(d) {
@@ -463,6 +456,7 @@ function toggleAcc(trigger) {
         price: raw.price, weight: raw.weight || local?.weight || '', tags: raw.tags || local?.tags || [],
         allergens:   fbObj('allergens_sv',   'allergens_fr',   'allergens_en',   'allergens'),
         nutrition:   raw.nutrition || {},
+        extra_images: raw.extra_images || [],
         variants: (raw.product_variants || []).map(v => ({ label: v.label, price: v.price })) || local?.variants || [],
         bestseller: raw.is_bestseller || false, isNew: raw.is_new || false,
       };
