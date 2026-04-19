@@ -91,7 +91,7 @@
 
 <div class="shop-hero">
   <h1 data-sv="Hela <em>sortimentet</em>" data-fr="Toute la <em>boutique</em>" data-en="The full <em>shop</em>">Toute la <em>boutique</em></h1>
-  <p data-sv="36 äkta svenska produkter — handplockat urval" data-fr="36 produits suédois authentiques — sélection soignée" data-en="36 authentic Swedish products — carefully curated">36 produits suédois authentiques — sélection soignée</p>
+  <p id="hero-count-text" data-sv="Sélection de produits nordiques & britanniques" data-fr="Sélection de produits nordiques & britanniques" data-en="Selection of Nordic & British products">Sélection de produits nordiques & britanniques</p>
 </div>
 
 <div class="shop-wrap">
@@ -301,26 +301,32 @@ function render() {
     return;
   }
 
+  function safeCard(p) {
+    try { return productCardHTML(p); }
+    catch(e) { console.warn('[boutique] card error', p?.id, e.message); return ''; }
+  }
+
   if (currentView === 'list') {
     container.innerHTML = list.map(p => {
       const origin = typeof p.origin === 'object' ? p.origin[LANG] : p.origin;
-      return `<div class="prod-list-item" onclick="window.location.href='produit.html?id=${p.id}'">
-        <div class="pli-img"><img src="${p.photo}" alt="${p.name['fr']}" loading="lazy" style="width:100%;height:100%;object-fit:cover;"></div>
+      const pid = typeof p.id === 'string' ? `'${p.id}'` : p.id;
+      return `<div class="prod-list-item" onclick="window.location.href='produit.html?id=${p.uuid||p.id}'">
+        <div class="pli-img"><img src="${p.photo}" alt="${p.name['fr']||''}" loading="lazy" style="width:100%;height:100%;object-fit:cover;"></div>
         <div class="pli-body">
-          <div class="pli-name">${p.name[LANG]}</div>
-          <div class="pli-sub">${p.subtitle[LANG]}</div>
-          <div class="pli-tags">${p.tags.slice(0,3).map(t=>`<span class="pli-tag">${t}</span>`).join('')}</div>
+          <div class="pli-name">${p.name[LANG]||''}</div>
+          <div class="pli-sub">${p.subtitle[LANG]||''}</div>
+          <div class="pli-tags">${(p.tags||[]).slice(0,3).map(t=>`<span class="pli-tag">${t}</span>`).join('')}</div>
         </div>
         <div class="pli-action">
-          <span class="pli-price">€${p.price.toFixed(2)}</span>
-          <span class="pli-weight">${p.weight}</span>
-          <button class="btn-add-small" onclick="event.stopPropagation();addToCart(${p.id})">Ajouter</button>
+          <span class="pli-price">€${(p.price||0).toFixed(2)}</span>
+          <span class="pli-weight">${p.weight||''}</span>
+          <button class="btn-add-small" onclick="event.stopPropagation();addToCart(${pid})">Ajouter</button>
         </div>
       </div>`;
     }).join('');
   } else {
     const cls = currentView === 'grid4' ? 'grid-4' : 'grid-3';
-    container.innerHTML = `<div class="${cls}">${list.map(p=>productCardHTML(p)).join('')}</div>`;
+    container.innerHTML = `<div class="${cls}">${list.map(p=>safeCard(p)).join('')}</div>`;
   }
 }
 
@@ -330,7 +336,23 @@ render();
 
 // Re-render avec données Supabase
 window.addEventListener('sdapi:ready', () => {
-  setCat(currentCat);
+  // Si la catégorie active n'a plus de produits, revenir à Tous
+  if (currentCat !== 'Tous') {
+    const inCat = PRODUCTS.filter(p => p.cat === currentCat);
+    if (inCat.length === 0) {
+      currentCat = 'Tous';
+      document.querySelectorAll('.sb-btn').forEach(b => b.classList.remove('active'));
+      const allBtn = document.getElementById('sb-ALL');
+      if (allBtn) allBtn.classList.add('active');
+    }
+  }
+  // Mettre à jour le compteur hero
+  const heroEl = document.getElementById('hero-count-text');
+  if (heroEl && PRODUCTS.length > 0) {
+    const n = PRODUCTS.length;
+    const txt = { sv: `${n} nordiska & brittiska produkter`, fr: `${n} produits nordiques & britanniques`, en: `${n} Nordic & British products` };
+    heroEl.textContent = txt[LANG] || txt.fr;
+  }
   render();
 });
 </script>
