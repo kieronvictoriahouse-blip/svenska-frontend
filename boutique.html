@@ -266,21 +266,29 @@ function render() {
   const c = document.getElementById('shop-count');
   if (c) c.textContent = `${list.length} ${list.length <= 1 ? UI[LANG].product : UI[LANG].products}`;
 
-  // Update sidebar counts
+  // Update sidebar counts and hide empty categories
   const allCounts = {};
   CATS.forEach(cat => { allCounts[cat.id] = PRODUCTS.filter(p => p.cat === cat.id).length; });
-  document.getElementById('cnt-ALL') && (document.getElementById('cnt-ALL').textContent = PRODUCTS.length);
-  document.getElementById('cnt-Epices') && (document.getElementById('cnt-Epices').textContent = allCounts['Épices']||0);
-  document.getElementById('cnt-Chips') && (document.getElementById('cnt-Chips').textContent = allCounts['Chips & Snacks']||0);
-  document.getElementById('cnt-Confis') && (document.getElementById('cnt-Confis').textContent = allCounts['Confiseries']||0);
-  document.getElementById('cnt-Basics') && (document.getElementById('cnt-Basics').textContent = allCounts['Basics suédois']||0);
-  document.getElementById('cnt-Fika') && (document.getElementById('cnt-Fika').textContent = allCounts['Fika & Boulangerie']||0);
-  document.getElementById('cnt-Mel') && (document.getElementById('cnt-Mel').textContent = allCounts['Mélanges']||0);
-  document.getElementById('cnt-Thes') && (document.getElementById('cnt-Thes').textContent = allCounts['Thés & Tisanes']||0);
-  document.getElementById('cnt-Baies') && (document.getElementById('cnt-Baies').textContent = allCounts['Baies séchées']||0);
-  document.getElementById('cnt-Flocons') && (document.getElementById('cnt-Flocons').textContent = allCounts['Flocons & Céréales']||0);
-  document.getElementById('cnt-Farines') && (document.getElementById('cnt-Farines').textContent = allCounts['Farines & Graines']||0);
-  document.getElementById('cnt-Sucres') && (document.getElementById('cnt-Sucres').textContent = allCounts['Sucres & Sirops']||0);
+  const el_ALL = document.getElementById('cnt-ALL');
+  if (el_ALL) el_ALL.textContent = PRODUCTS.length;
+  const CAT_CNT_MAP = {
+    'Épices':'cnt-Epices','Chips & Snacks':'cnt-Chips','Confiseries':'cnt-Confis',
+    'Basics suédois':'cnt-Basics','Fika & Boulangerie':'cnt-Fika','Mélanges':'cnt-Mel',
+    'Thés & Tisanes':'cnt-Thes','Baies séchées':'cnt-Baies','Flocons & Céréales':'cnt-Flocons',
+    'Farines & Graines':'cnt-Farines','Sucres & Sirops':'cnt-Sucres'
+  };
+  Object.entries(CAT_CNT_MAP).forEach(([cat, cntId]) => {
+    const count = allCounts[cat] || 0;
+    const cntEl = document.getElementById(cntId);
+    if (cntEl) cntEl.textContent = count;
+    const btnEl = document.getElementById(CAT_BTN_MAP[cat]);
+    if (btnEl) btnEl.style.display = count === 0 ? 'none' : '';
+    if (count === 0 && currentCat === cat) {
+      currentCat = 'Tous';
+      document.querySelectorAll('.sb-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('sb-ALL')?.classList.add('active');
+    }
+  });
 
   // Active filters strip
   const af = document.getElementById('active-filters');
