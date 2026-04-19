@@ -81,9 +81,21 @@
 .acc-trigger:hover { color:var(--lingon); }
 .acc-arrow { transition:transform 0.22s; font-size:10px; }
 .acc-trigger.open .acc-arrow { transform:rotate(180deg); }
-.acc-body { max-height:0; overflow:hidden; transition:max-height 0.35s ease; }
-.acc-body.open { max-height:500px; }
+.acc-body { max-height:0; overflow:hidden; transition:max-height 0.55s ease; }
+.acc-body.open { max-height:900px; }
 .acc-content { font-family:var(--font-body); font-size:16px; color:var(--slate); line-height:1.85; padding:0 0 20px; }
+
+/* NUTRITION TABLE */
+.nutri-table { width:100%; border-collapse:collapse; font-family:var(--font-ui); font-size:13px; margin-bottom:20px; }
+.nutri-table caption { text-align:left; font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--dust); padding-bottom:10px; }
+.nutri-table th { background:var(--parchment); padding:8px 12px; text-align:left; font-weight:600; font-size:11px; letter-spacing:0.5px; }
+.nutri-table td { padding:8px 12px; border-bottom:1px solid var(--parchment); color:var(--slate); }
+.nutri-table td:last-child { text-align:right; font-weight:600; color:var(--midnight); }
+.nutri-table tr.sub td:first-child { padding-left:24px; color:var(--dust); font-size:12px; }
+.allergen-box { background:var(--parchment); border-left:3px solid var(--lingon-mid); padding:12px 16px; font-family:var(--font-ui); font-size:13px; color:var(--slate); line-height:1.7; border-radius:1px; margin-bottom:4px; }
+
+/* WEIGHT BADGE */
+.pdp-weight { display:inline-block; background:var(--parchment); color:var(--dust); font-family:var(--font-ui); font-size:11px; letter-spacing:1px; text-transform:uppercase; padding:5px 14px; border-radius:1px; margin-bottom:18px; }
 
 /* RELATED */
 .related-bg { background:var(--cream); border-top:1px solid var(--linen); }
@@ -134,7 +146,7 @@
   <div class="gallery">
     <div class="gallery-main">
       <div class="gallery-origin" data-sv="🇸🇪 Sverige" data-fr="🇸🇪 Suède" data-en="🇸🇪 Sweden">🇸🇪 Suède</div>
-      <img id="main-photo" src="" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none;">
+      <img id="main-photo" src="" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:16px;display:none;">
       <span class="gallery-main-emoji" id="main-emoji">🌿</span>
     </div>
     <div class="gallery-thumbs" id="gallery-thumbs"></div>
@@ -150,6 +162,7 @@
       <span class="pdp-price" id="pdp-price"></span>
       <div><div class="pdp-per" id="pdp-per"></div><div class="pdp-per-kg" id="pdp-per-kg"></div></div>
     </div>
+    <div class="pdp-weight" id="pdp-weight" style="display:none;"></div>
     <p class="pdp-desc" id="pdp-desc"></p>
     <div id="variants-block" style="margin-bottom:26px;display:none;">
       <div class="opt-label" data-sv="Förpackning" data-fr="Conditionnement" data-en="Packaging">Conditionnement</div>
@@ -225,6 +238,11 @@ function renderPDP(p) {
   document.getElementById('pdp-sub').textContent = p.subtitle[LANG];
   document.getElementById('pdp-desc').textContent = p.desc[LANG];
 
+  // Weight badge
+  const weightEl = document.getElementById('pdp-weight');
+  if (weightEl) weightEl.textContent = p.weight || '';
+  if (weightEl) weightEl.style.display = p.weight ? '' : 'none';
+
   // Rating
   const stars = '★'.repeat(Math.round(p.rating)) + '☆'.repeat(5-Math.round(p.rating));
   document.getElementById('pdp-stars').textContent = stars;
@@ -261,24 +279,44 @@ function renderPDP(p) {
       <span>${e}</span>
     </div>`).join('');
 
-  // Accordion
-  const sections = [
-    { key:'usage',       sv:'Användning',        fr:'Utilisation',        en:'Usage' },
-    { key:'ingredients', sv:'Ingredienser',       fr:'Ingrédients',        en:'Ingredients' },
-    { key:'storage',     sv:'Förvaring',          fr:'Conservation',       en:'Storage' },
-  ];
-  document.getElementById('accordion').innerHTML = sections
-    .filter(s => p[s.key]?.[LANG])
-    .map((s,i) => `
-      <div class="acc-item">
-        <button class="acc-trigger${i===0?' open':''}" onclick="toggleAcc(this)">
-          <span>${LANG==='sv'?s.sv:LANG==='en'?s.en:s.fr}</span>
-          <span class="acc-arrow">▾</span>
-        </button>
-        <div class="acc-body${i===0?' open':''}">
-          <div class="acc-content">${p[s.key][LANG]}</div>
-        </div>
-      </div>`).join('');
+  // Accordion — build sections including allergens and nutrition
+  const allSections = [];
+  if (p.usage?.[LANG]) allSections.push({ label: LANG==='sv'?'Användning':LANG==='en'?'Usage':'Utilisation', html: `<div class="acc-content">${p.usage[LANG]}</div>` });
+  if (p.ingredients?.[LANG]) allSections.push({ label: LANG==='sv'?'Ingredienser':LANG==='en'?'Ingredients':'Ingrédients', html: `<div class="acc-content">${p.ingredients[LANG]}</div>` });
+  if (p.allergens?.[LANG]) allSections.push({ label: LANG==='sv'?'Allergener':LANG==='en'?'Allergens':'Allergènes', html: `<div style="padding-bottom:16px"><div class="allergen-box">⚠️ ${p.allergens[LANG]}</div></div>` });
+  if (p.storage?.[LANG]) allSections.push({ label: LANG==='sv'?'Förvaring':LANG==='en'?'Storage':'Conservation', html: `<div class="acc-content">${p.storage[LANG]}</div>` });
+  // Nutrition table
+  const n = p.nutrition || {};
+  const nutriRows = [
+    ['energie',     LANG==='sv'?'Energi':LANG==='en'?'Energy':'Énergie', false],
+    ['graisses',    LANG==='sv'?'Fett':LANG==='en'?'Fat':'Matières grasses', false],
+    ['dont_satures',LANG==='sv'?'varav mättat':'varav mättat',true],
+    ['glucides',    LANG==='sv'?'Kolhydrater':LANG==='en'?'Carbohydrates':'Glucides', false],
+    ['dont_sucres', LANG==='sv'?'varav socker':LANG==='en'?'of which sugars':'dont sucres', true],
+    ['fibres',      LANG==='sv'?'Kostfiber':LANG==='en'?'Fibre':'Fibres', false],
+    ['proteines',   LANG==='sv'?'Protein':LANG==='en'?'Protein':'Protéines', false],
+    ['sel',         LANG==='sv'?'Salt':LANG==='en'?'Salt':'Sel', false],
+  ].filter(([k]) => n[k]);
+  if (nutriRows.length > 0) {
+    const portion = n.portion ? ` — ${LANG==='sv'?'per portion':'per serving'}: ${n.portion}` : '';
+    const rows = nutriRows.map(([k, label, isSub]) =>
+      `<tr class="${isSub?'sub':''}"><td>${label}</td><td>${n[k]}</td></tr>`
+    ).join('');
+    allSections.push({
+      label: LANG==='sv'?'Näringsvärden':LANG==='en'?'Nutrition Facts':'Valeurs nutritionnelles',
+      html: `<div style="padding-bottom:16px"><table class="nutri-table"><caption>${LANG==='sv'?'Per 100g':LANG==='en'?'Per 100g':'Pour 100g'}${portion}</caption><thead><tr><th>${LANG==='sv'?'Näring':LANG==='en'?'Nutrient':'Nutriment'}</th><th>${LANG==='sv'?'Per 100g':LANG==='en'?'Per 100g':'Pour 100g'}</th></tr></thead><tbody>${rows}</tbody></table></div>`
+    });
+  }
+  document.getElementById('accordion').innerHTML = allSections.map((s,i) => `
+    <div class="acc-item">
+      <button class="acc-trigger${i===0?' open':''}" onclick="toggleAcc(this)">
+        <span>${s.label}</span>
+        <span class="acc-arrow">▾</span>
+      </button>
+      <div class="acc-body${i===0?' open':''}">
+        ${s.html}
+      </div>
+    </div>`).join('');
 
   // Related
   const related = PRODUCTS.filter(x => x.cat === p.cat && x.id !== p.id).slice(0,4);
@@ -423,6 +461,8 @@ function toggleAcc(trigger) {
         ingredients: fbObj('ingredients_sv', 'ingredients_fr', 'ingredients_en', 'ingredients'),
         storage:     fbObj('storage_sv',     'storage_fr',     'storage_en',     'storage'),
         price: raw.price, weight: raw.weight || local?.weight || '', tags: raw.tags || local?.tags || [],
+        allergens:   fbObj('allergens_sv',   'allergens_fr',   'allergens_en',   'allergens'),
+        nutrition:   raw.nutrition || {},
         variants: (raw.product_variants || []).map(v => ({ label: v.label, price: v.price })) || local?.variants || [],
         bestseller: raw.is_bestseller || false, isNew: raw.is_new || false,
       };
