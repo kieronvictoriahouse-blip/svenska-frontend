@@ -8,6 +8,24 @@
 
   const BASE = window.SD_API_URL || 'https://svenska-backend.vercel.app';
 
+  // sessionStorage cache — évite le double-rendu entre pages de la même session
+  const CACHE_KEY = 'sd_prods_v1';
+  const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
+  function tryCache() {
+    try {
+      const raw = sessionStorage.getItem(CACHE_KEY);
+      if (!raw) return null;
+      const { ts, data } = JSON.parse(raw);
+      if (Date.now() - ts > CACHE_TTL) return null;
+      return data;
+    } catch { return null; }
+  }
+
+  function setCache(data) {
+    try { sessionStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data })); } catch { }
+  }
+
   const CAT_EMOJI = {
     'Épices': '🌶️', 'Flocons & Céréales': '🌾', 'Baies séchées': '🫐',
     'Sucres & Sirops': '🍯', 'Thés & Tisanes': '🫖', 'Farines & Graines': '🌻',
@@ -186,6 +204,15 @@
   }
 
   async function initFromApi() {
+    // Servir depuis le cache sessionStorage immédiatement (pas d'attente réseau)
+    const cached = tryCache();
+    if (cached) {
+      window.PRODUCTS = cached;
+      window.SDApi.isReady = true;
+      window.SDApi.products = cached;
+      window.dispatchEvent(new CustomEvent('sdapi:ready', { detail: { products: cached, fromCache: true } }));
+    }
+
     try {
       const [productsData, cmsData, wlData] = await Promise.all([
         SDApi.getProducts().catch(() => null),
@@ -195,10 +222,18 @@
 
       // Produits
       if (productsData && productsData.length > 0) {
-        window.PRODUCTS = productsData.map(mapProduct);
+        const mapped = productsData.map(mapProduct);
+        setCache(mapped);
+        window.PRODUCTS = mapped;
         window.SDApi.isReady = true;
-        window.SDApi.products = window.PRODUCTS;
-        console.log('[SDApi] Produits chargés depuis Supabase :', window.PRODUCTS.length);
+        window.SDApi.products = mapped;
+        // Re-déclenche uniquement si les données ont changé par rapport au cache
+        if (!cached || cached.length !== mapped.length) {
+          window.dispatchEvent(new CustomEvent('sdapi:ready', { detail: { products: mapped } }));
+        }
+      } else if (!cached) {
+        // Pas de données API et pas de cache → déclenche quand même (fallback statique)
+        window.dispatchEvent(new CustomEvent('sdapi:ready', { detail: { fallback: true } }));
       }
 
       // CMS home
@@ -214,12 +249,11 @@
         applyWhiteLabel(wlData.config);
       }
 
-      // Déclenche un seul re-render
-      window.dispatchEvent(new CustomEvent('sdapi:ready', { detail: { products: window.PRODUCTS } }));
-
     } catch (e) {
       console.warn('[SDApi] Fallback sur données locales :', e.message);
-      window.dispatchEvent(new CustomEvent('sdapi:ready', { detail: { fallback: true } }));
+      if (!cached) {
+        window.dispatchEvent(new CustomEvent('sdapi:ready', { detail: { fallback: true } }));
+      }
     }
   }
 

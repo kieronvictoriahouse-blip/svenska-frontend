@@ -80,6 +80,14 @@
   .shop-hero { padding:40px 20px; }
   .shop-wrap { padding:24px 16px; }
 }
+/* ── Skeleton loader ── */
+.sk-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+.sk-card { background:var(--snow); border:1px solid var(--linen); overflow:hidden; animation:sk-pulse 1.4s ease-in-out infinite; }
+.sk-img  { aspect-ratio:1; background:linear-gradient(135deg,var(--parchment),var(--linen)); }
+.sk-line { height:11px; background:var(--parchment); margin:12px 16px 0; border-radius:2px; }
+.sk-lg { width:68%; } .sk-md { width:50%; } .sk-sm { width:35%; }
+@keyframes sk-pulse { 0%,100%{opacity:.55} 50%{opacity:1} }
+@media(max-width:600px) { .sk-grid { grid-template-columns:repeat(2,1fr); gap:12px; } }
 </style>
 <link rel="preconnect" href="https://cdn.snipcart.com">
 <link rel="stylesheet" href="https://cdn.snipcart.com/themes/v3.3.3/default/snipcart.css">
@@ -198,11 +206,13 @@
 <div id="footer-root"></div>
 <script src="js/app.js"></script>
 <script>
-let currentCat = 'Tous';
+const params = new URLSearchParams(window.location.search);
+let currentCat = params.get('cat') ? decodeURIComponent(params.get('cat')) : 'Tous';
 let currentMaxPrice = 25;
 let currentSort = 'default';
 let currentView = 'grid3';
 let activeTags = new Set();
+let _ready = false;
 
 const CAT_BTN_MAP = {
   'Tous':'sb-ALL','Épices':'sb-Epices','Chips & Snacks':'sb-Chips',
@@ -212,10 +222,6 @@ const CAT_BTN_MAP = {
 };
 
 initPage('shop');
-
-// URL params
-const params = new URLSearchParams(window.location.search);
-if (params.get('cat')) currentCat = decodeURIComponent(params.get('cat'));
 
 function onLangChange() { render(); }
 
@@ -262,6 +268,7 @@ function getFiltered() {
 }
 
 function render() {
+  if (!_ready) return;
   const list = getFiltered();
   const c = document.getElementById('shop-count');
   if (c) c.textContent = `${list.length} ${list.length <= 1 ? UI[LANG].product : UI[LANG].products}`;
@@ -330,13 +337,24 @@ function render() {
   }
 }
 
-// Init
-setCat(currentCat);
-render();
+// Highlight the active category button (state only, no render yet)
+(function() {
+  document.querySelectorAll('.sb-btn').forEach(b => b.classList.remove('active'));
+  const el = document.getElementById(CAT_BTN_MAP[currentCat]);
+  if (el) el.classList.add('active');
+})();
 
-// Re-render avec données Supabase
+// Show skeleton while waiting for API data
+const _SKL = '<div class="sk-card"><div class="sk-img"></div><div class="sk-line sk-lg"></div><div class="sk-line sk-md"></div><div class="sk-line sk-sm"></div></div>';
+document.getElementById('products-container').innerHTML = '<div class="sk-grid">' + Array(9).fill(_SKL).join('') + '</div>';
+
+// Fallback: render with static data if API doesn't respond within 4s
+const _fallback = setTimeout(() => { _ready = true; render(); }, 4000);
+
+// Render once API data (or cache) is ready
 window.addEventListener('sdapi:ready', () => {
-  // Si la catégorie active n'a plus de produits, revenir à Tous
+  clearTimeout(_fallback);
+  _ready = true;
   if (currentCat !== 'Tous') {
     const inCat = PRODUCTS.filter(p => p.cat === currentCat);
     if (inCat.length === 0) {
@@ -346,7 +364,6 @@ window.addEventListener('sdapi:ready', () => {
       if (allBtn) allBtn.classList.add('active');
     }
   }
-  // Mettre à jour le compteur hero
   const heroEl = document.getElementById('hero-count-text');
   if (heroEl && PRODUCTS.length > 0) {
     const n = PRODUCTS.length;
