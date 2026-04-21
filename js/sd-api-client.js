@@ -8,22 +8,26 @@
 
   const BASE = window.SD_API_URL || 'https://svenska-backend.vercel.app';
 
-  // sessionStorage cache — évite le double-rendu entre pages de la même session
-  const CACHE_KEY = 'sd_prods_v1';
+  // sessionStorage cache — produits + CMS + white-label, évite tout flash entre pages
+  const CACHE_KEY = 'sd_full_v1';
   const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
   function tryCache() {
     try {
       const raw = sessionStorage.getItem(CACHE_KEY);
       if (!raw) return null;
-      const { ts, data } = JSON.parse(raw);
+      const { ts, products, cms, wl } = JSON.parse(raw);
       if (Date.now() - ts > CACHE_TTL) return null;
-      return data;
+      return { products, cms: cms || null, wl: wl || null };
     } catch { return null; }
   }
 
-  function setCache(data) {
-    try { sessionStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data })); } catch { }
+  function setCache(products, cms, wl) {
+    try { sessionStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), products, cms: cms || null, wl: wl || null })); } catch { }
+  }
+
+  function productFingerprint(arr) {
+    return (arr || []).map(p => p.uuid || p.id).sort().join(',');
   }
 
   const CAT_EMOJI = {
@@ -204,13 +208,17 @@
   }
 
   async function initFromApi() {
-    // Servir depuis le cache sessionStorage immédiatement (pas d'attente réseau)
+    // Cache hit : appliquer CMS + WL + produits AVANT sdapi:ready → zéro flash
     const cached = tryCache();
     if (cached) {
-      window.PRODUCTS = cached;
-      window.SDApi.isReady = true;
-      window.SDApi.products = cached;
-      window.dispatchEvent(new CustomEvent('sdapi:ready', { detail: { products: cached, fromCache: true } }));
+      if (cached.cms)  { window.SDApi.cms = cached.cms; applyCms(cached.cms); }
+      if (cached.wl)   { applyWhiteLabel(cached.wl); }
+      if (cached.products) {
+        window.PRODUCTS = cached.products;
+        window.SDApi.isReady = true;
+        window.SDApi.products = cached.products;
+      }
+      window.dispatchEvent(new CustomEvent('sdapi:ready', { detail: { products: cached.products, fromCache: true } }));
     }
 
     try {
@@ -220,33 +228,32 @@
         SDApi.getWhiteLabel().catch(() => null),
       ]);
 
+      // Construire CMS et WL
+      const cms = cmsData?.cms ? Object.fromEntries(cmsData.cms.map(i => [i.key, i])) : null;
+      const wl  = wlData?.config || null;
+
+      // Appliquer CMS + WL AVANT sdapi:ready pour éviter tout flash
+      if (cms) { window.SDApi.cms = cms; applyCms(cms); }
+      if (wl)  { applyWhiteLabel(wl); }
+
       // Produits
-      if (productsData && productsData.length > 0) {
-        const mapped = productsData.map(mapProduct);
-        setCache(mapped);
+      const mapped = (productsData && productsData.length > 0) ? productsData.map(mapProduct) : null;
+      if (mapped) {
         window.PRODUCTS = mapped;
         window.SDApi.isReady = true;
         window.SDApi.products = mapped;
-        // Re-déclenche uniquement si les données ont changé par rapport au cache
-        if (!cached || cached.length !== mapped.length) {
+
+        // Re-déclencher uniquement si les produits ont changé
+        const changed = !cached || productFingerprint(cached.products) !== productFingerprint(mapped);
+        setCache(mapped, cms, wl);
+        if (changed) {
           window.dispatchEvent(new CustomEvent('sdapi:ready', { detail: { products: mapped } }));
         }
-      } else if (!cached) {
-        // Pas de données API et pas de cache → déclenche quand même (fallback statique)
-        window.dispatchEvent(new CustomEvent('sdapi:ready', { detail: { fallback: true } }));
-      }
-
-      // CMS home
-      if (cmsData && cmsData.cms) {
-        const cms = {};
-        cmsData.cms.forEach(i => { cms[i.key] = i; });
-        window.SDApi.cms = cms;
-        applyCms(cms);
-      }
-
-      // White-label : couleurs, polices, nom de marque
-      if (wlData && wlData.config) {
-        applyWhiteLabel(wlData.config);
+      } else {
+        setCache(cached?.products || [], cms, wl);
+        if (!cached) {
+          window.dispatchEvent(new CustomEvent('sdapi:ready', { detail: { fallback: true } }));
+        }
       }
 
     } catch (e) {
