@@ -6,30 +6,30 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Jost:wght@300;400;500;600&family=Crimson+Pro:ital,wght@0,300;0,400;1,300;1,400&display=swap');
 
 :root {
-  --cream:          #F6F1E9;
-  --warm-white:     #FDFAF5;
-  --parchment:      #EDE5D8;
-  --linen:          #D8CEBC;
-  --birch:          #C9BCA8;
-  --driftwood:      #9E8E78;
-  --heather:        #7B4F7B;
-  --heather-mid:    #9E6E9E;
-  --heather-light:  #C4A0C4;
-  --heather-pale:   #F0E8F0;
-  --lingon:         #8B2E3C;
-  --lingon-mid:     #AA4455;
-  --lingon-pale:    #F5E0E3;
-  --lingon-deep:    #6B1E2A;
-  --midnight:       #1C2028;
-  --slate:          #3E4550;
-  --dust:           #6A7280;
+  --cream:          #F8F4ED;
+  --warm-white:     #FEFCF7;
+  --parchment:      #EEE6D6;
+  --linen:          #DDD3BE;
+  --birch:          #C6BAAA;
+  --driftwood:      #9A8B74;
+  --heather:        #3D5239;
+  --heather-mid:    #566E52;
+  --heather-light:  #8CAE86;
+  --heather-pale:   #EAF2E7;
+  --lingon:         #C4733A;
+  --lingon-mid:     #D68E57;
+  --lingon-pale:    #FBF0E4;
+  --lingon-deep:    #9A5228;
+  --midnight:       #1B2118;
+  --slate:          #3A4636;
+  --dust:           #6C7A68;
   --snow:           #FFFFFF;
   --font-display:   'Cormorant Garamond', Georgia, serif;
   --font-body:      'Crimson Pro', Georgia, serif;
   --font-ui:        'Jost', sans-serif;
-  --shadow-sm:      0 2px 12px rgba(28,32,40,0.06);
-  --shadow-md:      0 6px 32px rgba(28,32,40,0.10);
-  --shadow-lg:      0 16px 56px rgba(28,32,40,0.14);
+  --shadow-sm:      0 2px 12px rgba(27,33,24,0.07);
+  --shadow-md:      0 6px 32px rgba(27,33,24,0.11);
+  --shadow-lg:      0 16px 56px rgba(27,33,24,0.16);
   --max-width:      1280px;
 }
 
