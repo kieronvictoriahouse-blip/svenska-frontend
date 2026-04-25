@@ -726,10 +726,22 @@ if (_na0) _na0.innerHTML = Array(4).fill(_SKL_H).join('');
 renderHome(); // renders cats-row only (product gate is closed)
 
 const _fallbackHome = setTimeout(() => { _homeReady = true; renderHome(); }, 4000);
-window.addEventListener('sdapi:ready', () => {
+window.addEventListener('sdapi:ready', (e) => {
   clearTimeout(_fallbackHome);
+  const wasHomeReady = _homeReady;
   _homeReady = true;
-  renderHome();
+
+  // If already rendered from cache and API returns updated data → smooth fade on product sections
+  if (wasHomeReady && !e.detail?.fromCache) {
+    const sections = ['bestsellers', 'new-arrivals'].map(id => document.getElementById(id)).filter(Boolean);
+    sections.forEach(el => { el.style.transition = 'opacity 0.18s ease'; el.style.opacity = '0.3'; });
+    setTimeout(() => {
+      renderHome();
+      sections.forEach(el => { el.style.opacity = '1'; setTimeout(() => { el.style.transition = ''; }, 220); });
+    }, 140);
+  } else {
+    renderHome();
+  }
 });
 </script>
 <script src="js/sd-api-client.js"></script>

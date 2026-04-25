@@ -232,9 +232,13 @@
       const cms = cmsData?.cms ? Object.fromEntries(cmsData.cms.map(i => [i.key, i])) : null;
       const wl  = wlData?.config || null;
 
-      // Appliquer CMS + WL AVANT sdapi:ready pour éviter tout flash
-      if (cms) { window.SDApi.cms = cms; applyCms(cms); }
-      if (wl)  { applyWhiteLabel(wl); }
+      // Appliquer CMS + WL seulement si le contenu a changé (évite le flash de re-application)
+      const cmsChanged = JSON.stringify(cached?.cms) !== JSON.stringify(cms);
+      const wlChanged  = JSON.stringify(cached?.wl)  !== JSON.stringify(wl);
+      if (cms && cmsChanged) { window.SDApi.cms = cms; applyCms(cms); }
+      else if (cms) { window.SDApi.cms = cms; }
+      if (wl  && wlChanged)  { applyWhiteLabel(wl); }
+      else if (wl) { window.SDApi.whiteLabel = wl; }
 
       // Produits
       const mapped = (productsData && productsData.length > 0) ? productsData.map(mapProduct) : null;
@@ -243,10 +247,10 @@
         window.SDApi.isReady = true;
         window.SDApi.products = mapped;
 
-        // Re-déclencher uniquement si les produits ont changé
-        const changed = !cached || productFingerprint(cached.products) !== productFingerprint(mapped);
+        // Re-déclencher uniquement si produits OU config ont changé
+        const productsChanged = !cached || productFingerprint(cached.products) !== productFingerprint(mapped);
         setCache(mapped, cms, wl);
-        if (changed) {
+        if (productsChanged || cmsChanged || wlChanged) {
           window.dispatchEvent(new CustomEvent('sdapi:ready', { detail: { products: mapped } }));
         }
       } else {

@@ -352,25 +352,41 @@ document.getElementById('products-container').innerHTML = '<div class="sk-grid">
 const _fallback = setTimeout(() => { _ready = true; render(); }, 4000);
 
 // Render once API data (or cache) is ready
-window.addEventListener('sdapi:ready', () => {
+window.addEventListener('sdapi:ready', (e) => {
   clearTimeout(_fallback);
+  const wasReady = _ready;
   _ready = true;
-  if (currentCat !== 'Tous') {
-    const inCat = PRODUCTS.filter(p => p.cat === currentCat);
-    if (inCat.length === 0) {
-      currentCat = 'Tous';
-      document.querySelectorAll('.sb-btn').forEach(b => b.classList.remove('active'));
-      const allBtn = document.getElementById('sb-ALL');
-      if (allBtn) allBtn.classList.add('active');
+
+  function doRender() {
+    if (currentCat !== 'Tous') {
+      const inCat = PRODUCTS.filter(p => p.cat === currentCat);
+      if (inCat.length === 0) {
+        currentCat = 'Tous';
+        document.querySelectorAll('.sb-btn').forEach(b => b.classList.remove('active'));
+        const allBtn = document.getElementById('sb-ALL');
+        if (allBtn) allBtn.classList.add('active');
+      }
     }
+    const heroEl = document.getElementById('hero-count-text');
+    if (heroEl && PRODUCTS.length > 0) {
+      const n = PRODUCTS.length;
+      const txt = { sv: `${n} nordiska & brittiska produkter`, fr: `${n} produits nordiques & britanniques`, en: `${n} Nordic & British products` };
+      heroEl.textContent = txt[LANG] || txt.fr;
+    }
+    render();
   }
-  const heroEl = document.getElementById('hero-count-text');
-  if (heroEl && PRODUCTS.length > 0) {
-    const n = PRODUCTS.length;
-    const txt = { sv: `${n} nordiska & brittiska produkter`, fr: `${n} produits nordiques & britanniques`, en: `${n} Nordic & British products` };
-    heroEl.textContent = txt[LANG] || txt.fr;
+
+  // If already rendered from cache and API returns updated data → smooth fade
+  if (wasReady && !e.detail?.fromCache) {
+    const pc = document.getElementById('products-container');
+    if (pc) {
+      pc.style.transition = 'opacity 0.18s ease';
+      pc.style.opacity = '0.3';
+      setTimeout(() => { doRender(); pc.style.opacity = '1'; setTimeout(() => { pc.style.transition = ''; }, 220); }, 140);
+    } else { doRender(); }
+  } else {
+    doRender();
   }
-  render();
 });
 </script>
   <script src="js/sd-api-client.js"></script>
