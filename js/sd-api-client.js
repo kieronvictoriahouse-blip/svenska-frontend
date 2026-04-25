@@ -161,6 +161,7 @@
 
   function applyWhiteLabel(cfg) {
     if (!cfg || !cfg.id) return; // config vide = pas de white-label configuré
+    try { localStorage.setItem('sd_wl_v1', JSON.stringify(cfg)); } catch {}
     const root = document.documentElement;
 
     // Couleurs → variables CSS
@@ -269,6 +270,7 @@
   }
 
   function applyCms(cms) {
+    try { localStorage.setItem('sd_cms_v1', JSON.stringify(cms)); } catch {}
     try {
       const LANG = localStorage.getItem('lang') || 'fr';
       const l = LANG === 'sv' ? 'value_sv' : LANG === 'en' ? 'value_en' : 'value_fr';
