@@ -276,11 +276,22 @@
       const l = LANG === 'sv' ? 'value_sv' : LANG === 'en' ? 'value_en' : 'value_fr';
       if (cms.hero_title) {
         const h1 = document.querySelector('.hero h1');
-        if (h1 && cms.hero_title[l]) h1.innerHTML = cms.hero_title[l];
+        if (h1) {
+          if (cms.hero_title[l]) h1.innerHTML = cms.hero_title[l];
+          // Update data attrs so setLang works for future language switches
+          if (cms.hero_title.value_sv) h1.setAttribute('data-sv', cms.hero_title.value_sv);
+          if (cms.hero_title.value_fr) h1.setAttribute('data-fr', cms.hero_title.value_fr);
+          if (cms.hero_title.value_en) h1.setAttribute('data-en', cms.hero_title.value_en);
+        }
       }
       if (cms.hero_subtitle) {
         const sub = document.querySelector('.hero-sub');
-        if (sub && cms.hero_subtitle[l]) sub.textContent = cms.hero_subtitle[l];
+        if (sub) {
+          if (cms.hero_subtitle[l]) sub.textContent = cms.hero_subtitle[l];
+          if (cms.hero_subtitle.value_sv) sub.setAttribute('data-sv', cms.hero_subtitle.value_sv);
+          if (cms.hero_subtitle.value_fr) sub.setAttribute('data-fr', cms.hero_subtitle.value_fr);
+          if (cms.hero_subtitle.value_en) sub.setAttribute('data-en', cms.hero_subtitle.value_en);
+        }
       }
       if (cms.hero_photo) {
         const img = document.querySelector('.hero-right img');

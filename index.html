@@ -140,27 +140,8 @@
   to { transform: translateX(-50%); }
 }
 
-/* ── PROMISE BAR ── */
-.promise-bar {
-  display: grid; grid-template-columns: repeat(4,1fr);
-  border-bottom: 1px solid var(--linen);
-  background: var(--warm-white);
-}
-.promise-cell {
-  padding: 30px 28px;
-  display: flex; align-items: center; gap: 18px;
-  border-right: 1px solid var(--linen);
-}
-.promise-cell:last-child { border-right: none; }
-.promise-icon { font-size: 26px; flex-shrink: 0; }
-.promise-title {
-  font-family: var(--font-display); font-size: 16px; font-weight: 600;
-  color: var(--midnight); margin-bottom: 3px; line-height: 1.2;
-}
-.promise-desc {
-  font-family: var(--font-body); font-size: 13px;
-  color: var(--dust); line-height: 1.5;
-}
+/* ── PROMISE BAR (overrides style.css if needed) ── */
+.promise-bar { background: var(--warm-white); }
 
 /* ── EDITORIAL INTRO ── */
 .editorial-intro {
@@ -218,36 +199,19 @@
 
 /* ── CATEGORIES ── */
 .cats-section {
-  background: var(--parchment);
+  background: var(--cream);
   border-bottom: 1px solid var(--linen);
 }
 .cats-head {
   display: flex; justify-content: space-between; align-items: flex-end;
-  padding: 72px 80px 44px;
+  padding: 72px 80px 40px;
   max-width: var(--max-width); margin: 0 auto;
 }
 .cats-grid {
-  display: grid; grid-template-columns: repeat(7,1fr);
-  border-top: 1px solid var(--linen);
-}
-.cat-card {
-  background: var(--warm-white);
-  padding: 34px 16px; text-align: center;
-  cursor: pointer; transition: all 0.22s;
-  text-decoration: none; display: block;
-  border-right: 1px solid var(--linen);
-}
-.cat-card:last-child { border-right: none; }
-.cat-card:hover { background: var(--heather); transform: none; }
-.cat-card:hover .cat-name, .cat-card:hover .cat-count { color: var(--snow); }
-.cat-emoji { font-size: 30px; margin-bottom: 12px; display: block; }
-.cat-name {
-  font-family: var(--font-display); font-size: 13px; font-weight: 600;
-  color: var(--heather); margin-bottom: 4px; line-height: 1.2; transition: color 0.22s;
-}
-.cat-count {
-  font-family: var(--font-ui); font-size: 9px; letter-spacing: 1.5px;
-  text-transform: uppercase; color: var(--lingon-mid); transition: color 0.22s;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 16px;
+  max-width: var(--max-width); margin: 0 auto;
+  padding: 0 80px 72px;
 }
 
 /* ── BESTSELLERS ── */
@@ -359,7 +323,7 @@
   border: 1px solid var(--linen); margin-top: 52px;
 }
 .testi-card { background: var(--warm-white); padding: 44px 36px; }
-.testi-stars { color: var(--lingon-mid); font-size: 14px; letter-spacing: 3px; margin-bottom: 20px; }
+.testi-stars { font-family: var(--font-ui); font-size: 12px; font-weight: 600; letter-spacing: 2px; color: var(--lingon-mid); margin-bottom: 20px; }
 .testi-q {
   font-family: var(--font-display); font-size: 18px; font-style: italic;
   color: var(--midnight); line-height: 1.75; margin-bottom: 24px;
@@ -411,8 +375,8 @@
   .editorial-intro { grid-template-columns: 1fr; }
   .ei-image { display: none; }
   .ei-text { padding: 64px 32px; }
-  .cats-head { padding: 48px 24px 32px; flex-direction: column; align-items: flex-start; gap: 14px; }
-  .cats-grid { grid-template-columns: repeat(4,1fr); }
+  .cats-head { padding: 48px 24px 28px; flex-direction: column; align-items: flex-start; gap: 14px; }
+  .cats-grid { padding: 0 24px 56px; grid-template-columns: repeat(3,1fr); }
   .feat-band { grid-template-columns: 1fr; }
   .feat-band-img { display: none; }
   .feat-band-text { padding: 56px 32px; }
@@ -421,14 +385,11 @@
   .about-split-img { min-height: 320px; }
   .about-split-text { padding: 56px 32px; }
   .testi-grid { grid-template-columns: 1fr; }
-  .promise-bar { grid-template-columns: 1fr 1fr; }
-  .promise-cell { border-bottom: 1px solid var(--linen); }
 }
 @media(max-width: 600px) {
   .hero h1 { font-size: 46px; letter-spacing: -1px; }
   .hero-sub { font-size: 15px; }
-  .cats-grid { grid-template-columns: repeat(3,1fr); }
-  .promise-bar { grid-template-columns: 1fr; }
+  .cats-grid { padding: 0 16px 48px; grid-template-columns: repeat(2,1fr); }
   .feat-stats { grid-template-columns: 1fr; gap: 16px; }
   .about-nums { gap: 28px; }
 }
@@ -456,15 +417,15 @@
   </div>
   <div class="hero-content">
     <p class="hero-eyebrow">British &amp; Nordic Pantry</p>
-    <h1>L'épicerie <em>du Nord</em></h1>
-    <p class="hero-sub">Le meilleur de la Scandinavie et des îles britanniques — épices, conserves, biscuits iconiques et spécialités authentiques, livrés en France.</p>
+    <h1 data-sv="Nordisk & brittisk <em>delikatessen</em>" data-fr="L'épicerie <em>du Nord</em>" data-en="The Nordic & British <em>pantry</em>">L'épicerie <em>du Nord</em></h1>
+    <p class="hero-sub" data-sv="Det bästa från Skandinavien och de brittiska öarna — kryddor, konserver, klassiska kex och autentiska specialiteter, levererade till Frankrike." data-fr="Le meilleur de la Scandinavie et des îles britanniques — épices, conserves, biscuits iconiques et spécialités authentiques, livrés en France." data-en="The best of Scandinavia and the British Isles — spices, preserves, iconic biscuits and authentic specialities, delivered across France.">Le meilleur de la Scandinavie et des îles britanniques — épices, conserves, biscuits iconiques et spécialités authentiques, livrés en France.</p>
     <div class="hero-ctas">
-      <a href="boutique.html" class="btn-primary">Explorer la boutique</a>
-      <a href="a-propos.html" class="btn-secondary">Notre histoire</a>
+      <a href="boutique.html" class="btn-primary" data-sv="Utforska butiken" data-fr="Explorer la boutique" data-en="Explore the shop">Explorer la boutique</a>
+      <a href="a-propos.html" class="btn-secondary" data-sv="Vår historia" data-fr="Notre histoire" data-en="Our story">Notre histoire</a>
     </div>
   </div>
   <div class="hero-scroll" onclick="document.querySelector('.ticker-bar').scrollIntoView({behavior:'smooth'})">
-    <span class="hero-scroll-label">Découvrir</span>
+    <span class="hero-scroll-label" data-sv="Utforska" data-fr="Découvrir" data-en="Discover">Découvrir</span>
     <div class="hero-scroll-line"></div>
   </div>
 </section>
@@ -491,44 +452,32 @@
 <!-- ═══ PROMISE BAR ═══ -->
 <div class="promise-bar">
   <div class="promise-cell">
-    <span class="promise-icon">🚚</span>
-    <div>
-      <div class="promise-title">Livraison offerte</div>
-      <div class="promise-desc">Dès 50€ dans toute l'UE</div>
-    </div>
+    <div class="promise-title" data-sv="Fri frakt" data-fr="Livraison offerte" data-en="Free delivery">Livraison offerte</div>
+    <div class="promise-desc" data-sv="Från 50€ i hela EU" data-fr="Dès 50€ dans toute l'UE" data-en="From €50 across the EU">Dès 50€ dans toute l'UE</div>
   </div>
   <div class="promise-cell">
-    <span class="promise-icon">🌿</span>
-    <div>
-      <div class="promise-title">Sélection artisanale</div>
-      <div class="promise-desc">Producteurs nordiques &amp; british</div>
-    </div>
+    <div class="promise-title" data-sv="Hantverksurval" data-fr="Sélection artisanale" data-en="Artisan selection">Sélection artisanale</div>
+    <div class="promise-desc" data-sv="Nordiska & brittiska producenter" data-fr="Producteurs nordiques & british" data-en="Nordic & British producers">Producteurs nordiques &amp; british</div>
   </div>
   <div class="promise-cell">
-    <span class="promise-icon">🔒</span>
-    <div>
-      <div class="promise-title">Paiement sécurisé</div>
-      <div class="promise-desc">Visa, Mastercard, PayPal</div>
-    </div>
+    <div class="promise-title" data-sv="Säker betalning" data-fr="Paiement sécurisé" data-en="Secure payment">Paiement sécurisé</div>
+    <div class="promise-desc" data-sv="Visa, Mastercard, PayPal" data-fr="Visa, Mastercard, PayPal" data-en="Visa, Mastercard, PayPal">Visa, Mastercard, PayPal</div>
   </div>
   <div class="promise-cell">
-    <span class="promise-icon">♻️</span>
-    <div>
-      <div class="promise-title">Emballage éco</div>
-      <div class="promise-desc">Matériaux recyclables</div>
-    </div>
+    <div class="promise-title" data-sv="Ekoförpackning" data-fr="Emballage éco" data-en="Eco packaging">Emballage éco</div>
+    <div class="promise-desc" data-sv="Återvinningsbara material" data-fr="Matériaux recyclables" data-en="Recyclable materials">Matériaux recyclables</div>
   </div>
 </div>
 
 <!-- ═══ EDITORIAL INTRO ═══ -->
 <section class="editorial-intro reveal">
   <div class="ei-text">
-    <p class="ei-label">Notre sélection</p>
-    <h2 class="ei-h2">L'épicerie que<br>vous <em>cherchiez</em></h2>
-    <p class="ei-body">Suédoise et britannique, réunies en France par notre amour des épiceries d'exception — celle qu'on cherchait et qu'on ne trouvait jamais ici.</p>
-    <p class="ei-body" style="font-size:15px;color:var(--dust);">Cardamome fraîche, marmelades artisanales, biscuits iconiques, herbes séchées des forêts scandinaves — tout ce qui manquait.</p>
+    <p class="ei-label" data-sv="Vårt urval" data-fr="Notre sélection" data-en="Our selection">Notre sélection</p>
+    <h2 class="ei-h2" data-sv="Delikatessen du<br>alltid <em>sökte</em>" data-fr="L'épicerie que<br>vous <em>cherchiez</em>" data-en="The pantry you<br>were <em>looking for</em>">L'épicerie que<br>vous <em>cherchiez</em></h2>
+    <p class="ei-body" data-sv="Svensk och brittisk, samlade i Frankrike av vår kärlek till exceptionella delikatesser — den vi sökte men aldrig hittade här." data-fr="Suédoise et britannique, réunies en France par notre amour des épiceries d'exception — celle qu'on cherchait et qu'on ne trouvait jamais ici." data-en="Swedish and British, brought together in France by our love of exceptional food shops — the one we were looking for but never found here.">Suédoise et britannique, réunies en France par notre amour des épiceries d'exception — celle qu'on cherchait et qu'on ne trouvait jamais ici.</p>
+    <p class="ei-body" style="font-size:15px;color:var(--dust);" data-sv="Färsk kardemumma, hantverksmarmelader, klassiska kex, torkade örter från skandinaviska skogar — allt som saknades." data-fr="Cardamome fraîche, marmelades artisanales, biscuits iconiques, herbes séchées des forêts scandinaves — tout ce qui manquait." data-en="Fresh cardamom, artisan marmalades, iconic biscuits, dried herbs from Scandinavian forests — everything that was missing.">Cardamome fraîche, marmelades artisanales, biscuits iconiques, herbes séchées des forêts scandinaves — tout ce qui manquait.</p>
     <div style="margin-top:38px;">
-      <a href="a-propos.html" class="btn-outline-dark">Lire notre histoire →</a>
+      <a href="a-propos.html" class="btn-outline-dark" data-sv="Läs vår historia →" data-fr="Lire notre histoire →" data-en="Read our story →">Lire notre histoire →</a>
     </div>
   </div>
   <div class="ei-image">
@@ -536,7 +485,7 @@
          alt="Épices nordiques — Heather & Lingon">
     <div class="ei-badge">
       <span class="ei-badge-num">20+</span>
-      <span class="ei-badge-sub">Produits<br>sélectionnés</span>
+      <span class="ei-badge-sub" data-sv="Utvalda<br>produkter" data-fr="Produits<br>sélectionnés" data-en="Selected<br>products">Produits<br>sélectionnés</span>
     </div>
   </div>
 </section>
@@ -545,10 +494,10 @@
 <section class="cats-section reveal">
   <div class="cats-head">
     <div>
-      <p class="sect-eyebrow">Notre gamme</p>
-      <h2 class="sect-title">Épicerie <em>nordique &amp; britannique</em></h2>
+      <p class="sect-eyebrow" data-sv="Våra kategorier" data-fr="Notre gamme" data-en="Our range">Notre gamme</p>
+      <h2 class="sect-title" data-sv="Nordisk & brittisk <em>delikatessen</em>" data-fr="Épicerie <em>nordique &amp; britannique</em>" data-en="Nordic & British <em>pantry</em>">Épicerie <em>nordique &amp; britannique</em></h2>
     </div>
-    <a href="boutique.html" class="see-all">Voir tout →</a>
+    <a href="boutique.html" class="see-all" data-sv="Visa allt →" data-fr="Voir tout →" data-en="See all →">Voir tout →</a>
   </div>
   <div class="cats-grid" id="cats-row"></div>
 </section>
@@ -558,10 +507,10 @@
   <div class="section">
     <div class="bs-head">
       <div>
-        <p class="sect-eyebrow">Les préférés de nos clients</p>
-        <h2 class="sect-title">Nos <em>best-sellers</em></h2>
+        <p class="sect-eyebrow" data-sv="Kundernas favoriter" data-fr="Les préférés de nos clients" data-en="Customer favourites">Les préférés de nos clients</p>
+        <h2 class="sect-title" data-sv="Våra <em>bästsäljare</em>" data-fr="Nos <em>best-sellers</em>" data-en="Our <em>best-sellers</em>">Nos <em>best-sellers</em></h2>
       </div>
-      <a href="boutique.html" class="see-all">Voir tout →</a>
+      <a href="boutique.html" class="see-all" data-sv="Visa allt →" data-fr="Voir tout →" data-en="See all →">Voir tout →</a>
     </div>
     <div class="grid-3" id="bestsellers"></div>
   </div>
@@ -575,24 +524,24 @@
     <div class="feat-band-img-shade"></div>
   </div>
   <div class="feat-band-text">
-    <p class="sect-eyebrow">Sélection de saison</p>
-    <h2 class="sect-title">Les épices du <em>Noël suédois</em></h2>
-    <p class="sect-body">Cardamome pour les lussekattor, cannelle pour le glögg, anis étoilé et clou de girofle — les arômes magiques du Jul suédois. Une sélection pour cuisiner avec l'âme du Nord.</p>
+    <p class="sect-eyebrow" data-sv="Säsongsurval" data-fr="Sélection de saison" data-en="Seasonal selection">Sélection de saison</p>
+    <h2 class="sect-title" data-sv="Kryddorna för <em>svensk Jul</em>" data-fr="Les épices du <em>Noël suédois</em>" data-en="The spices of <em>Swedish Christmas</em>">Les épices du <em>Noël suédois</em></h2>
+    <p class="sect-body" data-sv="Kardemumma till lussekattor, kanel till glögg, stjärnanis och kryddnejlika — Jul-magin från det nordiska köket." data-fr="Cardamome pour les lussekattor, cannelle pour le glögg, anis étoilé et clou de girofle — les arômes magiques du Jul suédois. Une sélection pour cuisiner avec l'âme du Nord." data-en="Cardamom for lussekattor, cinnamon for glögg, star anise and cloves — the magical aromas of Swedish Jul. A selection to cook with the soul of the North.">Cardamome pour les lussekattor, cannelle pour le glögg, anis étoilé et clou de girofle — les arômes magiques du Jul suédois. Une sélection pour cuisiner avec l'âme du Nord.</p>
     <div style="margin-top:36px;">
-      <a href="boutique.html?cat=Épices" class="btn-primary">Découvrir les épices →</a>
+      <a href="boutique.html?cat=Épices" class="btn-primary" data-sv="Utforska kryddorna →" data-fr="Découvrir les épices →" data-en="Discover the spices →">Découvrir les épices →</a>
     </div>
     <div class="feat-stats">
       <div>
         <div class="feat-stat-num">12</div>
-        <div class="feat-stat-label">épices disponibles</div>
+        <div class="feat-stat-label" data-sv="tillgängliga kryddor" data-fr="épices disponibles" data-en="spices available">épices disponibles</div>
       </div>
       <div>
         <div class="feat-stat-num">100%</div>
-        <div class="feat-stat-label">origine certifiée</div>
+        <div class="feat-stat-label" data-sv="certifierat ursprung" data-fr="origine certifiée" data-en="certified origin">origine certifiée</div>
       </div>
       <div>
         <div class="feat-stat-num">EU</div>
-        <div class="feat-stat-label">livraison partout</div>
+        <div class="feat-stat-label" data-sv="leverans överallt" data-fr="livraison partout" data-en="delivery everywhere">livraison partout</div>
       </div>
     </div>
   </div>
@@ -603,10 +552,10 @@
   <div class="section">
     <div class="bs-head">
       <div>
-        <p class="sect-eyebrow">Tout juste arrivé</p>
-        <h2 class="sect-title">Nouvelles <em>arrivées</em></h2>
+        <p class="sect-eyebrow" data-sv="Just anlänt" data-fr="Tout juste arrivé" data-en="Just arrived">Tout juste arrivé</p>
+        <h2 class="sect-title" data-sv="Nya <em>produkter</em>" data-fr="Nouvelles <em>arrivées</em>" data-en="New <em>arrivals</em>">Nouvelles <em>arrivées</em></h2>
       </div>
-      <a href="boutique.html?filter=new" class="see-all">Voir tout →</a>
+      <a href="boutique.html?filter=new" class="see-all" data-sv="Visa allt →" data-fr="Voir tout →" data-en="See all →">Voir tout →</a>
     </div>
     <div class="grid-4" id="new-arrivals"></div>
   </div>
@@ -619,30 +568,30 @@
          alt="Heather & Lingon — notre histoire">
   </div>
   <div class="about-split-text">
-    <p class="ei-label">Notre histoire</p>
-    <h2 class="ei-h2">Deux amies,<br><em>une passion</em></h2>
+    <p class="ei-label" data-sv="Vår historia" data-fr="Notre histoire" data-en="Our story">Notre histoire</p>
+    <h2 class="ei-h2" data-sv="Två vänner,<br><em>en passion</em>" data-fr="Deux amies,<br><em>une passion</em>" data-en="Two friends,<br><em>one passion</em>">Deux amies,<br><em>une passion</em></h2>
     <div class="divider-line"></div>
-    <p>Suédoise et britannique, réunies en France par notre amour commun des épiceries d'exception — celle qu'on cherchait et qu'on ne trouvait jamais ici.</p>
+    <p data-sv="Svensk och brittisk, samlade i Frankrike av vår gemensamma kärlek till exceptionella delikatesser — den vi sökte men aldrig hittade här." data-fr="Suédoise et britannique, réunies en France par notre amour commun des épiceries d'exception — celle qu'on cherchait et qu'on ne trouvait jamais ici." data-en="Swedish and British, brought together in France by our shared love of exceptional food shops — the one we were looking for but never found here.">Suédoise et britannique, réunies en France par notre amour commun des épiceries d'exception — celle qu'on cherchait et qu'on ne trouvait jamais ici.</p>
     <div class="about-blockquote">
-      <p>"On a décidé de la créer nous-mêmes."</p>
+      <p data-sv='"Vi bestämde oss för att skapa den själva."' data-fr='"On a décidé de la créer nous-mêmes."' data-en='"We decided to create it ourselves."'>"On a décidé de la créer nous-mêmes."</p>
     </div>
-    <p>Nous sélectionnons chaque produit directement auprès de producteurs soigneusement choisis pour garantir l'authenticité et la qualité de chaque référence.</p>
+    <p data-sv="Vi väljer varje produkt direkt från noggrant utvalda producenter för att garantera äkthet och kvalitet." data-fr="Nous sélectionnons chaque produit directement auprès de producteurs soigneusement choisis pour garantir l'authenticité et la qualité de chaque référence." data-en="We select every product directly from carefully chosen producers to guarantee the authenticity and quality of every item.">Nous sélectionnons chaque produit directement auprès de producteurs soigneusement choisis pour garantir l'authenticité et la qualité de chaque référence.</p>
     <div class="about-nums">
       <div>
         <div class="about-num-val">20+</div>
-        <div class="about-num-label">produits sélectionnés</div>
+        <div class="about-num-label" data-sv="utvalda produkter" data-fr="produits sélectionnés" data-en="selected products">produits sélectionnés</div>
       </div>
       <div>
         <div class="about-num-val">100%</div>
-        <div class="about-num-label">origine certifiée</div>
+        <div class="about-num-label" data-sv="certifierat ursprung" data-fr="origine certifiée" data-en="certified origin">origine certifiée</div>
       </div>
       <div>
         <div class="about-num-val">EU</div>
-        <div class="about-num-label">livraison partout</div>
+        <div class="about-num-label" data-sv="leverans överallt" data-fr="livraison partout" data-en="delivery everywhere">livraison partout</div>
       </div>
     </div>
     <div style="margin-top:40px;">
-      <a href="a-propos.html" class="btn-outline-dark">Lire notre histoire →</a>
+      <a href="a-propos.html" class="btn-outline-dark" data-sv="Läs vår historia →" data-fr="Lire notre histoire →" data-en="Read our story →">Lire notre histoire →</a>
     </div>
   </div>
 </section>
@@ -650,24 +599,24 @@
 <!-- ═══ TESTIMONIALS ═══ -->
 <section>
   <div class="section">
-    <p class="sect-eyebrow">Ils nous font confiance</p>
-    <h2 class="sect-title">Avis <em>clients</em></h2>
+    <p class="sect-eyebrow" data-sv="De litar på oss" data-fr="Ils nous font confiance" data-en="They trust us">Ils nous font confiance</p>
+    <h2 class="sect-title" data-sv="Kundernas <em>omdömen</em>" data-fr="Avis <em>clients</em>" data-en="Customer <em>reviews</em>">Avis <em>clients</em></h2>
     <div class="testi-grid">
       <div class="testi-card">
-        <div class="testi-stars">★★★★★</div>
-        <p class="testi-q">La cardamome est d'une fraîcheur incroyable, mes kanelbullar n'ont jamais été aussi parfumés.</p>
+        <div class="testi-stars">5.0</div>
+        <p class="testi-q" data-sv="Kardemumman är otroligt färsk, mina kanelbullar har aldrig doftat så gott." data-fr="La cardamome est d'une fraîcheur incroyable, mes kanelbullar n'ont jamais été aussi parfumés." data-en="The cardamom is incredibly fresh — my kanelbullar have never smelt so good.">La cardamome est d'une fraîcheur incroyable, mes kanelbullar n'ont jamais été aussi parfumés.</p>
         <div class="testi-author">— Ingrid M.</div>
         <div class="testi-loc">Stockholm, Sverige</div>
       </div>
       <div class="testi-card">
-        <div class="testi-stars">★★★★★</div>
-        <p class="testi-q">Le mélange Glögg est absolument parfait. Mes amis français ont été épatés par les arômes.</p>
+        <div class="testi-stars">5.0</div>
+        <p class="testi-q" data-sv="Glögg-blandningen är helt perfekt. Mina franska vänner var förtjusta i aromerna." data-fr="Le mélange Glögg est absolument parfait. Mes amis français ont été épatés par les arômes." data-en="The Glögg blend is absolutely perfect. My French friends were amazed by the aromas.">Le mélange Glögg est absolument parfait. Mes amis français ont été épatés par les arômes.</p>
         <div class="testi-author">— Marie-Hélène D.</div>
         <div class="testi-loc">Lyon, France</div>
       </div>
       <div class="testi-card">
-        <div class="testi-stars">★★★★★</div>
-        <p class="testi-q">Ces produits sont une madeleine de Proust nordique. Merci du fond du cœur.</p>
+        <div class="testi-stars">5.0</div>
+        <p class="testi-q" data-sv="Dessa produkter är en nordisk madeleine de Proust. Tack från djupet av mitt hjärta." data-fr="Ces produits sont une madeleine de Proust nordique. Merci du fond du cœur." data-en="These products are a Nordic madeleine de Proust. Thank you from the bottom of my heart.">Ces produits sont une madeleine de Proust nordique. Merci du fond du cœur.</p>
         <div class="testi-author">— Lars-Erik K.</div>
         <div class="testi-loc">London, UK</div>
       </div>
@@ -677,11 +626,11 @@
 
 <!-- ═══ NEWSLETTER ═══ -->
 <div class="nl-band reveal">
-  <h2>Recevez nos <em>nouveautés</em></h2>
-  <p>Recettes nordiques &amp; britanniques, nouveaux produits, offres exclusives — directement dans votre boîte mail.</p>
+  <h2 data-sv="Få våra <em>nyheter</em>" data-fr="Recevez nos <em>nouveautés</em>" data-en="Get our <em>news</em>">Recevez nos <em>nouveautés</em></h2>
+  <p data-sv="Nordiska & brittiska recept, nya produkter, exklusiva erbjudanden — direkt i din inkorg." data-fr="Recettes nordiques & britanniques, nouveaux produits, offres exclusives — directement dans votre boîte mail." data-en="Nordic & British recipes, new products, exclusive offers — directly in your inbox.">Recettes nordiques &amp; britanniques, nouveaux produits, offres exclusives — directement dans votre boîte mail.</p>
   <div class="nl-form">
-    <input type="email" id="nl-email" placeholder="Votre adresse e-mail">
-    <button onclick="nlSubscribe()">S'inscrire</button>
+    <input type="email" id="nl-email" data-sv-ph="Din e-postadress" data-fr-ph="Votre adresse e-mail" data-en-ph="Your email address" placeholder="Votre adresse e-mail">
+    <button onclick="nlSubscribe()" data-sv="Prenumerera" data-fr="S'inscrire" data-en="Subscribe">S'inscrire</button>
   </div>
 </div>
 
@@ -698,9 +647,20 @@ function onLangChange(l) {
     if (cms) {
       const lk = l === 'sv' ? 'value_sv' : l === 'en' ? 'value_en' : 'value_fr';
       const h = document.querySelector('.hero h1');
-      if (h && cms.hero_title?.[lk]) h.innerHTML = cms.hero_title[lk];
+      if (h) {
+        if (cms.hero_title?.[lk]) h.innerHTML = cms.hero_title[lk];
+        // Keep data attrs in sync so next setLang call works without CMS
+        if (cms.hero_title?.value_sv) h.setAttribute('data-sv', cms.hero_title.value_sv);
+        if (cms.hero_title?.value_fr) h.setAttribute('data-fr', cms.hero_title.value_fr);
+        if (cms.hero_title?.value_en) h.setAttribute('data-en', cms.hero_title.value_en);
+      }
       const s = document.querySelector('.hero-sub');
-      if (s && cms.hero_subtitle?.[lk]) s.textContent = cms.hero_subtitle[lk];
+      if (s) {
+        if (cms.hero_subtitle?.[lk]) s.textContent = cms.hero_subtitle[lk];
+        if (cms.hero_subtitle?.value_sv) s.setAttribute('data-sv', cms.hero_subtitle.value_sv);
+        if (cms.hero_subtitle?.value_fr) s.setAttribute('data-fr', cms.hero_subtitle.value_fr);
+        if (cms.hero_subtitle?.value_en) s.setAttribute('data-en', cms.hero_subtitle.value_en);
+      }
       const ey = document.querySelector('.hero-eyebrow');
       if (ey && cms.hero_eyebrow?.[lk]) ey.textContent = cms.hero_eyebrow[lk];
     }
@@ -715,10 +675,10 @@ function renderHome() {
     const catsToShow = (populated.length >= 4 ? populated : CATS).slice(0, 11);
     cr.innerHTML = catsToShow.map(c => {
       const count = PRODUCTS.filter(p => p.cat === c.id).length;
+      const _pLabel = count<=1?(LANG==='sv'?'produkt':LANG==='en'?'product':'produit'):(LANG==='sv'?'produkter':LANG==='en'?'products':'produits');
       return `<a href="boutique.html?cat=${encodeURIComponent(c.id)}" class="cat-card">
-        <span class="cat-emoji">${c.emoji}</span>
         <div class="cat-name">${CAT_LABELS[c.id]?.[LANG]||c.id}</div>
-        ${count ? `<div class="cat-count">${count} produit${count>1?'s':''}</div>` : ''}
+        ${count ? `<div class="cat-count">${count} ${_pLabel}</div>` : ''}
       </a>`;
     }).join('');
   }

@@ -104,7 +104,7 @@
 </div>
 
 <div class="shop-wrap">
-  <button class="mob-filter-btn" onclick="toggleMobFilter()">🔍 Filtres &amp; Tri</button>
+  <button class="mob-filter-btn" onclick="toggleMobFilter()" data-sv="🔍 Filter & Sortering" data-fr="🔍 Filtres & Tri" data-en="🔍 Filters & Sort">🔍 Filtres &amp; Tri</button>
   <div class="shop-layout">
     <!-- SIDEBAR -->
     <div class="sidebar">
@@ -115,47 +115,47 @@
           <span class="sb-cnt" id="cnt-ALL">36</span>
         </button>
         <button class="sb-btn" onclick="setCat('Épices')" id="sb-Epices">
-          <span>🌶️ <span data-sv="Épices" data-fr="Épices & Aromates" data-en="Spices">Épices & Aromates</span></span>
+          <span data-sv="Épices" data-fr="Épices & Aromates" data-en="Spices">Épices & Aromates</span>
           <span class="sb-cnt" id="cnt-Epices">7</span>
         </button>
         <button class="sb-btn" onclick="setCat('Chips & Snacks')" id="sb-Chips">
-          <span>🍟 <span data-sv="Chips & Snacks" data-fr="Chips & Snacks" data-en="Chips & Snacks">Chips & Snacks</span></span>
+          <span data-sv="Chips & Snacks" data-fr="Chips & Snacks" data-en="Chips & Snacks">Chips & Snacks</span>
           <span class="sb-cnt" id="cnt-Chips">3</span>
         </button>
         <button class="sb-btn" onclick="setCat('Confiseries')" id="sb-Confis">
-          <span>🍬 <span data-sv="Konfektyr" data-fr="Confiseries" data-en="Confectionery">Confiseries</span></span>
+          <span data-sv="Konfektyr" data-fr="Confiseries" data-en="Confectionery">Confiseries</span>
           <span class="sb-cnt" id="cnt-Confis">5</span>
         </button>
         <button class="sb-btn" onclick="setCat('Basics suédois')" id="sb-Basics">
-          <span>🇸🇪 <span data-sv="Svenska baser" data-fr="Basics suédois" data-en="Swedish basics">Basics suédois</span></span>
+          <span data-sv="Svenska baser" data-fr="Basics suédois" data-en="Swedish basics">Basics suédois</span>
           <span class="sb-cnt" id="cnt-Basics">4</span>
         </button>
         <button class="sb-btn" onclick="setCat('Fika & Boulangerie')" id="sb-Fika">
-          <span>🧁 <span data-sv="Fika & Bakning" data-fr="Fika & Boulangerie" data-en="Fika & Baking">Fika & Boulangerie</span></span>
+          <span data-sv="Fika & Bakning" data-fr="Fika & Boulangerie" data-en="Fika & Baking">Fika & Boulangerie</span>
           <span class="sb-cnt" id="cnt-Fika">4</span>
         </button>
         <button class="sb-btn" onclick="setCat('Mélanges')" id="sb-Mel">
-          <span>🎄 <span data-sv="Blandningar" data-fr="Mélanges suédois" data-en="Swedish blends">Mélanges suédois</span></span>
+          <span data-sv="Blandningar" data-fr="Mélanges suédois" data-en="Swedish blends">Mélanges suédois</span>
           <span class="sb-cnt" id="cnt-Mel">2</span>
         </button>
         <button class="sb-btn" onclick="setCat('Thés & Tisanes')" id="sb-Thes">
-          <span>🫖 <span data-sv="Thés & Tisanes" data-fr="Thés & Tisanes" data-en="Teas">Thés & Tisanes</span></span>
+          <span data-sv="Thés & Tisanes" data-fr="Thés & Tisanes" data-en="Teas">Thés & Tisanes</span>
           <span class="sb-cnt" id="cnt-Thes">2</span>
         </button>
         <button class="sb-btn" onclick="setCat('Baies séchées')" id="sb-Baies">
-          <span>🫐 <span data-sv="Baies séchées" data-fr="Baies séchées" data-en="Dried berries">Baies séchées</span></span>
+          <span data-sv="Baies séchées" data-fr="Baies séchées" data-en="Dried berries">Baies séchées</span>
           <span class="sb-cnt" id="cnt-Baies">3</span>
         </button>
         <button class="sb-btn" onclick="setCat('Flocons & Céréales')" id="sb-Flocons">
-          <span>🌾 <span data-sv="Flocons & Céréales" data-fr="Flocons & Céréales" data-en="Oats">Flocons & Céréales</span></span>
+          <span data-sv="Flocons & Céréales" data-fr="Flocons & Céréales" data-en="Oats">Flocons & Céréales</span>
           <span class="sb-cnt" id="cnt-Flocons">2</span>
         </button>
         <button class="sb-btn" onclick="setCat('Farines & Graines')" id="sb-Farines">
-          <span>🌻 <span data-sv="Farines & Graines" data-fr="Farines & Graines" data-en="Flours">Farines & Graines</span></span>
+          <span data-sv="Farines & Graines" data-fr="Farines & Graines" data-en="Flours">Farines & Graines</span>
           <span class="sb-cnt" id="cnt-Farines">2</span>
         </button>
         <button class="sb-btn" onclick="setCat('Sucres & Sirops')" id="sb-Sucres">
-          <span>🍯 <span data-sv="Sucres & Sirops" data-fr="Sucres & Sirops" data-en="Sugars">Sucres & Sirops</span></span>
+          <span data-sv="Sucres & Sirops" data-fr="Sucres & Sirops" data-en="Sugars">Sucres & Sirops</span>
           <span class="sb-cnt" id="cnt-Sucres">2</span>
         </button>
       </div>
@@ -171,20 +171,20 @@
       <div class="sb-block">
         <div class="sb-title" data-sv="Sortera" data-fr="Trier par" data-en="Sort by">Trier par</div>
         <select class="sort-sel" id="sort-sel" onchange="setSort(this.value)">
-          <option value="default">Par défaut</option>
-          <option value="price-asc">Prix croissant</option>
-          <option value="price-desc">Prix décroissant</option>
-          <option value="rating">Meilleures notes</option>
-          <option value="name">Nom A→Z</option>
+          <option value="default" data-sv="Standard" data-fr="Par défaut" data-en="Default">Par défaut</option>
+          <option value="price-asc" data-sv="Pris stigande" data-fr="Prix croissant" data-en="Price low→high">Prix croissant</option>
+          <option value="price-desc" data-sv="Pris fallande" data-fr="Prix décroissant" data-en="Price high→low">Prix décroissant</option>
+          <option value="rating" data-sv="Bästa betyg" data-fr="Meilleures notes" data-en="Best rated">Meilleures notes</option>
+          <option value="name" data-sv="Namn A→Ö" data-fr="Nom A→Z" data-en="Name A→Z">Nom A→Z</option>
         </select>
       </div>
 
       <div class="sb-block">
         <div class="sb-title" data-sv="Filtrera" data-fr="Filtres" data-en="Filters">Filtres</div>
-        <button class="tag-filter-btn" onclick="toggleTag('Bio')" id="tag-Bio"><span class="check"></span><span>🌿 Bio / Naturel</span></button>
-        <button class="tag-filter-btn" onclick="toggleTag('Vegan')" id="tag-Vegan"><span class="check"></span><span>🌱 Vegan</span></button>
-        <button class="tag-filter-btn" onclick="toggleTag('Signature')" id="tag-Signature"><span class="check"></span><span>⭐ Signature</span></button>
-        <button class="tag-filter-btn" onclick="toggleTag('Saisonnier')" id="tag-Saisonnier"><span class="check"></span><span>🍂 Saisonnier</span></button>
+        <button class="tag-filter-btn" onclick="toggleTag('Bio')" id="tag-Bio"><span class="check"></span><span data-sv="Bio / Naturel" data-fr="Bio / Naturel" data-en="Organic / Natural">Bio / Naturel</span></button>
+        <button class="tag-filter-btn" onclick="toggleTag('Vegan')" id="tag-Vegan"><span class="check"></span><span>Vegan</span></button>
+        <button class="tag-filter-btn" onclick="toggleTag('Signature')" id="tag-Signature"><span class="check"></span><span data-sv="Signatur" data-fr="Signature" data-en="Signature">Signature</span></button>
+        <button class="tag-filter-btn" onclick="toggleTag('Saisonnier')" id="tag-Saisonnier"><span class="check"></span><span data-sv="Säsongsbetonad" data-fr="Saisonnier" data-en="Seasonal">Saisonnier</span></button>
       </div>
     </div>
 
@@ -305,7 +305,9 @@ function render() {
   if (!container) return;
 
   if (list.length === 0) {
-    container.innerHTML = `<div class="empty-state"><p>Aucun produit ne correspond à ces filtres.</p><button onclick="setCat('Tous')" style="background:var(--heather);color:var(--snow);border:none;padding:12px 28px;font-family:var(--font-ui);font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;">Réinitialiser</button></div>`;
+    const _emptyMsg = {sv:'Inga produkter matchar dessa filter.',fr:'Aucun produit ne correspond à ces filtres.',en:'No products match these filters.'};
+    const _resetLbl = {sv:'Återställ',fr:'Réinitialiser',en:'Reset'};
+    container.innerHTML = `<div class="empty-state"><p>${_emptyMsg[LANG]||_emptyMsg.fr}</p><button onclick="setCat('Tous')" style="background:var(--heather);color:var(--snow);border:none;padding:12px 28px;font-family:var(--font-ui);font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;">${_resetLbl[LANG]||_resetLbl.fr}</button></div>`;
     return;
   }
 
@@ -328,7 +330,7 @@ function render() {
         <div class="pli-action">
           <span class="pli-price">€${(p.price||0).toFixed(2)}</span>
           <span class="pli-weight">${p.weight||''}</span>
-          <button class="btn-add-small" onclick="event.stopPropagation();addToCart(${pid})">Ajouter</button>
+          <button class="btn-add-small" onclick="event.stopPropagation();addToCart(${pid})">${{sv:'Lägg till',fr:'Ajouter',en:'Add'}[LANG]||'Ajouter'}</button>
         </div>
       </div>`;
     }).join('');
