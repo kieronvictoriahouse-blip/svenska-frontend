@@ -377,11 +377,10 @@ footer { background:var(--midnight); color:rgba(255,255,255,0.55); padding:64px 
 
 /* ── SCROLL REVEAL — seulement si JS a chargé ── */
 body.js-ready .reveal {
-  opacity: 0;
-  transform: translateY(32px);
-  transition: opacity 0.7s cubic-bezier(0.4,0,0.2,1), transform 0.7s cubic-bezier(0.4,0,0.2,1);
+  transform: translateY(20px);
+  transition: transform 0.6s cubic-bezier(0.4,0,0.2,1);
 }
-body.js-ready .reveal.visible { opacity: 1; transform: none; }
+body.js-ready .reveal.visible { transform: none; }
 body.js-ready .reveal-delay-1 { transition-delay: 0.08s; }
 body.js-ready .reveal-delay-2 { transition-delay: 0.16s; }
 body.js-ready .reveal-delay-3 { transition-delay: 0.24s; }
