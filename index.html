@@ -468,7 +468,7 @@
     <div class="hero-scroll-line"></div>
   </div>
 </section>
-<script>(function(){try{var c=JSON.parse(localStorage.getItem('sd_cms_v1'));if(!c)return;var lg=localStorage.getItem('lang')||'fr';var lk=lg==='sv'?'value_sv':lg==='en'?'value_en':'value_fr';var h=document.querySelector('.hero h1');if(h&&c.hero_title&&c.hero_title[lk])h.innerHTML=c.hero_title[lk];var s=document.querySelector('.hero-sub');if(s&&c.hero_subtitle&&c.hero_subtitle[lk])s.textContent=c.hero_subtitle[lk];var ey=document.querySelector('.hero-eyebrow');if(ey&&c.hero_eyebrow&&c.hero_eyebrow[lk])ey.textContent=c.hero_eyebrow[lk];}catch(e){}}());</script>
+<script>(function(){try{var c=JSON.parse(localStorage.getItem('sd_cms_v1'));if(!c)return;var lg=localStorage.getItem('sd_lang')||'fr';var lk=lg==='sv'?'value_sv':lg==='en'?'value_en':'value_fr';var h=document.querySelector('.hero h1');if(h&&c.hero_title&&c.hero_title[lk])h.innerHTML=c.hero_title[lk];var s=document.querySelector('.hero-sub');if(s&&c.hero_subtitle&&c.hero_subtitle[lk])s.textContent=c.hero_subtitle[lk];var ey=document.querySelector('.hero-eyebrow');if(ey&&c.hero_eyebrow&&c.hero_eyebrow[lk])ey.textContent=c.hero_eyebrow[lk];}catch(e){}}());</script>
 
 <!-- ═══ TICKER ═══ -->
 <div class="ticker-bar">
@@ -692,7 +692,21 @@ initPage('home');
 
 let _homeReady = false;
 
-function onLangChange(l) { renderHome(); }
+function onLangChange(l) {
+  try {
+    const cms = window.SDApi?.cms;
+    if (cms) {
+      const lk = l === 'sv' ? 'value_sv' : l === 'en' ? 'value_en' : 'value_fr';
+      const h = document.querySelector('.hero h1');
+      if (h && cms.hero_title?.[lk]) h.innerHTML = cms.hero_title[lk];
+      const s = document.querySelector('.hero-sub');
+      if (s && cms.hero_subtitle?.[lk]) s.textContent = cms.hero_subtitle[lk];
+      const ey = document.querySelector('.hero-eyebrow');
+      if (ey && cms.hero_eyebrow?.[lk]) ey.textContent = cms.hero_eyebrow[lk];
+    }
+  } catch(e) {}
+  renderHome();
+}
 
 function renderHome() {
   const cr = document.getElementById('cats-row');

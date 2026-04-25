@@ -272,7 +272,7 @@
   function applyCms(cms) {
     try { localStorage.setItem('sd_cms_v1', JSON.stringify(cms)); } catch {}
     try {
-      const LANG = localStorage.getItem('lang') || 'fr';
+      const LANG = localStorage.getItem('sd_lang') || 'fr';
       const l = LANG === 'sv' ? 'value_sv' : LANG === 'en' ? 'value_en' : 'value_fr';
       if (cms.hero_title) {
         const h1 = document.querySelector('.hero h1');
