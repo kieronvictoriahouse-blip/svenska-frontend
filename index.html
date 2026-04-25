@@ -711,18 +711,39 @@ function onLangChange(l) {
 function renderHome() {
   const cr = document.getElementById('cats-row');
   if (cr) {
-    cr.innerHTML = CATS.map(c => `
-      <a href="boutique.html?cat=${encodeURIComponent(c.id)}" class="cat-card">
+    const populated = CATS.filter(c => PRODUCTS.some(p => p.cat === c.id));
+    const catsToShow = (populated.length >= 4 ? populated : CATS).slice(0, 11);
+    cr.innerHTML = catsToShow.map(c => {
+      const count = PRODUCTS.filter(p => p.cat === c.id).length;
+      return `<a href="boutique.html?cat=${encodeURIComponent(c.id)}" class="cat-card">
         <span class="cat-emoji">${c.emoji}</span>
         <div class="cat-name">${CAT_LABELS[c.id]?.[LANG]||c.id}</div>
-        <div class="cat-count">${c.count} produits</div>
-      </a>`).join('');
+        ${count ? `<div class="cat-count">${count} produit${count>1?'s':''}</div>` : ''}
+      </a>`;
+    }).join('');
   }
   if (!_homeReady) return;
+
+  // Bestsellers : flaggés d'abord, puis meilleurs ratings pour compléter jusqu'à 6
+  let bs_list = PRODUCTS.filter(p => p.bestseller);
+  if (bs_list.length < 6) {
+    const bsIds = new Set(bs_list.map(p => p.uuid||p.id));
+    const extra = [...PRODUCTS].filter(p => !bsIds.has(p.uuid||p.id)).sort((a,b) => b.rating - a.rating);
+    bs_list = [...bs_list, ...extra].slice(0, 6);
+  }
+
+  // Nouvelles arrivées : flaggées d'abord, puis les autres pour compléter jusqu'à 4
+  let na_list = PRODUCTS.filter(p => p.isNew);
+  if (na_list.length < 4) {
+    const naIds = new Set(na_list.map(p => p.uuid||p.id));
+    const extra = PRODUCTS.filter(p => !naIds.has(p.uuid||p.id));
+    na_list = [...na_list, ...extra].slice(0, 4);
+  }
+
   const bs = document.getElementById('bestsellers');
-  if (bs) { bs.innerHTML = PRODUCTS.filter(p=>p.bestseller).slice(0,6).map(p=>productCardHTML(p)).join(''); revealNew(bs); }
+  if (bs) { bs.innerHTML = bs_list.map(p => productCardHTML(p)).join(''); revealNew(bs); }
   const na = document.getElementById('new-arrivals');
-  if (na) { na.innerHTML = PRODUCTS.filter(p=>p.isNew).slice(0,4).map(p=>productCardHTML(p,'compact')).join(''); revealNew(na); }
+  if (na) { na.innerHTML = na_list.map(p => productCardHTML(p)).join(''); revealNew(na); }
 }
 
 function nlSubscribe() {
