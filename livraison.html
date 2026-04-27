@@ -17,74 +17,151 @@ window.SnipcartSettings={publicApiKey:'MzYxZmI4YTktYTFhMC00ZTQyLWE5NDEtZDY5NzNjO
 <div id="header-root"></div>
 
 <div class="page-hero" style="background:var(--heather);padding:56px 40px;text-align:center;">
-  <h1 style="font-family:var(--font-display);font-size:clamp(28px,4vw,52px);font-weight:300;color:var(--snow);">Livraison <em style="font-style:italic;color:var(--lingon-mid);">&amp; Retours</em></h1>
-  <p style="font-family:var(--font-body);font-size:16px;color:rgba(255,255,255,0.65);margin-top:10px;">Expédié avec soin depuis la France</p>
+  <h1 style="font-family:var(--font-display);font-size:clamp(28px,4vw,52px);font-weight:300;color:var(--snow);"
+      data-sv="Leverans <em style='font-style:italic;color:var(--lingon-mid);'>&amp; Returer</em>"
+      data-fr="Livraison <em style='font-style:italic;color:var(--lingon-mid);'>&amp; Retours</em>"
+      data-en="Delivery <em style='font-style:italic;color:var(--lingon-mid);'>&amp; Returns</em>">
+    Livraison <em style="font-style:italic;color:var(--lingon-mid);">&amp; Retours</em>
+  </h1>
+  <p style="font-family:var(--font-body);font-size:16px;color:rgba(255,255,255,0.65);margin-top:10px;"
+     data-sv="Skickat med omsorg från Frankrike"
+     data-fr="Expédié avec soin depuis la France"
+     data-en="Shipped with care from France">
+    Expédié avec soin depuis la France
+  </p>
 </div>
 
 <div class="legal-wrap">
 
   <!-- Tarifs livraison -->
-  <h2>Tarifs de livraison</h2>
+  <h2 data-sv="Leveranspriser" data-fr="Tarifs de livraison" data-en="Delivery rates">Tarifs de livraison</h2>
   <div style="overflow-x:auto;margin:16px 0 28px;">
     <table style="width:100%;border-collapse:collapse;font-family:var(--font-body);font-size:15px;">
       <thead>
         <tr style="background:var(--heather);color:#fff;">
-          <th style="padding:12px 16px;text-align:left;font-family:var(--font-ui);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;">Destination</th>
-          <th style="padding:12px 16px;text-align:left;font-family:var(--font-ui);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;">Délai</th>
-          <th style="padding:12px 16px;text-align:right;font-family:var(--font-ui);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;">Tarif</th>
+          <th style="padding:12px 16px;text-align:left;font-family:var(--font-ui);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;"
+              data-sv="Destination" data-fr="Destination" data-en="Destination">Destination</th>
+          <th style="padding:12px 16px;text-align:left;font-family:var(--font-ui);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;"
+              data-sv="Leveranstid" data-fr="Délai" data-en="Lead time">Délai</th>
+          <th style="padding:12px 16px;text-align:right;font-family:var(--font-ui);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;"
+              data-sv="Pris" data-fr="Tarif" data-en="Price">Tarif</th>
         </tr>
       </thead>
       <tbody>
         <tr style="border-bottom:1px solid var(--linen);">
-          <td style="padding:12px 16px;">France métropolitaine</td>
-          <td style="padding:12px 16px;color:var(--dust);">2 à 4 jours ouvrés</td>
-          <td style="padding:12px 16px;text-align:right;font-weight:600;">4,90 € <span style="font-size:12px;color:var(--heather);font-weight:400;">Offerte dès 50€</span></td>
+          <td style="padding:12px 16px;"
+              data-sv="Frankrike" data-fr="France métropolitaine" data-en="Metropolitan France">France métropolitaine</td>
+          <td style="padding:12px 16px;color:var(--dust);"
+              data-sv="2–4 arbetsdagar" data-fr="2 à 4 jours ouvrés" data-en="2 to 4 working days">2 à 4 jours ouvrés</td>
+          <td style="padding:12px 16px;text-align:right;font-weight:600;"
+              data-sv="4,90 € <span style='font-size:12px;color:var(--heather);font-weight:400;'>Gratis från 50€</span>"
+              data-fr="4,90 € <span style='font-size:12px;color:var(--heather);font-weight:400;'>Offerte dès 50€</span>"
+              data-en="€4.90 <span style='font-size:12px;color:var(--heather);font-weight:400;'>Free from €50</span>">
+            4,90 € <span style="font-size:12px;color:var(--heather);font-weight:400;">Offerte dès 50€</span>
+          </td>
         </tr>
         <tr style="border-bottom:1px solid var(--linen);background:var(--warm-white);">
-          <td style="padding:12px 16px;">Belgique, Luxembourg, Suisse</td>
-          <td style="padding:12px 16px;color:var(--dust);">3 à 5 jours ouvrés</td>
-          <td style="padding:12px 16px;text-align:right;font-weight:600;">7,90 € <span style="font-size:12px;color:var(--heather);font-weight:400;">Offerte dès 80€</span></td>
+          <td style="padding:12px 16px;"
+              data-sv="Belgien, Luxemburg, Schweiz" data-fr="Belgique, Luxembourg, Suisse" data-en="Belgium, Luxembourg, Switzerland">Belgique, Luxembourg, Suisse</td>
+          <td style="padding:12px 16px;color:var(--dust);"
+              data-sv="3–5 arbetsdagar" data-fr="3 à 5 jours ouvrés" data-en="3 to 5 working days">3 à 5 jours ouvrés</td>
+          <td style="padding:12px 16px;text-align:right;font-weight:600;"
+              data-sv="7,90 € <span style='font-size:12px;color:var(--heather);font-weight:400;'>Gratis från 80€</span>"
+              data-fr="7,90 € <span style='font-size:12px;color:var(--heather);font-weight:400;'>Offerte dès 80€</span>"
+              data-en="€7.90 <span style='font-size:12px;color:var(--heather);font-weight:400;'>Free from €80</span>">
+            7,90 € <span style="font-size:12px;color:var(--heather);font-weight:400;">Offerte dès 80€</span>
+          </td>
         </tr>
         <tr style="border-bottom:1px solid var(--linen);">
-          <td style="padding:12px 16px;">Europe (hors liste ci-dessus)</td>
-          <td style="padding:12px 16px;color:var(--dust);">4 à 7 jours ouvrés</td>
+          <td style="padding:12px 16px;"
+              data-sv="Europa (övriga länder)" data-fr="Europe (hors liste ci-dessus)" data-en="Europe (other countries)">Europe (hors liste ci-dessus)</td>
+          <td style="padding:12px 16px;color:var(--dust);"
+              data-sv="4–7 arbetsdagar" data-fr="4 à 7 jours ouvrés" data-en="4 to 7 working days">4 à 7 jours ouvrés</td>
           <td style="padding:12px 16px;text-align:right;font-weight:600;">12,90 €</td>
         </tr>
         <tr style="background:var(--warm-white);">
-          <td style="padding:12px 16px;">Reste du monde</td>
-          <td style="padding:12px 16px;color:var(--dust);">7 à 14 jours ouvrés</td>
-          <td style="padding:12px 16px;text-align:right;font-weight:600;">Nous contacter</td>
+          <td style="padding:12px 16px;"
+              data-sv="Resten av världen" data-fr="Reste du monde" data-en="Rest of the world">Reste du monde</td>
+          <td style="padding:12px 16px;color:var(--dust);"
+              data-sv="7–14 arbetsdagar" data-fr="7 à 14 jours ouvrés" data-en="7 to 14 working days">7 à 14 jours ouvrés</td>
+          <td style="padding:12px 16px;text-align:right;font-weight:600;"
+              data-sv="Kontakta oss" data-fr="Nous contacter" data-en="Contact us">Nous contacter</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <h2>Emballage & expédition</h2>
-  <p>Vos commandes sont préparées avec soin dans nos emballages éco-responsables. Les produits fragiles sont protégés individuellement. Chaque colis contient un récapitulatif de commande.</p>
-  <p>Un email de confirmation avec numéro de suivi vous est envoyé dès l'expédition.</p>
+  <h2 data-sv="Förpackning &amp; Frakt" data-fr="Emballage &amp; expédition" data-en="Packaging &amp; shipping">Emballage &amp; expédition</h2>
+  <p data-sv="Era beställningar förpackas omsorgsfullt i våra miljövänliga emballage. Ömtåliga produkter skyddas individuellt. Varje paket innehåller en orderöversikt."
+     data-fr="Vos commandes sont préparées avec soin dans nos emballages éco-responsables. Les produits fragiles sont protégés individuellement. Chaque colis contient un récapitulatif de commande."
+     data-en="Your orders are carefully packed in our eco-friendly packaging. Fragile items are individually protected. Each parcel includes an order summary.">
+    Vos commandes sont préparées avec soin dans nos emballages éco-responsables. Les produits fragiles sont protégés individuellement. Chaque colis contient un récapitulatif de commande.
+  </p>
+  <p data-sv="Ett bekräftelsemejl med spårningsnummer skickas så snart paketet har avsänts."
+     data-fr="Un email de confirmation avec numéro de suivi vous est envoyé dès l'expédition."
+     data-en="A confirmation email with a tracking number is sent as soon as the parcel is dispatched.">
+    Un email de confirmation avec numéro de suivi vous est envoyé dès l'expédition.
+  </p>
 
-  <h2>⏱ Délais de traitement</h2>
-  <p>Les commandes passées avant <strong>12h00 (heure de Paris)</strong> du lundi au vendredi sont traitées le jour même. Les commandes passées le week-end sont traitées le lundi suivant.</p>
-  <div class="info-box">Délai total estimé = délai de traitement (1 jour) + délai de livraison</div>
+  <h2 data-sv="⏱ Behandlingstider" data-fr="⏱ Délais de traitement" data-en="⏱ Processing times">⏱ Délais de traitement</h2>
+  <p data-sv="Beställningar lagda före <strong>kl. 12:00 (Paris-tid)</strong> måndag till fredag behandlas samma dag. Helgbeställningar behandlas påföljande måndag."
+     data-fr="Les commandes passées avant <strong>12h00 (heure de Paris)</strong> du lundi au vendredi sont traitées le jour même. Les commandes passées le week-end sont traitées le lundi suivant."
+     data-en="Orders placed before <strong>12:00 (Paris time)</strong> Monday to Friday are processed the same day. Weekend orders are processed the following Monday.">
+    Les commandes passées avant <strong>12h00 (heure de Paris)</strong> du lundi au vendredi sont traitées le jour même. Les commandes passées le week-end sont traitées le lundi suivant.
+  </p>
+  <div class="info-box"
+       data-sv="Total estimerad tid = behandlingstid (1 dag) + leveranstid"
+       data-fr="Délai total estimé = délai de traitement (1 jour) + délai de livraison"
+       data-en="Total estimated time = processing time (1 day) + delivery time">
+    Délai total estimé = délai de traitement (1 jour) + délai de livraison
+  </div>
 
-  <h2>Politique de retour</h2>
-  <p>Vous disposez de <strong>14 jours</strong> à compter de la réception de votre commande pour nous retourner un article, sans justification.</p>
-  <p><strong>Conditions de retour :</strong></p>
+  <h2 data-sv="Returpolicy" data-fr="Politique de retour" data-en="Return policy">Politique de retour</h2>
+  <p data-sv="Du har <strong>14 dagar</strong> från mottagandet av din beställning på dig att returnera en artikel, utan motivering."
+     data-fr="Vous disposez de <strong>14 jours</strong> à compter de la réception de votre commande pour nous retourner un article, sans justification."
+     data-en="You have <strong>14 days</strong> from receipt of your order to return an item, without justification.">
+    Vous disposez de <strong>14 jours</strong> à compter de la réception de votre commande pour nous retourner un article, sans justification.
+  </p>
+  <p data-sv="<strong>Returvillkor :</strong>" data-fr="<strong>Conditions de retour :</strong>" data-en="<strong>Return conditions:</strong>"><strong>Conditions de retour :</strong></p>
   <ul>
-    <li>L'article doit être dans son état d'origine, non ouvert et non entamé</li>
-    <li>Les produits alimentaires entamés ne peuvent être retournés pour des raisons d'hygiène</li>
-    <li>Les frais de retour sont à la charge du Client</li>
+    <li data-sv="Artikeln måste vara i originalskick, ej öppnad och ej använd"
+        data-fr="L'article doit être dans son état d'origine, non ouvert et non entamé"
+        data-en="The item must be in its original condition, unopened and unused">
+      L'article doit être dans son état d'origine, non ouvert et non entamé
+    </li>
+    <li data-sv="Öppnade livsmedel kan inte returneras av hygienskäl"
+        data-fr="Les produits alimentaires entamés ne peuvent être retournés pour des raisons d'hygiène"
+        data-en="Opened food products cannot be returned for hygiene reasons">
+      Les produits alimentaires entamés ne peuvent être retournés pour des raisons d'hygiène
+    </li>
+    <li data-sv="Returkostnader betalas av kunden"
+        data-fr="Les frais de retour sont à la charge du Client"
+        data-en="Return costs are borne by the customer">
+      Les frais de retour sont à la charge du Client
+    </li>
   </ul>
-  <p>Pour initier un retour : <a href="mailto:hej@heather-lingon.fr">hej@heather-lingon.fr</a> avec votre numéro de commande.</p>
-  <p>Le remboursement est effectué sous 5 à 10 jours ouvrés après réception du retour, sur le moyen de paiement d'origine.</p>
+  <p data-sv="För att initiera en retur: <a href='mailto:hej@heather-lingon.fr'>hej@heather-lingon.fr</a> med ditt beställningsnummer."
+     data-fr="Pour initier un retour : <a href='mailto:hej@heather-lingon.fr'>hej@heather-lingon.fr</a> avec votre numéro de commande."
+     data-en="To initiate a return: <a href='mailto:hej@heather-lingon.fr'>hej@heather-lingon.fr</a> with your order number.">
+    Pour initier un retour : <a href="mailto:hej@heather-lingon.fr">hej@heather-lingon.fr</a> avec votre numéro de commande.
+  </p>
+  <p data-sv="Återbetalning sker inom 5–10 arbetsdagar efter mottagandet av returen, via ursprunglig betalningsmetod."
+     data-fr="Le remboursement est effectué sous 5 à 10 jours ouvrés après réception du retour, sur le moyen de paiement d'origine."
+     data-en="Refund is processed within 5 to 10 working days after receipt of the return, to the original payment method.">
+    Le remboursement est effectué sous 5 à 10 jours ouvrés après réception du retour, sur le moyen de paiement d'origine.
+  </p>
 
-  <h2>Colis endommagé ou manquant</h2>
-  <p>En cas de colis endommagé à réception, prenez des photos avant de l'ouvrir et contactez-nous dans les 48h à <a href="mailto:hej@heather-lingon.fr">hej@heather-lingon.fr</a>. Nous traiterons votre réclamation dans les meilleurs délais.</p>
+  <h2 data-sv="Skadat eller saknat paket" data-fr="Colis endommagé ou manquant" data-en="Damaged or missing parcel">Colis endommagé ou manquant</h2>
+  <p data-sv="Vid skadat paket vid leverans: ta foton innan du öppnar det och kontakta oss inom 48h på <a href='mailto:hej@heather-lingon.fr'>hej@heather-lingon.fr</a>. Vi hanterar ditt ärende så snabbt som möjligt."
+     data-fr="En cas de colis endommagé à réception, prenez des photos avant de l'ouvrir et contactez-nous dans les 48h à <a href='mailto:hej@heather-lingon.fr'>hej@heather-lingon.fr</a>. Nous traiterons votre réclamation dans les meilleurs délais."
+     data-en="If your parcel arrives damaged, take photos before opening it and contact us within 48h at <a href='mailto:hej@heather-lingon.fr'>hej@heather-lingon.fr</a>. We will handle your complaint as quickly as possible.">
+    En cas de colis endommagé à réception, prenez des photos avant de l'ouvrir et contactez-nous dans les 48h à <a href="mailto:hej@heather-lingon.fr">hej@heather-lingon.fr</a>. Nous traiterons votre réclamation dans les meilleurs délais.
+  </p>
 </div>
 
 <div id="footer-root"></div>
 <script src="js/app.js"></script>
-<script>initPage('');</script>
+<script>initPage('livraison');</script>
 <script src="js/sd-api-client.js"></script>
 </body>
 </html>
