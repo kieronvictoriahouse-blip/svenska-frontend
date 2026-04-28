@@ -296,6 +296,12 @@
       if (!cached) {
         window.dispatchEvent(new CustomEvent('sdapi:ready', { detail: { fallback: true } }));
       }
+    } finally {
+      // Révéler le header/footer quoi qu'il arrive (même si WL a échoué)
+      var _hr = document.getElementById('header-root');
+      var _fr = document.getElementById('footer-root');
+      if (_hr && !_hr.classList.contains('wl-ready')) _hr.classList.add('wl-ready');
+      if (_fr && !_fr.classList.contains('wl-ready')) _fr.classList.add('wl-ready');
     }
   }
 
