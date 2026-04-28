@@ -192,18 +192,48 @@
       if (cfg.font_ui)      root.style.setProperty('--font-ui', `'${cfg.font_ui}', sans-serif`);
     }
 
-    // Nom & slogan → logo dans header + footer (rendus par app.js)
-    if (cfg.site_name) {
-      document.querySelectorAll('.logo-main').forEach(el => { el.textContent = cfg.site_name; });
-      document.title = document.title.replace(/^[^—]+/, cfg.site_name + ' ');
-    }
-    if (cfg.site_slogan) {
-      document.querySelectorAll('.logo-tag').forEach(el => { el.textContent = cfg.site_slogan; });
+    // Mise à jour SD_WL + re-rendu header/footer
+    if (typeof window.SD_WL !== 'undefined') {
+      var _n = cfg.site_name || window.SD_WL.brand_name;
+      window.SD_WL = {
+        brand_name: _n,
+        brand_tagline: cfg.site_slogan || window.SD_WL.brand_tagline,
+        contact_email: cfg.email || window.SD_WL.contact_email,
+        instagram: cfg.instagram !== undefined ? cfg.instagram : window.SD_WL.instagram,
+        facebook: cfg.facebook !== undefined ? cfg.facebook : window.SD_WL.facebook,
+        pinterest: cfg.pinterest !== undefined ? cfg.pinterest : window.SD_WL.pinterest,
+        free_shipping_threshold: cfg.free_shipping_threshold || window.SD_WL.free_shipping_threshold,
+        announcement: {
+          sv: cfg.announcement_sv || window.SD_WL.announcement.sv,
+          fr: cfg.announcement_fr || window.SD_WL.announcement.fr,
+          en: cfg.announcement_en || window.SD_WL.announcement.en,
+        },
+        footer_desc: {
+          sv: cfg.footer_desc_sv || window.SD_WL.footer_desc.sv,
+          fr: cfg.footer_desc_fr || window.SD_WL.footer_desc.fr,
+          en: cfg.footer_desc_en || window.SD_WL.footer_desc.en,
+        },
+        footer_tagline: {
+          sv: cfg.footer_tagline_sv || window.SD_WL.footer_tagline.sv,
+          fr: cfg.footer_tagline_fr || window.SD_WL.footer_tagline.fr,
+          en: cfg.footer_tagline_en || window.SD_WL.footer_tagline.en,
+        },
+        copyright: {
+          sv: '© 2026 ' + _n + ' · Alla rättigheter förbehållna',
+          fr: '© 2026 ' + _n + ' · Tous droits réservés',
+          en: '© 2026 ' + _n + ' · All rights reserved',
+        },
+      };
+      if (typeof renderHeader === 'function') {
+        var _hr = document.getElementById('header-root');
+        if (_hr) _hr.innerHTML = renderHeader(window._activePage || '');
+        var _fr = document.getElementById('footer-root');
+        if (_fr) _fr.innerHTML = renderFooter();
+        if (typeof setLang === 'function') setLang(window.LANG || localStorage.getItem('sd_lang') || 'fr');
+      }
     }
 
-    // Email de contact dans les alertes JS
     if (cfg.email) window._contactEmail = cfg.email;
-
     window.SDApi.whiteLabel = cfg;
     console.log('[SDApi] White-label appliqué :', cfg.site_name || '—');
   }
