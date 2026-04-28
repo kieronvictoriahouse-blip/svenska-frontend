@@ -226,9 +226,9 @@
       };
       if (typeof renderHeader === 'function') {
         var _hr = document.getElementById('header-root');
-        if (_hr) _hr.innerHTML = renderHeader(window._activePage || '');
+        if (_hr) { _hr.innerHTML = renderHeader(window._activePage || ''); _hr.classList.add('wl-ready'); }
         var _fr = document.getElementById('footer-root');
-        if (_fr) _fr.innerHTML = renderFooter();
+        if (_fr) { _fr.innerHTML = renderFooter(); _fr.classList.add('wl-ready'); }
         if (typeof setLang === 'function') setLang(window.LANG || localStorage.getItem('sd_lang') || 'fr');
       }
     }

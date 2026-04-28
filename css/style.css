@@ -1,9 +1,13 @@
 /* ═══════════════════════════════════════════
-   HEATHER & LINGON — Design System
-   Épicerie nordique & britannique
+   SVENSKA DELIKATESSEN — Design System
+   White-label · Épicerie nordique & britannique
 ═══════════════════════════════════════════ */
 
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Jost:wght@300;400;500;600&family=Crimson+Pro:ital,wght@0,300;0,400;1,300;1,400&display=swap');
+
+/* Header/footer invisibles jusqu'au chargement de la marque (anti-flash) */
+#header-root, #footer-root { opacity:0; pointer-events:none; transition:opacity 0.18s ease; }
+#header-root.wl-ready, #footer-root.wl-ready { opacity:1; pointer-events:auto; }
 
 :root {
   --cream:          #F8F4ED;
