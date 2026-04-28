@@ -233,6 +233,35 @@
       }
     }
 
+    // Mise à jour <title> et balises meta Open Graph / Twitter
+    var _siteName = cfg.site_name;
+    if (_siteName) {
+      var _curSN = document.querySelector('meta[property="og:site_name"]');
+      var _oldBrand = _curSN ? (_curSN.getAttribute('content') || 'Heather & Lingon') : 'Heather & Lingon';
+      if (_oldBrand !== _siteName) {
+        document.title = document.title.replace(_oldBrand, _siteName);
+      }
+      var _qm = function(s) { return document.querySelector(s); };
+      var _me;
+      _me = _qm('meta[property="og:title"]');
+      if (_me) _me.setAttribute('content', (_me.getAttribute('content') || '').replace(_oldBrand, _siteName));
+      if (_curSN) _curSN.setAttribute('content', _siteName);
+      _me = _qm('meta[name="twitter:title"]');
+      if (_me) _me.setAttribute('content', (_me.getAttribute('content') || '').replace(_oldBrand, _siteName));
+      _me = _qm('meta[property="og:url"]');
+      if (_me) _me.setAttribute('content', location.href);
+      var _jld = _qm('script[type="application/ld+json"]');
+      if (_jld) {
+        try {
+          var _d = JSON.parse(_jld.textContent);
+          if (_d.name !== undefined) _d.name = _siteName;
+          if (cfg.email && _d.email !== undefined) _d.email = cfg.email;
+          if (_d.url !== undefined) _d.url = location.origin;
+          _jld.textContent = JSON.stringify(_d);
+        } catch(e) {}
+      }
+    }
+
     if (cfg.email) window._contactEmail = cfg.email;
     window.SDApi.whiteLabel = cfg;
     console.log('[SDApi] White-label appliqué :', cfg.site_name || '—');
