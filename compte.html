@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mon compte — Heather & Lingon</title>
+<meta name="description" content="Consultez vos commandes et gérez votre compte Heather & Lingon.">
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="css/style.css">
+<script>const SD_API_URL = 'https://admin.swedishcravings.fr';</script>
+<script>(function(){try{var w=JSON.parse(localStorage.getItem('sd_wl_v1'));if(w&&w.id){var r=document.documentElement.style;if(w.color_primary){r.setProperty('--heather',w.color_primary);r.setProperty('--heather-mid',w.color_primary+'CC');}if(w.color_secondary){r.setProperty('--lingon',w.color_secondary);r.setProperty('--lingon-mid',w.color_secondary+'CC');}if(w.color_bg)r.setProperty('--cream',w.color_bg);if(w.color_text)r.setProperty('--midnight',w.color_text);if(w.font_display)r.setProperty('--font-display',"'"+w.font_display+"',Georgia,serif");if(w.font_body)r.setProperty('--font-body',"'"+w.font_body+"',Georgia,serif");if(w.font_ui)r.setProperty('--font-ui',"'"+w.font_ui+"',sans-serif");}}catch(e){}}());</script>
+<style>
+/* ── Page layout ── */
+.acct-hero{background:var(--heather);padding:64px 40px 48px;text-align:center;}
+.acct-hero h1{font-family:var(--font-display);font-size:clamp(32px,5vw,60px);font-weight:300;color:var(--snow);}
+.acct-hero h1 em{font-style:italic;color:var(--lingon-mid);}
+.acct-hero p{font-family:var(--font-body);font-size:16px;color:rgba(255,255,255,0.6);margin-top:10px;}
+
+.acct-wrap{max-width:860px;margin:0 auto;padding:56px 32px 80px;}
+
+/* ── Login card ── */
+.login-card{max-width:480px;margin:0 auto;background:var(--snow);border:1px solid var(--linen);padding:48px 40px;}
+.login-card h2{font-family:var(--font-display);font-size:26px;font-weight:500;color:var(--midnight);margin-bottom:8px;}
+.login-card p{font-family:var(--font-body);font-size:15px;color:var(--slate);margin-bottom:32px;line-height:1.7;}
+.login-field{margin-bottom:20px;}
+.login-field label{display:block;font-family:var(--font-ui);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dust);margin-bottom:8px;}
+.login-field input{width:100%;border:1px solid var(--linen);background:var(--cream);padding:14px 16px;font-family:var(--font-body);font-size:16px;color:var(--midnight);outline:none;transition:border-color 0.2s;box-sizing:border-box;}
+.login-field input:focus{border-color:var(--heather);}
+.login-field input.err{border-color:var(--lingon);}
+.login-error{font-family:var(--font-ui);font-size:11px;color:var(--lingon);margin-top:8px;display:none;}
+.login-error.show{display:block;}
+.btn-login{width:100%;background:var(--heather);color:var(--snow);border:none;padding:16px 24px;font-family:var(--font-ui);font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;transition:background 0.2s;margin-top:4px;}
+.btn-login:hover{background:var(--midnight);}
+.btn-login:disabled{opacity:0.5;cursor:not-allowed;}
+.login-note{font-family:var(--font-body);font-size:13px;color:var(--dust);text-align:center;margin-top:20px;line-height:1.6;}
+
+/* ── Account view ── */
+.acct-header{display:flex;align-items:center;gap:20px;margin-bottom:40px;padding-bottom:32px;border-bottom:1px solid var(--linen);}
+.acct-avatar{width:56px;height:56px;border-radius:50%;background:var(--heather);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:22px;font-weight:600;color:var(--snow);flex-shrink:0;letter-spacing:1px;}
+.acct-info{flex:1;}
+.acct-name{font-family:var(--font-display);font-size:22px;font-weight:500;color:var(--midnight);}
+.acct-email{font-family:var(--font-ui);font-size:11px;letter-spacing:1.5px;color:var(--dust);margin-top:2px;}
+.btn-logout{background:none;border:1px solid var(--linen);color:var(--dust);padding:10px 20px;font-family:var(--font-ui);font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+.btn-logout:hover{border-color:var(--lingon);color:var(--lingon);}
+
+/* ── Stats bar ── */
+.acct-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--linen);border:1px solid var(--linen);margin-bottom:40px;}
+.stat-box{background:var(--snow);padding:20px 24px;text-align:center;}
+.stat-val{font-family:var(--font-display);font-size:28px;font-weight:500;color:var(--heather);}
+.stat-lbl{font-family:var(--font-ui);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--dust);margin-top:4px;}
+
+/* ── Orders section ── */
+.orders-title{font-family:var(--font-ui);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--dust);margin-bottom:16px;display:flex;align-items:center;gap:12px;}
+.orders-title::after{content:'';flex:1;height:1px;background:var(--linen);}
+
+.order-card{border:1px solid var(--linen);margin-bottom:12px;background:var(--snow);overflow:hidden;}
+.order-head{display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:16px;padding:20px 24px;cursor:pointer;transition:background 0.15s;}
+.order-head:hover{background:var(--warm-white,#faf9f7);}
+.order-num{font-family:var(--font-display);font-size:17px;font-weight:600;color:var(--midnight);}
+.order-date{font-family:var(--font-ui);font-size:10px;letter-spacing:1.5px;color:var(--dust);margin-top:2px;}
+.order-status{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-ui);font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:5px 12px;border-radius:1px;white-space:nowrap;}
+.s-pending{background:#f5f0ff;color:#7c5cbf;}
+.s-paid{background:#e8f4fd;color:#2563a8;}
+.s-shipped{background:#fff3e0;color:#b45309;}
+.s-delivered{background:#e8f5e9;color:#2e7d32;}
+.s-cancelled{background:#fce4ec;color:#c62828;}
+.s-refunded{background:#f3e5f5;color:#7b1fa2;}
+.order-total{font-family:var(--font-display);font-size:18px;font-weight:500;color:var(--midnight);white-space:nowrap;}
+.order-chevron{font-size:12px;color:var(--dust);transition:transform 0.25s;}
+.order-card.open .order-chevron{transform:rotate(180deg);}
+
+.order-body{max-height:0;overflow:hidden;transition:max-height 0.3s ease;}
+.order-card.open .order-body{max-height:600px;}
+.order-body-inner{border-top:1px solid var(--linen);padding:20px 24px;}
+
+.order-lines{margin-bottom:16px;}
+.order-line{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--parchment,#f5f0e8);font-family:var(--font-body);font-size:14px;}
+.order-line:last-child{border-bottom:none;}
+.order-line-name{color:var(--midnight);flex:1;}
+.order-line-sub{font-family:var(--font-ui);font-size:10px;color:var(--dust);margin-top:1px;}
+.order-line-qty{color:var(--slate);margin:0 16px;}
+.order-line-price{color:var(--midnight);font-weight:500;white-space:nowrap;}
+
+.order-totals{border-top:1px solid var(--linen);padding-top:14px;margin-top:4px;}
+.order-total-row{display:flex;justify-content:space-between;font-family:var(--font-body);font-size:14px;color:var(--slate);margin-bottom:6px;}
+.order-total-row.grand{font-family:var(--font-display);font-size:17px;font-weight:600;color:var(--midnight);border-top:1px solid var(--linen);padding-top:10px;margin-top:6px;}
+
+.order-addr{font-family:var(--font-ui);font-size:10px;letter-spacing:1px;color:var(--dust);line-height:1.9;margin-top:12px;}
+
+/* ── Empty / loading states ── */
+.acct-empty{text-align:center;padding:60px 20px;}
+.acct-empty p{font-family:var(--font-body);font-size:18px;color:var(--slate);margin-bottom:24px;}
+.acct-loading{text-align:center;padding:60px 20px;}
+.spinner{display:inline-block;width:32px;height:32px;border:2px solid var(--linen);border-top-color:var(--heather);border-radius:50%;animation:spin 0.7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+@media(max-width:700px){
+  .acct-wrap{padding:32px 16px 60px;}
+  .login-card{padding:32px 20px;}
+  .acct-header{flex-wrap:wrap;gap:12px;}
+  .acct-stats{grid-template-columns:repeat(2,1fr);}
+  .order-head{grid-template-columns:1fr auto;gap:10px;}
+  .order-num{grid-column:1;}
+  .order-status{grid-column:1;}
+  .order-total{text-align:right;}
+  .order-chevron{grid-row:1;grid-column:2;align-self:center;}
+  .acct-hero{padding:48px 20px 36px;}
+}
+</style>
+</head>
+<body>
+<script>
+window.SnipcartSettings={publicApiKey:'MTM2ODI3MjQtODdlMy00YzRkLWFiNGMtMmMwMGQ1M2ZhZDk3NjM5MTI5MDkyNzIyOTUxODcy',loadStrategy:'on-user-interaction',currency:'eur',modalStyle:'side',addProductBehavior:'none',version:'3.3.3'};
+(()=>{var c,d;(d=(c=window.SnipcartSettings).version)!=null||(c.version="3.0");var s,S;(S=(s=window.SnipcartSettings).timeoutDuration)!=null||(s.timeoutDuration=2750);var l,p;(p=(l=window.SnipcartSettings).domain)!=null||(l.domain="cdn.snipcart.com");var w,u;(u=(w=window.SnipcartSettings).protocol)!=null||(w.protocol="https");var f=window.SnipcartSettings.version.includes("v3.0.0-ci")||window.SnipcartSettings.version!="3.0"&&window.SnipcartSettings.version.localeCompare("3.4.0",void 0,{numeric:!0,sensitivity:"base"})===-1,m=["focus","mouseover","touchmove","scroll","keydown"];window.LoadSnipcart=o;document.readyState==="loading"?document.addEventListener("DOMContentLoaded",r):r();function r(){window.SnipcartSettings.loadStrategy?window.SnipcartSettings.loadStrategy==="on-user-interaction"&&(m.forEach(t=>document.addEventListener(t,o)),setTimeout(o,window.SnipcartSettings.timeoutDuration)):o()}var a=!1;function o(){if(a)return;a=!0;let t=document.getElementsByTagName("head")[0],e=document.querySelector("#snipcart"),i=document.querySelector('script[src^="'+window.SnipcartSettings.protocol+'://'+window.SnipcartSettings.domain+'"][src$="snipcart.js"]'),n=document.querySelector('link[href^="'+window.SnipcartSettings.protocol+'://'+window.SnipcartSettings.domain+'"][href$="snipcart.css"]');e||(e=document.createElement("div"),e.id="snipcart",e.setAttribute("hidden","true"),document.body.appendChild(e)),v(e),i||(i=document.createElement("script"),i.src=window.SnipcartSettings.protocol+"://"+window.SnipcartSettings.domain+"/themes/v"+window.SnipcartSettings.version+"/default/snipcart.js",i.async=!0,t.appendChild(i)),n||(n=document.createElement("link"),n.rel="stylesheet",n.type="text/css",n.href=window.SnipcartSettings.protocol+"://"+window.SnipcartSettings.domain+"/themes/v"+window.SnipcartSettings.version+"/default/snipcart.css",t.prepend(n)),m.forEach(g=>document.removeEventListener(g,o))}function v(t){!f||(t.dataset.apiKey=window.SnipcartSettings.publicApiKey,window.SnipcartSettings.addProductBehavior&&(t.dataset.configAddProductBehavior=window.SnipcartSettings.addProductBehavior),window.SnipcartSettings.modalStyle&&(t.dataset.configModalStyle=window.SnipcartSettings.modalStyle),window.SnipcartSettings.currency&&(t.dataset.currency=window.SnipcartSettings.currency),window.SnipcartSettings.templatesUrl&&(t.dataset.templatesUrl=window.SnipcartSettings.templatesUrl));}})();
+</script>
+
+<div id="header-root"></div>
+
+<div class="acct-hero">
+  <h1 data-sv="Mitt <em>konto</em>" data-fr="Mon <em>compte</em>" data-en="My <em>account</em>">Mon <em>compte</em></h1>
+  <p data-sv="Följ dina beställningar och hantera ditt konto." data-fr="Suivez vos commandes et gérez votre compte." data-en="Track your orders and manage your account.">Suivez vos commandes et gérez votre compte.</p>
+</div>
+
+<div class="acct-wrap">
+  <div id="acct-root"></div>
+</div>
+
+<div id="footer-root"></div>
+<script src="js/app.js"></script>
+<script>
+initPage('account');
+
+const BASE = window.SD_API_URL || 'https://admin.swedishcravings.fr';
+let _session = null;
+
+// ── Utilities ────────────────────────────────────────────────
+function saveSession(s) {
+  _session = s;
+  try { localStorage.setItem('sd_customer_v1', JSON.stringify(s)); } catch(e) {}
+}
+function loadSession() {
+  try { return JSON.parse(localStorage.getItem('sd_customer_v1') || 'null'); } catch(e) { return null; }
+}
+function clearSession() {
+  _session = null;
+  try { localStorage.removeItem('sd_customer_v1'); } catch(e) {}
+}
+
+function fmtDate(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  return d.toLocaleDateString(LANG === 'sv' ? 'sv-SE' : LANG === 'en' ? 'en-GB' : 'fr-FR', { day: '2-digit', month: 'short', year: 'numeric' });
+}
+
+function statusLabel(s) {
+  const m = {
+    pending:   { fr:'En attente',   sv:'Väntar',     en:'Pending'   },
+    paid:      { fr:'Payée',        sv:'Betald',      en:'Paid'      },
+    shipped:   { fr:'Expédiée',     sv:'Skickad',     en:'Shipped'   },
+    delivered: { fr:'Livrée',       sv:'Levererad',   en:'Delivered' },
+    cancelled: { fr:'Annulée',      sv:'Avbruten',    en:'Cancelled' },
+    refunded:  { fr:'Remboursée',   sv:'Återbetald',  en:'Refunded'  },
+  };
+  return m[s]?.[LANG] || s;
+}
+
+function initials(name) {
+  if (!name) return '?';
+  const parts = name.trim().split(' ');
+  return (parts[0][0] + (parts[1]?.[0] || '')).toUpperCase();
+}
+
+// ── Render functions ──────────────────────────────────────────
+function renderLogin(errorKey) {
+  const errorMsgs = {
+    no_orders: LANG==='sv' ? 'Inga beställningar hittades för denna e-post.' : LANG==='en' ? 'No orders found for this email.' : 'Aucune commande trouvée pour cet email.',
+    invalid_email: LANG==='sv' ? 'Ogiltig e-postadress.' : LANG==='en' ? 'Invalid email address.' : 'Adresse email invalide.',
+    network: LANG==='sv' ? 'Anslutningsfel. Försök igen.' : LANG==='en' ? 'Connection error. Please try again.' : 'Erreur de connexion. Réessayez.',
+  };
+  const titles = { sv: 'Se dina beställningar', fr: 'Voir vos commandes', en: 'View your orders' };
+  const descs  = { sv: 'Ange din e-postadress för att se dina beställningar och spåra dina leveranser.', fr: 'Entrez l\'email utilisé lors de vos commandes pour consulter votre historique et suivre vos livraisons.', en: 'Enter the email you used when ordering to view your history and track deliveries.' };
+  const labels = { sv: 'E-postadress', fr: 'Adresse email', en: 'Email address' };
+  const btns   = { sv: 'Se mina beställningar →', fr: 'Voir mes commandes →', en: 'View my orders →' };
+  const notes  = { sv: 'Ange din e-post — inget lösenord krävs.', fr: 'Pas de mot de passe requis — juste votre email.', en: 'No password needed — just your email.' };
+
+  document.getElementById('acct-root').innerHTML = `
+    <div class="login-card">
+      <h2>${titles[LANG]||titles.fr}</h2>
+      <p>${descs[LANG]||descs.fr}</p>
+      <form id="login-form" onsubmit="doLogin(event)">
+        <div class="login-field">
+          <label for="login-email">${labels[LANG]||labels.fr}</label>
+          <input type="email" id="login-email" autocomplete="email" required placeholder="vous@exemple.fr" class="${errorKey?'err':''}">
+          <div class="login-error${errorKey?' show':''}">${errorMsgs[errorKey]||''}</div>
+        </div>
+        <button type="submit" class="btn-login" id="login-btn">${btns[LANG]||btns.fr}</button>
+      </form>
+      <p class="login-note">${notes[LANG]||notes.fr}</p>
+    </div>`;
+  document.getElementById('login-email')?.focus();
+}
+
+function renderAccount(session) {
+  const { customer_name, customer_email, orders } = session;
+  const root = document.getElementById('acct-root');
+
+  const totalSpent = orders.reduce((s, o) => s + (o.total || 0), 0);
+  const delivered  = orders.filter(o => o.status === 'delivered').length;
+
+  const ordersTitles = { sv: 'Beställningar', fr: 'Commandes', en: 'Orders' };
+  const delivTitles  = { sv: 'Levererade', fr: 'Livrées', en: 'Delivered' };
+  const spentTitles  = { sv: 'Totalt',     fr: 'Total',   en: 'Total spent' };
+  const logoutTxt    = { sv: 'Logga ut', fr: 'Déconnexion', en: 'Log out' };
+  const historyTxt   = { sv: 'Beställningshistorik', fr: 'Historique des commandes', en: 'Order history' };
+  const noOrdersTxt  = { sv: 'Inga beställningar ännu.', fr: 'Aucune commande pour l\'instant.', en: 'No orders yet.' };
+  const shopTxt      = { sv: 'Utforska butiken →', fr: 'Explorer la boutique →', en: 'Explore the shop →' };
+
+  root.innerHTML = `
+    <div class="acct-header">
+      <div class="acct-avatar">${initials(customer_name)}</div>
+      <div class="acct-info">
+        <div class="acct-name">${customer_name}</div>
+        <div class="acct-email">${customer_email}</div>
+      </div>
+      <button class="btn-logout" onclick="doLogout()">${logoutTxt[LANG]||logoutTxt.fr}</button>
+    </div>
+
+    <div class="acct-stats">
+      <div class="stat-box"><div class="stat-val">${orders.length}</div><div class="stat-lbl">${ordersTitles[LANG]||ordersTitles.fr}</div></div>
+      <div class="stat-box"><div class="stat-val">${delivered}</div><div class="stat-lbl">${delivTitles[LANG]||delivTitles.fr}</div></div>
+      <div class="stat-box"><div class="stat-val">€${totalSpent.toFixed(0)}</div><div class="stat-lbl">${spentTitles[LANG]||spentTitles.fr}</div></div>
+    </div>
+
+    <div class="orders-title">${historyTxt[LANG]||historyTxt.fr}</div>
+
+    ${orders.length === 0 ? `
+      <div class="acct-empty">
+        <p>${noOrdersTxt[LANG]||noOrdersTxt.fr}</p>
+        <a href="boutique.html" class="btn-primary">${shopTxt[LANG]||shopTxt.fr}</a>
+      </div>
+    ` : orders.map(o => renderOrderCard(o)).join('')}
+  `;
+}
+
+function renderOrderCard(o) {
+  const lines = Array.isArray(o.lines) ? o.lines : (typeof o.lines === 'string' ? JSON.parse(o.lines || '[]') : []);
+  const shipping = (o.shipping || 0);
+  const subtotal = (o.subtotal || 0);
+  const total = (o.total || 0);
+
+  const shippingFree = { sv:'Gratis', fr:'Gratuite', en:'Free' };
+  const shippingLbl  = { sv:'Frakt', fr:'Livraison', en:'Shipping' };
+  const subtotalLbl  = { sv:'Delsumma', fr:'Sous-total', en:'Subtotal' };
+  const totalLbl     = { sv:'Total', fr:'Total', en:'Total' };
+  const detailsTxt   = { sv:`${lines.length} artikel${lines.length>1?'ar':''}`, fr:`${lines.length} article${lines.length>1?'s':''}`, en:`${lines.length} item${lines.length>1?'s':''}` };
+
+  const addrHtml = o.shipping_address?.name ? `
+    <div class="order-addr">
+      ${[o.shipping_address.name, o.shipping_address.address1, o.shipping_address.city + (o.shipping_address.postalCode ? ' ' + o.shipping_address.postalCode : ''), o.shipping_address.country].filter(Boolean).join(' · ')}
+    </div>` : '';
+
+  return `
+    <div class="order-card" id="oc-${o.id}">
+      <div class="order-head" onclick="toggleOrder('${o.id}')">
+        <div>
+          <div class="order-num">${o.order_number}</div>
+          <div class="order-date">${fmtDate(o.created_at)}</div>
+        </div>
+        <div>
+          <span class="order-status s-${o.status}">${statusLabel(o.status)}</span>
+          <div class="order-date" style="margin-top:4px;">${detailsTxt[LANG]||detailsTxt.fr}</div>
+        </div>
+        <div class="order-total">€${total.toFixed(2)}</div>
+        <div class="order-chevron">▾</div>
+      </div>
+      <div class="order-body">
+        <div class="order-body-inner">
+          <div class="order-lines">
+            ${lines.map(l => `
+              <div class="order-line">
+                <div>
+                  <div class="order-line-name">${l.name || ''}</div>
+                  ${l.variant ? `<div class="order-line-sub">${l.variant}</div>` : ''}
+                </div>
+                <div class="order-line-qty">× ${l.qty || 1}</div>
+                <div class="order-line-price">€${((l.total || l.price * (l.qty||1)) || 0).toFixed(2)}</div>
+              </div>`).join('')}
+          </div>
+          <div class="order-totals">
+            <div class="order-total-row"><span>${subtotalLbl[LANG]||subtotalLbl.fr}</span><span>€${subtotal.toFixed(2)}</span></div>
+            <div class="order-total-row"><span>${shippingLbl[LANG]||shippingLbl.fr}</span><span>${shipping === 0 ? shippingFree[LANG]||shippingFree.fr : '€' + shipping.toFixed(2)}</span></div>
+            <div class="order-total-row grand"><span>${totalLbl[LANG]||totalLbl.fr}</span><span>€${total.toFixed(2)}</span></div>
+          </div>
+          ${addrHtml}
+        </div>
+      </div>
+    </div>`;
+}
+
+function toggleOrder(id) {
+  document.getElementById('oc-' + id)?.classList.toggle('open');
+}
+
+// ── Actions ───────────────────────────────────────────────────
+async function doLogin(e) {
+  e.preventDefault();
+  const email = document.getElementById('login-email').value.trim().toLowerCase();
+  const btn   = document.getElementById('login-btn');
+  btn.disabled = true;
+  btn.textContent = '…';
+
+  try {
+    const res  = await fetch(BASE + '/api/customer/orders', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ email }),
+    });
+    const data = await res.json();
+
+    if (!res.ok) {
+      renderLogin(data.error || 'network');
+      return;
+    }
+
+    const session = {
+      token:           data.token,
+      customer_name:   data.customer_name,
+      customer_email:  data.customer_email,
+      orders:          data.orders || [],
+    };
+    saveSession(session);
+    renderAccount(session);
+
+  } catch(err) {
+    renderLogin('network');
+  }
+}
+
+async function doLogout() {
+  clearSession();
+  renderLogin();
+}
+
+// ── Init ──────────────────────────────────────────────────────
+(async function init() {
+  const session = loadSession();
+  if (session?.token) {
+    // Re-fetch orders to get latest status
+    document.getElementById('acct-root').innerHTML = '<div class="acct-loading"><div class="spinner"></div></div>';
+    try {
+      const res  = await fetch(BASE + '/api/customer/orders', {
+        headers: { Authorization: 'Bearer ' + session.token },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        const updated = { ...session, orders: data.orders || [] };
+        saveSession(updated);
+        renderAccount(updated);
+      } else {
+        clearSession();
+        renderLogin();
+      }
+    } catch(e) {
+      // Network error — show cached session
+      renderAccount(session);
+    }
+  } else {
+    renderLogin();
+  }
+})();
+</script>
+<script src="js/sd-api-client.js"></script>
+</body>
+</html>

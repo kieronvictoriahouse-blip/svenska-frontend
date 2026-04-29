@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════
    SVENSKA DELIKATESSEN — Design System
-   White-label · Épicerie nordique & britannique
+   White-label · Épicerie suédoise
 ═══════════════════════════════════════════ */
 
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Jost:wght@300;400;500;600&family=Crimson+Pro:ital,wght@0,300;0,400;1,300;1,400&display=swap');
@@ -92,6 +92,16 @@ nav a:hover, nav a.active { color:var(--lingon); border-bottom-color:var(--lingo
   display:flex; align-items:center; justify-content:center; transition:color 0.2s;
 }
 .btn-search:hover { color:var(--lingon); }
+.btn-account {
+  background:none; border:none; padding:8px; color:var(--slate);
+  display:flex; align-items:center; justify-content:center; transition:color 0.2s;
+  position:relative; text-decoration:none;
+}
+.btn-account:hover, .btn-account.active { color:var(--heather); }
+.acct-dot {
+  position:absolute; top:5px; right:5px; width:7px; height:7px;
+  background:var(--lingon); border-radius:50%; border:1.5px solid var(--snow);
+}
 .btn-cart {
   background:var(--heather); color:var(--snow); border:none;
   padding:10px 22px; font-family:var(--font-ui); font-size:11px; letter-spacing:2px; text-transform:uppercase;
