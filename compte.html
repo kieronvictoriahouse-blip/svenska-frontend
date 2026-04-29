@@ -7,21 +7,31 @@
 <meta name="description" content="Consultez vos commandes et gérez votre compte Heather & Lingon.">
 <meta name="robots" content="noindex">
 <link rel="stylesheet" href="css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>const SD_API_URL = 'https://admin.swedishcravings.fr';</script>
 <script>(function(){try{var w=JSON.parse(localStorage.getItem('sd_wl_v1'));if(w&&w.id){var r=document.documentElement.style;if(w.color_primary){r.setProperty('--heather',w.color_primary);r.setProperty('--heather-mid',w.color_primary+'CC');}if(w.color_secondary){r.setProperty('--lingon',w.color_secondary);r.setProperty('--lingon-mid',w.color_secondary+'CC');}if(w.color_bg)r.setProperty('--cream',w.color_bg);if(w.color_text)r.setProperty('--midnight',w.color_text);if(w.font_display)r.setProperty('--font-display',"'"+w.font_display+"',Georgia,serif");if(w.font_body)r.setProperty('--font-body',"'"+w.font_body+"',Georgia,serif");if(w.font_ui)r.setProperty('--font-ui',"'"+w.font_ui+"',sans-serif");}}catch(e){}}());</script>
 <style>
-/* ── Page layout ── */
 .acct-hero{background:var(--heather);padding:64px 40px 48px;text-align:center;}
 .acct-hero h1{font-family:var(--font-display);font-size:clamp(32px,5vw,60px);font-weight:300;color:var(--snow);}
 .acct-hero h1 em{font-style:italic;color:var(--lingon-mid);}
 .acct-hero p{font-family:var(--font-body);font-size:16px;color:rgba(255,255,255,0.6);margin-top:10px;}
-
 .acct-wrap{max-width:860px;margin:0 auto;padding:56px 32px 80px;}
 
-/* ── Login card ── */
-.login-card{max-width:480px;margin:0 auto;background:var(--snow);border:1px solid var(--linen);padding:48px 40px;}
+/* Login card */
+.login-card{max-width:460px;margin:0 auto;background:var(--snow);border:1px solid var(--linen);padding:48px 40px;}
 .login-card h2{font-family:var(--font-display);font-size:26px;font-weight:500;color:var(--midnight);margin-bottom:8px;}
-.login-card p{font-family:var(--font-body);font-size:15px;color:var(--slate);margin-bottom:32px;line-height:1.7;}
+.login-card .login-sub{font-family:var(--font-body);font-size:15px;color:var(--slate);margin-bottom:32px;line-height:1.7;}
+
+/* Google button */
+.btn-google{width:100%;display:flex;align-items:center;justify-content:center;gap:12px;background:#fff;border:1px solid #dadce0;padding:13px 20px;font-family:var(--font-ui);font-size:14px;color:#3c4043;cursor:pointer;transition:background 0.15s,box-shadow 0.15s;margin-bottom:24px;letter-spacing:0.01em;}
+.btn-google:hover{background:#f8f8f8;box-shadow:0 1px 3px rgba(0,0,0,0.08);}
+.btn-google svg{flex-shrink:0;}
+.btn-google:disabled{opacity:0.5;cursor:not-allowed;}
+
+.login-divider{display:flex;align-items:center;gap:12px;margin-bottom:24px;}
+.login-divider span{font-family:var(--font-ui);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dust);white-space:nowrap;}
+.login-divider::before,.login-divider::after{content:'';flex:1;height:1px;background:var(--linen);}
+
 .login-field{margin-bottom:20px;}
 .login-field label{display:block;font-family:var(--font-ui);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dust);margin-bottom:8px;}
 .login-field input{width:100%;border:1px solid var(--linen);background:var(--cream);padding:14px 16px;font-family:var(--font-body);font-size:16px;color:var(--midnight);outline:none;transition:border-color 0.2s;box-sizing:border-box;}
@@ -34,63 +44,56 @@
 .btn-login:disabled{opacity:0.5;cursor:not-allowed;}
 .login-note{font-family:var(--font-body);font-size:13px;color:var(--dust);text-align:center;margin-top:20px;line-height:1.6;}
 
-/* ── Account view ── */
+/* Account view */
 .acct-header{display:flex;align-items:center;gap:20px;margin-bottom:40px;padding-bottom:32px;border-bottom:1px solid var(--linen);}
-.acct-avatar{width:56px;height:56px;border-radius:50%;background:var(--heather);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:22px;font-weight:600;color:var(--snow);flex-shrink:0;letter-spacing:1px;}
+.acct-avatar{width:56px;height:56px;border-radius:50%;background:var(--heather);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:22px;font-weight:600;color:var(--snow);flex-shrink:0;letter-spacing:1px;overflow:hidden;}
+.acct-avatar img{width:100%;height:100%;object-fit:cover;}
 .acct-info{flex:1;}
 .acct-name{font-family:var(--font-display);font-size:22px;font-weight:500;color:var(--midnight);}
 .acct-email{font-family:var(--font-ui);font-size:11px;letter-spacing:1.5px;color:var(--dust);margin-top:2px;}
+.acct-badge{display:inline-flex;align-items:center;gap:5px;font-family:var(--font-ui);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--moss,#4a7c59);border:1px solid var(--moss,#4a7c59);padding:3px 10px;margin-top:6px;}
 .btn-logout{background:none;border:1px solid var(--linen);color:var(--dust);padding:10px 20px;font-family:var(--font-ui);font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
 .btn-logout:hover{border-color:var(--lingon);color:var(--lingon);}
 
-/* ── Stats bar ── */
+/* Stats */
 .acct-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--linen);border:1px solid var(--linen);margin-bottom:40px;}
 .stat-box{background:var(--snow);padding:20px 24px;text-align:center;}
 .stat-val{font-family:var(--font-display);font-size:28px;font-weight:500;color:var(--heather);}
 .stat-lbl{font-family:var(--font-ui);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--dust);margin-top:4px;}
 
-/* ── Orders section ── */
+/* Orders */
 .orders-title{font-family:var(--font-ui);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--dust);margin-bottom:16px;display:flex;align-items:center;gap:12px;}
 .orders-title::after{content:'';flex:1;height:1px;background:var(--linen);}
-
 .order-card{border:1px solid var(--linen);margin-bottom:12px;background:var(--snow);overflow:hidden;}
 .order-head{display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:16px;padding:20px 24px;cursor:pointer;transition:background 0.15s;}
 .order-head:hover{background:var(--warm-white,#faf9f7);}
 .order-num{font-family:var(--font-display);font-size:17px;font-weight:600;color:var(--midnight);}
 .order-date{font-family:var(--font-ui);font-size:10px;letter-spacing:1.5px;color:var(--dust);margin-top:2px;}
 .order-status{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-ui);font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:5px 12px;border-radius:1px;white-space:nowrap;}
-.s-pending{background:#f5f0ff;color:#7c5cbf;}
-.s-paid{background:#e8f4fd;color:#2563a8;}
-.s-shipped{background:#fff3e0;color:#b45309;}
-.s-delivered{background:#e8f5e9;color:#2e7d32;}
-.s-cancelled{background:#fce4ec;color:#c62828;}
-.s-refunded{background:#f3e5f5;color:#7b1fa2;}
+.s-pending{background:#f5f0ff;color:#7c5cbf;} .s-paid{background:#e8f4fd;color:#2563a8;}
+.s-shipped{background:#fff3e0;color:#b45309;} .s-delivered{background:#e8f5e9;color:#2e7d32;}
+.s-cancelled{background:#fce4ec;color:#c62828;} .s-refunded{background:#f3e5f5;color:#7b1fa2;}
 .order-total{font-family:var(--font-display);font-size:18px;font-weight:500;color:var(--midnight);white-space:nowrap;}
 .order-chevron{font-size:12px;color:var(--dust);transition:transform 0.25s;}
 .order-card.open .order-chevron{transform:rotate(180deg);}
-
 .order-body{max-height:0;overflow:hidden;transition:max-height 0.3s ease;}
 .order-card.open .order-body{max-height:600px;}
 .order-body-inner{border-top:1px solid var(--linen);padding:20px 24px;}
-
-.order-lines{margin-bottom:16px;}
 .order-line{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--parchment,#f5f0e8);font-family:var(--font-body);font-size:14px;}
 .order-line:last-child{border-bottom:none;}
 .order-line-name{color:var(--midnight);flex:1;}
 .order-line-sub{font-family:var(--font-ui);font-size:10px;color:var(--dust);margin-top:1px;}
 .order-line-qty{color:var(--slate);margin:0 16px;}
 .order-line-price{color:var(--midnight);font-weight:500;white-space:nowrap;}
-
 .order-totals{border-top:1px solid var(--linen);padding-top:14px;margin-top:4px;}
 .order-total-row{display:flex;justify-content:space-between;font-family:var(--font-body);font-size:14px;color:var(--slate);margin-bottom:6px;}
 .order-total-row.grand{font-family:var(--font-display);font-size:17px;font-weight:600;color:var(--midnight);border-top:1px solid var(--linen);padding-top:10px;margin-top:6px;}
-
 .order-addr{font-family:var(--font-ui);font-size:10px;letter-spacing:1px;color:var(--dust);line-height:1.9;margin-top:12px;}
 
-/* ── Empty / loading states ── */
+/* States */
 .acct-empty{text-align:center;padding:60px 20px;}
 .acct-empty p{font-family:var(--font-body);font-size:18px;color:var(--slate);margin-bottom:24px;}
-.acct-loading{text-align:center;padding:60px 20px;}
+.acct-loading{text-align:center;padding:80px 20px;}
 .spinner{display:inline-block;width:32px;height:32px;border:2px solid var(--linen);border-top-color:var(--heather);border-radius:50%;animation:spin 0.7s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
 
@@ -100,10 +103,7 @@
   .acct-header{flex-wrap:wrap;gap:12px;}
   .acct-stats{grid-template-columns:repeat(2,1fr);}
   .order-head{grid-template-columns:1fr auto;gap:10px;}
-  .order-num{grid-column:1;}
-  .order-status{grid-column:1;}
-  .order-total{text-align:right;}
-  .order-chevron{grid-row:1;grid-column:2;align-self:center;}
+  .order-total,.order-chevron{grid-column:auto;}
   .acct-hero{padding:48px 20px 36px;}
 }
 </style>
@@ -122,7 +122,7 @@ window.SnipcartSettings={publicApiKey:'MTM2ODI3MjQtODdlMy00YzRkLWFiNGMtMmMwMGQ1M
 </div>
 
 <div class="acct-wrap">
-  <div id="acct-root"></div>
+  <div id="acct-root"><div class="acct-loading"><div class="spinner"></div></div></div>
 </div>
 
 <div id="footer-root"></div>
@@ -131,9 +131,10 @@ window.SnipcartSettings={publicApiKey:'MTM2ODI3MjQtODdlMy00YzRkLWFiNGMtMmMwMGQ1M
 initPage('account');
 
 const BASE = window.SD_API_URL || 'https://admin.swedishcravings.fr';
-let _session = null;
+let _session   = null;
+let _sbClient  = null;
 
-// ── Utilities ────────────────────────────────────────────────
+// ── Session helpers ──────────────────────────────────────────
 function saveSession(s) {
   _session = s;
   try { localStorage.setItem('sd_customer_v1', JSON.stringify(s)); } catch(e) {}
@@ -144,171 +145,42 @@ function loadSession() {
 function clearSession() {
   _session = null;
   try { localStorage.removeItem('sd_customer_v1'); } catch(e) {}
+  if (_sbClient) _sbClient.auth.signOut().catch(() => {});
 }
 
-function fmtDate(iso) {
-  if (!iso) return '';
-  const d = new Date(iso);
-  return d.toLocaleDateString(LANG === 'sv' ? 'sv-SE' : LANG === 'en' ? 'en-GB' : 'fr-FR', { day: '2-digit', month: 'short', year: 'numeric' });
+// ── Supabase init ────────────────────────────────────────────
+async function initSupabase() {
+  try {
+    const cfg = await fetch(BASE + '/api/public-config').then(r => r.json());
+    if (!cfg.supabaseUrl || !cfg.supabaseAnonKey) return null;
+    _sbClient = window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseAnonKey);
+    return _sbClient;
+  } catch(e) { return null; }
 }
 
-function statusLabel(s) {
-  const m = {
-    pending:   { fr:'En attente',   sv:'Väntar',     en:'Pending'   },
-    paid:      { fr:'Payée',        sv:'Betald',      en:'Paid'      },
-    shipped:   { fr:'Expédiée',     sv:'Skickad',     en:'Shipped'   },
-    delivered: { fr:'Livrée',       sv:'Levererad',   en:'Delivered' },
-    cancelled: { fr:'Annulée',      sv:'Avbruten',    en:'Cancelled' },
-    refunded:  { fr:'Remboursée',   sv:'Återbetald',  en:'Refunded'  },
-  };
-  return m[s]?.[LANG] || s;
+async function signInWithGoogle() {
+  if (!_sbClient) { renderLogin('network'); return; }
+  document.getElementById('btn-google')?.setAttribute('disabled', true);
+  try {
+    const { error } = await _sbClient.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: window.location.origin + '/compte',
+        queryParams: { access_type: 'online', prompt: 'select_account' },
+      },
+    });
+    if (error) renderLogin('network');
+  } catch(e) {
+    renderLogin('network');
+  }
 }
 
-function initials(name) {
-  if (!name) return '?';
-  const parts = name.trim().split(' ');
-  return (parts[0][0] + (parts[1]?.[0] || '')).toUpperCase();
-}
+// ── Login with email (our HMAC system) ───────────────────────
+async function loginWithEmail(emailArg) {
+  const email = (emailArg || '').trim().toLowerCase();
+  if (!email) return;
 
-// ── Render functions ──────────────────────────────────────────
-function renderLogin(errorKey) {
-  const errorMsgs = {
-    no_orders: LANG==='sv' ? 'Inga beställningar hittades för denna e-post.' : LANG==='en' ? 'No orders found for this email.' : 'Aucune commande trouvée pour cet email.',
-    invalid_email: LANG==='sv' ? 'Ogiltig e-postadress.' : LANG==='en' ? 'Invalid email address.' : 'Adresse email invalide.',
-    network: LANG==='sv' ? 'Anslutningsfel. Försök igen.' : LANG==='en' ? 'Connection error. Please try again.' : 'Erreur de connexion. Réessayez.',
-  };
-  const titles = { sv: 'Se dina beställningar', fr: 'Voir vos commandes', en: 'View your orders' };
-  const descs  = { sv: 'Ange din e-postadress för att se dina beställningar och spåra dina leveranser.', fr: 'Entrez l\'email utilisé lors de vos commandes pour consulter votre historique et suivre vos livraisons.', en: 'Enter the email you used when ordering to view your history and track deliveries.' };
-  const labels = { sv: 'E-postadress', fr: 'Adresse email', en: 'Email address' };
-  const btns   = { sv: 'Se mina beställningar →', fr: 'Voir mes commandes →', en: 'View my orders →' };
-  const notes  = { sv: 'Ange din e-post — inget lösenord krävs.', fr: 'Pas de mot de passe requis — juste votre email.', en: 'No password needed — just your email.' };
-
-  document.getElementById('acct-root').innerHTML = `
-    <div class="login-card">
-      <h2>${titles[LANG]||titles.fr}</h2>
-      <p>${descs[LANG]||descs.fr}</p>
-      <form id="login-form" onsubmit="doLogin(event)">
-        <div class="login-field">
-          <label for="login-email">${labels[LANG]||labels.fr}</label>
-          <input type="email" id="login-email" autocomplete="email" required placeholder="vous@exemple.fr" class="${errorKey?'err':''}">
-          <div class="login-error${errorKey?' show':''}">${errorMsgs[errorKey]||''}</div>
-        </div>
-        <button type="submit" class="btn-login" id="login-btn">${btns[LANG]||btns.fr}</button>
-      </form>
-      <p class="login-note">${notes[LANG]||notes.fr}</p>
-    </div>`;
-  document.getElementById('login-email')?.focus();
-}
-
-function renderAccount(session) {
-  const { customer_name, customer_email, orders } = session;
-  const root = document.getElementById('acct-root');
-
-  const totalSpent = orders.reduce((s, o) => s + (o.total || 0), 0);
-  const delivered  = orders.filter(o => o.status === 'delivered').length;
-
-  const ordersTitles = { sv: 'Beställningar', fr: 'Commandes', en: 'Orders' };
-  const delivTitles  = { sv: 'Levererade', fr: 'Livrées', en: 'Delivered' };
-  const spentTitles  = { sv: 'Totalt',     fr: 'Total',   en: 'Total spent' };
-  const logoutTxt    = { sv: 'Logga ut', fr: 'Déconnexion', en: 'Log out' };
-  const historyTxt   = { sv: 'Beställningshistorik', fr: 'Historique des commandes', en: 'Order history' };
-  const noOrdersTxt  = { sv: 'Inga beställningar ännu.', fr: 'Aucune commande pour l\'instant.', en: 'No orders yet.' };
-  const shopTxt      = { sv: 'Utforska butiken →', fr: 'Explorer la boutique →', en: 'Explore the shop →' };
-
-  root.innerHTML = `
-    <div class="acct-header">
-      <div class="acct-avatar">${initials(customer_name)}</div>
-      <div class="acct-info">
-        <div class="acct-name">${customer_name}</div>
-        <div class="acct-email">${customer_email}</div>
-      </div>
-      <button class="btn-logout" onclick="doLogout()">${logoutTxt[LANG]||logoutTxt.fr}</button>
-    </div>
-
-    <div class="acct-stats">
-      <div class="stat-box"><div class="stat-val">${orders.length}</div><div class="stat-lbl">${ordersTitles[LANG]||ordersTitles.fr}</div></div>
-      <div class="stat-box"><div class="stat-val">${delivered}</div><div class="stat-lbl">${delivTitles[LANG]||delivTitles.fr}</div></div>
-      <div class="stat-box"><div class="stat-val">€${totalSpent.toFixed(0)}</div><div class="stat-lbl">${spentTitles[LANG]||spentTitles.fr}</div></div>
-    </div>
-
-    <div class="orders-title">${historyTxt[LANG]||historyTxt.fr}</div>
-
-    ${orders.length === 0 ? `
-      <div class="acct-empty">
-        <p>${noOrdersTxt[LANG]||noOrdersTxt.fr}</p>
-        <a href="boutique.html" class="btn-primary">${shopTxt[LANG]||shopTxt.fr}</a>
-      </div>
-    ` : orders.map(o => renderOrderCard(o)).join('')}
-  `;
-}
-
-function renderOrderCard(o) {
-  const lines = Array.isArray(o.lines) ? o.lines : (typeof o.lines === 'string' ? JSON.parse(o.lines || '[]') : []);
-  const shipping = (o.shipping || 0);
-  const subtotal = (o.subtotal || 0);
-  const total = (o.total || 0);
-
-  const shippingFree = { sv:'Gratis', fr:'Gratuite', en:'Free' };
-  const shippingLbl  = { sv:'Frakt', fr:'Livraison', en:'Shipping' };
-  const subtotalLbl  = { sv:'Delsumma', fr:'Sous-total', en:'Subtotal' };
-  const totalLbl     = { sv:'Total', fr:'Total', en:'Total' };
-  const detailsTxt   = { sv:`${lines.length} artikel${lines.length>1?'ar':''}`, fr:`${lines.length} article${lines.length>1?'s':''}`, en:`${lines.length} item${lines.length>1?'s':''}` };
-
-  const addrHtml = o.shipping_address?.name ? `
-    <div class="order-addr">
-      ${[o.shipping_address.name, o.shipping_address.address1, o.shipping_address.city + (o.shipping_address.postalCode ? ' ' + o.shipping_address.postalCode : ''), o.shipping_address.country].filter(Boolean).join(' · ')}
-    </div>` : '';
-
-  return `
-    <div class="order-card" id="oc-${o.id}">
-      <div class="order-head" onclick="toggleOrder('${o.id}')">
-        <div>
-          <div class="order-num">${o.order_number}</div>
-          <div class="order-date">${fmtDate(o.created_at)}</div>
-        </div>
-        <div>
-          <span class="order-status s-${o.status}">${statusLabel(o.status)}</span>
-          <div class="order-date" style="margin-top:4px;">${detailsTxt[LANG]||detailsTxt.fr}</div>
-        </div>
-        <div class="order-total">€${total.toFixed(2)}</div>
-        <div class="order-chevron">▾</div>
-      </div>
-      <div class="order-body">
-        <div class="order-body-inner">
-          <div class="order-lines">
-            ${lines.map(l => `
-              <div class="order-line">
-                <div>
-                  <div class="order-line-name">${l.name || ''}</div>
-                  ${l.variant ? `<div class="order-line-sub">${l.variant}</div>` : ''}
-                </div>
-                <div class="order-line-qty">× ${l.qty || 1}</div>
-                <div class="order-line-price">€${((l.total || l.price * (l.qty||1)) || 0).toFixed(2)}</div>
-              </div>`).join('')}
-          </div>
-          <div class="order-totals">
-            <div class="order-total-row"><span>${subtotalLbl[LANG]||subtotalLbl.fr}</span><span>€${subtotal.toFixed(2)}</span></div>
-            <div class="order-total-row"><span>${shippingLbl[LANG]||shippingLbl.fr}</span><span>${shipping === 0 ? shippingFree[LANG]||shippingFree.fr : '€' + shipping.toFixed(2)}</span></div>
-            <div class="order-total-row grand"><span>${totalLbl[LANG]||totalLbl.fr}</span><span>€${total.toFixed(2)}</span></div>
-          </div>
-          ${addrHtml}
-        </div>
-      </div>
-    </div>`;
-}
-
-function toggleOrder(id) {
-  document.getElementById('oc-' + id)?.classList.toggle('open');
-}
-
-// ── Actions ───────────────────────────────────────────────────
-async function doLogin(e) {
-  e.preventDefault();
-  const email = document.getElementById('login-email').value.trim().toLowerCase();
-  const btn   = document.getElementById('login-btn');
-  btn.disabled = true;
-  btn.textContent = '…';
-
+  showLoading();
   try {
     const res  = await fetch(BASE + '/api/customer/orders', {
       method:  'POST',
@@ -318,15 +190,22 @@ async function doLogin(e) {
     const data = await res.json();
 
     if (!res.ok) {
-      renderLogin(data.error || 'network');
+      if (data.error === 'no_orders') {
+        // Google user with no orders yet
+        if (emailArg && emailArg !== email) { renderNewGoogleUser(email); }
+        else { renderLogin('no_orders'); }
+      } else {
+        renderLogin(data.error || 'network');
+      }
       return;
     }
 
     const session = {
-      token:           data.token,
-      customer_name:   data.customer_name,
-      customer_email:  data.customer_email,
-      orders:          data.orders || [],
+      token:          data.token,
+      customer_name:  data.customer_name,
+      customer_email: data.customer_email,
+      orders:         data.orders || [],
+      via_google:     !!emailArg && emailArg !== email ? false : undefined,
     };
     saveSession(session);
     renderAccount(session);
@@ -336,37 +215,230 @@ async function doLogin(e) {
   }
 }
 
+// ── Render: loading ──────────────────────────────────────────
+function showLoading() {
+  document.getElementById('acct-root').innerHTML = '<div class="acct-loading"><div class="spinner"></div></div>';
+}
+
+// ── Render: login form ───────────────────────────────────────
+function renderLogin(errorKey, googleReady) {
+  const errorMsgs = {
+    no_orders: LANG==='sv'?'Inga beställningar hittades för denna e-post.':LANG==='en'?'No orders found for this email.':'Aucune commande trouvée pour cet email.',
+    invalid_email: LANG==='sv'?'Ogiltig e-postadress.':LANG==='en'?'Invalid email address.':'Adresse email invalide.',
+    network: LANG==='sv'?'Anslutningsfel, försök igen.':LANG==='en'?'Connection error, try again.':'Erreur de connexion, réessayez.',
+  };
+  const T = {
+    title: {sv:'Se dina beställningar',fr:'Voir vos commandes',en:'View your orders'},
+    sub:   {sv:'Logga in med Google eller ange din e-postadress för att se dina beställningar.',fr:'Connectez-vous avec Google ou entrez votre email pour consulter vos commandes.',en:'Sign in with Google or enter your email to view your orders.'},
+    google:{sv:'Fortsätt med Google',fr:'Continuer avec Google',en:'Continue with Google'},
+    or:    {sv:'eller',fr:'ou',en:'or'},
+    label: {sv:'E-postadress',fr:'Adresse email',en:'Email address'},
+    btn:   {sv:'Voir mes commandes →',fr:'Voir mes commandes →',en:'View my orders →'},
+    note:  {sv:'Ange e-posten du använde när du beställde.',fr:'Entrez l\'email utilisé lors de vos commandes.',en:'Enter the email you used when ordering.'},
+  };
+  const L = LANG || 'fr';
+
+  document.getElementById('acct-root').innerHTML = `
+    <div class="login-card">
+      <h2>${T.title[L]||T.title.fr}</h2>
+      <p class="login-sub">${T.sub[L]||T.sub.fr}</p>
+
+      <button class="btn-google" id="btn-google" onclick="signInWithGoogle()" ${!googleReady&&!_sbClient?'disabled':''}>
+        <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.08 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.36-8.16 2.36-6.26 0-11.57-3.59-13.46-8.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/><path fill="none" d="M0 0h48v48H0z"/></svg>
+        ${T.google[L]||T.google.fr}
+      </button>
+
+      <div class="login-divider"><span>${T.or[L]||T.or.fr}</span></div>
+
+      <form id="login-form" onsubmit="doLoginForm(event)">
+        <div class="login-field">
+          <label for="login-email">${T.label[L]||T.label.fr}</label>
+          <input type="email" id="login-email" autocomplete="email" required placeholder="vous@exemple.fr" class="${errorKey?'err':''}">
+          <div class="login-error${errorKey?' show':''}">${errorMsgs[errorKey]||''}</div>
+        </div>
+        <button type="submit" class="btn-login" id="login-btn">
+          ${T.btn[L]||T.btn.fr}
+        </button>
+      </form>
+      <p class="login-note">${T.note[L]||T.note.fr}</p>
+    </div>`;
+}
+
+// ── Render: Google user with no orders ───────────────────────
+function renderNewGoogleUser(email) {
+  const T = {
+    title: {fr:'Bienvenue !',sv:'Välkommen!',en:'Welcome!'},
+    msg:   {fr:`Vous êtes connecté avec <strong>${email}</strong>, mais nous n'avons pas encore de commandes associées à cet email.`,sv:`Du är inloggad med <strong>${email}</strong> men vi har inga beställningar för denna e-post ännu.`,en:`You're signed in as <strong>${email}</strong>, but we have no orders linked to this email yet.`},
+    shop:  {fr:'Explorer la boutique →',sv:'Utforska butiken →',en:'Explore the shop →'},
+    out:   {fr:'Se déconnecter',sv:'Logga ut',en:'Sign out'},
+  };
+  const L = LANG || 'fr';
+  document.getElementById('acct-root').innerHTML = `
+    <div class="login-card" style="text-align:center;">
+      <h2>${T.title[L]||T.title.fr}</h2>
+      <p class="login-sub" style="margin-bottom:28px;">${T.msg[L]||T.msg.fr}</p>
+      <a href="boutique.html" class="btn-login" style="display:block;text-decoration:none;text-align:center;margin-bottom:12px;">${T.shop[L]||T.shop.fr}</a>
+      <button onclick="doLogout()" class="btn-logout" style="width:100%;justify-content:center;">${T.out[L]||T.out.fr}</button>
+    </div>`;
+}
+
+// ── Render: account dashboard ────────────────────────────────
+function renderAccount(session) {
+  const { customer_name, customer_email, orders } = session;
+  const L = LANG || 'fr';
+  const root = document.getElementById('acct-root');
+
+  const totalSpent = orders.reduce((s, o) => s + (o.total || 0), 0);
+  const delivered  = orders.filter(o => o.status === 'delivered').length;
+
+  const T = {
+    orders:  {fr:'Commandes',sv:'Beställningar',en:'Orders'},
+    deliv:   {fr:'Livrées',sv:'Levererade',en:'Delivered'},
+    spent:   {fr:'Total dépensé',sv:'Totalt spenderat',en:'Total spent'},
+    logout:  {fr:'Déconnexion',sv:'Logga ut',en:'Log out'},
+    history: {fr:'Historique des commandes',sv:'Beställningshistorik',en:'Order history'},
+    empty:   {fr:'Aucune commande pour l\'instant.',sv:'Inga beställningar ännu.',en:'No orders yet.'},
+    shop:    {fr:'Explorer la boutique →',sv:'Utforska butiken →',en:'Explore the shop →'},
+    google:  {fr:'Compte Google',sv:'Google-konto',en:'Google account'},
+  };
+
+  const viaGoogle = session.via_google || (loadSession()?.via_google);
+
+  root.innerHTML = `
+    <div class="acct-header">
+      <div class="acct-avatar">${initials(customer_name)}</div>
+      <div class="acct-info">
+        <div class="acct-name">${customer_name}</div>
+        <div class="acct-email">${customer_email}</div>
+        ${viaGoogle ? `<div class="acct-badge">
+          <svg width="12" height="12" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.08 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.36-8.16 2.36-6.26 0-11.57-3.59-13.46-8.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+          ${T.google[L]||T.google.fr}
+        </div>` : ''}
+      </div>
+      <button class="btn-logout" onclick="doLogout()">${T.logout[L]||T.logout.fr}</button>
+    </div>
+
+    <div class="acct-stats">
+      <div class="stat-box"><div class="stat-val">${orders.length}</div><div class="stat-lbl">${T.orders[L]||T.orders.fr}</div></div>
+      <div class="stat-box"><div class="stat-val">${delivered}</div><div class="stat-lbl">${T.deliv[L]||T.deliv.fr}</div></div>
+      <div class="stat-box"><div class="stat-val">€${totalSpent.toFixed(0)}</div><div class="stat-lbl">${T.spent[L]||T.spent.fr}</div></div>
+    </div>
+
+    <div class="orders-title">${T.history[L]||T.history.fr}</div>
+
+    ${orders.length === 0 ? `
+      <div class="acct-empty">
+        <p>${T.empty[L]||T.empty.fr}</p>
+        <a href="boutique.html" class="btn-primary">${T.shop[L]||T.shop.fr}</a>
+      </div>` : orders.map(o => renderOrderCard(o)).join('')}
+  `;
+}
+
+function renderOrderCard(o) {
+  const L = LANG || 'fr';
+  const lines = Array.isArray(o.lines) ? o.lines : [];
+  const total = o.total || 0; const subtotal = o.subtotal || 0; const shipping = o.shipping || 0;
+  const T = {
+    sub:    {fr:'Sous-total',sv:'Delsumma',en:'Subtotal'},
+    ship:   {fr:'Livraison',sv:'Frakt',en:'Shipping'},
+    free:   {fr:'Gratuite',sv:'Gratis',en:'Free'},
+    total:  {fr:'Total',sv:'Total',en:'Total'},
+    items:  (n) => ({fr:`${n} article${n>1?'s':''}`,sv:`${n} artikel${n>1?'ar':''}`,en:`${n} item${n>1?'s':''}`}),
+  };
+  const statusLabels = {
+    pending:{fr:'En attente',sv:'Väntar',en:'Pending'},paid:{fr:'Payée',sv:'Betald',en:'Paid'},
+    shipped:{fr:'Expédiée',sv:'Skickad',en:'Shipped'},delivered:{fr:'Livrée',sv:'Levererad',en:'Delivered'},
+    cancelled:{fr:'Annulée',sv:'Avbruten',en:'Cancelled'},refunded:{fr:'Remboursée',sv:'Återbetald',en:'Refunded'},
+  };
+  const fmtDate = iso => iso ? new Date(iso).toLocaleDateString(L==='sv'?'sv-SE':L==='en'?'en-GB':'fr-FR',{day:'2-digit',month:'short',year:'numeric'}) : '';
+  const addr = o.shipping_address?.name ? [o.shipping_address.name,o.shipping_address.address1,(o.shipping_address.city||'')+(o.shipping_address.postalCode?' '+o.shipping_address.postalCode:''),o.shipping_address.country].filter(Boolean).join(' · ') : '';
+
+  return `
+    <div class="order-card" id="oc-${o.id}">
+      <div class="order-head" onclick="toggleOrder('${o.id}')">
+        <div><div class="order-num">${o.order_number}</div><div class="order-date">${fmtDate(o.created_at)}</div></div>
+        <div><span class="order-status s-${o.status}">${statusLabels[o.status]?.[L]||o.status}</span><div class="order-date" style="margin-top:4px;">${T.items(lines.length)[L]||T.items(lines.length).fr}</div></div>
+        <div class="order-total">€${total.toFixed(2)}</div>
+        <div class="order-chevron">▾</div>
+      </div>
+      <div class="order-body"><div class="order-body-inner">
+        <div>${lines.map(l=>`<div class="order-line"><div><div class="order-line-name">${l.name||''}</div>${l.variant?`<div class="order-line-sub">${l.variant}</div>`:''}</div><div class="order-line-qty">× ${l.qty||1}</div><div class="order-line-price">€${((l.total||l.price*(l.qty||1))||0).toFixed(2)}</div></div>`).join('')}</div>
+        <div class="order-totals">
+          <div class="order-total-row"><span>${T.sub[L]||T.sub.fr}</span><span>€${subtotal.toFixed(2)}</span></div>
+          <div class="order-total-row"><span>${T.ship[L]||T.ship.fr}</span><span>${shipping===0?T.free[L]||T.free.fr:'€'+shipping.toFixed(2)}</span></div>
+          <div class="order-total-row grand"><span>${T.total[L]||T.total.fr}</span><span>€${total.toFixed(2)}</span></div>
+        </div>
+        ${addr?`<div class="order-addr">${addr}</div>`:''}
+      </div></div>
+    </div>`;
+}
+
+function toggleOrder(id) { document.getElementById('oc-' + id)?.classList.toggle('open'); }
+function initials(name) { if(!name)return'?'; const p=name.trim().split(' '); return(p[0][0]+(p[1]?.[0]||'')).toUpperCase(); }
+
+// ── Actions ───────────────────────────────────────────────────
+async function doLoginForm(e) {
+  e.preventDefault();
+  const email = document.getElementById('login-email').value.trim().toLowerCase();
+  const btn   = document.getElementById('login-btn');
+  btn.disabled = true; btn.textContent = '…';
+  await loginWithEmail(email);
+}
+
 async function doLogout() {
   clearSession();
-  renderLogin();
+  renderLogin(null, !!_sbClient);
 }
 
 // ── Init ──────────────────────────────────────────────────────
 (async function init() {
-  const session = loadSession();
-  if (session?.token) {
-    // Re-fetch orders to get latest status
-    document.getElementById('acct-root').innerHTML = '<div class="acct-loading"><div class="spinner"></div></div>';
+  // Init Supabase in parallel with session check
+  const [sb, savedSession] = await Promise.all([
+    initSupabase(),
+    Promise.resolve(loadSession()),
+  ]);
+
+  // Check if coming back from Google OAuth redirect
+  if (sb) {
+    const { data: { session: googleSession } } = await sb.auth.getSession();
+    if (googleSession?.user?.email) {
+      // Signed in via Google — load their orders
+      const email = googleSession.user.email;
+      const name  = googleSession.user.user_metadata?.full_name || googleSession.user.user_metadata?.name || email;
+      await loginWithEmail(email);
+      // Mark session as Google-based
+      if (_session) { _session.via_google = true; _session.customer_name = name || _session.customer_name; saveSession(_session); }
+      // Clean the URL (remove OAuth params)
+      if (window.location.search || window.location.hash) {
+        window.history.replaceState({}, '', window.location.pathname);
+      }
+      return;
+    }
+  }
+
+  // Check for existing HMAC session
+  if (savedSession?.token) {
+    showLoading();
     try {
-      const res  = await fetch(BASE + '/api/customer/orders', {
-        headers: { Authorization: 'Bearer ' + session.token },
+      const res = await fetch(BASE + '/api/customer/orders', {
+        headers: { Authorization: 'Bearer ' + savedSession.token },
       });
       if (res.ok) {
         const data = await res.json();
-        const updated = { ...session, orders: data.orders || [] };
+        const updated = { ...savedSession, orders: data.orders || [] };
         saveSession(updated);
         renderAccount(updated);
       } else {
         clearSession();
-        renderLogin();
+        renderLogin(null, !!sb);
       }
     } catch(e) {
-      // Network error — show cached session
-      renderAccount(session);
+      renderAccount(savedSession); // show cached on network error
     }
-  } else {
-    renderLogin();
+    return;
   }
+
+  renderLogin(null, !!sb);
 })();
 </script>
 <script src="js/sd-api-client.js"></script>
