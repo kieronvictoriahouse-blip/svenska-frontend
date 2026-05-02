@@ -162,7 +162,7 @@ window.SnipcartSettings={publicApiKey:'MTM2ODI3MjQtODdlMy00YzRkLWFiNGMtMmMwMGQ1M
 <div id="footer-root"></div>
 <script src="js/app.js?v=2"></script>
 <script>initPage('livraison');</script>
-<script src="js/sd-api-client.js"></script>
+<script src="js/sd-api-client.js?v=2"></script>
 <script>(function(){function applyDynamic(){try{var w=JSON.parse(localStorage.getItem('sd_wl_v1'))||{};var e=w.email||'';document.querySelectorAll('.dyn-email').forEach(function(el){if(e){el.href='mailto:'+e;el.textContent=e;}});}catch(err){}}applyDynamic();window.addEventListener('sdapi:ready',function(){try{var cfg=window.SDApi&&window.SDApi.whiteLabel;if(cfg){document.querySelectorAll('.dyn-email').forEach(function(el){if(cfg.email){el.href='mailto:'+cfg.email;el.textContent=cfg.email;}});}}catch(err){}});}());</script>
 </body>
 </html>
