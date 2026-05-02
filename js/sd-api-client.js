@@ -307,6 +307,21 @@
         window.SDApi.isReady = true;
         window.SDApi.products = mapped;
 
+        // Populate sd_cart_products for any cart items missing product data
+        try {
+          var _cartKeys = Object.keys(JSON.parse(localStorage.getItem('sd_cart') || '{}'));
+          var _cp = JSON.parse(localStorage.getItem('sd_cart_products') || '{}');
+          var _dirty = false;
+          _cartKeys.forEach(function(key) {
+            var ri = key.indexOf('_'); var idStr = ri === -1 ? key : key.slice(0, ri);
+            if (_cp[idStr]) return;
+            var idInt = parseInt(idStr);
+            var p = mapped.find(function(x) { return String(x.uuid || x.id) === idStr || (!isNaN(idInt) && x.id === idInt); });
+            if (p) { _cp[idStr] = {name:p.name,photo:p.photo,price:p.price,weight:p.weight,variants:p.variants||[]}; _dirty = true; }
+          });
+          if (_dirty) localStorage.setItem('sd_cart_products', JSON.stringify(_cp));
+        } catch(e) {}
+
         // Re-déclencher uniquement si produits OU config ont changé
         const productsChanged = !cached || productFingerprint(cached.products) !== productFingerprint(mapped);
         setCache(mapped, cms, wl);
