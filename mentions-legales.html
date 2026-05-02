@@ -24,12 +24,12 @@ window.SnipcartSettings={publicApiKey:'MTM2ODI3MjQtODdlMy00YzRkLWFiNGMtMmMwMGQ1M
   <h2>Éditeur du site</h2>
   <p><strong><span class="dyn-brand-name">notre boutique</span></strong><br>
   Entreprise individuelle<br>
-  Adresse : [À compléter]<br>
+  Adresse : <span class="dyn-address">[À compléter]</span><br>
   Email : <a href="#" class="dyn-email">contact</a><br>
-  SIRET : [À compléter]<br>
-  N° TVA intracommunautaire : [À compléter]</p>
+  SIRET : <span class="dyn-siret">[À compléter]</span><br>
+  N° TVA intracommunautaire : <span class="dyn-tva">[À compléter]</span></p>
 
-  <div class="info-box">Ces informations doivent être complétées avant l'ouverture officielle de la boutique. Elles sont obligatoires en France pour toute vente en ligne.</div>
+  <div class="info-box dyn-incomplete-warning">Ces informations doivent être complétées avant l'ouverture officielle de la boutique. Elles sont obligatoires en France pour toute vente en ligne.</div>
 
   <h2>Hébergement</h2>
   <p><strong>Vercel Inc.</strong><br>
@@ -67,6 +67,6 @@ window.SnipcartSettings={publicApiKey:'MTM2ODI3MjQtODdlMy00YzRkLWFiNGMtMmMwMGQ1M
 <script src="js/app.js"></script>
 <script>initPage('');</script>
 <script src="js/sd-api-client.js"></script>
-<script>(function(){function applyDynamic(){try{var w=JSON.parse(localStorage.getItem('sd_wl_v1'))||{};var e=w.email||'';var s=w.instagram||'';document.querySelectorAll('.dyn-email').forEach(function(el){if(e){el.href='mailto:'+e;el.textContent=e;}});document.querySelectorAll('.dyn-instagram').forEach(function(el){if(s){el.href=s;el.textContent=s;}});document.querySelectorAll('.dyn-brand-name').forEach(function(el){if(w.site_name)el.textContent=w.site_name;});}catch(err){}}applyDynamic();window.addEventListener('sdapi:ready',function(){try{var cfg=window.SDApi&&window.SDApi.whiteLabel;if(cfg){document.querySelectorAll('.dyn-email').forEach(function(el){if(cfg.email){el.href='mailto:'+cfg.email;el.textContent=cfg.email;}});document.querySelectorAll('.dyn-instagram').forEach(function(el){if(cfg.instagram){el.href=cfg.instagram;el.textContent=cfg.instagram;}});document.querySelectorAll('.dyn-brand-name').forEach(function(el){if(cfg&&cfg.site_name)el.textContent=cfg.site_name;});}}catch(err){}});}());</script>
+<script>(function(){function applyDynamic(w){try{if(!w)return;if(w.email)document.querySelectorAll('.dyn-email').forEach(function(el){el.href='mailto:'+w.email;el.textContent=w.email;});if(w.site_name)document.querySelectorAll('.dyn-brand-name').forEach(function(el){el.textContent=w.site_name;});if(w.address)document.querySelectorAll('.dyn-address').forEach(function(el){el.textContent=w.address;});if(w.siret)document.querySelectorAll('.dyn-siret').forEach(function(el){el.textContent=w.siret;});if(w.tva)document.querySelectorAll('.dyn-tva').forEach(function(el){el.textContent=w.tva;});if(w.siret&&w.address){document.querySelectorAll('.dyn-incomplete-warning').forEach(function(el){el.style.display='none';});}}catch(err){}}var _wl=JSON.parse(localStorage.getItem('sd_wl_v1')||'{}');applyDynamic(_wl);window.addEventListener('sdapi:ready',function(){applyDynamic(window.SDApi&&window.SDApi.whiteLabel);});}());</script>
 </body>
 </html>

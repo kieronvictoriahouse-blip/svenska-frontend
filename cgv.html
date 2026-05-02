@@ -23,7 +23,7 @@ window.SnipcartSettings={publicApiKey:'MTM2ODI3MjQtODdlMy00YzRkLWFiNGMtMmMwMGQ1M
 
 <div class="legal-wrap">
   <h2>Article 1 — Objet</h2>
-  <p>Les présentes Conditions Générales de Vente (CGV) régissent les relations contractuelles entre <strong><span class="dyn-brand-name">notre boutique</span></strong> (ci-après "le Vendeur") et tout acheteur (ci-après "le Client") passant commande sur <a href="#" class="dyn-site-url">notre site</a>.</p>
+  <p>Les présentes Conditions Générales de Vente (CGV) régissent les relations contractuelles entre <strong><span class="dyn-brand-name">notre boutique</span></strong> (ci-après "le Vendeur") et tout acheteur (ci-après "le Client") passant commande sur <a href="/" class="dyn-site-url"><span class="dyn-brand-name">notre site</span></a>.</p>
   <p>Toute commande implique l'acceptation pleine et entière des présentes CGV.</p>
 
   <h2>Article 2 — Produits</h2>
@@ -31,7 +31,7 @@ window.SnipcartSettings={publicApiKey:'MTM2ODI3MjQtODdlMy00YzRkLWFiNGMtMmMwMGQ1M
   <p>En cas d'indisponibilité d'un produit après passation de commande, le Client sera informé par email dans les 48h et pourra opter pour un remboursement intégral ou un avoir.</p>
 
   <h2>Article 3 — Prix</h2>
-  <p>Les prix sont indiqués en euros (€) toutes taxes comprises (TTC). La TVA applicable est de 5,5% pour les produits alimentaires.</p>
+  <p>Les prix sont indiqués en euros (€) toutes taxes comprises (TTC). La TVA applicable est de <span class="dyn-tva-rate">5,5</span>% pour les produits alimentaires.</p>
   <p>Le Vendeur se réserve le droit de modifier ses prix à tout moment, étant entendu que le prix applicable est celui en vigueur au moment de la validation de la commande.</p>
 
   <h2>Article 4 — Commande</h2>
@@ -42,7 +42,7 @@ window.SnipcartSettings={publicApiKey:'MTM2ODI3MjQtODdlMy00YzRkLWFiNGMtMmMwMGQ1M
   <p>Le règlement s'effectue en ligne par carte bancaire (Visa, Mastercard) ou PayPal via la plateforme sécurisée Snipcart. Les données de paiement sont cryptées et ne sont jamais stockées sur nos serveurs.</p>
 
   <h2>Article 6 — Livraison</h2>
-  <p>Les commandes sont expédiées sous 3 à 5 jours ouvrés. La livraison est offerte dès 50€ d'achat en France métropolitaine. Pour les autres destinations, les frais sont calculés au moment de la commande.</p>
+  <p>Les commandes sont expédiées sous 3 à 5 jours ouvrés. La livraison est offerte dès <span class="dyn-free-shipping">50</span>€ d'achat en France métropolitaine. Pour les autres destinations, les frais sont calculés au moment de la commande.</p>
   <p>En cas de retard de livraison, le Client peut contacter le Vendeur pour obtenir des informations sur l'état de son colis.</p>
 
   <h2>Article 7 — Droit de rétractation</h2>
@@ -66,6 +66,6 @@ window.SnipcartSettings={publicApiKey:'MTM2ODI3MjQtODdlMy00YzRkLWFiNGMtMmMwMGQ1M
 <script src="js/app.js"></script>
 <script>initPage('');</script>
 <script src="js/sd-api-client.js"></script>
-<script>(function(){function applyDynamic(){try{var w=JSON.parse(localStorage.getItem('sd_wl_v1'))||{};var e=w.email||'';var s=w.instagram||'';document.querySelectorAll('.dyn-email').forEach(function(el){if(e){el.href='mailto:'+e;el.textContent=e;}});document.querySelectorAll('.dyn-instagram').forEach(function(el){if(s){el.href=s;el.textContent=s;}});document.querySelectorAll('.dyn-brand-name').forEach(function(el){if(w.site_name)el.textContent=w.site_name;});}catch(err){}}applyDynamic();window.addEventListener('sdapi:ready',function(){try{var cfg=window.SDApi&&window.SDApi.whiteLabel;if(cfg){document.querySelectorAll('.dyn-email').forEach(function(el){if(cfg.email){el.href='mailto:'+cfg.email;el.textContent=cfg.email;}});document.querySelectorAll('.dyn-instagram').forEach(function(el){if(cfg.instagram){el.href=cfg.instagram;el.textContent=cfg.instagram;}});document.querySelectorAll('.dyn-brand-name').forEach(function(el){if(cfg&&cfg.site_name)el.textContent=cfg.site_name;});}}catch(err){}});}());</script>
+<script>(function(){function applyDynamic(w){try{if(!w)return;if(w.email)document.querySelectorAll('.dyn-email').forEach(function(el){el.href='mailto:'+w.email;el.textContent=w.email;});if(w.site_name)document.querySelectorAll('.dyn-brand-name').forEach(function(el){el.textContent=w.site_name;});if(w.front_url)document.querySelectorAll('.dyn-site-url').forEach(function(el){el.href=w.front_url;});if(w.tva_rate)document.querySelectorAll('.dyn-tva-rate').forEach(function(el){el.textContent=String(w.tva_rate).replace('.',',');});if(w.free_shipping_threshold)document.querySelectorAll('.dyn-free-shipping').forEach(function(el){el.textContent=String(w.free_shipping_threshold).replace('.00','');});}catch(err){}}var _wl=JSON.parse(localStorage.getItem('sd_wl_v1')||'{}');applyDynamic(_wl);window.addEventListener('sdapi:ready',function(){applyDynamic(window.SDApi&&window.SDApi.whiteLabel);});}());</script>
 </body>
 </html>
