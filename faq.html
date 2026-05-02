@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FAQ — Heather & Lingon</title>
-<meta name="description" content="Questions fréquentes — Heather & Lingon, épicerie nordique & britannique.">
+<title>FAQ</title>
+<meta name="description" content="Questions fréquentes.">
 <link rel="stylesheet" href="css/style.css">
-<script>const SD_API_URL = 'https://svenska-backend.vercel.app';</script>
+<script>const SD_API_URL = 'https://admin.swedishcravings.fr';</script>
 <script>(function(){try{var w=JSON.parse(localStorage.getItem('sd_wl_v1'));if(w&&w.id){var r=document.documentElement.style;if(w.color_primary){r.setProperty('--heather',w.color_primary);r.setProperty('--heather-mid',w.color_primary+'CC');}if(w.color_secondary){r.setProperty('--lingon',w.color_secondary);r.setProperty('--lingon-mid',w.color_secondary+'CC');}if(w.color_bg)r.setProperty('--cream',w.color_bg);if(w.color_text)r.setProperty('--midnight',w.color_text);if(w.font_display)r.setProperty('--font-display',"'"+w.font_display+"',Georgia,serif");if(w.font_body)r.setProperty('--font-body',"'"+w.font_body+"',Georgia,serif");if(w.font_ui)r.setProperty('--font-ui',"'"+w.font_ui+"',sans-serif");}}catch(e){}}());</script>
 <style>
 .faq-wrap { max-width: 760px; margin: 0 auto; padding: 64px 40px; }
@@ -32,7 +32,7 @@
 </head>
 <body>
 <script>
-window.SnipcartSettings={publicApiKey:'MzYxZmI4YTktYTFhMC00ZTQyLWE5NDEtZDY5NzNjODc4NzJkNjM5MTI5MDkyNzIyOTUxODcy',loadStrategy:'on-user-interaction',currency:'eur',modalStyle:'side',addProductBehavior:'none',version:'3.3.3'};
+window.SnipcartSettings={publicApiKey:'MTM2ODI3MjQtODdlMy00YzRkLWFiNGMtMmMwMGQ1M2ZhZDk3NjM5MTI5MDkyNzIyOTUxODcy',loadStrategy:'on-user-interaction',currency:'eur',modalStyle:'side',addProductBehavior:'none',version:'3.3.3'};
 (()=>{var c,d;(d=(c=window.SnipcartSettings).version)!=null||(c.version="3.0");var s,S;(S=(s=window.SnipcartSettings).timeoutDuration)!=null||(s.timeoutDuration=2750);var l,p;(p=(l=window.SnipcartSettings).domain)!=null||(l.domain="cdn.snipcart.com");var w,u;(u=(w=window.SnipcartSettings).protocol)!=null||(w.protocol="https");var f=window.SnipcartSettings.version.includes("v3.0.0-ci")||window.SnipcartSettings.version!="3.0"&&window.SnipcartSettings.version.localeCompare("3.4.0",void 0,{numeric:!0,sensitivity:"base"})===-1,m=["focus","mouseover","touchmove","scroll","keydown"];window.LoadSnipcart=o;document.readyState==="loading"?document.addEventListener("DOMContentLoaded",r):r();function r(){window.SnipcartSettings.loadStrategy?window.SnipcartSettings.loadStrategy==="on-user-interaction"&&(m.forEach(t=>document.addEventListener(t,o)),setTimeout(o,window.SnipcartSettings.timeoutDuration)):o()}var a=!1;function o(){if(a)return;a=!0;let t=document.getElementsByTagName("head")[0],e=document.querySelector("#snipcart"),i=document.querySelector('script[src^="'+window.SnipcartSettings.protocol+'://'+window.SnipcartSettings.domain+'"][src$="snipcart.js"]'),n=document.querySelector('link[href^="'+window.SnipcartSettings.protocol+'://'+window.SnipcartSettings.domain+'"][href$="snipcart.css"]');e||(e=document.createElement("div"),e.id="snipcart",e.setAttribute("hidden","true"),document.body.appendChild(e)),v(e),i||(i=document.createElement("script"),i.src=window.SnipcartSettings.protocol+"://"+window.SnipcartSettings.domain+"/themes/v"+window.SnipcartSettings.version+"/default/snipcart.js",i.async=!0,t.appendChild(i)),n||(n=document.createElement("link"),n.rel="stylesheet",n.type="text/css",n.href=window.SnipcartSettings.protocol+"://"+window.SnipcartSettings.domain+"/themes/v"+window.SnipcartSettings.version+"/default/snipcart.css",t.prepend(n)),m.forEach(g=>document.removeEventListener(g,o))}function v(t){!f||(t.dataset.apiKey=window.SnipcartSettings.publicApiKey,window.SnipcartSettings.addProductBehavior&&(t.dataset.configAddProductBehavior=window.SnipcartSettings.addProductBehavior),window.SnipcartSettings.modalStyle&&(t.dataset.configModalStyle=window.SnipcartSettings.modalStyle),window.SnipcartSettings.currency&&(t.dataset.currency=window.SnipcartSettings.currency),window.SnipcartSettings.templatesUrl&&(t.dataset.templatesUrl=window.SnipcartSettings.templatesUrl));}})();
 </script>
 <div id="header-root"></div>
@@ -64,7 +64,7 @@ window.SnipcartSettings={publicApiKey:'MzYxZmI4YTktYTFhMC00ZTQyLWE5NDEtZDY5NzNjO
     <button class="faq-q" onclick="toggleFaq(this)">
       Puis-je modifier ou annuler ma commande ?<span class="faq-arrow">▾</span>
     </button>
-    <div class="faq-a"><div class="faq-a-inner">Vous pouvez modifier ou annuler votre commande dans les 2 heures suivant la validation. Passé ce délai, contactez-nous rapidement à <a href="mailto:hej@heather-lingon.fr">hej@heather-lingon.fr</a>. Nous ferons notre maximum.</div></div>
+    <div class="faq-a"><div class="faq-a-inner">Vous pouvez modifier ou annuler votre commande dans les 2 heures suivant la validation. Passé ce délai, contactez-nous rapidement à <a href="#" class="dyn-email">contact</a>. Nous ferons notre maximum.</div></div>
   </div>
 
   <div class="faq-cat">Livraison</div>
@@ -96,7 +96,7 @@ window.SnipcartSettings={publicApiKey:'MzYxZmI4YTktYTFhMC00ZTQyLWE5NDEtZDY5NzNjO
     <button class="faq-q" onclick="toggleFaq(this)">
       D'où viennent vos produits ?<span class="faq-arrow">▾</span>
     </button>
-    <div class="faq-a"><div class="faq-a-inner">Nos produits proviennent directement de Suède et du Royaume-Uni. Nous travaillons avec des producteurs et importateurs soigneusement sélectionnés pour garantir l'authenticité et la qualité de chaque référence.</div></div>
+    <div class="faq-a"><div class="faq-a-inner">Nos produits proviennent directement de Suède. Nous travaillons avec des producteurs et importateurs soigneusement sélectionnés pour garantir l'authenticité et la qualité de chaque référence.</div></div>
   </div>
 
   <div class="faq-item">
@@ -119,7 +119,7 @@ window.SnipcartSettings={publicApiKey:'MzYxZmI4YTktYTFhMC00ZTQyLWE5NDEtZDY5NzNjO
     <button class="faq-q" onclick="toggleFaq(this)">
       Comment retourner un article ?<span class="faq-arrow">▾</span>
     </button>
-    <div class="faq-a"><div class="faq-a-inner">Vous avez 14 jours à compter de la réception pour retourner un article non ouvert. Envoyez un email à <a href="mailto:hej@heather-lingon.fr">hej@heather-lingon.fr</a> avec votre numéro de commande. Les frais de retour sont à votre charge.</div></div>
+    <div class="faq-a"><div class="faq-a-inner">Vous avez 14 jours à compter de la réception pour retourner un article non ouvert. Envoyez un email à <a href="#" class="dyn-email">contact</a> avec votre numéro de commande. Les frais de retour sont à votre charge.</div></div>
   </div>
 
   <div class="faq-item">
@@ -150,5 +150,6 @@ function toggleFaq(btn) {
 }
 </script>
 <script src="js/sd-api-client.js"></script>
+<script>(function(){function applyDynamic(){try{var w=JSON.parse(localStorage.getItem('sd_wl_v1'))||{};var e=w.email||'';var s=w.instagram||'';document.querySelectorAll('.dyn-email').forEach(function(el){if(e){el.href='mailto:'+e;el.textContent=e;}});document.querySelectorAll('.dyn-instagram').forEach(function(el){if(s){el.href=s;el.textContent=s;}});document.querySelectorAll('.dyn-brand-name').forEach(function(el){if(w.site_name)el.textContent=w.site_name;});}catch(err){}}applyDynamic();window.addEventListener('sdapi:ready',function(){try{var cfg=window.SDApi&&window.SDApi.whiteLabel;if(cfg){document.querySelectorAll('.dyn-email').forEach(function(el){if(cfg.email){el.href='mailto:'+cfg.email;el.textContent=cfg.email;}});document.querySelectorAll('.dyn-instagram').forEach(function(el){if(cfg.instagram){el.href=cfg.instagram;el.textContent=cfg.instagram;}});document.querySelectorAll('.dyn-brand-name').forEach(function(el){if(cfg&&cfg.site_name)el.textContent=cfg.site_name;});}}catch(err){}});}());</script>
 </body>
 </html>

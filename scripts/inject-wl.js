@@ -8,7 +8,7 @@ const https = require('https');
 const fs = require('fs');
 const path = require('path');
 
-const BASE = process.env.SD_API_URL || 'https://svenska-backend.vercel.app';
+const BASE = process.env.SD_API_URL || 'https://admin.swedishcravings.fr';
 const MARKER_START = '<!-- wl-baked-start -->';
 const MARKER_END = '<!-- wl-baked-end -->';
 

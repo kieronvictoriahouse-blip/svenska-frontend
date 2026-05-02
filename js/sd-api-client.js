@@ -1,12 +1,12 @@
 /**
- * Heather & Lingon — API Client Bridge v2
+ * API Client Bridge v2
  * Connecte le front Netlify/Vercel au back-end Vercel
  */
 (function () {
   if (window._sdApiInitialized) return;
   window._sdApiInitialized = true;
 
-  const BASE = window.SD_API_URL || 'https://svenska-backend.vercel.app';
+  const BASE = window.SD_API_URL || 'https://admin.swedishcravings.fr';
 
   // sessionStorage cache — produits + CMS + white-label, évite tout flash entre pages
   const CACHE_KEY = 'sd_full_v1';
@@ -237,7 +237,7 @@
     var _siteName = cfg.site_name;
     if (_siteName) {
       var _curSN = document.querySelector('meta[property="og:site_name"]');
-      var _oldBrand = _curSN ? (_curSN.getAttribute('content') || 'Heather & Lingon') : 'Heather & Lingon';
+      var _oldBrand = _curSN ? (_curSN.getAttribute('content') || '') : '';
       if (_oldBrand !== _siteName) {
         document.title = document.title.replace(_oldBrand, _siteName);
       }
