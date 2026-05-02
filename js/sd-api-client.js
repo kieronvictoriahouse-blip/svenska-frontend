@@ -272,7 +272,7 @@
     const cached = tryCache();
     if (cached) {
       if (cached.cms)  { window.SDApi.cms = cached.cms; applyCms(cached.cms); }
-      if (cached.wl)   { applyWhiteLabel(cached.wl); }
+      if (cached.wl)   { applyWhiteLabel(cached.wl); if (typeof updateCartBadge === 'function') updateCartBadge(); }
       if (cached.products) {
         window.PRODUCTS = cached.products;
         window.SDApi.isReady = true;
@@ -297,7 +297,7 @@
       const wlChanged  = JSON.stringify(cached?.wl)  !== JSON.stringify(wl);
       if (cms && cmsChanged) { window.SDApi.cms = cms; applyCms(cms); }
       else if (cms) { window.SDApi.cms = cms; }
-      if (wl  && wlChanged)  { applyWhiteLabel(wl); }
+      if (wl  && wlChanged)  { applyWhiteLabel(wl); if (typeof updateCartBadge === 'function') updateCartBadge(); }
       else if (wl) { window.SDApi.whiteLabel = wl; }
 
       // Produits
