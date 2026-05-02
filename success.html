@@ -33,7 +33,7 @@ localStorage.removeItem('sd_cart_products');
 cart = {};
 updateCartBadge();
 </script>
+<script>(function(){var _hr=document.getElementById("header-root");if(_hr&&typeof MutationObserver!=="undefined")new MutationObserver(function(){if(typeof updateCartBadge==="function")updateCartBadge();}).observe(_hr,{childList:true});})();</script>
 <script src="js/sd-api-client.js?v=2"></script>
-<script>window.addEventListener("sdapi:ready",function(){if(typeof updateCartBadge==="function")updateCartBadge();});</script>
 </body>
 </html>
