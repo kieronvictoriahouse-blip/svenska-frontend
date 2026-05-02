@@ -67,5 +67,6 @@ window.SnipcartSettings={publicApiKey:'MTM2ODI3MjQtODdlMy00YzRkLWFiNGMtMmMwMGQ1M
 <script>initPage('');</script>
 <script src="js/sd-api-client.js?v=2"></script>
 <script>(function(){function applyDynamic(w){try{if(!w)return;if(w.email)document.querySelectorAll('.dyn-email').forEach(function(el){el.href='mailto:'+w.email;el.textContent=w.email;});if(w.site_name)document.querySelectorAll('.dyn-brand-name').forEach(function(el){el.textContent=w.site_name;});if(w.front_url)document.querySelectorAll('.dyn-site-url').forEach(function(el){el.href=w.front_url;});if(w.tva_rate)document.querySelectorAll('.dyn-tva-rate').forEach(function(el){el.textContent=String(w.tva_rate).replace('.',',');});if(w.free_shipping_threshold)document.querySelectorAll('.dyn-free-shipping').forEach(function(el){el.textContent=String(w.free_shipping_threshold).replace('.00','');});}catch(err){}}var _wl=JSON.parse(localStorage.getItem('sd_wl_v1')||'{}');applyDynamic(_wl);window.addEventListener('sdapi:ready',function(){applyDynamic(window.SDApi&&window.SDApi.whiteLabel);});}());</script>
+<script>window.addEventListener("sdapi:ready",function(){if(typeof updateCartBadge==="function")updateCartBadge();});</script>
 </body>
 </html>

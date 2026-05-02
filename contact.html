@@ -202,5 +202,6 @@ function submitForm() {
 </script>
   <script src="js/sd-api-client.js?v=2"></script>
 <script>(function(){function applyDynamic(){try{var w=JSON.parse(localStorage.getItem('sd_wl_v1'))||{};var e=w.email||'';var s=w.instagram||'';document.querySelectorAll('.dyn-email').forEach(function(el){if(e){el.href='mailto:'+e;el.textContent=e;}});document.querySelectorAll('.dyn-instagram').forEach(function(el){if(s){el.href=s;el.textContent=s;}});document.querySelectorAll('.dyn-brand-name').forEach(function(el){if(w.site_name)el.textContent=w.site_name;});}catch(err){}}applyDynamic();window.addEventListener('sdapi:ready',function(){try{var cfg=window.SDApi&&window.SDApi.whiteLabel;if(cfg){document.querySelectorAll('.dyn-email').forEach(function(el){if(cfg.email){el.href='mailto:'+cfg.email;el.textContent=cfg.email;}});document.querySelectorAll('.dyn-instagram').forEach(function(el){if(cfg.instagram){el.href=cfg.instagram;el.textContent=cfg.instagram;}});document.querySelectorAll('.dyn-brand-name').forEach(function(el){if(cfg&&cfg.site_name)el.textContent=cfg.site_name;});}}catch(err){}});}());</script>
+<script>window.addEventListener("sdapi:ready",function(){if(typeof updateCartBadge==="function")updateCartBadge();});</script>
 </body>
 </html>
