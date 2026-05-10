@@ -226,7 +226,11 @@
       };
       if (typeof renderHeader === 'function') {
         var _hr = document.getElementById('header-root');
-        if (_hr) { _hr.innerHTML = renderHeader(window._activePage || ''); _hr.classList.add('wl-ready'); }
+        if (_hr) {
+          _hr.innerHTML = renderHeader(window._activePage || '');
+          if (typeof updateCartBadge === 'function') updateCartBadge();
+          _hr.classList.add('wl-ready');
+        }
         var _fr = document.getElementById('footer-root');
         if (_fr) { _fr.innerHTML = renderFooter(); _fr.classList.add('wl-ready'); }
         if (typeof setLang === 'function') setLang(window.LANG || localStorage.getItem('sd_lang') || 'fr');
@@ -271,10 +275,11 @@
     // Cache hit : appliquer CMS + WL + produits AVANT sdapi:ready → zéro flash
     const cached = tryCache();
     if (cached) {
-      if (cached.cms)  { window.SDApi.cms = cached.cms; applyCms(cached.cms); }
+      if (cached.cms)  { window.SDApi.cms = cached.cms; applyCms(cached.cms, true); }
       if (cached.wl)   { applyWhiteLabel(cached.wl); if (typeof updateCartBadge === 'function') updateCartBadge(); }
       if (cached.products) {
         window.PRODUCTS = cached.products;
+        window._SD_STATIC = cached.products;
         window.SDApi.isReady = true;
         window.SDApi.products = cached.products;
       }
@@ -295,8 +300,7 @@
       // Appliquer CMS + WL seulement si le contenu a changé (évite le flash de re-application)
       const cmsChanged = JSON.stringify(cached?.cms) !== JSON.stringify(cms);
       const wlChanged  = JSON.stringify(cached?.wl)  !== JSON.stringify(wl);
-      if (cms && cmsChanged) { window.SDApi.cms = cms; applyCms(cms); }
-      else if (cms) { window.SDApi.cms = cms; }
+      if (cms) { window.SDApi.cms = cms; applyCms(cms); }
       if (wl  && wlChanged)  { applyWhiteLabel(wl); if (typeof updateCartBadge === 'function') updateCartBadge(); }
       else if (wl) { window.SDApi.whiteLabel = wl; }
 
@@ -304,6 +308,7 @@
       const mapped = (productsData && productsData.length > 0) ? productsData.map(mapProduct) : null;
       if (mapped) {
         window.PRODUCTS = mapped;
+        window._SD_STATIC = mapped;
         window.SDApi.isReady = true;
         window.SDApi.products = mapped;
 
@@ -344,13 +349,13 @@
       // Révéler le header/footer quoi qu'il arrive (même si WL a échoué)
       var _hr = document.getElementById('header-root');
       var _fr = document.getElementById('footer-root');
-      if (_hr && !_hr.classList.contains('wl-ready')) _hr.classList.add('wl-ready');
+      if (_hr && !_hr.classList.contains('wl-ready')) { if (typeof updateCartBadge === 'function') updateCartBadge(); _hr.classList.add('wl-ready'); }
       if (_fr && !_fr.classList.contains('wl-ready')) _fr.classList.add('wl-ready');
     }
   }
 
-  function applyCms(cms) {
-    try { localStorage.setItem('sd_cms_v1', JSON.stringify(cms)); } catch {}
+  function applyCms(cms, fromCache) {
+    if (!fromCache) { try { localStorage.setItem('sd_cms_v1', JSON.stringify(cms)); } catch {} }
     try {
       const LANG = localStorage.getItem('sd_lang') || 'fr';
       const l = LANG === 'sv' ? 'value_sv' : LANG === 'en' ? 'value_en' : 'value_fr';
@@ -358,7 +363,6 @@
         const h1 = document.querySelector('.hero h1');
         if (h1) {
           if (cms.hero_title[l]) h1.innerHTML = cms.hero_title[l];
-          // Update data attrs so setLang works for future language switches
           if (cms.hero_title.value_sv) h1.setAttribute('data-sv', cms.hero_title.value_sv);
           if (cms.hero_title.value_fr) h1.setAttribute('data-fr', cms.hero_title.value_fr);
           if (cms.hero_title.value_en) h1.setAttribute('data-en', cms.hero_title.value_en);
@@ -373,21 +377,23 @@
           if (cms.hero_subtitle.value_en) sub.setAttribute('data-en', cms.hero_subtitle.value_en);
         }
       }
-      if (cms.hero_image && cms.hero_image.value_fr) {
-        const img = document.querySelector('.hero-media img');
-        if (img) img.src = cms.hero_image.value_fr;
-      }
-      if (cms.editorial_image && cms.editorial_image.value_fr) {
-        const img = document.querySelector('.ei-image img');
-        if (img) img.src = cms.editorial_image.value_fr;
-      }
-      if (cms.feature_image && cms.feature_image.value_fr) {
-        const img = document.querySelector('.feat-band-img img');
-        if (img) img.src = cms.feature_image.value_fr;
-      }
-      if (cms.about_image && cms.about_image.value_fr) {
-        const img = document.querySelector('.about-split-img img');
-        if (img) img.src = cms.about_image.value_fr;
+      if (!fromCache) {
+        if (cms.hero_image && cms.hero_image.value_fr) {
+          const img = document.querySelector('.hero-media img');
+          if (img) img.src = cms.hero_image.value_fr;
+        }
+        if (cms.editorial_image && cms.editorial_image.value_fr) {
+          const img = document.querySelector('.ei-image img');
+          if (img) img.src = cms.editorial_image.value_fr;
+        }
+        if (cms.feature_image && cms.feature_image.value_fr) {
+          const img = document.querySelector('.feat-band-img img');
+          if (img) img.src = cms.feature_image.value_fr;
+        }
+        if (cms.about_image && cms.about_image.value_fr) {
+          const img = document.querySelector('.about-split-img img');
+          if (img) img.src = cms.about_image.value_fr;
+        }
       }
       if (cms.feat_title) {
         const el = document.querySelector('.feat-band-text .sect-title');

@@ -401,17 +401,12 @@
 </style>
 </head>
 <body>
-<script>
-window.SnipcartSettings={publicApiKey:'MTM2ODI3MjQtODdlMy00YzRkLWFiNGMtMmMwMGQ1M2ZhZDk3NjM5MTI5MDkyNzIyOTUxODcy',loadStrategy:'on-user-interaction',currency:'EUR',modalStyle:'side',addProductBehavior:'none',version:'3.3.3'};
-(()=>{var c,d;(d=(c=window.SnipcartSettings).version)!=null||(c.version="3.0");var s,S;(S=(s=window.SnipcartSettings).timeoutDuration)!=null||(s.timeoutDuration=2750);var l,p;(p=(l=window.SnipcartSettings).domain)!=null||(l.domain="cdn.snipcart.com");var w,u;(u=(w=window.SnipcartSettings).protocol)!=null||(w.protocol="https");var f=window.SnipcartSettings.version.includes("v3.0.0-ci")||window.SnipcartSettings.version!="3.0"&&window.SnipcartSettings.version.localeCompare("3.4.0",void 0,{numeric:!0,sensitivity:"base"})===-1,m=["focus","mouseover","touchmove","scroll","keydown"];window.LoadSnipcart=o;document.readyState==="loading"?document.addEventListener("DOMContentLoaded",r):r();function r(){window.SnipcartSettings.loadStrategy?window.SnipcartSettings.loadStrategy==="on-user-interaction"&&(m.forEach(t=>document.addEventListener(t,o)),setTimeout(o,window.SnipcartSettings.timeoutDuration)):o()}var a=!1;function o(){if(a)return;a=!0;let t=document.getElementsByTagName("head")[0],e=document.querySelector("#snipcart"),i=document.querySelector('script[src^="'+window.SnipcartSettings.protocol+'://'+window.SnipcartSettings.domain+'"][src$="snipcart.js"]'),n=document.querySelector('link[href^="'+window.SnipcartSettings.protocol+'://'+window.SnipcartSettings.domain+'"][href$="snipcart.css"]');e||(e=document.createElement("div"),e.id="snipcart",e.setAttribute("hidden","true"),document.body.appendChild(e)),v(e),i||(i=document.createElement("script"),i.src=window.SnipcartSettings.protocol+"://"+window.SnipcartSettings.domain+"/themes/v"+window.SnipcartSettings.version+"/default/snipcart.js",i.async=!0,t.appendChild(i)),n||(n=document.createElement("link"),n.rel="stylesheet",n.type="text/css",n.href=window.SnipcartSettings.protocol+"://"+window.SnipcartSettings.domain+"/themes/v"+window.SnipcartSettings.version+"/default/snipcart.css",t.prepend(n)),m.forEach(g=>document.removeEventListener(g,o))}function v(t){!f||(t.dataset.apiKey=window.SnipcartSettings.publicApiKey,window.SnipcartSettings.addProductBehavior&&(t.dataset.configAddProductBehavior=window.SnipcartSettings.addProductBehavior),window.SnipcartSettings.modalStyle&&(t.dataset.configModalStyle=window.SnipcartSettings.modalStyle),window.SnipcartSettings.currency&&(t.dataset.currency=window.SnipcartSettings.currency),window.SnipcartSettings.templatesUrl&&(t.dataset.templatesUrl=window.SnipcartSettings.templatesUrl));}})();
-</script>
 <div id="header-root"></div>
 
 <!-- ═══ HERO ═══ -->
 <section class="hero">
   <div class="hero-media">
-    <img src="https://images.unsplash.com/photo-1481931098730-318b6f776db0?w=1600&q=85"
-         alt="Épicerie nordique">
+    <img src="" alt="Épicerie nordique">
     <div class="hero-overlay"></div>
   </div>
   <div class="hero-content">
@@ -428,7 +423,7 @@ window.SnipcartSettings={publicApiKey:'MTM2ODI3MjQtODdlMy00YzRkLWFiNGMtMmMwMGQ1M
     <div class="hero-scroll-line"></div>
   </div>
 </section>
-<script>(function(){try{var c=JSON.parse(localStorage.getItem('sd_cms_v1'));if(!c)return;var lg=localStorage.getItem('sd_lang')||'fr';var lk=lg==='sv'?'value_sv':lg==='en'?'value_en':'value_fr';var h=document.querySelector('.hero h1');if(h&&c.hero_title&&c.hero_title[lk])h.innerHTML=c.hero_title[lk];var s=document.querySelector('.hero-sub');if(s&&c.hero_subtitle&&c.hero_subtitle[lk])s.textContent=c.hero_subtitle[lk];var ey=document.querySelector('.hero-eyebrow');if(ey&&c.hero_eyebrow&&c.hero_eyebrow[lk])ey.textContent=c.hero_eyebrow[lk];var img=document.querySelector('.hero-media img');if(img&&c.hero_image&&c.hero_image[lk])img.src=c.hero_image[lk];var ei=document.querySelector('.ei-image img');if(ei&&c.editorial_image&&c.editorial_image.value_fr)ei.src=c.editorial_image.value_fr;var ft=document.querySelector('.feat-band-img img');if(ft&&c.feature_image&&c.feature_image.value_fr)ft.src=c.feature_image.value_fr;var ab=document.querySelector('.about-split-img img');if(ab&&c.about_image&&c.about_image.value_fr)ab.src=c.about_image.value_fr;var eb1=document.getElementById('ei-body1');if(eb1&&c.editorial_body1&&c.editorial_body1[lk])eb1.textContent=c.editorial_body1[lk];var eb2=document.getElementById('ei-body2');if(eb2&&c.editorial_body2&&c.editorial_body2[lk])eb2.textContent=c.editorial_body2[lk];var ab1=document.getElementById('about-body1');if(ab1&&c.about_body1&&c.about_body1[lk])ab1.textContent=c.about_body1[lk];var aq=document.getElementById('about-quote-text');if(aq&&c.about_quote&&c.about_quote[lk])aq.textContent=c.about_quote[lk];var ab2=document.getElementById('about-body2');if(ab2&&c.about_body2&&c.about_body2[lk])ab2.textContent=c.about_body2[lk];}catch(e){}}());</script>
+<script>(function(){try{var sf=JSON.parse(sessionStorage.getItem('sd_full_v1'));if(sf&&sf.cms){var sc=sf.cms;var himg=document.querySelector('.hero-media img');if(himg&&sc.hero_image&&sc.hero_image.value_fr)himg.src=sc.hero_image.value_fr;var eimg=document.querySelector('.ei-image img');if(eimg&&sc.editorial_image&&sc.editorial_image.value_fr)eimg.src=sc.editorial_image.value_fr;var fimg=document.querySelector('.feat-band-img img');if(fimg&&sc.feature_image&&sc.feature_image.value_fr)fimg.src=sc.feature_image.value_fr;var aimg=document.querySelector('.about-split-img img');if(aimg&&sc.about_image&&sc.about_image.value_fr)aimg.src=sc.about_image.value_fr;}}catch(e){}try{var c=JSON.parse(localStorage.getItem('sd_cms_v1'));if(!c)return;var lg=localStorage.getItem('sd_lang')||'fr';var lk=lg==='sv'?'value_sv':lg==='en'?'value_en':'value_fr';var h=document.querySelector('.hero h1');if(h&&c.hero_title&&c.hero_title[lk])h.innerHTML=c.hero_title[lk];var s=document.querySelector('.hero-sub');if(s&&c.hero_subtitle&&c.hero_subtitle[lk])s.textContent=c.hero_subtitle[lk];var ey=document.querySelector('.hero-eyebrow');if(ey&&c.hero_eyebrow&&c.hero_eyebrow[lk])ey.textContent=c.hero_eyebrow[lk];var eb1=document.getElementById('ei-body1');if(eb1&&c.editorial_body1&&c.editorial_body1[lk])eb1.textContent=c.editorial_body1[lk];var eb2=document.getElementById('ei-body2');if(eb2&&c.editorial_body2&&c.editorial_body2[lk])eb2.textContent=c.editorial_body2[lk];var ab1=document.getElementById('about-body1');if(ab1&&c.about_body1&&c.about_body1[lk])ab1.textContent=c.about_body1[lk];var aq=document.getElementById('about-quote-text');if(aq&&c.about_quote&&c.about_quote[lk])aq.textContent=c.about_quote[lk];var ab2=document.getElementById('about-body2');if(ab2&&c.about_body2&&c.about_body2[lk])ab2.textContent=c.about_body2[lk];}catch(e){}}());</script>
 
 <!-- ═══ TICKER ═══ -->
 <div class="ticker-bar">
@@ -480,8 +475,7 @@ window.SnipcartSettings={publicApiKey:'MTM2ODI3MjQtODdlMy00YzRkLWFiNGMtMmMwMGQ1M
     </div>
   </div>
   <div class="ei-image">
-    <img src="https://images.unsplash.com/photo-1547592166-23ac45744acd?w=800&q=85"
-         alt="Épices nordiques et baies séchées">
+    <img src="" alt="Épices nordiques et baies séchées">
     <div class="ei-badge">
       <span class="ei-badge-num">20+</span>
       <span class="ei-badge-sub" data-sv="Utvalda<br>produkter" data-fr="Produits<br>sélectionnés" data-en="Selected<br>products">Produits<br>sélectionnés</span>
@@ -518,8 +512,7 @@ window.SnipcartSettings={publicApiKey:'MTM2ODI3MjQtODdlMy00YzRkLWFiNGMtMmMwMGQ1M
 <!-- ═══ FEATURE BAND ═══ -->
 <section class="feat-band reveal">
   <div class="feat-band-img">
-    <img src="https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=900&q=85"
-         alt="Épices de saison">
+    <img src="" alt="Épices de saison">
     <div class="feat-band-img-shade"></div>
   </div>
   <div class="feat-band-text">
@@ -563,8 +556,7 @@ window.SnipcartSettings={publicApiKey:'MTM2ODI3MjQtODdlMy00YzRkLWFiNGMtMmMwMGQ1M
 <!-- ═══ ABOUT ═══ -->
 <section class="about-split reveal" id="om-oss">
   <div class="about-split-img">
-    <img src="https://images.unsplash.com/photo-1551183053-bf91798d047c?w=900&q=85"
-         alt="Notre histoire — épicerie nordique ">
+    <img src="" alt="Notre histoire — épicerie nordique">
   </div>
   <div class="about-split-text">
     <p class="ei-label" data-sv="Vår historia" data-fr="Notre histoire" data-en="Our story">Notre histoire</p>
@@ -596,32 +588,42 @@ window.SnipcartSettings={publicApiKey:'MTM2ODI3MjQtODdlMy00YzRkLWFiNGMtMmMwMGQ1M
 </section>
 
 <!-- ═══ TESTIMONIALS ═══ -->
-<section>
+<section id="testi-section" style="display:none">
   <div class="section">
     <p class="sect-eyebrow" data-sv="De litar på oss" data-fr="Ils nous font confiance" data-en="They trust us">Ils nous font confiance</p>
-    <h2 class="sect-title" data-sv="Kundernas <em>omdömen</em>" data-fr="Avis <em>clients</em>" data-en="Customer <em>reviews</em>">Avis <em>clients</em></h2>
-    <div class="testi-grid">
-      <div class="testi-card">
-        <div class="testi-stars">5.0</div>
-        <p class="testi-q" data-sv="Kardemumman är otroligt färsk, mina kanelbullar har aldrig doftat så gott." data-fr="La cardamome est d'une fraîcheur incroyable, mes kanelbullar n'ont jamais été aussi parfumés." data-en="The cardamom is incredibly fresh — my kanelbullar have never smelt so good.">La cardamome est d'une fraîcheur incroyable, mes kanelbullar n'ont jamais été aussi parfumés.</p>
-        <div class="testi-author">— Ingrid M.</div>
-        <div class="testi-loc">Stockholm, Sverige</div>
-      </div>
-      <div class="testi-card">
-        <div class="testi-stars">5.0</div>
-        <p class="testi-q" data-sv="Glögg-blandningen är helt perfekt. Mina franska vänner var förtjusta i aromerna." data-fr="Le mélange Glögg est absolument parfait. Mes amis français ont été épatés par les arômes." data-en="The Glögg blend is absolutely perfect. My French friends were amazed by the aromas.">Le mélange Glögg est absolument parfait. Mes amis français ont été épatés par les arômes.</p>
-        <div class="testi-author">— Marie-Hélène D.</div>
-        <div class="testi-loc">Lyon, France</div>
-      </div>
-      <div class="testi-card">
-        <div class="testi-stars">5.0</div>
-        <p class="testi-q" data-sv="Dessa produkter är en nordisk madeleine de Proust. Tack från djupet av mitt hjärta." data-fr="Ces produits sont une madeleine de Proust nordique. Merci du fond du cœur." data-en="These products are a Nordic madeleine de Proust. Thank you from the bottom of my heart.">Ces produits sont une madeleine de Proust nordique. Merci du fond du cœur.</p>
-        <div class="testi-author">— Lars-Erik K.</div>
-        <div class="testi-loc">London, UK</div>
-      </div>
-    </div>
+    <h2 class="sect-title" id="testi-title" data-sv="Kundernas <em>omdömen</em>" data-fr="Avis <em>clients</em>" data-en="Customer <em>reviews</em>">Avis <em>clients</em></h2>
+    <div class="testi-grid" id="testi-grid"></div>
   </div>
 </section>
+<script>
+(function(){
+  var BASE = (typeof SD_API_URL !== 'undefined' ? SD_API_URL : '');
+  fetch(BASE + '/api/google-reviews')
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(d){
+      if (!d || !d.reviews || !d.reviews.length) return;
+      var grid = document.getElementById('testi-grid');
+      var section = document.getElementById('testi-section');
+      if (!grid || !section) return;
+      var stars = function(n){ var s=''; for(var i=0;i<5;i++) s+='<span style="color:'+(i<n?'var(--lingon-mid)':'#ccc')+'">★</span>'; return s; };
+      grid.innerHTML = d.reviews.slice(0,6).map(function(r){
+        var txt = r.text ? r.text.slice(0,200)+(r.text.length>200?'…':'') : '';
+        return '<div class="testi-card">'
+          + '<div class="testi-stars">'+stars(r.rating)+'</div>'
+          + (txt ? '<p class="testi-q">'+txt.replace(/</g,'&lt;')+'</p>' : '')
+          + '<div class="testi-author">— '+r.author.replace(/</g,'&lt;')+'</div>'
+          + '<div class="testi-loc">'+r.date+'</div>'
+          + '</div>';
+      }).join('');
+      if (d.rating) {
+        var t = document.getElementById('testi-title');
+        if (t) t.innerHTML = 'Avis <em>clients</em> <small style="font-size:0.55em;font-style:normal;opacity:0.6;">'+d.rating+'/5 · '+d.total+' avis Google</small>';
+      }
+      section.style.display = '';
+    })
+    .catch(function(){});
+}());
+</script>
 
 <!-- ═══ NEWSLETTER ═══ -->
 <div class="nl-band reveal">
@@ -634,7 +636,7 @@ window.SnipcartSettings={publicApiKey:'MTM2ODI3MjQtODdlMy00YzRkLWFiNGMtMmMwMGQ1M
 </div>
 
 <div id="footer-root"></div>
-<script src="js/app.js?v=2"></script>
+<script src="js/app.js?v=6"></script>
 <script>
 initPage('home');
 
@@ -741,6 +743,6 @@ window.addEventListener('sdapi:ready', (e) => {
 });
 </script>
 <script>(function(){var _hr=document.getElementById("header-root");if(_hr&&typeof MutationObserver!=="undefined")new MutationObserver(function(){if(typeof updateCartBadge==="function")updateCartBadge();}).observe(_hr,{childList:true});})();</script>
-<script src="js/sd-api-client.js?v=2"></script>
+<script src="js/sd-api-client.js?v=4"></script>
 </body>
 </html>

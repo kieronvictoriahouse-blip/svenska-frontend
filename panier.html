@@ -46,6 +46,11 @@
 
 /* Summary box */
 .cart-page-summary{background:var(--snow);border:1px solid var(--linen);padding:32px 28px;position:sticky;top:120px;}
+/* Delivery toggle */
+.delivery-toggle{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--linen);border-radius:4px;overflow:hidden;margin-bottom:20px;}
+.dt-btn{background:var(--snow);border:none;padding:10px 6px;font-family:var(--font-ui);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--slate);cursor:pointer;transition:background 0.15s,color 0.15s;text-align:center;line-height:1.4;}
+.dt-btn.active{background:var(--heather);color:var(--snow);}
+.dt-btn:not(:last-child){border-right:1px solid var(--linen);}
 .summary-title{font-family:var(--font-display);font-size:20px;font-weight:500;color:var(--midnight);margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid var(--linen);}
 .summary-line{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;font-family:var(--font-body);font-size:15px;color:var(--slate);}
 .summary-line.total{font-family:var(--font-display);font-size:20px;font-weight:600;color:var(--midnight);margin-top:16px;padding-top:16px;border-top:1px solid var(--linen);margin-bottom:24px;}
@@ -86,8 +91,11 @@
 </div>
 
 <div id="footer-root"></div>
-<script src="js/app.js?v=2"></script>
+<script src="js/app.js?v=6"></script>
 <script>
+window._deliveryMode = window._deliveryMode || 'delivery';
+function setDeliveryMode(mode) { window._deliveryMode = mode; }
+
 initPage('');
 renderCartPageFull();
 
@@ -138,7 +146,7 @@ function renderCartPageFull() {
           <span>${qty}</span>
           <button onclick="changeQty('${key}',1);renderCartPageFull();">+</button>
         </div>
-        <div class="cpr-price">€${line.toFixed(2)}</div>
+        <div class="cpr-price">${fmtPrice(line)}</div>
       </div>`;
   }).join('');
 
@@ -146,7 +154,7 @@ function renderCartPageFull() {
   const pct = Math.min(100, (subtotal / 50) * 100);
   const shipHtml = remaining > 0
     ? `<div class="summary-ship-bar">
-        <div class="summary-ship-text">${LANG==='sv'?`€${remaining.toFixed(2)} kvar till fri frakt`:LANG==='en'?`€${remaining.toFixed(2)} away from free delivery`:`Plus que €${remaining.toFixed(2)} pour la livraison gratuite`}</div>
+        <div class="summary-ship-text">${LANG==='sv'?`${fmtPrice(remaining)} kvar till fri frakt`:LANG==='en'?`${fmtPrice(remaining)} away from free delivery`:`Plus que ${fmtPrice(remaining)} pour la livraison gratuite`}</div>
         <div class="summary-bar"><div class="summary-bar-fill" style="width:${pct}%"></div></div>
        </div>`
     : `<div class="summary-ship-bar">
@@ -173,20 +181,28 @@ function renderCartPageFull() {
 
       <div class="cart-page-summary">
         <div class="summary-title" data-sv="Orderöversikt" data-fr="Récapitulatif" data-en="Order summary">${LANG==='sv'?'Orderöversikt':LANG==='en'?'Order summary':'Récapitulatif'}</div>
+        <div class="delivery-toggle">
+          <button class="dt-btn${window._deliveryMode!=='pickup'?' active':''}" onclick="setDeliveryMode('delivery');renderCartPageFull()">
+            🚚 ${LANG==='sv'?'Hemleverans':LANG==='en'?'Delivery':'Livraison'}
+          </button>
+          <button class="dt-btn${window._deliveryMode==='pickup'?' active':''}" onclick="setDeliveryMode('pickup');renderCartPageFull()">
+            🏪 Click &amp; Collect
+          </button>
+        </div>
         <div class="summary-line">
           <span data-sv="Delsumma" data-fr="Sous-total" data-en="Subtotal">${UI[LANG].subtotal}</span>
-          <span>€${subtotal.toFixed(2)}</span>
+          <span>${fmtPrice(subtotal)}</span>
         </div>
         <div class="summary-line">
           <span data-sv="Leverans" data-fr="Livraison" data-en="Shipping">${LANG==='sv'?'Leverans':LANG==='en'?'Shipping':'Livraison'}</span>
-          <span>${shipping === 0 ? `<span style="color:var(--moss)">${LANG==='sv'?'Gratis':LANG==='en'?'Free':'Gratuite'}</span>` : `€${shipping.toFixed(2)}`}</span>
+          <span>${window._deliveryMode==='pickup'?`<span style="color:var(--moss)">${LANG==='sv'?'Gratis':LANG==='en'?'Free':'Gratuit'}</span>`:shipping===0?`<span style="color:var(--moss)">${LANG==='sv'?'Gratis':LANG==='en'?'Free':'Gratuite'}</span>`:`${fmtPrice(shipping)}`}</span>
         </div>
-        ${shipHtml}
+        ${window._deliveryMode==='pickup'?`<div class="summary-ship-bar"><div class="summary-ship-text" style="color:var(--moss);">${LANG==='sv'?'Hämtas i butiken':'🏪 '+(LANG==='en'?'In-store pickup':'Retrait en magasin')}</div></div>`:shipHtml}
         <div class="summary-line total">
           <span>Total</span>
-          <span>€${(subtotal + shipping).toFixed(2)}</span>
+          <span>${fmtPrice(subtotal + (window._deliveryMode==='pickup'?0:shipping))}</span>
         </div>
-        <button class="btn-pay" onclick="doSnipcartCheckout()">
+        <button class="btn-pay" onclick="doCheckout()">
           ${LANG==='sv'?'Betala säkert →':LANG==='en'?'Pay securely →':'Payer en toute sécurité →'}
         </button>
         <div class="btn-pay-sec">
@@ -202,7 +218,7 @@ function renderCartPageFull() {
     </div>`;
 }
 
-async function doSnipcartCheckout() {
+async function doCheckout() {
   const items = Object.entries(cart)
     .filter(([,q]) => q > 0)
     .map(([key, qty]) => {
@@ -225,7 +241,7 @@ async function doSnipcartCheckout() {
     const res = await fetch((window.SD_API_URL || 'https://admin.swedishcravings.fr') + '/api/checkout', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ items }),
+      body: JSON.stringify({ items, delivery_mode: window._deliveryMode || 'delivery' }),
     });
     const data = await res.json();
     if (data.url) {
@@ -245,6 +261,6 @@ async function doSnipcartCheckout() {
 window.addEventListener('sdapi:ready', () => { renderCartPageFull(); });
 </script>
 <script>(function(){var _hr=document.getElementById("header-root");if(_hr&&typeof MutationObserver!=="undefined")new MutationObserver(function(){if(typeof updateCartBadge==="function")updateCartBadge();}).observe(_hr,{childList:true});})();</script>
-<script src="js/sd-api-client.js?v=2"></script>
+<script src="js/sd-api-client.js?v=4"></script>
 </body>
 </html>

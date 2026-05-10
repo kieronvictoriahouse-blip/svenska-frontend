@@ -7,33 +7,150 @@
 <meta name="robots" content="noindex">
 <link rel="stylesheet" href="css/style.css">
 <script>const SD_API_URL = 'https://admin.swedishcravings.fr';</script>
+<script>try{localStorage.removeItem('sd_cart');localStorage.removeItem('sd_cart_products');}catch(e){}</script>
 <script>(function(){try{var w=JSON.parse(localStorage.getItem('sd_wl_v1'));if(w&&w.id){var r=document.documentElement.style;if(w.color_primary){r.setProperty('--heather',w.color_primary);r.setProperty('--heather-mid',w.color_primary+'CC');}if(w.color_secondary){r.setProperty('--lingon',w.color_secondary);r.setProperty('--lingon-mid',w.color_secondary+'CC');}if(w.color_bg)r.setProperty('--cream',w.color_bg);if(w.color_text)r.setProperty('--midnight',w.color_text);}}catch(e){}}());</script>
+<style>
+.success-wrap { max-width: 680px; margin: 0 auto; padding: 0 20px 80px; }
+.success-hero { background: var(--heather); padding: 72px 40px 56px; text-align: center; }
+.success-check { font-size: 52px; margin-bottom: 16px; }
+.success-hero h1 { font-family: var(--font-display); font-size: clamp(26px,4vw,48px); font-weight: 300; color: var(--snow); margin: 0 0 14px; }
+.success-hero p { font-family: var(--font-body); font-size: 16px; color: rgba(255,255,255,0.72); max-width: 440px; margin: 0 auto; }
+.success-order { background: var(--warm-white, #FDFAF5); border-radius: 10px; box-shadow: 0 2px 24px rgba(0,0,0,0.08); margin-top: 32px; overflow: hidden; }
+.success-order-head { background: var(--heather); padding: 16px 28px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+.success-order-num { font-family: var(--font-ui); font-size: 13px; font-weight: 600; color: #fff; letter-spacing: 1px; }
+.success-order-date { font-family: var(--font-ui); font-size: 12px; color: rgba(255,255,255,0.6); }
+.success-section { padding: 24px 28px; border-bottom: 1px solid var(--sand, #E8E0D0); }
+.success-section:last-child { border-bottom: none; }
+.success-section-title { font-family: var(--font-ui); font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--heather); margin-bottom: 14px; }
+.success-line { display: flex; justify-content: space-between; align-items: baseline; padding: 6px 0; font-family: var(--font-body); font-size: 14px; color: var(--midnight, #1C2028); border-bottom: 1px solid rgba(0,0,0,0.05); }
+.success-line:last-child { border-bottom: none; }
+.success-line-name { flex: 1; }
+.success-line-qty { color: var(--slate, #6A7280); margin: 0 16px; font-size: 13px; }
+.success-line-price { font-weight: 600; white-space: nowrap; }
+.success-totals { padding-top: 12px; }
+.success-total-row { display: flex; justify-content: space-between; font-family: var(--font-body); font-size: 14px; color: var(--slate, #6A7280); padding: 3px 0; }
+.success-total-row.grand { font-size: 16px; font-weight: 700; color: var(--midnight, #1C2028); padding-top: 10px; border-top: 1px solid var(--sand, #E8E0D0); margin-top: 8px; }
+.success-addr { font-family: var(--font-body); font-size: 14px; color: var(--midnight, #1C2028); line-height: 1.7; }
+.success-actions { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; margin-top: 32px; }
+.success-skeleton { background: linear-gradient(90deg,#f0ece4 25%,#e0d8cc 50%,#f0ece4 75%); background-size: 200%; animation: shimmer 1.4s infinite; border-radius: 6px; height: 16px; margin: 8px 0; }
+@keyframes shimmer { 0%{background-position:200%} 100%{background-position:-200%} }
+</style>
 </head>
 <body>
 <div id="header-root"></div>
 
-<div class="page-hero" style="background:var(--heather);padding:80px 40px;text-align:center;">
-  <div style="font-size:48px;margin-bottom:20px;">✓</div>
-  <h1 style="font-family:var(--font-display);font-size:clamp(28px,4vw,52px);font-weight:300;color:var(--snow);">Commande <em style="font-style:italic;color:var(--lingon-mid);">confirmée</em></h1>
-  <p style="font-family:var(--font-body);font-size:17px;color:rgba(255,255,255,0.75);margin-top:16px;max-width:480px;margin-left:auto;margin-right:auto;">Merci pour votre commande ! Vous recevrez un email de confirmation dans quelques minutes.</p>
+<div class="success-hero">
+  <div class="success-check">✓</div>
+  <h1 id="success-title">Commande <em style="font-style:italic;color:var(--lingon-mid);">confirmée</em></h1>
+  <p id="success-sub">Merci pour votre commande ! Vous recevrez un email de confirmation dans quelques minutes.</p>
 </div>
 
-<div class="section" style="text-align:center;padding:64px 20px;">
-  <p style="font-family:var(--font-body);font-size:16px;color:var(--slate);margin-bottom:32px;">Vos articles sont en cours de préparation. Expédition sous 3 à 5 jours ouvrés.</p>
-  <a href="boutique.html" class="btn-primary" style="display:inline-block;">Continuer mes achats</a>
+<div class="success-wrap">
+  <div id="order-recap"></div>
+
+  <div class="success-actions">
+    <a href="compte.html" class="btn-secondary" id="btn-compte">Mon compte</a>
+    <a href="boutique.html" class="btn-primary" id="btn-shop">Continuer mes achats</a>
+  </div>
 </div>
 
 <div id="footer-root"></div>
-<script src="js/app.js?v=2"></script>
+<script src="js/app.js?v=6"></script>
 <script>
-initPage('');
-// Clear cart after successful payment
-localStorage.removeItem('sd_cart');
-localStorage.removeItem('sd_cart_products');
-cart = {};
-updateCartBadge();
+const LANG = localStorage.getItem('sd_lang') || 'fr';
+const T_SUCCESS = {
+  title:    { fr: 'Commande <em style="font-style:italic;color:var(--lingon-mid);">confirmée</em>', en: 'Order <em style="font-style:italic;color:var(--lingon-mid);">confirmed</em>', sv: 'Beställning <em style="font-style:italic;color:var(--lingon-mid);">bekräftad</em>' },
+  sub:      { fr: 'Merci pour votre commande ! Vous recevrez un email de confirmation dans quelques minutes.', en: 'Thank you for your order! You will receive a confirmation email shortly.', sv: 'Tack för din beställning! Du får ett bekräftelsemail inom några minuter.' },
+  subPickup:{ fr: 'Merci pour votre commande ! Elle est prête à être retirée en magasin. Vous recevrez un email de confirmation.', en: 'Thank you! Your order is ready for in-store pickup. You will receive a confirmation email.', sv: 'Tack! Din beställning är redo att hämtas i butiken. Du får ett bekräftelsemail.' },
+  pickup:   { fr: 'Retrait en magasin', en: 'In-store pickup', sv: 'Hämtas i butiken' },
+  items:    { fr: 'Articles', en: 'Items', sv: 'Artiklar' },
+  subtotal: { fr: 'Sous-total', en: 'Subtotal', sv: 'Delsumma' },
+  shipping: { fr: 'Livraison', en: 'Shipping', sv: 'Frakt' },
+  free:     { fr: 'Offerte', en: 'Free', sv: 'Gratis' },
+  total:    { fr: 'Total TTC', en: 'Total', sv: 'Totalt' },
+  address:  { fr: 'Adresse de livraison', en: 'Delivery address', sv: 'Leveransadress' },
+  account:  { fr: 'Mon compte', en: 'My account', sv: 'Mitt konto' },
+  shop:     { fr: 'Continuer mes achats', en: 'Continue shopping', sv: 'Fortsätt handla' },
+  loading:  { fr: 'Chargement de votre commande…', en: 'Loading your order…', sv: 'Laddar din beställning…' },
+};
+const L = LANG === 'en' ? 'en' : LANG === 'sv' ? 'sv' : 'fr';
+
+document.getElementById('success-title').innerHTML = T_SUCCESS.title[L];
+document.getElementById('success-sub').textContent = T_SUCCESS.sub[L];
+document.getElementById('btn-compte').textContent  = T_SUCCESS.account[L];
+document.getElementById('btn-shop').textContent    = T_SUCCESS.shop[L];
+
+// Clear cart
+if (typeof clearCart === 'function') clearCart();
+
+// Fetch order from backend
+(async function() {
+  var params = new URLSearchParams(location.search);
+  var orderId = params.get('order_id');
+  var recap = document.getElementById('order-recap');
+  if (!orderId || !recap) return;
+
+  recap.innerHTML = '<div style="padding:32px 0"><div class="success-skeleton" style="width:60%;margin:0 auto"></div><div class="success-skeleton" style="width:40%;margin:8px auto"></div></div>';
+
+  // Retry jusqu'à 8× (attendre que le webhook mette à jour le statut à 'paid')
+  var order = null;
+  for (var attempt = 0; attempt < 8; attempt++) {
+    if (attempt > 0) await new Promise(r => setTimeout(r, 1500));
+    try {
+      var res = await fetch(SD_API_URL + '/api/orders/' + encodeURIComponent(orderId));
+      if (res.ok) {
+        var d = await res.json();
+        if (d.order && d.order.status === 'paid') { order = d.order; break; }
+        if (d.order && attempt === 7) { order = d.order; } // afficher même si pas encore paid
+      }
+    } catch(e) {}
+  }
+
+  if (!order) { recap.innerHTML = ''; return; }
+
+  // Adapt subtitle for pickup orders
+  if (order.delivery_mode === 'pickup') {
+    document.getElementById('success-sub').textContent = T_SUCCESS.subPickup[L];
+  }
+
+  var lines = [];
+  try { lines = typeof order.lines === 'string' ? JSON.parse(order.lines) : (order.lines || []); } catch(e) {}
+
+  var subtotal = parseFloat(order.subtotal) || parseFloat(order.total) || 0;
+  var shipping = parseFloat(order.shipping) || 0;
+  var total    = parseFloat(order.total) || 0;
+
+  var linesHtml = lines.map(function(l) {
+    var price = (l.qty * l.price) || l.total || 0;
+    return '<div class="success-line">'
+      + '<span class="success-line-name">' + (l.name || '').replace(/</g,'&lt;') + '</span>'
+      + '<span class="success-line-qty">× ' + (l.qty || 1) + '</span>'
+      + '<span class="success-line-price">' + price.toFixed(2) + ' €</span>'
+      + '</div>';
+  }).join('');
+
+  var dateStr = order.created_at ? new Date(order.created_at).toLocaleDateString(L === 'sv' ? 'sv-SE' : L === 'en' ? 'en-GB' : 'fr-FR', { day:'2-digit', month:'long', year:'numeric' }) : '';
+
+  recap.innerHTML = '<div class="success-order">'
+    + '<div class="success-order-head">'
+    + '<span class="success-order-num">' + (order.order_number || '') + '</span>'
+    + '<span class="success-order-date">' + dateStr + '</span>'
+    + '</div>'
+    + '<div class="success-section">'
+    + '<div class="success-section-title">' + T_SUCCESS.items[L] + '</div>'
+    + linesHtml
+    + '<div class="success-totals">'
+    + '<div class="success-total-row"><span>' + T_SUCCESS.subtotal[L] + '</span><span>' + subtotal.toFixed(2) + ' €</span></div>'
+    + '<div class="success-total-row"><span>' + T_SUCCESS.shipping[L] + '</span><span>' + (shipping > 0 ? shipping.toFixed(2) + ' €' : T_SUCCESS.free[L]) + '</span></div>'
+    + '<div class="success-total-row grand"><span>' + T_SUCCESS.total[L] + '</span><span>' + total.toFixed(2) + ' €</span></div>'
+    + '</div>'
+    + '</div>'
+    + (order.shipping_address ? '<div class="success-section"><div class="success-section-title">' + T_SUCCESS.address[L] + '</div><div class="success-addr">' + order.shipping_address.replace(/</g,'&lt;').replace(/,\s*/g,'<br>') + '</div></div>' : '')
+    + '</div>';
+}());
 </script>
 <script>(function(){var _hr=document.getElementById("header-root");if(_hr&&typeof MutationObserver!=="undefined")new MutationObserver(function(){if(typeof updateCartBadge==="function")updateCartBadge();}).observe(_hr,{childList:true});})();</script>
-<script src="js/sd-api-client.js?v=2"></script>
+<script>initPage('');</script>
+<script src="js/sd-api-client.js?v=4"></script>
 </body>
 </html>

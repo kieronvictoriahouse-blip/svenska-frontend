@@ -121,10 +121,6 @@
 </style>
 </head>
 <body>
-<script>
-window.SnipcartSettings={publicApiKey:'MTM2ODI3MjQtODdlMy00YzRkLWFiNGMtMmMwMGQ1M2ZhZDk3NjM5MTI5MDkyNzIyOTUxODcy',loadStrategy:'on-user-interaction',currency:'EUR',modalStyle:'side',addProductBehavior:'none',version:'3.3.3'};
-(()=>{var c,d;(d=(c=window.SnipcartSettings).version)!=null||(c.version="3.0");var s,S;(S=(s=window.SnipcartSettings).timeoutDuration)!=null||(s.timeoutDuration=2750);var l,p;(p=(l=window.SnipcartSettings).domain)!=null||(l.domain="cdn.snipcart.com");var w,u;(u=(w=window.SnipcartSettings).protocol)!=null||(w.protocol="https");var f=window.SnipcartSettings.version.includes("v3.0.0-ci")||window.SnipcartSettings.version!="3.0"&&window.SnipcartSettings.version.localeCompare("3.4.0",void 0,{numeric:!0,sensitivity:"base"})===-1,m=["focus","mouseover","touchmove","scroll","keydown"];window.LoadSnipcart=o;document.readyState==="loading"?document.addEventListener("DOMContentLoaded",r):r();function r(){window.SnipcartSettings.loadStrategy?window.SnipcartSettings.loadStrategy==="on-user-interaction"&&(m.forEach(t=>document.addEventListener(t,o)),setTimeout(o,window.SnipcartSettings.timeoutDuration)):o()}var a=!1;function o(){if(a)return;a=!0;let t=document.getElementsByTagName("head")[0],e=document.querySelector("#snipcart"),i=document.querySelector('script[src^="'+window.SnipcartSettings.protocol+'://'+window.SnipcartSettings.domain+'"][src$="snipcart.js"]'),n=document.querySelector('link[href^="'+window.SnipcartSettings.protocol+'://'+window.SnipcartSettings.domain+'"][href$="snipcart.css"]');e||(e=document.createElement("div"),e.id="snipcart",e.setAttribute("hidden","true"),document.body.appendChild(e)),v(e),i||(i=document.createElement("script"),i.src=window.SnipcartSettings.protocol+"://"+window.SnipcartSettings.domain+"/themes/v"+window.SnipcartSettings.version+"/default/snipcart.js",i.async=!0,t.appendChild(i)),n||(n=document.createElement("link"),n.rel="stylesheet",n.type="text/css",n.href=window.SnipcartSettings.protocol+"://"+window.SnipcartSettings.domain+"/themes/v"+window.SnipcartSettings.version+"/default/snipcart.css",t.prepend(n)),m.forEach(g=>document.removeEventListener(g,o))}function v(t){!f||(t.dataset.apiKey=window.SnipcartSettings.publicApiKey,window.SnipcartSettings.addProductBehavior&&(t.dataset.configAddProductBehavior=window.SnipcartSettings.addProductBehavior),window.SnipcartSettings.modalStyle&&(t.dataset.configModalStyle=window.SnipcartSettings.modalStyle),window.SnipcartSettings.currency&&(t.dataset.currency=window.SnipcartSettings.currency),window.SnipcartSettings.templatesUrl&&(t.dataset.templatesUrl=window.SnipcartSettings.templatesUrl));}})();
-</script>
 <div id="header-root"></div>
 
 <!-- STICKY ADD TO CART -->
@@ -202,12 +198,13 @@ window.SnipcartSettings={publicApiKey:'MTM2ODI3MjQtODdlMy00YzRkLWFiNGMtMmMwMGQ1M
 </section>
 
 <div id="footer-root"></div>
-<script src="js/app.js?v=2"></script>
+<script src="js/app.js?v=6"></script>
 <script>
 let pdpQtyVal = 1;
 let selectedVariant = null;
 let isWished = false;
 let pdpProduct = null;
+let _pdpFavId = null;
 
 initPage('shop');
 
@@ -274,7 +271,7 @@ function renderPDP(p) {
   if (p.variants.length > 1) {
     vb.style.display = 'block';
     vl.innerHTML = p.variants.map((v,i) => `
-      <button class="var-btn${i===0?' active':''}" onclick="selectVar(this,'${v.label}',${v.price})">${v.label} — €${v.price.toFixed(2)}</button>
+      <button class="var-btn${i===0?' active':''}" onclick="selectVar(this,'${v.label}',${v.price})">${v.label} — ${fmtPrice(v.price)}</button>
     `).join('');
   } else {
     vb.style.display = 'none';
@@ -344,8 +341,10 @@ function renderPDP(p) {
   // Reset qty
   pdpQtyVal = 1;
   document.getElementById('pdp-qty').textContent = 1;
+  _pdpFavId = p.uuid || p.id;
+  isWished = typeof _favorites !== 'undefined' && _favorites.includes(String(_pdpFavId));
   const btnWishEl = document.getElementById('btn-wish');
-  if (btnWishEl) btnWishEl.classList.toggle('liked', isWished);
+  if (btnWishEl) { btnWishEl.setAttribute('data-fav-id', String(_pdpFavId)); btnWishEl.classList.toggle('liked', isWished); }
 
   // Sticky ATC
   const price = selectedVariant ? selectedVariant.price : p.price;
@@ -372,7 +371,7 @@ function renderPDP(p) {
 
 function updatePrice() {
   if (!selectedVariant) return;
-  document.getElementById('pdp-price').textContent = '€' + selectedVariant.price.toFixed(2);
+  document.getElementById('pdp-price').textContent = fmtPrice(selectedVariant.price);
   document.getElementById('pdp-per').textContent = selectedVariant.label;
 }
 
@@ -400,14 +399,23 @@ function changeQtyPdp(d) {
 
 function pdpAdd() {
   if (!pdpProduct) return;
-  addToCart(pdpProduct.id, pdpQtyVal, selectedVariant?.label);
-  openCart();
+  const _cid = String(pdpProduct.uuid || pdpProduct.id);
+  try {
+    const _cp = JSON.parse(localStorage.getItem('sd_cart_products') || '{}');
+    _cp[_cid] = { name: pdpProduct.name, photo: pdpProduct.photo, price: pdpProduct.price, weight: pdpProduct.weight, variants: pdpProduct.variants || [] };
+    localStorage.setItem('sd_cart_products', JSON.stringify(_cp));
+  } catch(e) {}
+  addToCart(pdpProduct.uuid || pdpProduct.id, pdpQtyVal, selectedVariant?.label);
 }
 
 function toggleWish() {
-  isWished = !isWished;
-  const b = document.getElementById('btn-wish');
-  b.classList.toggle('liked', isWished);
+  if (_pdpFavId !== null) {
+    toggleFavorite(_pdpFavId);
+    isWished = typeof _favorites !== 'undefined' ? _favorites.includes(String(_pdpFavId)) : !isWished;
+  } else {
+    isWished = !isWished;
+  }
+  document.getElementById('btn-wish')?.classList.toggle('liked', isWished);
 }
 
 function toggleAcc(trigger) {
@@ -459,7 +467,7 @@ function toggleAcc(trigger) {
         en: raw[enKey] || local?.[localField]?.en || '',
       });
       const product = {
-        id: raw.sort_order || _numId, cat, emoji: CAT_EMOJI[cat] || '🛒',
+        id: raw.sort_order || _numId, uuid: raw.id, cat, emoji: CAT_EMOJI[cat] || '🛒',
         badge: raw.badge || '', rating: raw.rating || 4.5, reviews: raw.reviews_count || 0,
         photo: raw.image_url || local?.photo || '',
         name:        fbObj('name_sv',        'name_fr',        'name_en',        'name'),
@@ -510,6 +518,6 @@ window.addEventListener('sdapi:ready', () => {
 });
 </script>
   <script>(function(){var _hr=document.getElementById("header-root");if(_hr&&typeof MutationObserver!=="undefined")new MutationObserver(function(){if(typeof updateCartBadge==="function")updateCartBadge();}).observe(_hr,{childList:true});})();</script>
-<script src="js/sd-api-client.js?v=2"></script>
+<script src="js/sd-api-client.js?v=4"></script>
 </body>
 </html>
