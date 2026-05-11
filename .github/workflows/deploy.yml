@@ -19,7 +19,7 @@ jobs:
       - name: Bake WL + CMS into HTML
         run: node scripts/inject-wl.js
         env:
-          SD_API_URL: https://svenska-backend.vercel.app
+          SD_API_URL: https://admin.swedishcravings.fr
 
       - name: Deploy to Vercel
         run: npx vercel --prod --token=${{ secrets.VERCEL_TOKEN }} --yes
