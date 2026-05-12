@@ -108,6 +108,8 @@
       variants,
       bestseller:  !!(p.is_bestseller ?? p.bestseller),
       isNew:       !!(p.is_new ?? p.isNew),
+      stock:       typeof p.stock === 'number' ? p.stock : null,
+      trackStock:  !!(p.track_stock),
     };
   }
 
