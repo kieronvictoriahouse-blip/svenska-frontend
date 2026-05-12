@@ -99,6 +99,7 @@
 
 /* WEIGHT BADGE */
 .pdp-weight { display:inline-block; background:var(--parchment); color:var(--dust); font-family:var(--font-ui); font-size:11px; letter-spacing:1px; text-transform:uppercase; padding:5px 14px; border-radius:1px; margin-bottom:18px; }
+.pdp-price-top { font-family:var(--font-display); font-size:30px; font-weight:300; color:var(--midnight); margin-bottom:16px; letter-spacing:-0.5px; }
 
 /* RELATED */
 .related-bg { background:var(--cream); border-top:1px solid var(--linen); }
@@ -156,8 +157,9 @@
     <div class="pdp-cat" id="pdp-cat"></div>
     <h1 class="pdp-name" id="pdp-name"></h1>
     <div class="pdp-sub" id="pdp-sub"></div>
+    <div class="pdp-price-top" id="pdp-price-top"></div>
     <div class="pdp-rating" style="display:none;"><span class="pdp-rating-score" id="pdp-stars"></span><span class="pdp-rev" id="pdp-rev"></span></div>
-    <div id="pdp-stock-badge" style="margin-bottom:10px;"></div>
+    <div id="pdp-stock-badge" style="margin-bottom:14px;"></div>
     <div class="price-row">
       <span class="pdp-price" id="pdp-price"></span>
       <div><div class="pdp-per" id="pdp-per"></div><div class="pdp-per-kg" id="pdp-per-kg"></div></div>
@@ -256,20 +258,24 @@ function renderPDP(p) {
   const _cleanPdpW = (p.weight||'').replace(/^\d+\s*[xX×]\s*/,'').trim();
   if (weightEl) { weightEl.textContent = _cleanPdpW; weightEl.style.display = _cleanPdpW ? '' : 'none'; }
 
-  // Stock badge
+  // Stock badge — always show, fallback to green "En stock" if not tracked
   const stockBadgeEl = document.getElementById('pdp-stock-badge');
   if (stockBadgeEl) {
-    if (!p.trackStock || p.stock === null) {
-      stockBadgeEl.innerHTML = '';
-    } else if (p.stock === 0) {
-      const l = {fr:'Rupture de stock',en:'Out of stock',sv:'Slutsålt'};
-      stockBadgeEl.innerHTML = `<span class="prod-stock-badge psb-out" style="position:static;display:inline-block;font-size:11px;padding:4px 12px;">${l[LANG]||l.fr}</span>`;
-    } else if (p.stock <= 2) {
-      const l = {fr:`Plus que ${p.stock} en stock`,en:`Only ${p.stock} left`,sv:`Bara ${p.stock} kvar`};
-      stockBadgeEl.innerHTML = `<span class="prod-stock-badge psb-low" style="position:static;display:inline-block;font-size:11px;padding:4px 12px;">${l[LANG]||l.fr}</span>`;
+    const _sb = (cls, txt) => `<span class="prod-stock-badge ${cls}" style="position:static;display:inline-block;font-size:11px;padding:5px 14px;">${txt}</span>`;
+    if (p.trackStock && p.stock !== null) {
+      if (p.stock === 0) {
+        const l = {fr:'Rupture de stock',en:'Out of stock',sv:'Slutsålt'};
+        stockBadgeEl.innerHTML = _sb('psb-out', l[LANG]||l.fr);
+      } else if (p.stock <= 2) {
+        const l = {fr:`Plus que ${p.stock} en stock`,en:`Only ${p.stock} left`,sv:`Bara ${p.stock} kvar`};
+        stockBadgeEl.innerHTML = _sb('psb-low', l[LANG]||l.fr);
+      } else {
+        const l = {fr:`En stock (${p.stock})`,en:`In stock (${p.stock})`,sv:`I lager (${p.stock})`};
+        stockBadgeEl.innerHTML = _sb('psb-ok', l[LANG]||l.fr);
+      }
     } else {
       const l = {fr:'En stock',en:'In stock',sv:'I lager'};
-      stockBadgeEl.innerHTML = `<span class="prod-stock-badge psb-ok" style="position:static;display:inline-block;font-size:11px;padding:4px 12px;">${l[LANG]||l.fr}</span>`;
+      stockBadgeEl.innerHTML = _sb('psb-ok', l[LANG]||l.fr);
     }
   }
 
@@ -383,8 +389,11 @@ function renderPDP(p) {
 
 function updatePrice() {
   if (!selectedVariant) return;
-  document.getElementById('pdp-price').textContent = fmtPrice(selectedVariant.price);
+  const fp = fmtPrice(selectedVariant.price);
+  document.getElementById('pdp-price').textContent = fp;
   document.getElementById('pdp-per').textContent = selectedVariant.label;
+  const topEl = document.getElementById('pdp-price-top');
+  if (topEl) topEl.textContent = fp;
 }
 
 function selectVar(btn, label, price) {
