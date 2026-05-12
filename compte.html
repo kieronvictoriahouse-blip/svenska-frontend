@@ -203,14 +203,22 @@ async function initSupabase() {
   } catch(e) { return null; }
 }
 
+function maybeRedirectNext() {
+  const next = new URLSearchParams(window.location.search).get('next');
+  if (next === 'checkout') { window.location.href = 'panier.html'; return true; }
+  return false;
+}
+
 async function signInWithGoogle() {
   if (!_sbClient) { renderLogin('network'); return; }
   document.getElementById('btn-google')?.setAttribute('disabled', true);
+  const next = new URLSearchParams(window.location.search).get('next');
+  const redirectTo = window.location.origin + '/compte' + (next ? '?next=' + encodeURIComponent(next) : '');
   try {
     const { error } = await _sbClient.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: window.location.origin + '/compte',
+        redirectTo,
         queryParams: { access_type: 'online', prompt: 'select_account' },
       },
     });
@@ -302,6 +310,7 @@ async function loginWithEmail(emailArg, isGoogle, googleName) {
     };
     saveSession(session);
     await loadProfile(session.token);
+    if (maybeRedirectNext()) return;
     renderAccount(session);
 
   } catch(err) { renderLogin('network'); }
@@ -386,6 +395,7 @@ async function renderNewGoogleUser(email, googleName) {
     };
     saveSession(session);
     await loadProfile(session.token);
+    if (maybeRedirectNext()) return;
     renderAccount(session);
   } catch(e) { renderLogin('network'); }
 }
@@ -661,6 +671,7 @@ async function doLogout() {
     const isOAuthCallback = window.location.hash.includes('access_token') || window.location.search.includes('code=');
     if (isOAuthCallback) {
       showLoading();
+      const nextParam = new URLSearchParams(window.location.search).get('next');
       const { data: { subscription } } = sb.auth.onAuthStateChange(async (event, session) => {
         if (event === 'SIGNED_IN' && session?.user?.email) {
           subscription.unsubscribe();
@@ -671,6 +682,7 @@ async function doLogout() {
           if (window.location.search || window.location.hash) {
             window.history.replaceState({}, '', window.location.pathname);
           }
+          if (nextParam === 'checkout') { window.location.href = 'panier.html'; return; }
         }
       });
       return;
@@ -697,6 +709,7 @@ async function doLogout() {
         const data    = await ordersRes.json();
         const updated = { ...savedSession, orders: data.orders || [] };
         saveSession(updated);
+        if (maybeRedirectNext()) return;
         renderAccount(updated);
       } else {
         clearSession();

@@ -279,8 +279,10 @@ function renderPDP(p) {
     }
   }
 
-  // Price
-  selectedVariant = p.variants[0];
+  // Price — set top price immediately from base price, then refine via updatePrice
+  const _topPriceEl = document.getElementById('pdp-price-top');
+  if (_topPriceEl) _topPriceEl.textContent = fmtPrice(p.variants[0]?.price ?? p.price);
+  selectedVariant = p.variants[0] || { label: '', price: p.price };
   updatePrice();
 
   // Variants

@@ -76,6 +76,13 @@
   .cpr-qty,.cpr-price{grid-column:2;}
   .cpr-del{grid-column:2;justify-self:end;}
 }
+/* Profile gate modal */
+.pg-field{margin-bottom:18px;}
+.pg-field label{display:block;font-family:var(--font-ui);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dust);margin-bottom:7px;}
+.pg-field input,.pg-field select{width:100%;border:1px solid var(--linen);background:var(--cream);padding:12px 14px;font-family:var(--font-body);font-size:15px;color:var(--midnight);outline:none;transition:border-color 0.2s;box-sizing:border-box;}
+.pg-field input:focus,.pg-field select:focus{border-color:var(--heather);}
+.pg-2col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+@media(max-width:480px){.pg-2col{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
@@ -90,6 +97,19 @@
   <div id="cart-page-root"></div>
 </div>
 
+<!-- Profile completion gate — shown when user has no name/address before checkout -->
+<div id="profile-gate" style="display:none;position:fixed;inset:0;background:rgba(27,33,24,0.65);z-index:2000;align-items:center;justify-content:center;padding:20px;">
+  <div style="background:var(--snow);max-width:460px;width:100%;padding:40px 36px;position:relative;max-height:90vh;overflow-y:auto;">
+    <button onclick="document.getElementById('profile-gate').style.display='none'" style="position:absolute;top:16px;right:16px;background:none;border:none;font-size:22px;cursor:pointer;color:var(--dust);line-height:1;" aria-label="Fermer">×</button>
+    <h2 style="font-family:var(--font-display);font-size:22px;font-weight:500;color:var(--midnight);margin-bottom:8px;">Avant de commander</h2>
+    <p style="font-family:var(--font-body);font-size:15px;color:var(--dust);margin-bottom:28px;line-height:1.6;" id="profile-gate-subtitle"></p>
+    <div id="profile-gate-fields"></div>
+    <button id="profile-gate-btn" onclick="submitProfileGate()" style="width:100%;background:var(--heather);color:var(--snow);border:none;padding:16px 24px;font-family:var(--font-ui);font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;margin-top:4px;transition:background 0.2s;" onmouseover="this.style.background='var(--midnight)'" onmouseout="this.style.background='var(--heather)'">
+      CONTINUER →
+    </button>
+    <div id="profile-gate-error" style="color:var(--lingon);font-family:var(--font-ui);font-size:12px;margin-top:10px;min-height:18px;"></div>
+  </div>
+</div>
 <div id="footer-root"></div>
 <script src="js/app.js?v=6"></script>
 <script>
@@ -219,13 +239,21 @@ function renderCartPageFull() {
 }
 
 async function doCheckout() {
+  // 1. Auth check — must be logged in
+  let session;
+  try { session = JSON.parse(localStorage.getItem('sd_customer_v1') || 'null'); } catch(e) {}
+  if (!session?.token) {
+    window.location.href = 'compte.html?next=checkout';
+    return;
+  }
+
+  // 2. Build item list
   const items = Object.entries(cart)
     .filter(([,q]) => q > 0)
     .map(([key, qty]) => {
       const ri = key.indexOf('_');
       const idStr = ri === -1 ? key : key.slice(0, ri);
       const variant = ri === -1 ? undefined : key.slice(ri + 1);
-      // Upgrade integer IDs to UUIDs when API products are available
       const idInt = parseInt(idStr);
       let id = idStr;
       if (!isNaN(idInt) && /^\d+$/.test(idStr)) {
@@ -235,13 +263,39 @@ async function doCheckout() {
       return Object.assign({ id, quantity: qty }, variant ? { variant } : {});
     });
   if (items.length === 0) return;
+
+  const isPickup = window._deliveryMode === 'pickup';
+  const BASE = window.SD_API_URL || 'https://admin.swedishcravings.fr';
+
+  // 3. Profile check — require name (+ address for delivery)
+  let profile = null;
+  try {
+    const pr = await fetch(BASE + '/api/customer/profile', { headers: { Authorization: 'Bearer ' + session.token } });
+    if (pr.ok) profile = (await pr.json()).profile || null;
+  } catch(e) {}
+
+  const profileOk = isPickup
+    ? !!(profile?.name)
+    : !!(profile?.name && profile?.address1 && profile?.city && profile?.postal_code);
+
+  if (!profileOk) {
+    showProfileGate(session.token, isPickup, () => doCheckout());
+    return;
+  }
+
+  // 4. Proceed to Stripe checkout
   const btn = document.querySelector('.btn-pay');
   if (btn) { btn.disabled = true; btn.textContent = '…'; }
   try {
-    const res = await fetch((window.SD_API_URL || 'https://admin.swedishcravings.fr') + '/api/checkout', {
+    const res = await fetch(BASE + '/api/checkout', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ items, delivery_mode: window._deliveryMode || 'delivery' }),
+      body: JSON.stringify({
+        items,
+        delivery_mode: window._deliveryMode || 'delivery',
+        customer_token: session.token,
+        customer_email: session.customer_email,
+      }),
     });
     const data = await res.json();
     if (data.url) {
@@ -254,6 +308,69 @@ async function doCheckout() {
     console.error('[checkout]', e);
     alert('Erreur de connexion. Veuillez réessayer.');
     if (btn) { btn.disabled = false; btn.textContent = LANG === 'sv' ? 'Betala säkert →' : LANG === 'en' ? 'Pay securely →' : 'Payer en toute sécurité →'; }
+  }
+}
+
+function showProfileGate(token, isPickup, onSaved) {
+  const gate = document.getElementById('profile-gate');
+  if (!gate) return;
+  const L = LANG || 'fr';
+  const subtitles = {
+    fr: isPickup ? 'Indiquez votre nom pour finaliser la commande (click & collect).' : 'Renseignez vos coordonnées de livraison pour continuer.',
+    en: isPickup ? 'Enter your name to complete your order (click & collect).' : 'Enter your delivery address to continue.',
+    sv: isPickup ? 'Ange ditt namn för att slutföra beställningen.' : 'Ange din leveransadress för att fortsätta.',
+  };
+  document.getElementById('profile-gate-subtitle').textContent = subtitles[L] || subtitles.fr;
+  const addrFields = isPickup ? '' : `
+    <div class="pg-field"><label>${L==='sv'?'Adresse':L==='en'?'Address':'Adresse'}</label><input id="pg-addr1" type="text" autocomplete="street-address" placeholder="15 rue de la Paix"></div>
+    <div class="pg-field pg-2col">
+      <div class="pg-field" style="margin-bottom:0"><label>${L==='sv'?'Stad':L==='en'?'City':'Ville'}</label><input id="pg-city" type="text" autocomplete="address-level2" placeholder="Paris"></div>
+      <div class="pg-field" style="margin-bottom:0"><label>${L==='sv'?'Code postal':L==='en'?'Postal code':'Code postal'}</label><input id="pg-postal" type="text" autocomplete="postal-code" placeholder="75001"></div>
+    </div>
+    <div class="pg-field"><label>${L==='sv'?'Land':L==='en'?'Country':'Pays'}</label><select id="pg-country" autocomplete="country">
+      <option value="FR">France</option><option value="BE">Belgique</option><option value="CH">Suisse</option>
+      <option value="LU">Luxembourg</option><option value="DE">Allemagne</option><option value="ES">Espagne</option>
+      <option value="IT">Italie</option><option value="NL">Pays-Bas</option><option value="PT">Portugal</option>
+      <option value="SE">Suède</option><option value="GB">Royaume-Uni</option>
+    </select></div>`;
+  document.getElementById('profile-gate-fields').innerHTML = `
+    <div class="pg-field"><label>${L==='sv'?'Nom complet':L==='en'?'Full name':'Nom complet'} *</label><input id="pg-name" type="text" autocomplete="name" placeholder="${L==='sv'?'Prénom Nom':L==='en'?'First Last':'Prénom Nom'}"></div>
+    <div class="pg-field"><label>${L==='sv'?'Telefon':L==='en'?'Phone':'Téléphone'}</label><input id="pg-phone" type="tel" autocomplete="tel" placeholder="+33 6 12 34 56 78"></div>
+    ${addrFields}`;
+  gate._token = token; gate._isPickup = isPickup; gate._onSaved = onSaved;
+  gate.style.display = 'flex';
+  setTimeout(() => document.getElementById('pg-name')?.focus(), 50);
+}
+
+async function submitProfileGate() {
+  const gate = document.getElementById('profile-gate');
+  const { _token, _isPickup, _onSaved } = gate;
+  const btn = document.getElementById('profile-gate-btn');
+  const errEl = document.getElementById('profile-gate-error');
+  const L = LANG || 'fr';
+  const name    = (document.getElementById('pg-name')?.value || '').trim();
+  const phone   = (document.getElementById('pg-phone')?.value || '').trim();
+  const address1 = _isPickup ? '' : (document.getElementById('pg-addr1')?.value || '').trim();
+  const city     = _isPickup ? '' : (document.getElementById('pg-city')?.value || '').trim();
+  const postal_code = _isPickup ? '' : (document.getElementById('pg-postal')?.value || '').trim();
+  const country  = _isPickup ? 'FR' : (document.getElementById('pg-country')?.value || 'FR');
+  if (!name) { errEl.textContent = L==='en'?'Name is required.':L==='sv'?'Namn krävs.':'Le nom est obligatoire.'; return; }
+  if (!_isPickup && (!address1 || !city || !postal_code)) { errEl.textContent = L==='en'?'Please fill in all address fields.':L==='sv'?'Fyll i alla adressfält.':"Veuillez remplir tous les champs d'adresse."; return; }
+  errEl.textContent = '';
+  if (btn) { btn.disabled = true; btn.textContent = '…'; }
+  const BASE = window.SD_API_URL || 'https://admin.swedishcravings.fr';
+  try {
+    const res = await fetch(BASE + '/api/customer/profile', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + _token },
+      body: JSON.stringify({ name, phone, address1, address2: '', city, postal_code, country }),
+    });
+    if (!res.ok) { errEl.textContent = L==='en'?'Error, please retry.':'Erreur, réessayez.'; if(btn){btn.disabled=false;btn.textContent='CONTINUER →';} return; }
+    gate.style.display = 'none';
+    if (_onSaved) _onSaved();
+  } catch(e) {
+    errEl.textContent = L==='en'?'Connection error.':'Erreur de connexion.';
+    if (btn) { btn.disabled = false; btn.textContent = 'CONTINUER →'; }
   }
 }
 
