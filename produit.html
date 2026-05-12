@@ -99,7 +99,7 @@
 
 /* WEIGHT BADGE */
 .pdp-weight { display:inline-block; background:var(--parchment); color:var(--dust); font-family:var(--font-ui); font-size:11px; letter-spacing:1px; text-transform:uppercase; padding:5px 14px; border-radius:1px; margin-bottom:18px; }
-.pdp-price-top { font-family:var(--font-display); font-size:30px; font-weight:300; color:var(--midnight); margin-bottom:16px; letter-spacing:-0.5px; }
+
 
 /* RELATED */
 .related-bg { background:var(--cream); border-top:1px solid var(--linen); }
@@ -157,8 +157,7 @@
     <div class="pdp-cat" id="pdp-cat"></div>
     <h1 class="pdp-name" id="pdp-name"></h1>
     <div class="pdp-sub" id="pdp-sub"></div>
-    <div class="pdp-price-top" id="pdp-price-top"></div>
-    <div class="pdp-rating" style="display:none;"><span class="pdp-rating-score" id="pdp-stars"></span><span class="pdp-rev" id="pdp-rev"></span></div>
+<div class="pdp-rating" style="display:none;"><span class="pdp-rating-score" id="pdp-stars"></span><span class="pdp-rev" id="pdp-rev"></span></div>
     <div id="pdp-stock-badge" style="margin-bottom:14px;"></div>
     <div class="price-row">
       <span class="pdp-price" id="pdp-price"></span>
@@ -279,9 +278,6 @@ function renderPDP(p) {
     }
   }
 
-  // Price — set top price immediately from base price, then refine via updatePrice
-  const _topPriceEl = document.getElementById('pdp-price-top');
-  if (_topPriceEl) _topPriceEl.textContent = fmtPrice(p.variants[0]?.price ?? p.price);
   selectedVariant = p.variants[0] || { label: '', price: p.price };
   updatePrice();
 
@@ -394,8 +390,6 @@ function updatePrice() {
   const fp = fmtPrice(selectedVariant.price);
   document.getElementById('pdp-price').textContent = fp;
   document.getElementById('pdp-per').textContent = selectedVariant.label;
-  const topEl = document.getElementById('pdp-price-top');
-  if (topEl) topEl.textContent = fp;
 }
 
 function selectVar(btn, label, price) {
