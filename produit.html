@@ -251,10 +251,10 @@ function renderPDP(p) {
   document.getElementById('pdp-sub').textContent = p.subtitle[LANG];
   document.getElementById('pdp-desc').textContent = p.desc[LANG];
 
-  // Weight badge
+  // Weight badge — strip bulk format "16x22g" → "22g"
   const weightEl = document.getElementById('pdp-weight');
-  if (weightEl) weightEl.textContent = p.weight || '';
-  if (weightEl) weightEl.style.display = p.weight ? '' : 'none';
+  const _cleanPdpW = (p.weight||'').replace(/^\d+\s*[xX×]\s*/,'').trim();
+  if (weightEl) { weightEl.textContent = _cleanPdpW; weightEl.style.display = _cleanPdpW ? '' : 'none'; }
 
   // Stock badge
   const stockBadgeEl = document.getElementById('pdp-stock-badge');
