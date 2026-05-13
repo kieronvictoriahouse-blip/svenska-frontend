@@ -447,7 +447,7 @@
 <div class="promise-bar">
   <div class="promise-cell">
     <div class="promise-title" data-sv="Fri frakt" data-fr="Livraison offerte" data-en="Free delivery">Livraison offerte</div>
-    <div class="promise-desc" data-sv="Från 50€ i hela EU" data-fr="Dès 50€ dans toute l'UE" data-en="From €50 across the EU">Dès 50€ dans toute l'UE</div>
+    <div class="promise-desc" data-sv="Från 50€ i Frankrike" data-fr="Dès 50€ en France" data-en="From €50 in France">Dès 50€ en France</div>
   </div>
   <div class="promise-cell">
     <div class="promise-title" data-sv="Hantverksurval" data-fr="Sélection artisanale" data-en="Artisan selection">Sélection artisanale</div>
@@ -512,28 +512,28 @@
 <!-- ═══ FEATURE BAND ═══ -->
 <section class="feat-band reveal">
   <div class="feat-band-img">
-    <img src="" alt="Épices de saison">
+    <img id="season-img" src="" alt="Sélection de saison">
     <div class="feat-band-img-shade"></div>
   </div>
   <div class="feat-band-text">
-    <p class="sect-eyebrow" data-sv="Säsongsurval" data-fr="Sélection de saison" data-en="Seasonal selection">Sélection de saison</p>
-    <h2 class="sect-title" data-sv="Kryddorna för <em>svensk Jul</em>" data-fr="Les épices du <em>Noël suédois</em>" data-en="The spices of <em>Swedish Christmas</em>">Les épices du <em>Noël suédois</em></h2>
-    <p class="sect-body" data-sv="Kardemumma till lussekattor, kanel till glögg, stjärnanis och kryddnejlika — Jul-magin från det nordiska köket." data-fr="Cardamome pour les lussekattor, cannelle pour le glögg, anis étoilé et clou de girofle — les arômes magiques du Jul suédois. Une sélection pour cuisiner avec l'âme du Nord." data-en="Cardamom for lussekattor, cinnamon for glögg, star anise and cloves — the magical aromas of Swedish Jul. A selection to cook with the soul of the North.">Cardamome pour les lussekattor, cannelle pour le glögg, anis étoilé et clou de girofle — les arômes magiques du Jul suédois. Une sélection pour cuisiner avec l'âme du Nord.</p>
+    <p id="season-eyebrow" class="sect-eyebrow">Sélection de saison</p>
+    <h2 id="season-title" class="sect-title">Les saveurs du <em>printemps nordique</em></h2>
+    <p id="season-body" class="sect-body">Herbes fraîches, épices douces et produits de saison — la Scandinavie célèbre le retour du soleil. Une sélection pour cuisiner avec l'esprit du Midsommar.</p>
     <div style="margin-top:36px;">
-      <a href="boutique.html?cat=Épices" class="btn-primary" data-sv="Utforska kryddorna →" data-fr="Découvrir les épices →" data-en="Discover the spices →">Découvrir les épices →</a>
+      <a id="season-cta" href="boutique.html" class="btn-primary">Explorer la sélection →</a>
     </div>
     <div class="feat-stats">
       <div>
-        <div class="feat-stat-num">12</div>
-        <div class="feat-stat-label" data-sv="tillgängliga kryddor" data-fr="épices disponibles" data-en="spices available">épices disponibles</div>
+        <div id="season-stat1-num" class="feat-stat-num">20+</div>
+        <div id="season-stat1-label" class="feat-stat-label">références de saison</div>
       </div>
       <div>
-        <div class="feat-stat-num">100%</div>
-        <div class="feat-stat-label" data-sv="certifierat ursprung" data-fr="origine certifiée" data-en="certified origin">origine certifiée</div>
+        <div id="season-stat2-num" class="feat-stat-num">100%</div>
+        <div id="season-stat2-label" class="feat-stat-label">origine certifiée</div>
       </div>
       <div>
-        <div class="feat-stat-num">EU</div>
-        <div class="feat-stat-label" data-sv="leverans överallt" data-fr="livraison partout" data-en="delivery everywhere">livraison partout</div>
+        <div id="season-stat3-num" class="feat-stat-num">France</div>
+        <div id="season-stat3-label" class="feat-stat-label">livraison disponible</div>
       </div>
     </div>
   </div>
@@ -577,8 +577,8 @@
         <div class="about-num-label" data-sv="certifierat ursprung" data-fr="origine certifiée" data-en="certified origin">origine certifiée</div>
       </div>
       <div>
-        <div class="about-num-val">EU</div>
-        <div class="about-num-label" data-sv="leverans överallt" data-fr="livraison partout" data-en="delivery everywhere">livraison partout</div>
+        <div class="about-num-val">France</div>
+        <div class="about-num-label" data-sv="leverans tillgänglig" data-fr="livraison disponible" data-en="delivery available">livraison disponible</div>
       </div>
     </div>
     <div style="margin-top:40px;">
@@ -642,9 +642,31 @@ initPage('home');
 
 var _homeReady = true;
 
+function _applyCmsSeason(cms, l) {
+  if (!cms) return;
+  const lk = l === 'sv' ? 'value_sv' : l === 'en' ? 'value_en' : 'value_fr';
+  const get = (key) => cms[key]?.[lk];
+  const el = (id) => document.getElementById(id);
+  if (get('season_eyebrow') && el('season-eyebrow')) el('season-eyebrow').textContent = get('season_eyebrow');
+  if (get('season_title')   && el('season-title'))   el('season-title').innerHTML   = get('season_title');
+  if (get('season_body')    && el('season-body'))     el('season-body').textContent   = get('season_body');
+  if (el('season-cta')) {
+    if (get('season_cta_label')) el('season-cta').textContent = get('season_cta_label');
+    if (get('season_cta_url'))   el('season-cta').href        = get('season_cta_url');
+  }
+  if (get('season_stat1_num')   && el('season-stat1-num'))   el('season-stat1-num').textContent   = get('season_stat1_num');
+  if (get('season_stat1_label') && el('season-stat1-label')) el('season-stat1-label').textContent = get('season_stat1_label');
+  if (get('season_stat2_num')   && el('season-stat2-num'))   el('season-stat2-num').textContent   = get('season_stat2_num');
+  if (get('season_stat2_label') && el('season-stat2-label')) el('season-stat2-label').textContent = get('season_stat2_label');
+  if (get('season_stat3_num')   && el('season-stat3-num'))   el('season-stat3-num').textContent   = get('season_stat3_num');
+  if (get('season_stat3_label') && el('season-stat3-label')) el('season-stat3-label').textContent = get('season_stat3_label');
+  if (get('season_image') && el('season-img'))  el('season-img').src = get('season_image');
+}
+
 function onLangChange(l) {
   try {
     const cms = window.SDApi?.cms;
+    _applyCmsSeason(cms, l);
     if (cms) {
       const lk = l === 'sv' ? 'value_sv' : l === 'en' ? 'value_en' : 'value_fr';
       const h = document.querySelector('.hero h1');
@@ -728,6 +750,7 @@ window.addEventListener('sdapi:ready', (e) => {
   clearTimeout(_fallbackHome);
   const wasHomeReady = _homeReady;
   _homeReady = true;
+  _applyCmsSeason(window.SDApi?.cms, typeof LANG !== 'undefined' ? LANG : 'fr');
 
   // If already rendered from cache and API returns updated data → smooth fade on product sections
   if (wasHomeReady && !e.detail?.fromCache) {
