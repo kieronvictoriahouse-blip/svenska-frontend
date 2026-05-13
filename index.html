@@ -427,58 +427,56 @@
 
 <!-- ═══ TICKER ═══ -->
 <div class="ticker-bar">
-  <div class="ticker-track">
+  <div id="ticker-track" class="ticker-track">
     <span class="ticker-item">Livraison offerte dès 50€<span class="ticker-sep"></span></span>
     <span class="ticker-item">Produits authentiques<span class="ticker-sep"></span></span>
     <span class="ticker-item">Sans conservateurs<span class="ticker-sep"></span></span>
     <span class="ticker-item">Entreprise familiale<span class="ticker-sep"></span></span>
     <span class="ticker-item">Paiement sécurisé PCI-DSS<span class="ticker-sep"></span></span>
-    <span class="ticker-item">Livraison internationale<span class="ticker-sep"></span></span>
     <span class="ticker-item">Livraison offerte dès 50€<span class="ticker-sep"></span></span>
     <span class="ticker-item">Produits authentiques<span class="ticker-sep"></span></span>
     <span class="ticker-item">Sans conservateurs<span class="ticker-sep"></span></span>
     <span class="ticker-item">Entreprise familiale<span class="ticker-sep"></span></span>
     <span class="ticker-item">Paiement sécurisé PCI-DSS<span class="ticker-sep"></span></span>
-    <span class="ticker-item">Livraison internationale<span class="ticker-sep"></span></span>
   </div>
 </div>
 
 <!-- ═══ PROMISE BAR ═══ -->
 <div class="promise-bar">
   <div class="promise-cell">
-    <div class="promise-title" data-sv="Fri frakt" data-fr="Livraison offerte" data-en="Free delivery">Livraison offerte</div>
-    <div class="promise-desc" data-sv="Från 50€ i Frankrike" data-fr="Dès 50€ en France" data-en="From €50 in France">Dès 50€ en France</div>
+    <div id="promise-1-title" class="promise-title">Livraison offerte</div>
+    <div id="promise-1-desc" class="promise-desc">Dès 50€ en France</div>
   </div>
   <div class="promise-cell">
-    <div class="promise-title" data-sv="Hantverksurval" data-fr="Sélection artisanale" data-en="Artisan selection">Sélection artisanale</div>
-    <div class="promise-desc" data-sv="Svenska producenter" data-fr="Producteurs suédois" data-en="Swedish producers">Producteurs suédois</div>
+    <div id="promise-2-title" class="promise-title">Sélection artisanale</div>
+    <div id="promise-2-desc" class="promise-desc">Producteurs suédois</div>
   </div>
   <div class="promise-cell">
-    <div class="promise-title" data-sv="Säker betalning" data-fr="Paiement sécurisé" data-en="Secure payment">Paiement sécurisé</div>
-    <div class="promise-desc" data-sv="Visa, Mastercard" data-fr="Visa, Mastercard" data-en="Visa, Mastercard">Visa, Mastercard</div>
+    <div id="promise-3-title" class="promise-title">Paiement sécurisé</div>
+    <div id="promise-3-desc" class="promise-desc">Visa, Mastercard</div>
   </div>
   <div class="promise-cell">
-    <div class="promise-title" data-sv="Ekoförpackning" data-fr="Emballage éco" data-en="Eco packaging">Emballage éco</div>
-    <div class="promise-desc" data-sv="Återvinningsbara material" data-fr="Matériaux recyclables" data-en="Recyclable materials">Matériaux recyclables</div>
+    <div id="promise-4-title" class="promise-title">Emballage éco</div>
+    <div id="promise-4-desc" class="promise-desc">Matériaux recyclables</div>
   </div>
 </div>
 
 <!-- ═══ EDITORIAL INTRO ═══ -->
 <section class="editorial-intro reveal">
   <div class="ei-text">
-    <p class="ei-label" data-sv="Vårt urval" data-fr="Notre sélection" data-en="Our selection">Notre sélection</p>
-    <h2 class="ei-h2" data-sv="Delikatessen du<br>alltid <em>sökte</em>" data-fr="L'épicerie que<br>vous <em>cherchiez</em>" data-en="The pantry you<br>were <em>looking for</em>">L'épicerie que<br>vous <em>cherchiez</em></h2>
+    <p id="editorial-eyebrow" class="ei-label">Notre sélection</p>
+    <h2 id="editorial-title" class="ei-h2">L'épicerie que<br>vous <em>cherchiez</em></h2>
     <p id="ei-body1" class="ei-body">Une épicerie spécialisée, fondée par passion — la boutique que vous cherchiez.</p>
     <p id="ei-body2" class="ei-body" style="font-size:15px;color:var(--dust);">Épices, conserves, confiseries — une sélection soigneuse livrée en France.</p>
     <div style="margin-top:38px;">
-      <a href="a-propos" class="btn-outline-dark" data-sv="Läs vår historia →" data-fr="Lire notre histoire →" data-en="Read our story →">Lire notre histoire →</a>
+      <a id="editorial-cta-btn" href="a-propos" class="btn-outline-dark">Lire notre histoire →</a>
     </div>
   </div>
   <div class="ei-image">
     <img src="" alt="Épices nordiques et baies séchées">
     <div class="ei-badge">
-      <span class="ei-badge-num">20+</span>
-      <span class="ei-badge-sub" data-sv="Utvalda<br>produkter" data-fr="Produits<br>sélectionnés" data-en="Selected<br>products">Produits<br>sélectionnés</span>
+      <span id="editorial-badge-num" class="ei-badge-num">20+</span>
+      <span id="editorial-badge-label" class="ei-badge-sub">Produits<br>sélectionnés</span>
     </div>
   </div>
 </section>
@@ -559,8 +557,8 @@
     <img src="" alt="Notre histoire — épicerie nordique">
   </div>
   <div class="about-split-text">
-    <p class="ei-label" data-sv="Vår historia" data-fr="Notre histoire" data-en="Our story">Notre histoire</p>
-    <h2 id="about-title" class="ei-h2" data-sv="Svenska Cravings,<br><em>vår historia</em>" data-fr="Svenska Cravings,<br><em>notre histoire</em>" data-en="Svenska Cravings,<br><em>our story</em>">Svenska Cravings,<br><em>notre histoire</em></h2>
+    <p id="about-eyebrow" class="ei-label">Notre histoire</p>
+    <h2 id="about-title" class="ei-h2">Svenska Cravings,<br><em>notre histoire</em></h2>
     <div class="divider-line"></div>
     <p id="about-body1">Une boutique fondée par amour des saveurs — l'épicerie qu'on cherchait sans la trouver.</p>
     <div class="about-blockquote">
@@ -569,20 +567,20 @@
     <p id="about-body2">Chaque produit est sélectionné directement auprès de producteurs soigneusement choisis pour garantir authenticité et qualité.</p>
     <div class="about-nums">
       <div>
-        <div class="about-num-val">20+</div>
-        <div class="about-num-label" data-sv="utvalda produkter" data-fr="produits sélectionnés" data-en="selected products">produits sélectionnés</div>
+        <div id="about-stat1-num" class="about-num-val">20+</div>
+        <div id="about-stat1-label" class="about-num-label">produits sélectionnés</div>
       </div>
       <div>
-        <div class="about-num-val">100%</div>
-        <div class="about-num-label" data-sv="certifierat ursprung" data-fr="origine certifiée" data-en="certified origin">origine certifiée</div>
+        <div id="about-stat2-num" class="about-num-val">100%</div>
+        <div id="about-stat2-label" class="about-num-label">origine certifiée</div>
       </div>
       <div>
-        <div class="about-num-val">France</div>
-        <div class="about-num-label" data-sv="leverans tillgänglig" data-fr="livraison disponible" data-en="delivery available">livraison disponible</div>
+        <div id="about-stat3-num" class="about-num-val">France</div>
+        <div id="about-stat3-label" class="about-num-label">livraison disponible</div>
       </div>
     </div>
     <div style="margin-top:40px;">
-      <a href="a-propos" class="btn-outline-dark" data-sv="Läs vår historia →" data-fr="Lire notre histoire →" data-en="Read our story →">Lire notre histoire →</a>
+      <a id="about-cta-btn" href="a-propos" class="btn-outline-dark">Lire notre histoire →</a>
     </div>
   </div>
 </section>
@@ -627,11 +625,11 @@
 
 <!-- ═══ NEWSLETTER ═══ -->
 <div class="nl-band reveal">
-  <h2 data-sv="Få våra <em>nyheter</em>" data-fr="Recevez nos <em>nouveautés</em>" data-en="Get our <em>news</em>">Recevez nos <em>nouveautés</em></h2>
-  <p data-sv="Svenska recept, nya produkter, exklusiva erbjudanden — direkt i din inkorg." data-fr="Recettes suédoises, nouveaux produits, offres exclusives — directement dans votre boîte mail." data-en="Swedish recipes, new products, exclusive offers — directly in your inbox.">Recettes suédoises, nouveaux produits, offres exclusives — directement dans votre boîte mail.</p>
+  <h2 id="nl-title">Recevez nos <em>nouveautés</em></h2>
+  <p id="nl-subtitle">Recettes suédoises, nouveaux produits, offres exclusives — directement dans votre boîte mail.</p>
   <div class="nl-form">
-    <input type="email" id="nl-email" data-sv-ph="Din e-postadress" data-fr-ph="Votre adresse e-mail" data-en-ph="Your email address" placeholder="Votre adresse e-mail">
-    <button onclick="nlSubscribe()" data-sv="Prenumerera" data-fr="S'inscrire" data-en="Subscribe">S'inscrire</button>
+    <input type="email" id="nl-email" placeholder="Votre adresse e-mail">
+    <button id="nl-btn" onclick="nlSubscribe()">S'inscrire</button>
   </div>
 </div>
 
@@ -646,12 +644,56 @@ function _applyCmsAbout(cms, l) {
   if (!cms) return;
   const lk = l === 'sv' ? 'value_sv' : l === 'en' ? 'value_en' : 'value_fr';
   const el = (id) => document.getElementById(id);
-  if (cms.about_title?.[lk]  && el('about-title'))      el('about-title').innerHTML    = cms.about_title[lk];
-  if (cms.about_body1?.[lk]  && el('about-body1'))      el('about-body1').textContent  = cms.about_body1[lk];
-  if (cms.about_quote?.[lk]  && el('about-quote-text')) el('about-quote-text').textContent = cms.about_quote[lk];
-  if (cms.about_body2?.[lk]  && el('about-body2'))      el('about-body2').textContent  = cms.about_body2[lk];
-  if (cms.editorial_body1?.[lk] && el('ei-body1'))      el('ei-body1').textContent     = cms.editorial_body1[lk];
-  if (cms.editorial_body2?.[lk] && el('ei-body2'))      el('ei-body2').textContent     = cms.editorial_body2[lk];
+  const set = (id, key, html) => { const v = cms[key]?.[lk]; if (v && el(id)) { if (html) el(id).innerHTML = v; else el(id).textContent = v; } };
+  // About section
+  set('about-title',       'about_title',       true);
+  set('about-eyebrow',     'about_eyebrow',     false);
+  set('about-body1',       'about_body1',       false);
+  set('about-quote-text',  'about_quote',       false);
+  set('about-body2',       'about_body2',       false);
+  set('about-stat1-num',   'about_stat1_num',   false);
+  set('about-stat1-label', 'about_stat1_label', false);
+  set('about-stat2-num',   'about_stat2_num',   false);
+  set('about-stat2-label', 'about_stat2_label', false);
+  set('about-stat3-num',   'about_stat3_num',   false);
+  set('about-stat3-label', 'about_stat3_label', false);
+  set('about-cta-btn',     'about_cta',         false);
+  // Editorial intro
+  set('editorial-eyebrow',     'editorial_eyebrow',     false);
+  set('editorial-title',       'editorial_title',       true);
+  set('editorial-cta-btn',     'editorial_cta',         false);
+  set('editorial-badge-num',   'editorial_badge_num',   false);
+  set('editorial-badge-label', 'editorial_badge_label', true);
+  set('ei-body1',              'editorial_body1',       false);
+  set('ei-body2',              'editorial_body2',       false);
+  // Newsletter
+  set('nl-title',    'nl_title',    true);
+  set('nl-subtitle', 'nl_subtitle', false);
+  set('nl-btn',      'nl_btn',      false);
+}
+
+function _applyCmsPromise(cms, l) {
+  if (!cms) return;
+  const lk = l === 'sv' ? 'value_sv' : l === 'en' ? 'value_en' : 'value_fr';
+  const el = (id) => document.getElementById(id);
+  const set = (id, key) => { const v = cms[key]?.[lk]; if (v && el(id)) el(id).textContent = v; };
+  set('promise-1-title', 'promise_1_title'); set('promise-1-desc', 'promise_1_desc');
+  set('promise-2-title', 'promise_2_title'); set('promise-2-desc', 'promise_2_desc');
+  set('promise-3-title', 'promise_3_title'); set('promise-3-desc', 'promise_3_desc');
+  set('promise-4-title', 'promise_4_title'); set('promise-4-desc', 'promise_4_desc');
+}
+
+function _applyCmsTicker(cms, l) {
+  if (!cms) return;
+  const lk = l === 'sv' ? 'value_sv' : l === 'en' ? 'value_en' : 'value_fr';
+  const track = document.getElementById('ticker-track');
+  if (!track) return;
+  const msgs = [cms.ticker_1, cms.ticker_2, cms.ticker_3, cms.ticker_4, cms.ticker_5]
+    .map(k => k?.[lk]).filter(Boolean);
+  if (!msgs.length) return;
+  // Duplicate for seamless loop
+  const items = [...msgs, ...msgs].map(m => `<span class="ticker-item">${m}<span class="ticker-sep"></span></span>`).join('');
+  track.innerHTML = items;
 }
 
 function _applyCmsSeason(cms, l) {
@@ -680,6 +722,8 @@ function onLangChange(l) {
     const cms = window.SDApi?.cms;
     _applyCmsAbout(cms, l);
     _applyCmsSeason(cms, l);
+    _applyCmsPromise(cms, l);
+    _applyCmsTicker(cms, l);
     if (cms) {
       const lk = l === 'sv' ? 'value_sv' : l === 'en' ? 'value_en' : 'value_fr';
       const h = document.querySelector('.hero h1');
@@ -766,6 +810,8 @@ window.addEventListener('sdapi:ready', (e) => {
   const _sdLang = typeof LANG !== 'undefined' ? LANG : 'fr';
   _applyCmsAbout(window.SDApi?.cms, _sdLang);
   _applyCmsSeason(window.SDApi?.cms, _sdLang);
+  _applyCmsPromise(window.SDApi?.cms, _sdLang);
+  _applyCmsTicker(window.SDApi?.cms, _sdLang);
 
   // If already rendered from cache and API returns updated data → smooth fade on product sections
   if (wasHomeReady && !e.detail?.fromCache) {
