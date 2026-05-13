@@ -414,8 +414,8 @@
     <h1 data-sv="Nordisk <em>delikatessen</em>" data-fr="L'épicerie <em>du Nord</em>" data-en="The Nordic <em>pantry</em>">L'épicerie <em>du Nord</em></h1>
     <p class="hero-sub" data-sv="Det bästa från Sverige — kryddor, konserver, klassiska kex och autentiska svenska specialiteter, levererade till Frankrike." data-fr="Le meilleur de la Suède — épices, conserves, spécialités suédoises authentiques, livrés en France." data-en="The best of Sweden — spices, preserves, iconic biscuits and authentic Swedish specialities, delivered across France.">Le meilleur de la Suède — épices, conserves, spécialités suédoises authentiques, livrés en France.</p>
     <div class="hero-ctas">
-      <a href="boutique.html" class="btn-primary" data-sv="Utforska butiken" data-fr="Explorer la boutique" data-en="Explore the shop">Explorer la boutique</a>
-      <a href="a-propos" class="btn-secondary" data-sv="Vår historia" data-fr="Notre histoire" data-en="Our story">Notre histoire</a>
+      <a id="hero-cta1" href="boutique.html" class="btn-primary">Explorer la boutique</a>
+      <a id="hero-cta2" href="a-propos" class="btn-secondary">Notre histoire</a>
     </div>
   </div>
   <div class="hero-scroll" onclick="document.querySelector('.ticker-bar').scrollIntoView({behavior:'smooth'})">
@@ -485,8 +485,8 @@
 <section class="cats-section reveal" style="display:none">
   <div class="cats-head">
     <div>
-      <p class="sect-eyebrow" data-sv="Våra kategorier" data-fr="Notre gamme" data-en="Our range">Notre gamme</p>
-      <h2 class="sect-title" data-sv="Nordisk <em>delikatessen</em>" data-fr="Épicerie <em>suédoise</em>" data-en="Swedish <em>pantry</em>">Épicerie <em>suédoise</em></h2>
+      <p id="cats-eyebrow" class="sect-eyebrow">Notre gamme</p>
+      <h2 id="cats-title" class="sect-title">Épicerie <em>suédoise</em></h2>
     </div>
     <a href="boutique.html" class="see-all" data-sv="Visa allt →" data-fr="Voir tout →" data-en="See all →">Voir tout →</a>
   </div>
@@ -498,8 +498,8 @@
   <div class="section">
     <div class="bs-head">
       <div>
-        <p class="sect-eyebrow" data-sv="Kundernas favoriter" data-fr="Les préférés de nos clients" data-en="Customer favourites">Les préférés de nos clients</p>
-        <h2 class="sect-title" data-sv="Våra <em>bästsäljare</em>" data-fr="Nos <em>best-sellers</em>" data-en="Our <em>best-sellers</em>">Nos <em>best-sellers</em></h2>
+        <p id="bs-eyebrow" class="sect-eyebrow">Les préférés de nos clients</p>
+        <h2 id="bs-title" class="sect-title">Nos <em>best-sellers</em></h2>
       </div>
       <a href="boutique.html" class="see-all" data-sv="Visa allt →" data-fr="Voir tout →" data-en="See all →">Voir tout →</a>
     </div>
@@ -542,8 +542,8 @@
   <div class="section">
     <div class="bs-head">
       <div>
-        <p class="sect-eyebrow" data-sv="Just anlänt" data-fr="Tout juste arrivé" data-en="Just arrived">Tout juste arrivé</p>
-        <h2 class="sect-title" data-sv="Nya <em>produkter</em>" data-fr="Nouvelles <em>arrivées</em>" data-en="New <em>arrivals</em>">Nouvelles <em>arrivées</em></h2>
+        <p id="na-eyebrow" class="sect-eyebrow">Tout juste arrivé</p>
+        <h2 id="na-title" class="sect-title">Nouvelles <em>arrivées</em></h2>
       </div>
       <a href="boutique.html?filter=new" class="see-all" data-sv="Visa allt →" data-fr="Voir tout →" data-en="See all →">Voir tout →</a>
     </div>
@@ -672,6 +672,21 @@ function _applyCmsAbout(cms, l) {
   set('nl-btn',      'nl_btn',      false);
 }
 
+function _applyCmsSections(cms, l) {
+  if (!cms) return;
+  const lk = l === 'sv' ? 'value_sv' : l === 'en' ? 'value_en' : 'value_fr';
+  const el = (id) => document.getElementById(id);
+  const set = (id, key, html) => { const v = cms[key]?.[lk]; if (v && el(id)) { if (html) el(id).innerHTML = v; else el(id).textContent = v; } };
+  set('hero-cta1',    'hero_cta1',   false);
+  set('hero-cta2',    'hero_cta2',   false);
+  set('cats-eyebrow', 'cats_eyebrow', false);
+  set('cats-title',   'cats_title',   true);
+  set('bs-eyebrow',   'bs_eyebrow',   false);
+  set('bs-title',     'bs_title',     true);
+  set('na-eyebrow',   'na_eyebrow',   false);
+  set('na-title',     'na_title',     true);
+}
+
 function _applyCmsPromise(cms, l) {
   if (!cms) return;
   const lk = l === 'sv' ? 'value_sv' : l === 'en' ? 'value_en' : 'value_fr';
@@ -724,6 +739,7 @@ function onLangChange(l) {
     _applyCmsSeason(cms, l);
     _applyCmsPromise(cms, l);
     _applyCmsTicker(cms, l);
+    _applyCmsSections(cms, l);
     if (cms) {
       const lk = l === 'sv' ? 'value_sv' : l === 'en' ? 'value_en' : 'value_fr';
       const h = document.querySelector('.hero h1');
@@ -812,6 +828,7 @@ window.addEventListener('sdapi:ready', (e) => {
   _applyCmsSeason(window.SDApi?.cms, _sdLang);
   _applyCmsPromise(window.SDApi?.cms, _sdLang);
   _applyCmsTicker(window.SDApi?.cms, _sdLang);
+  _applyCmsSections(window.SDApi?.cms, _sdLang);
 
   // If already rendered from cache and API returns updated data → smooth fade on product sections
   if (wasHomeReady && !e.detail?.fromCache) {
