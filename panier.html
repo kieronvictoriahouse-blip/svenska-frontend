@@ -83,6 +83,15 @@
 .pg-field input:focus,.pg-field select:focus{border-color:var(--heather);}
 .pg-2col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
 @media(max-width:480px){.pg-2col{grid-template-columns:1fr;}}
+.promo-section{margin-bottom:20px;}
+.promo-row{display:flex;gap:8px;margin-bottom:8px;}
+.promo-input{flex:1;border:1px solid var(--linen);background:var(--cream);padding:10px 12px;font-family:var(--font-body);font-size:14px;color:var(--midnight);outline:none;box-sizing:border-box;transition:border-color 0.2s;}
+.promo-input:focus{border-color:var(--heather);}
+.promo-btn{background:none;border:1px solid var(--heather);color:var(--heather);padding:10px 14px;font-family:var(--font-ui);font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:background 0.2s,color 0.2s;}
+.promo-btn:hover{background:var(--heather);color:var(--snow);}
+.promo-msg{font-family:var(--font-ui);font-size:11px;letter-spacing:0.5px;min-height:16px;}
+.promo-msg.ok{color:var(--moss);}
+.promo-msg.err{color:var(--lingon);}
 </style>
 </head>
 <body>
@@ -182,6 +191,18 @@ function renderCartPageFull() {
        </div>`;
 
   const shipping = subtotal >= 50 ? 0 : 4.90;
+  const _promoValid = !!(window._appliedPromo && subtotal >= (window._appliedPromo.min_order || 0));
+  const _discountAmt = _promoValid ? _calcPromoDiscount(window._appliedPromo, subtotal) : 0;
+  const _isFreeShip = _promoValid && window._appliedPromo.type === 'free_shipping';
+  const _effectiveShipping = (_isFreeShip || window._deliveryMode === 'pickup') ? 0 : shipping;
+  const _totalToPay = Math.max(0, subtotal - _discountAmt) + _effectiveShipping;
+  const _promoLabel = LANG==='sv'?'Kampanjkod':LANG==='en'?'Promo code':'Code promo';
+  const _promoApplyLabel = LANG==='sv'?'Tillämpa':LANG==='en'?'Apply':'Appliquer';
+  const _promoInputVal = window._appliedPromo?.code || window._promoInput || '';
+  const _promoMinFail = !!(window._appliedPromo && !_promoValid);
+  const _promoMsgToShow = _promoMinFail ? { ok: false, text: `${LANG==='en'?'Minimum order':LANG==='sv'?'Minsta order':'Commande minimum'} ${fmtPrice(window._appliedPromo.min_order)} ${LANG==='en'?'required':'requise'}` } : window._promoMsg;
+  const _promoMsgHtml = _promoMsgToShow ? `<div class="promo-msg ${_promoMsgToShow.ok?'ok':'err'}">${_promoMsgToShow.text}</div>` : '';
+  const _promoDiscHtml = (_promoValid && _discountAmt > 0) ? `<div class="summary-line" style="color:var(--moss)"><span>${LANG==='sv'?'Rabatt':LANG==='en'?'Discount':'Réduction'} (${window._appliedPromo.code})</span><span>−${fmtPrice(_discountAmt)}</span></div>` : ((_promoValid && _isFreeShip) ? `<div class="summary-line" style="color:var(--moss)"><span>Code ${window._appliedPromo.code}</span><span>${LANG==='sv'?'Fri frakt':LANG==='en'?'Free shipping':'Livraison offerte'}</span></div>` : '');
 
   root.innerHTML = `
     <div class="cart-page-layout">
@@ -209,18 +230,26 @@ function renderCartPageFull() {
             🏪 Click &amp; Collect
           </button>
         </div>
+        <div class="promo-section">
+          <div class="promo-row">
+            <input id="promo-input" class="promo-input" type="text" placeholder="${_promoLabel}" value="${_promoInputVal}" oninput="window._promoInput=this.value.toUpperCase();this.value=this.value.toUpperCase();" onkeydown="if(event.key==='Enter')applyPromoCode();">
+            <button class="promo-btn" onclick="applyPromoCode();">${_promoApplyLabel}</button>
+          </div>
+          ${_promoMsgHtml}
+        </div>
         <div class="summary-line">
           <span data-sv="Delsumma" data-fr="Sous-total" data-en="Subtotal">${UI[LANG].subtotal}</span>
           <span>${fmtPrice(subtotal)}</span>
         </div>
+        ${_promoDiscHtml}
         <div class="summary-line">
           <span data-sv="Leverans" data-fr="Livraison" data-en="Shipping">${LANG==='sv'?'Leverans':LANG==='en'?'Shipping':'Livraison'}</span>
-          <span>${window._deliveryMode==='pickup'?`<span style="color:var(--moss)">${LANG==='sv'?'Gratis':LANG==='en'?'Free':'Gratuit'}</span>`:shipping===0?`<span style="color:var(--moss)">${LANG==='sv'?'Gratis':LANG==='en'?'Free':'Gratuite'}</span>`:`${fmtPrice(shipping)}`}</span>
+          <span>${window._deliveryMode==='pickup'?`<span style="color:var(--moss)">${LANG==='sv'?'Gratis':LANG==='en'?'Free':'Gratuit'}</span>`:_effectiveShipping===0?`<span style="color:var(--moss)">${LANG==='sv'?'Gratis':LANG==='en'?'Free':'Gratuite'}</span>`:`${fmtPrice(_effectiveShipping)}`}</span>
         </div>
-        ${window._deliveryMode==='pickup'?`<div class="summary-ship-bar"><div class="summary-ship-text" style="color:var(--moss);">${LANG==='sv'?'Hämtas i butiken':'🏪 '+(LANG==='en'?'In-store pickup':'Retrait en magasin')}</div></div>`:shipHtml}
+        ${window._deliveryMode==='pickup'?`<div class="summary-ship-bar"><div class="summary-ship-text" style="color:var(--moss);">${LANG==='sv'?'Hämtas i butiken':'🏪 '+(LANG==='en'?'In-store pickup':'Retrait en magasin')}</div></div>`:_isFreeShip?`<div class="summary-ship-bar"><div class="summary-ship-text" style="color:var(--moss);">🎟 ${LANG==='sv'?'Fri frakt via kampanjkod':LANG==='en'?'Free shipping via promo code':'Livraison offerte via code promo'}</div></div>`:shipHtml}
         <div class="summary-line total">
           <span>Total</span>
-          <span>${fmtPrice(subtotal + (window._deliveryMode==='pickup'?0:shipping))}</span>
+          <span>${fmtPrice(_totalToPay)}</span>
         </div>
         <button class="btn-pay" onclick="doCheckout()">
           ${LANG==='sv'?'Betala säkert →':LANG==='en'?'Pay securely →':'Payer en toute sécurité →'}
@@ -232,10 +261,76 @@ function renderCartPageFull() {
         <div class="pay-methods">
           <span class="pay-m">VISA</span>
           <span class="pay-m">MASTERCARD</span>
-          <span class="pay-m">PAYPAL</span>
         </div>
       </div>
     </div>`;
+}
+
+function _calcPromoDiscount(promo, sub) {
+  if (!promo) return 0;
+  if (promo.type === 'percent') return Math.min(sub, (sub * promo.value) / 100);
+  if (promo.type === 'fixed') return Math.min(sub, promo.value);
+  return 0;
+}
+
+async function applyPromoCode() {
+  const code = ((document.getElementById('promo-input')?.value || '') || window._promoInput || '').trim().toUpperCase();
+  if (!code) return;
+  const BASE = window.SD_API_URL || 'https://admin.swedishcravings.fr';
+  try {
+    const res = await fetch(BASE + '/api/marketing?tab=promo');
+    if (!res.ok) throw new Error('fetch failed');
+    const { codes } = await res.json();
+    const found = (codes || []).find(c => c.code === code);
+    const L = LANG || 'fr';
+    if (!found || !found.is_active) {
+      window._appliedPromo = null; window._promoInput = code;
+      window._promoMsg = { ok: false, text: L==='en'?'Invalid or inactive code':L==='sv'?'Ogiltig kod':'Code invalide ou inactif' };
+      renderCartPageFull(); return;
+    }
+    const now = new Date();
+    if (found.valid_from && now < new Date(found.valid_from)) {
+      window._appliedPromo = null; window._promoInput = code;
+      window._promoMsg = { ok: false, text: L==='en'?'Code not yet valid':L==='sv'?'Koden är inte giltig ännu':'Code pas encore valide' };
+      renderCartPageFull(); return;
+    }
+    if (found.valid_until && now > new Date(found.valid_until)) {
+      window._appliedPromo = null; window._promoInput = code;
+      window._promoMsg = { ok: false, text: L==='en'?'Code expired':L==='sv'?'Koden har gått ut':'Code expiré' };
+      renderCartPageFull(); return;
+    }
+    if (found.max_uses && (found.used_count || 0) >= found.max_uses) {
+      window._appliedPromo = null; window._promoInput = code;
+      window._promoMsg = { ok: false, text: L==='en'?'Code no longer available':L==='sv'?'Koden är inte längre tillgänglig':'Code plus disponible' };
+      renderCartPageFull(); return;
+    }
+    const entries = Object.entries(cart).filter(([,q]) => q > 0);
+    let st = 0;
+    entries.forEach(([key, qty]) => {
+      const ri = key.indexOf('_'); const idStr = ri===-1?key:key.slice(0,ri);
+      const _cpd = JSON.parse(localStorage.getItem('sd_cart_products')||'{}');
+      const p = PRODUCTS.find(x => String(x.uuid||x.id)===idStr||x.id===parseInt(idStr))||_cpd[idStr]||(window._SD_STATIC||[]).find(x=>String(x.id)===idStr);
+      if (!p) return;
+      const variant = ri===-1?undefined:key.slice(ri+1);
+      const v = variant?p.variants?.find(x=>x.label===variant):p.variants?.[0];
+      st += (v?v.price:p.price) * qty;
+    });
+    if (found.min_order && st < found.min_order) {
+      window._appliedPromo = null; window._promoInput = code;
+      window._promoMsg = { ok: false, text: `${L==='en'?'Minimum order':L==='sv'?'Minsta order':'Commande minimum'} ${fmtPrice(found.min_order)} ${L==='en'?'required':'requise'}` };
+      renderCartPageFull(); return;
+    }
+    window._appliedPromo = found; window._promoInput = code;
+    const discAmt = _calcPromoDiscount(found, st);
+    const discLabel = found.type==='free_shipping'
+      ? (L==='en'?'Free shipping applied!':L==='sv'?'Fri frakt aktiverad!':'Livraison offerte appliquée !')
+      : `${L==='en'?'Discount':L==='sv'?'Rabatt':'Réduction'} −${fmtPrice(discAmt)} ${L==='en'?'applied!':L==='sv'?'tillämpas!':'appliquée !'}`;
+    window._promoMsg = { ok: true, text: discLabel };
+    renderCartPageFull();
+  } catch(e) {
+    window._promoMsg = { ok: false, text: LANG==='en'?'Error. Try again.':'Erreur. Réessayez.' };
+    renderCartPageFull();
+  }
 }
 
 async function doCheckout() {
@@ -295,6 +390,7 @@ async function doCheckout() {
         delivery_mode: window._deliveryMode || 'delivery',
         customer_token: session.token,
         customer_email: session.customer_email,
+        promo_code: window._appliedPromo?.code || null,
       }),
     });
     const data = await res.json();
