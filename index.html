@@ -469,7 +469,7 @@
     <p class="ei-label" data-sv="Vårt urval" data-fr="Notre sélection" data-en="Our selection">Notre sélection</p>
     <h2 class="ei-h2" data-sv="Delikatessen du<br>alltid <em>sökte</em>" data-fr="L'épicerie que<br>vous <em>cherchiez</em>" data-en="The pantry you<br>were <em>looking for</em>">L'épicerie que<br>vous <em>cherchiez</em></h2>
     <p id="ei-body1" class="ei-body">Une épicerie spécialisée, fondée par passion — la boutique que vous cherchiez.</p>
-    <p id="ei-body2" class="ei-body" style="font-size:15px;color:var(--dust);">Épices, conserves, confiseries — une sélection soigneuse livrée en Europe.</p>
+    <p id="ei-body2" class="ei-body" style="font-size:15px;color:var(--dust);">Épices, conserves, confiseries — une sélection soigneuse livrée en France.</p>
     <div style="margin-top:38px;">
       <a href="a-propos" class="btn-outline-dark" data-sv="Läs vår historia →" data-fr="Lire notre histoire →" data-en="Read our story →">Lire notre histoire →</a>
     </div>
@@ -560,7 +560,7 @@
   </div>
   <div class="about-split-text">
     <p class="ei-label" data-sv="Vår historia" data-fr="Notre histoire" data-en="Our story">Notre histoire</p>
-    <h2 class="ei-h2" data-sv="Hennes projekt,<br><em>en passion</em>" data-fr="Son projet,<br><em>une passion</em>" data-en="Her project,<br><em>one passion</em>">Son projet,<br><em>une passion</em></h2>
+    <h2 id="about-title" class="ei-h2" data-sv="Svenska Cravings,<br><em>vår historia</em>" data-fr="Svenska Cravings,<br><em>notre histoire</em>" data-en="Svenska Cravings,<br><em>our story</em>">Svenska Cravings,<br><em>notre histoire</em></h2>
     <div class="divider-line"></div>
     <p id="about-body1">Une boutique fondée par amour des saveurs — l'épicerie qu'on cherchait sans la trouver.</p>
     <div class="about-blockquote">
@@ -642,6 +642,18 @@ initPage('home');
 
 var _homeReady = true;
 
+function _applyCmsAbout(cms, l) {
+  if (!cms) return;
+  const lk = l === 'sv' ? 'value_sv' : l === 'en' ? 'value_en' : 'value_fr';
+  const el = (id) => document.getElementById(id);
+  if (cms.about_title?.[lk]  && el('about-title'))      el('about-title').innerHTML    = cms.about_title[lk];
+  if (cms.about_body1?.[lk]  && el('about-body1'))      el('about-body1').textContent  = cms.about_body1[lk];
+  if (cms.about_quote?.[lk]  && el('about-quote-text')) el('about-quote-text').textContent = cms.about_quote[lk];
+  if (cms.about_body2?.[lk]  && el('about-body2'))      el('about-body2').textContent  = cms.about_body2[lk];
+  if (cms.editorial_body1?.[lk] && el('ei-body1'))      el('ei-body1').textContent     = cms.editorial_body1[lk];
+  if (cms.editorial_body2?.[lk] && el('ei-body2'))      el('ei-body2').textContent     = cms.editorial_body2[lk];
+}
+
 function _applyCmsSeason(cms, l) {
   if (!cms) return;
   const lk = l === 'sv' ? 'value_sv' : l === 'en' ? 'value_en' : 'value_fr';
@@ -666,6 +678,7 @@ function _applyCmsSeason(cms, l) {
 function onLangChange(l) {
   try {
     const cms = window.SDApi?.cms;
+    _applyCmsAbout(cms, l);
     _applyCmsSeason(cms, l);
     if (cms) {
       const lk = l === 'sv' ? 'value_sv' : l === 'en' ? 'value_en' : 'value_fr';
@@ -750,7 +763,9 @@ window.addEventListener('sdapi:ready', (e) => {
   clearTimeout(_fallbackHome);
   const wasHomeReady = _homeReady;
   _homeReady = true;
-  _applyCmsSeason(window.SDApi?.cms, typeof LANG !== 'undefined' ? LANG : 'fr');
+  const _sdLang = typeof LANG !== 'undefined' ? LANG : 'fr';
+  _applyCmsAbout(window.SDApi?.cms, _sdLang);
+  _applyCmsSeason(window.SDApi?.cms, _sdLang);
 
   // If already rendered from cache and API returns updated data → smooth fade on product sections
   if (wasHomeReady && !e.detail?.fromCache) {
