@@ -47,7 +47,7 @@
 /* Summary box */
 .cart-page-summary{background:var(--snow);border:1px solid var(--linen);padding:32px 28px;position:sticky;top:120px;}
 /* Delivery toggle */
-.delivery-toggle{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--linen);border-radius:4px;overflow:hidden;margin-bottom:20px;}
+.delivery-toggle{display:grid;grid-template-columns:1fr 1fr 1fr;border:1px solid var(--linen);border-radius:4px;overflow:hidden;margin-bottom:20px;}
 .dt-btn{background:var(--snow);border:none;padding:10px 6px;font-family:var(--font-ui);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--slate);cursor:pointer;transition:background 0.15s,color 0.15s;text-align:center;line-height:1.4;}
 .dt-btn.active{background:var(--heather);color:var(--snow);}
 .dt-btn:not(:last-child){border-right:1px solid var(--linen);}
@@ -92,6 +92,20 @@
 .promo-msg{font-family:var(--font-ui);font-size:11px;letter-spacing:0.5px;min-height:16px;}
 .promo-msg.ok{color:var(--moss);}
 .promo-msg.err{color:var(--lingon);}
+.relay-picker{margin-bottom:20px;}
+.relay-search-row{display:flex;gap:8px;margin-bottom:10px;}
+.relay-cp-input{flex:1;border:1px solid var(--linen);background:var(--cream);padding:10px 12px;font-family:var(--font-body);font-size:14px;color:var(--midnight);outline:none;box-sizing:border-box;transition:border-color 0.2s;}
+.relay-cp-input:focus{border-color:var(--heather);}
+.relay-search-btn{background:none;border:1px solid var(--heather);color:var(--heather);padding:10px 14px;font-family:var(--font-ui);font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:background 0.2s,color 0.2s;}
+.relay-search-btn:hover{background:var(--heather);color:var(--snow);}
+.relay-list{max-height:200px;overflow-y:auto;border:1px solid var(--linen);margin-bottom:8px;}
+.relay-item{padding:10px 12px;border-bottom:1px solid var(--linen);cursor:pointer;transition:background 0.15s;}
+.relay-item:last-child{border-bottom:none;}
+.relay-item:hover,.relay-item.selected{background:var(--linen);}
+.relay-item.selected{border-left:3px solid var(--heather);padding-left:9px;}
+.relay-item-name{font-family:var(--font-ui);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--midnight);margin-bottom:2px;}
+.relay-item-addr{font-family:var(--font-body);font-size:12px;color:var(--dust);}
+.relay-selected-info{font-family:var(--font-ui);font-size:11px;color:var(--midnight);background:var(--linen);padding:8px 12px;margin-bottom:8px;}
 </style>
 </head>
 <body>
@@ -123,7 +137,13 @@
 <script src="js/app.js?v=6"></script>
 <script>
 window._deliveryMode = window._deliveryMode || 'delivery';
-function setDeliveryMode(mode) { window._deliveryMode = mode; }
+window._selectedRelay = window._selectedRelay || null;
+window._relayPoints = window._relayPoints || null;
+window._relaySearchCp = window._relaySearchCp || '';
+function setDeliveryMode(mode) {
+  window._deliveryMode = mode;
+  if (mode !== 'mondial_relay') { window._selectedRelay = null; window._relayPoints = null; window._relaySearchCp = ''; }
+}
 
 initPage('');
 renderCartPageFull();
@@ -204,6 +224,38 @@ function renderCartPageFull() {
   const _promoMsgHtml = _promoMsgToShow ? `<div class="promo-msg ${_promoMsgToShow.ok?'ok':'err'}">${_promoMsgToShow.text}</div>` : '';
   const _promoDiscHtml = (_promoValid && _discountAmt > 0) ? `<div class="summary-line" style="color:var(--moss)"><span>${LANG==='sv'?'Rabatt':LANG==='en'?'Discount':'Réduction'} (${window._appliedPromo.code})</span><span>−${fmtPrice(_discountAmt)}</span></div>` : ((_promoValid && _isFreeShip) ? `<div class="summary-line" style="color:var(--moss)"><span>Code ${window._appliedPromo.code}</span><span>${LANG==='sv'?'Fri frakt':LANG==='en'?'Free shipping':'Livraison offerte'}</span></div>` : '');
 
+  const relayPickerHtml = window._deliveryMode === 'mondial_relay' ? (function() {
+    const L = LANG || 'fr';
+    let listHtml = '';
+    if (window._relayPoints === 'loading') {
+      listHtml = '<div style="font-family:var(--font-ui);font-size:11px;color:var(--dust);padding:8px 0;">...</div>';
+    } else if (Array.isArray(window._relayPoints)) {
+      if (window._relayPoints.length === 0) {
+        listHtml = '<div style="font-family:var(--font-ui);font-size:11px;color:var(--dust);padding:8px 0;">'+(L==='en'?'No relay points found':L==='sv'?'Inga utlämningsställen hittades':'Aucun point relais trouvé')+'</div>';
+      } else {
+        listHtml = '<div class="relay-list">' + window._relayPoints.map(function(p,i){
+          return '<div class="relay-item'+(window._selectedRelay&&window._selectedRelay.id===p.id?' selected':'')+'" onclick="selectRelay('+i+')">'
+            +'<div class="relay-item-name">'+p.name+'</div>'
+            +'<div class="relay-item-addr">'+p.adresse+', '+p.cp+' '+p.ville+(p.distance?' — '+p.distance+' km':'')+'</div>'
+            +'</div>';
+        }).join('') + '</div>';
+      }
+    }
+    const selectedHtml = window._selectedRelay
+      ? '<div class="relay-selected-info">✓ '+window._selectedRelay.name+' — '+window._selectedRelay.adresse+', '+window._selectedRelay.cp+' '+window._selectedRelay.ville+'</div>'
+      : '';
+    const cpPlaceholder = L==='sv'?'Postnummer':L==='en'?'Postal code':'Code postal';
+    const searchTxt = L==='sv'?'Sök':L==='en'?'Search':'Chercher';
+    return '<div class="relay-picker">'
+      +'<div class="relay-search-row">'
+      +'<input id="relay-cp-input" class="relay-cp-input" type="text" placeholder="'+cpPlaceholder+'" value="'+(window._relaySearchCp||'')+'" oninput="window._relaySearchCp=this.value" onkeydown="if(event.key===\'Enter\')searchRelayPoints(this.value)">'
+      +'<button class="relay-search-btn" onclick="searchRelayPoints(document.getElementById(\'relay-cp-input\')?.value||\'\')">'+ searchTxt+'</button>'
+      +'</div>'
+      +listHtml
+      +selectedHtml
+      +'</div>';
+  })() : '';
+
   root.innerHTML = `
     <div class="cart-page-layout">
       <div class="cart-page-items">
@@ -223,13 +275,17 @@ function renderCartPageFull() {
       <div class="cart-page-summary">
         <div class="summary-title" data-sv="Orderöversikt" data-fr="Récapitulatif" data-en="Order summary">${LANG==='sv'?'Orderöversikt':LANG==='en'?'Order summary':'Récapitulatif'}</div>
         <div class="delivery-toggle">
-          <button class="dt-btn${window._deliveryMode!=='pickup'?' active':''}" onclick="setDeliveryMode('delivery');renderCartPageFull()">
+          <button class="dt-btn${window._deliveryMode==='delivery'?' active':''}" onclick="setDeliveryMode('delivery');renderCartPageFull()">
             🚚 ${LANG==='sv'?'Hemleverans':LANG==='en'?'Delivery':'Livraison'}
+          </button>
+          <button class="dt-btn${window._deliveryMode==='mondial_relay'?' active':''}" onclick="setDeliveryMode('mondial_relay');renderCartPageFull()">
+            📦 ${LANG==='sv'?'Utlämning':LANG==='en'?'Relay point':'Point Relais'}
           </button>
           <button class="dt-btn${window._deliveryMode==='pickup'?' active':''}" onclick="setDeliveryMode('pickup');renderCartPageFull()">
             🏪 Click &amp; Collect
           </button>
         </div>
+        ${relayPickerHtml}
         <div class="promo-section">
           <div class="promo-row">
             <input id="promo-input" class="promo-input" type="text" placeholder="${_promoLabel}" value="${_promoInputVal}" oninput="window._promoInput=this.value.toUpperCase();this.value=this.value.toUpperCase();" onkeydown="if(event.key==='Enter')applyPromoCode();">
@@ -246,7 +302,7 @@ function renderCartPageFull() {
           <span data-sv="Leverans" data-fr="Livraison" data-en="Shipping">${LANG==='sv'?'Leverans':LANG==='en'?'Shipping':'Livraison'}</span>
           <span>${window._deliveryMode==='pickup'?`<span style="color:var(--moss)">${LANG==='sv'?'Gratis':LANG==='en'?'Free':'Gratuit'}</span>`:_effectiveShipping===0?`<span style="color:var(--moss)">${LANG==='sv'?'Gratis':LANG==='en'?'Free':'Gratuite'}</span>`:`${fmtPrice(_effectiveShipping)}`}</span>
         </div>
-        ${window._deliveryMode==='pickup'?`<div class="summary-ship-bar"><div class="summary-ship-text" style="color:var(--moss);">${LANG==='sv'?'Hämtas i butiken':'🏪 '+(LANG==='en'?'In-store pickup':'Retrait en magasin')}</div></div>`:_isFreeShip?`<div class="summary-ship-bar"><div class="summary-ship-text" style="color:var(--moss);">🎟 ${LANG==='sv'?'Fri frakt via kampanjkod':LANG==='en'?'Free shipping via promo code':'Livraison offerte via code promo'}</div></div>`:shipHtml}
+        ${window._deliveryMode==='pickup'?`<div class="summary-ship-bar"><div class="summary-ship-text" style="color:var(--moss);">${LANG==='sv'?'Hämtas i butiken':'🏪 '+(LANG==='en'?'In-store pickup':'Retrait en magasin')}</div></div>`:window._deliveryMode==='mondial_relay'?`<div class="summary-ship-bar"><div class="summary-ship-text" style="color:var(--heather);">📦 ${LANG==='sv'?'Leverans till utlämningsställe':LANG==='en'?'Mondial Relay pickup point':'Livraison en point relais Mondial Relay'}</div></div>`:_isFreeShip?`<div class="summary-ship-bar"><div class="summary-ship-text" style="color:var(--moss);">🎟 ${LANG==='sv'?'Fri frakt via kampanjkod':LANG==='en'?'Free shipping via promo code':'Livraison offerte via code promo'}</div></div>`:shipHtml}
         <div class="summary-line total">
           <span>Total</span>
           <span>${fmtPrice(_totalToPay)}</span>
@@ -333,6 +389,29 @@ async function applyPromoCode() {
   }
 }
 
+async function searchRelayPoints(cp) {
+  if (!cp || cp.trim().length < 4) return;
+  window._relaySearchCp = cp.trim();
+  window._relayPoints = 'loading';
+  window._selectedRelay = null;
+  renderCartPageFull();
+  const BASE = window.SD_API_URL || 'https://admin.swedishcravings.fr';
+  try {
+    const res = await fetch(BASE + '/api/mondial-relay/points?cp=' + encodeURIComponent(cp.trim()) + '&pays=FR');
+    if (!res.ok) throw new Error('fetch failed');
+    const data = await res.json();
+    window._relayPoints = Array.isArray(data) ? data : (data.points || []);
+  } catch(e) {
+    window._relayPoints = [];
+  }
+  renderCartPageFull();
+}
+
+function selectRelay(i) {
+  window._selectedRelay = (window._relayPoints || [])[i] || null;
+  renderCartPageFull();
+}
+
 async function doCheckout() {
   // 1. Auth check — must be logged in
   let session;
@@ -360,21 +439,27 @@ async function doCheckout() {
   if (items.length === 0) return;
 
   const isPickup = window._deliveryMode === 'pickup';
+  const isMR = window._deliveryMode === 'mondial_relay';
   const BASE = window.SD_API_URL || 'https://admin.swedishcravings.fr';
 
-  // 3. Profile check — require name (+ address for delivery)
+  if (isMR && !window._selectedRelay) {
+    alert(LANG === 'en' ? 'Please select a relay point.' : LANG === 'sv' ? 'Välj ett utlämningsställe.' : 'Veuillez sélectionner un point relais.');
+    return;
+  }
+
+  // 3. Profile check — require name (+ address for home delivery only)
   let profile = null;
   try {
     const pr = await fetch(BASE + '/api/customer/profile', { headers: { Authorization: 'Bearer ' + session.token } });
     if (pr.ok) profile = (await pr.json()).profile || null;
   } catch(e) {}
 
-  const profileOk = isPickup
+  const profileOk = (isPickup || isMR)
     ? !!(profile?.name)
     : !!(profile?.name && profile?.address1 && profile?.city && profile?.postal_code);
 
   if (!profileOk) {
-    showProfileGate(session.token, isPickup, () => doCheckout());
+    showProfileGate(session.token, isPickup || isMR, () => doCheckout());
     return;
   }
 
@@ -391,6 +476,12 @@ async function doCheckout() {
         customer_token: session.token,
         customer_email: session.customer_email,
         promo_code: window._appliedPromo?.code || null,
+        ...(window._deliveryMode === 'mondial_relay' && window._selectedRelay ? {
+          relay_point_id: window._selectedRelay.id,
+          relay_point_name: window._selectedRelay.name,
+          relay_point_address: window._selectedRelay.adresse + ', ' + window._selectedRelay.cp + ' ' + window._selectedRelay.ville,
+          relay_point_pays: window._selectedRelay.pays || 'FR',
+        } : {}),
       }),
     });
     const data = await res.json();
@@ -411,10 +502,11 @@ function showProfileGate(token, isPickup, onSaved) {
   const gate = document.getElementById('profile-gate');
   if (!gate) return;
   const L = LANG || 'fr';
+  const _isMRMode = window._deliveryMode === 'mondial_relay';
   const subtitles = {
-    fr: isPickup ? 'Indiquez votre nom pour finaliser la commande (click & collect).' : 'Renseignez vos coordonnées de livraison pour continuer.',
-    en: isPickup ? 'Enter your name to complete your order (click & collect).' : 'Enter your delivery address to continue.',
-    sv: isPickup ? 'Ange ditt namn för att slutföra beställningen.' : 'Ange din leveransadress för att fortsätta.',
+    fr: isPickup ? (_isMRMode ? 'Indiquez votre nom pour commander en point relais Mondial Relay.' : 'Indiquez votre nom pour finaliser la commande (click & collect).') : 'Renseignez vos coordonnées de livraison pour continuer.',
+    en: isPickup ? (_isMRMode ? 'Enter your name to order to a Mondial Relay point.' : 'Enter your name to complete your order (click & collect).') : 'Enter your delivery address to continue.',
+    sv: isPickup ? (_isMRMode ? 'Ange ditt namn för att beställa till ett utlämningsställe.' : 'Ange ditt namn för att slutföra beställningen.') : 'Ange din leveransadress för att fortsätta.',
   };
   document.getElementById('profile-gate-subtitle').textContent = subtitles[L] || subtitles.fr;
   const addrFields = isPickup ? '' : `
