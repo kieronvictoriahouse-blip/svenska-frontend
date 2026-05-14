@@ -637,7 +637,7 @@ function renderOrderCard(o, L) {
           <div class="order-total-row grand"><span>${T.total[L]||T.total.fr}</span><span>€${total.toFixed(2)}</span></div>
         </div>
         ${addr ? `<div class="order-addr">${addr}</div>` : ''}
-        ${o.tracking_number ? `<div class="order-tracking"><span class="order-tracking-label">${{fr:'Numéro de suivi',en:'Tracking number',sv:'Spårningsnummer'}[L]||'Suivi'}</span><a href="https://www.laposte.fr/outils/suivre-vos-envois?code=${encodeURIComponent(o.tracking_number)}" target="_blank" rel="noopener" class="order-tracking-num">${o.tracking_number} →</a></div>` : ''}
+        ${o.tracking_number ? `<div class="order-tracking"><span class="order-tracking-label">${{fr:'Numéro de suivi',en:'Tracking number',sv:'Spårningsnummer'}[L]||'Suivi'}</span><a href="${o.delivery_mode==='mondial_relay'?'https://www.mondialrelay.fr/suivi-de-colis/?exp='+encodeURIComponent(o.tracking_number):'https://www.laposte.fr/outils/suivre-vos-envois?code='+encodeURIComponent(o.tracking_number)}" target="_blank" rel="noopener" class="order-tracking-num">${o.tracking_number} →</a></div>` : ''}
       </div></div>
     </div>`;
 }
