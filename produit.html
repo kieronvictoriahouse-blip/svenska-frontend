@@ -508,6 +508,8 @@ function toggleAcc(trigger) {
         extra_images: raw.extra_images || [],
         variants: (raw.product_variants || []).map(v => ({ label: v.label, price: v.price })) || local?.variants || [],
         bestseller: raw.is_bestseller || false, isNew: raw.is_new || false,
+        stock:      typeof raw.stock === 'number' ? raw.stock : null,
+        trackStock: !!(raw.track_stock),
       };
       renderPDP(product);
       return;
