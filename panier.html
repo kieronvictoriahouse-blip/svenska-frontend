@@ -273,7 +273,11 @@ function renderCartPageFull() {
           <span data-sv="Pris" data-fr="Prix" data-en="Price">${LANG==='sv'?'Pris':LANG==='en'?'Price':'Prix'}</span>
         </div>
         ${itemRows}
-        <div style="margin-top:24px;">
+        <div style="margin-top:32px;border-top:1px solid var(--linen);padding-top:24px;">
+          <label style="display:block;font-family:var(--font-ui);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dust);margin-bottom:10px;">${LANG==='sv'?'Kommentar till din beställning (valfritt)':LANG==='en'?'Order note (optional)':'Note pour votre commande (optionnel)'}</label>
+          <textarea id="order-note-input" rows="3" oninput="window._orderNote=this.value" style="width:100%;border:1px solid var(--linen);background:var(--cream);padding:12px 14px;font-family:var(--font-body);font-size:15px;color:var(--midnight);outline:none;resize:vertical;box-sizing:border-box;transition:border-color 0.2s;" onfocus="this.style.borderColor='var(--heather)'" onblur="this.style.borderColor='var(--linen)'" placeholder="${LANG==='sv'?'Ex: Cadeau, allergie non signalée, instructions spéciales...':LANG==='en'?'E.g. gift, special instructions...':'Ex : cadeau, instruction particulière...'}">${window._orderNote||''}</textarea>
+        </div>
+        <div style="margin-top:16px;">
           <a href="boutique.html" style="font-family:var(--font-ui);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dust);text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:color 0.15s;" onmouseover="this.style.color='var(--heather)'" onmouseout="this.style.color='var(--dust)'">
             ← ${LANG==='sv'?'Fortsätt handla':LANG==='en'?'Continue shopping':'Continuer mes achats'}
           </a>
@@ -484,6 +488,7 @@ async function doCheckout() {
         customer_token: session.token,
         customer_email: session.customer_email,
         promo_code: window._appliedPromo?.code || null,
+        customer_note: (window._orderNote || '').trim() || null,
         ...(window._deliveryMode === 'mondial_relay' && window._selectedRelay ? {
           relay_point_id: window._selectedRelay.id,
           relay_point_name: window._selectedRelay.name,

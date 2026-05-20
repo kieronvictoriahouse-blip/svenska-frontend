@@ -271,7 +271,7 @@ function renderPDP(p) {
     const _sb = (cls, txt) => `<span class="prod-stock-badge ${cls}" style="position:static;display:inline-block;font-size:11px;padding:5px 14px;">${txt}</span>`;
     if (p.trackStock && p.stock !== null) {
       if (p.stock <= 0) {
-        const l = {fr:'Rupture de stock',en:'Out of stock',sv:'Slutsålt'};
+        const l = {fr:'Coming soon',en:'Coming soon',sv:'Coming soon'};
         stockBadgeEl.innerHTML = _sb('psb-out', l[LANG]||l.fr);
       } else if (p.stock <= 2) {
         const l = {fr:`Plus que ${p.stock} en stock`,en:`Only ${p.stock} left`,sv:`Bara ${p.stock} kvar`};
