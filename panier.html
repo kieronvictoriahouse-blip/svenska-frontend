@@ -55,7 +55,7 @@
 /* Summary box */
 .cart-page-summary{background:var(--snow);border:1px solid var(--linen);padding:32px 28px;position:sticky;top:120px;}
 /* Delivery toggle */
-.delivery-toggle{display:grid;grid-template-columns:1fr 1fr 1fr;border:1px solid var(--linen);border-radius:4px;overflow:hidden;margin-bottom:20px;}
+.delivery-toggle{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--linen);border-radius:4px;overflow:hidden;margin-bottom:20px;}
 .dt-btn{background:var(--snow);border:none;padding:10px 6px;font-family:var(--font-ui);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--slate);cursor:pointer;transition:background 0.15s,color 0.15s;text-align:center;line-height:1.4;}
 .dt-btn.active{background:var(--heather);color:var(--snow);}
 .dt-btn:not(:last-child){border-right:1px solid var(--linen);}
@@ -144,7 +144,7 @@
 <div id="footer-root"></div>
 <script src="js/app.js?v=6"></script>
 <script>
-window._deliveryMode = window._deliveryMode || 'delivery';
+window._deliveryMode = window._deliveryMode || 'pickup';
 window._selectedRelay = window._selectedRelay || null;
 window._relayPoints = window._relayPoints || null;
 window._relaySearchCp = window._relaySearchCp || '';
@@ -287,9 +287,6 @@ function renderCartPageFull() {
       <div class="cart-page-summary">
         <div class="summary-title" data-sv="Orderöversikt" data-fr="Récapitulatif" data-en="Order summary">${LANG==='sv'?'Orderöversikt':LANG==='en'?'Order summary':'Récapitulatif'}</div>
         <div class="delivery-toggle">
-          <button class="dt-btn${window._deliveryMode==='delivery'?' active':''}" onclick="setDeliveryMode('delivery');renderCartPageFull()">
-            🚚 ${LANG==='sv'?'Hemleverans':LANG==='en'?'Delivery':'Livraison'}
-          </button>
           <button class="dt-btn${window._deliveryMode==='mondial_relay'?' active':''}" onclick="setDeliveryMode('mondial_relay');renderCartPageFull()">
             📦 ${LANG==='sv'?'Utlämning':LANG==='en'?'Relay point':'Point Relais'}
           </button>
