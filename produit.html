@@ -274,10 +274,10 @@ function renderPDP(p) {
         const l = {fr:'Coming soon',en:'Coming soon',sv:'Coming soon'};
         stockBadgeEl.innerHTML = _sb('psb-out', l[LANG]||l.fr);
       } else if (p.stock <= 2) {
-        const l = {fr:`Plus que ${p.stock} en stock`,en:`Only ${p.stock} left`,sv:`Bara ${p.stock} kvar`};
+        const l = {fr:'Stock limité',en:'Limited stock',sv:'Begränsat'};
         stockBadgeEl.innerHTML = _sb('psb-low', l[LANG]||l.fr);
       } else {
-        const l = {fr:`En stock (${p.stock})`,en:`In stock (${p.stock})`,sv:`I lager (${p.stock})`};
+        const l = {fr:'En stock',en:'In stock',sv:'I lager'};
         stockBadgeEl.innerHTML = _sb('psb-ok', l[LANG]||l.fr);
       }
     } else {
