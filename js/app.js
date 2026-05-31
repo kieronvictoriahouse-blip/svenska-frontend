@@ -135,59 +135,88 @@ function renderSuggestionWidget() {
       box-shadow:0 4px 18px rgba(0,0,0,0.18);transition:transform 0.18s,box-shadow 0.18s;letter-spacing:0.2px;}
     #suggest-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.22);}
     #suggest-btn svg{flex-shrink:0;}
-    #suggest-overlay{position:fixed;inset:0;background:rgba(28,32,40,0.5);z-index:900;backdrop-filter:blur(3px);
-      opacity:0;pointer-events:none;transition:opacity 0.22s;}
+    #suggest-overlay{position:fixed;inset:0;background:rgba(20,26,20,0.6);z-index:900;backdrop-filter:blur(4px);
+      opacity:0;pointer-events:none;transition:opacity 0.26s;}
     #suggest-overlay.open{opacity:1;pointer-events:all;}
-    #suggest-modal{position:fixed;bottom:80px;left:24px;z-index:901;width:340px;max-width:calc(100vw - 48px);
-      background:var(--cream,#F6F1E9);border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,0.22);
-      transform:translateY(16px) scale(0.97);opacity:0;pointer-events:none;
-      transition:transform 0.22s cubic-bezier(.34,1.56,.64,1),opacity 0.2s;}
-    #suggest-modal.open{transform:translateY(0) scale(1);opacity:1;pointer-events:all;}
-    #suggest-modal .sm-head{padding:18px 20px 0;display:flex;align-items:flex-start;justify-content:space-between;}
-    #suggest-modal .sm-title{font-family:var(--font-display,'Cormorant Garamond',Georgia,serif);font-size:19px;color:var(--midnight,#1C2028);font-weight:600;line-height:1.2;}
-    #suggest-modal .sm-sub{font-size:12px;color:#6A7280;margin-top:3px;font-family:var(--font-body,'Crimson Pro',Georgia,serif);}
-    #suggest-modal .sm-close{background:none;border:none;font-size:20px;cursor:pointer;color:#9CA3AF;padding:0;line-height:1;margin-top:-2px;}
-    #suggest-modal .sm-close:hover{color:#1C2028;}
-    #suggest-modal .sm-body{padding:14px 20px 18px;}
-    #suggest-modal .sm-field{margin-bottom:12px;}
-    #suggest-modal .sm-label{display:block;font-size:11px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;color:#6A7280;margin-bottom:5px;font-family:var(--font-ui,'Jost',sans-serif);}
-    #suggest-modal input,#suggest-modal textarea{width:100%;box-sizing:border-box;border:1px solid #D8CEBC;border-radius:7px;
-      padding:9px 12px;font-size:14px;font-family:var(--font-body,'Crimson Pro',Georgia,serif);color:var(--midnight,#1C2028);
-      background:#fff;outline:none;transition:border-color 0.15s;resize:none;}
-    #suggest-modal input:focus,#suggest-modal textarea:focus{border-color:var(--heather,#3E5238);}
-    #suggest-modal input::placeholder,#suggest-modal textarea::placeholder{color:#B8AFA0;}
-    #suggest-modal .sm-submit{width:100%;padding:12px;background:var(--heather,#3E5238);color:#fff;border:none;
-      border-radius:8px;font-size:14px;font-weight:600;letter-spacing:0.3px;cursor:pointer;
-      font-family:var(--font-ui,'Jost',sans-serif);transition:opacity 0.15s;margin-top:4px;}
-    #suggest-modal .sm-submit:hover{opacity:0.88;}
-    #suggest-modal .sm-submit:disabled{opacity:0.5;cursor:not-allowed;}
-    #suggest-modal .sm-success{padding:28px 20px;text-align:center;}
-    #suggest-modal .sm-success-icon{font-size:38px;margin-bottom:10px;}
-    #suggest-modal .sm-success-title{font-family:var(--font-display,'Cormorant Garamond',Georgia,serif);font-size:19px;color:var(--midnight,#1C2028);font-weight:600;margin-bottom:6px;}
-    #suggest-modal .sm-success-sub{font-size:13px;color:#6A7280;font-family:var(--font-body,'Crimson Pro',Georgia,serif);}
-    @media(max-width:480px){
-      #suggest-modal{left:12px;right:12px;width:auto;bottom:76px;}
+    #suggest-modal{position:fixed;top:50%;left:50%;z-index:901;width:100%;max-width:620px;max-height:92vh;
+      background:var(--cream,#F6F1E9);border-radius:18px;box-shadow:0 32px 80px rgba(0,0,0,0.28);
+      overflow:hidden;display:flex;flex-direction:column;
+      transform:translate(-50%,-48%) scale(0.96);opacity:0;pointer-events:none;
+      transition:transform 0.28s cubic-bezier(.34,1.4,.64,1),opacity 0.22s;}
+    #suggest-modal.open{transform:translate(-50%,-50%) scale(1);opacity:1;pointer-events:all;}
+    #suggest-modal .sm-hero{background:var(--heather,#3E5238);padding:28px 32px 24px;position:relative;flex-shrink:0;}
+    #suggest-modal .sm-hero-close{position:absolute;top:16px;right:18px;background:rgba(255,255,255,0.15);
+      border:none;color:#fff;width:32px;height:32px;border-radius:50%;font-size:18px;line-height:32px;text-align:center;
+      cursor:pointer;transition:background 0.15s;padding:0;}
+    #suggest-modal .sm-hero-close:hover{background:rgba(255,255,255,0.28);}
+    #suggest-modal .sm-hero-icon{font-size:28px;margin-bottom:10px;}
+    #suggest-modal .sm-title{font-family:var(--font-display,'Cormorant Garamond',Georgia,serif);font-size:26px;
+      color:#fff;font-weight:600;line-height:1.2;margin-bottom:6px;}
+    #suggest-modal .sm-sub{font-size:14px;color:rgba(255,255,255,0.75);font-family:var(--font-body,'Crimson Pro',Georgia,serif);line-height:1.5;}
+    #suggest-modal .sm-body{padding:26px 32px 28px;overflow-y:auto;flex:1;}
+    #suggest-modal .sm-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+    #suggest-modal .sm-field{margin-bottom:16px;}
+    #suggest-modal .sm-field:last-of-type{margin-bottom:0;}
+    #suggest-modal .sm-label{display:block;font-size:11px;font-weight:700;letter-spacing:0.6px;text-transform:uppercase;
+      color:#6A7280;margin-bottom:6px;font-family:var(--font-ui,'Jost',sans-serif);}
+    #suggest-modal .sm-label .req{color:var(--heather,#3E5238);}
+    #suggest-modal input,#suggest-modal textarea{width:100%;box-sizing:border-box;border:1.5px solid #D8CEBC;border-radius:9px;
+      padding:11px 14px;font-size:15px;font-family:var(--font-body,'Crimson Pro',Georgia,serif);color:var(--midnight,#1C2028);
+      background:#fff;outline:none;transition:border-color 0.15s,box-shadow 0.15s;resize:none;}
+    #suggest-modal input:focus,#suggest-modal textarea:focus{border-color:var(--heather,#3E5238);box-shadow:0 0 0 3px rgba(62,82,56,0.1);}
+    #suggest-modal input.error,#suggest-modal textarea.error{border-color:#DC2626;box-shadow:0 0 0 3px rgba(220,38,38,0.1);}
+    #suggest-modal input::placeholder,#suggest-modal textarea::placeholder{color:#C4B9AB;}
+    #suggest-modal .sm-divider{border:none;border-top:1px solid #E8E0D4;margin:20px 0;}
+    #suggest-modal .sm-section-title{font-size:11px;font-weight:700;letter-spacing:0.6px;text-transform:uppercase;
+      color:#9CA3AF;font-family:var(--font-ui,'Jost',sans-serif);margin-bottom:14px;}
+    #suggest-modal .sm-submit{width:100%;padding:14px;background:var(--heather,#3E5238);color:#fff;border:none;
+      border-radius:10px;font-size:15px;font-weight:600;letter-spacing:0.3px;cursor:pointer;
+      font-family:var(--font-ui,'Jost',sans-serif);transition:opacity 0.15s,transform 0.15s;margin-top:20px;}
+    #suggest-modal .sm-submit:hover{opacity:0.9;transform:translateY(-1px);}
+    #suggest-modal .sm-submit:disabled{opacity:0.45;cursor:not-allowed;transform:none;}
+    #suggest-modal .sm-hint{text-align:center;font-size:12px;color:#9CA3AF;margin-top:10px;
+      font-family:var(--font-body,'Crimson Pro',Georgia,serif);}
+    #suggest-modal .sm-success{padding:48px 32px;text-align:center;}
+    #suggest-modal .sm-success-icon{font-size:52px;margin-bottom:16px;}
+    #suggest-modal .sm-success-title{font-family:var(--font-display,'Cormorant Garamond',Georgia,serif);font-size:28px;
+      color:var(--midnight,#1C2028);font-weight:600;margin-bottom:10px;}
+    #suggest-modal .sm-success-sub{font-size:15px;color:#6A7280;font-family:var(--font-body,'Crimson Pro',Georgia,serif);line-height:1.6;}
+    @media(max-width:600px){
+      #suggest-modal{max-width:100%;max-height:100%;border-radius:0;top:0;left:0;transform:translateY(100%) scale(1);
+        border-radius:18px 18px 0 0;bottom:0;top:auto;max-height:94vh;}
+      #suggest-modal.open{transform:translateY(0) scale(1);}
+      #suggest-modal .sm-row{grid-template-columns:1fr;}
+      #suggest-modal .sm-hero{padding:22px 20px 18px;}
+      #suggest-modal .sm-body{padding:20px 20px 24px;}
+      #suggest-modal .sm-title{font-size:22px;}
       #suggest-btn{left:16px;bottom:20px;}
     }
   `;
 
   var T = {
-    btn:         {fr:'Suggérer un produit', sv:'Föreslå en produkt', en:'Suggest a product'},
-    title:       {fr:'Suggérer un produit', sv:'Föreslå en produkt', en:'Suggest a product'},
-    sub:         {fr:'Vous ne trouvez pas ce que vous cherchez ? Dites-le nous !', sv:'Hittar du inte det du söker? Berätta för oss!', en:"Can't find what you're looking for? Let us know!"},
-    nameLabel:   {fr:'Nom du produit *',  sv:'Produktnamn *',         en:'Product name *'},
-    namePh:      {fr:'Ex: Lingonberry jam, Knäckebröd…', sv:'T.ex. Lingonsylt, Knäckebröd…', en:'E.g. Lingonberry jam, Knäckebröd…'},
-    descLabel:   {fr:'Description (optionnel)', sv:'Beskrivning (valfritt)', en:'Description (optional)'},
-    descPh:      {fr:'Pourquoi voulez-vous ce produit ? Où l\'avez-vous vu ?', sv:'Varför vill du ha den här produkten?', en:'Why do you want this product?'},
-    urlLabel:    {fr:'Lien où vous l\'avez vu (optionnel)', sv:'Länk där du såg den (valfritt)', en:'Link where you saw it (optional)'},
-    urlPh:       {fr:'https://…', sv:'https://…', en:'https://…'},
-    emailLabel:  {fr:'Votre email (optionnel)', sv:'Din e-post (valfritt)', en:'Your email (optional)'},
-    emailPh:     {fr:'Pour vous répondre si on le trouve !', sv:'Vi hör av oss om vi hittar den!', en:"We'll reach out if we find it!"},
-    submit:      {fr:'Envoyer ma suggestion →', sv:'Skicka mitt förslag →', en:'Send my suggestion →'},
-    successTitle:{fr:'Merci pour votre suggestion !', sv:'Tack för ditt förslag!', en:'Thanks for your suggestion!'},
-    successSub:  {fr:'Nous en prenons note et reviendrons vers vous si disponible.', sv:'Vi noterar det och återkommer om vi hittar produkten.', en:"We've noted it and will get back to you if we find the product."},
-    errorName:   {fr:'Merci d\'indiquer un nom de produit.', sv:'Ange ett produktnamn.', en:'Please enter a product name.'},
-    errorSend:   {fr:'Erreur lors de l\'envoi. Réessayez.', sv:'Det gick inte att skicka. Försök igen.', en:'Could not send. Please try again.'},
+    btn:           {fr:'Suggérer un produit', sv:'Föreslå en produkt', en:'Suggest a product'},
+    title:         {fr:'Suggérer un produit', sv:'Föreslå en produkt', en:'Suggest a product'},
+    sub:           {fr:'Un produit suédois introuvable ici ? Dites-le nous, on fera le maximum pour le sourcer.', sv:'Hittar du inte det du söker? Berätta för oss, vi gör vårt bästa för att hitta det!', en:"Can't find a Swedish product here? Tell us and we'll do our best to source it."},
+    yourInfoTitle: {fr:'Vos coordonnées', sv:'Dina uppgifter', en:'Your details'},
+    customerLabel: {fr:'Votre prénom & nom *', sv:'Ditt namn *', en:'Your name *'},
+    customerPh:    {fr:'Marie Dupont', sv:'Anna Svensson', en:'Jane Smith'},
+    emailLabel:    {fr:'Votre email *', sv:'Din e-post *', en:'Your email *'},
+    emailPh:       {fr:'marie@exemple.fr', sv:'anna@exempel.se', en:'jane@example.com'},
+    productTitle:  {fr:'Le produit recherché', sv:'Produkten du söker', en:'The product you want'},
+    nameLabel:     {fr:'Nom du produit *', sv:'Produktnamn *', en:'Product name *'},
+    namePh:        {fr:'Ex: Lingonberry jam, Knäckebröd…', sv:'T.ex. Lingonsylt, Knäckebröd…', en:'E.g. Lingonberry jam, Knäckebröd…'},
+    descLabel:     {fr:'Description (optionnel)', sv:'Beskrivning (valfritt)', en:'Description (optional)'},
+    descPh:        {fr:'Pourquoi ce produit ? Où l\'avez-vous découvert ?', sv:'Varför vill du ha den? Var hittade du den?', en:'Why this product? Where did you discover it?'},
+    urlLabel:      {fr:'Lien où vous l\'avez vu (optionnel)', sv:'Länk där du såg den (valfritt)', en:'Link where you saw it (optional)'},
+    urlPh:         {fr:'https://…', sv:'https://…', en:'https://…'},
+    submit:        {fr:'Envoyer ma suggestion →', sv:'Skicka mitt förslag →', en:'Send my suggestion →'},
+    hint:          {fr:'Nous lisons chaque suggestion avec attention.', sv:'Vi läser varje förslag noggrant.', en:'We read every suggestion carefully.'},
+    successTitle:  {fr:'Merci pour votre suggestion !', sv:'Tack för ditt förslag!', en:'Thanks for your suggestion!'},
+    successSub:    {fr:'Nous en prenons note et vous recontacterons dès que ce produit est disponible.', sv:'Vi noterar det och återkommer till dig så snart produkten finns tillgänglig.', en:"We've noted it and will get back to you as soon as the product is available."},
+    errCustomer:   {fr:'Merci d\'indiquer votre prénom et nom.', sv:'Ange ditt namn.', en:'Please enter your name.'},
+    errEmail:      {fr:'Merci d\'indiquer votre adresse email.', sv:'Ange din e-postadress.', en:'Please enter your email address.'},
+    errName:       {fr:'Merci d\'indiquer le nom du produit.', sv:'Ange ett produktnamn.', en:'Please enter the product name.'},
+    errSend:       {fr:'Erreur lors de l\'envoi. Réessayez.', sv:'Det gick inte att skicka. Försök igen.', en:'Could not send. Please try again.'},
   };
 
   var l = LANG || 'fr';
@@ -197,40 +226,47 @@ function renderSuggestionWidget() {
     <style>${css}</style>
     <button id="suggest-btn" onclick="openSuggest()">
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="8" cy="8" r="6.5"/>
-        <line x1="8" y1="5" x2="8" y2="8.5"/>
-        <circle cx="8" cy="11" r="0.5" fill="currentColor"/>
+        <path d="M8 1.5C4.41 1.5 1.5 4.1 1.5 7.3c0 1.7.75 3.22 1.97 4.3L2.5 14.5l3.2-1.4A7.1 7.1 0 008 13.1c3.59 0 6.5-2.6 6.5-5.8S11.59 1.5 8 1.5z"/>
       </svg>
       <span id="suggest-btn-label">${t('btn')}</span>
     </button>
     <div id="suggest-overlay" onclick="closeSuggest()"></div>
-    <div id="suggest-modal">
+    <div id="suggest-modal" role="dialog" aria-modal="true">
       <div id="suggest-form-view">
-        <div class="sm-head">
-          <div>
-            <div class="sm-title" id="sg-title">${t('title')}</div>
-            <div class="sm-sub" id="sg-sub">${t('sub')}</div>
-          </div>
-          <button class="sm-close" onclick="closeSuggest()">×</button>
+        <div class="sm-hero">
+          <button class="sm-hero-close" onclick="closeSuggest()" aria-label="Fermer">×</button>
+          <div class="sm-hero-icon">💬</div>
+          <div class="sm-title" id="sg-title">${t('title')}</div>
+          <div class="sm-sub" id="sg-sub">${t('sub')}</div>
         </div>
         <div class="sm-body">
+          <div class="sm-section-title" id="sg-your-info-title">${t('yourInfoTitle')}</div>
+          <div class="sm-row">
+            <div class="sm-field">
+              <label class="sm-label" id="sg-customer-lbl">${t('customerLabel').replace('*','<span class="req">*</span>')}</label>
+              <input type="text" id="sg-customer" placeholder="${t('customerPh')}" maxlength="80" autocomplete="name">
+            </div>
+            <div class="sm-field">
+              <label class="sm-label" id="sg-email-lbl">${t('emailLabel').replace('*','<span class="req">*</span>')}</label>
+              <input type="email" id="sg-email" placeholder="${t('emailPh')}" autocomplete="email">
+            </div>
+          </div>
+          <hr class="sm-divider">
+          <div class="sm-section-title" id="sg-product-title">${t('productTitle')}</div>
           <div class="sm-field">
-            <label class="sm-label" id="sg-name-lbl">${t('nameLabel')}</label>
+            <label class="sm-label" id="sg-name-lbl">${t('nameLabel').replace('*','<span class="req">*</span>')}</label>
             <input type="text" id="sg-name" placeholder="${t('namePh')}" maxlength="120">
           </div>
           <div class="sm-field">
             <label class="sm-label" id="sg-desc-lbl">${t('descLabel')}</label>
-            <textarea id="sg-desc" rows="2" placeholder="${t('descPh')}" maxlength="400"></textarea>
+            <textarea id="sg-desc" rows="3" placeholder="${t('descPh')}" maxlength="400"></textarea>
           </div>
           <div class="sm-field">
             <label class="sm-label" id="sg-url-lbl">${t('urlLabel')}</label>
             <input type="url" id="sg-url" placeholder="${t('urlPh')}">
           </div>
-          <div class="sm-field">
-            <label class="sm-label" id="sg-email-lbl">${t('emailLabel')}</label>
-            <input type="email" id="sg-email" placeholder="${t('emailPh')}">
-          </div>
           <button class="sm-submit" id="sg-submit" onclick="submitSuggestion()">${t('submit')}</button>
+          <div class="sm-hint" id="sg-hint">${t('hint')}</div>
         </div>
       </div>
       <div id="suggest-success-view" style="display:none">
@@ -254,93 +290,124 @@ function openSuggest() {
   refreshSuggestLang();
   document.getElementById('suggest-form-view').style.display = '';
   document.getElementById('suggest-success-view').style.display = 'none';
+  ['sg-customer','sg-email','sg-name'].forEach(function(id){
+    var el = document.getElementById(id); if(el) el.classList.remove('error');
+  });
   document.getElementById('suggest-overlay').classList.add('open');
   document.getElementById('suggest-modal').classList.add('open');
-  setTimeout(function() { var n = document.getElementById('sg-name'); if (n) n.focus(); }, 200);
+  document.body.style.overflow = 'hidden';
+  setTimeout(function() { var n = document.getElementById('sg-customer'); if (n) n.focus(); }, 250);
 }
 
 function closeSuggest() {
   _suggestOpen = false;
   document.getElementById('suggest-overlay').classList.remove('open');
   document.getElementById('suggest-modal').classList.remove('open');
+  document.body.style.overflow = '';
 }
 
 function refreshSuggestLang() {
   var l = LANG || 'fr';
   var T = {
-    btn:         {fr:'Suggérer un produit', sv:'Föreslå en produkt', en:'Suggest a product'},
-    title:       {fr:'Suggérer un produit', sv:'Föreslå en produkt', en:'Suggest a product'},
-    sub:         {fr:'Vous ne trouvez pas ce que vous cherchez ? Dites-le nous !', sv:'Hittar du inte det du söker? Berätta för oss!', en:"Can't find what you're looking for? Let us know!"},
-    nameLabel:   {fr:'Nom du produit *',  sv:'Produktnamn *',         en:'Product name *'},
-    namePh:      {fr:'Ex: Lingonberry jam, Knäckebröd…', sv:'T.ex. Lingonsylt, Knäckebröd…', en:'E.g. Lingonberry jam, Knäckebröd…'},
-    descLabel:   {fr:'Description (optionnel)', sv:'Beskrivning (valfritt)', en:'Description (optional)'},
-    descPh:      {fr:'Pourquoi voulez-vous ce produit ? Où l\'avez-vous vu ?', sv:'Varför vill du ha den här produkten?', en:'Why do you want this product?'},
-    urlLabel:    {fr:'Lien où vous l\'avez vu (optionnel)', sv:'Länk där du såg den (valfritt)', en:'Link where you saw it (optional)'},
-    emailLabel:  {fr:'Votre email (optionnel)', sv:'Din e-post (valfritt)', en:'Your email (optional)'},
-    emailPh:     {fr:'Pour vous répondre si on le trouve !', sv:'Vi hör av oss om vi hittar den!', en:"We'll reach out if we find it!"},
-    submit:      {fr:'Envoyer ma suggestion →', sv:'Skicka mitt förslag →', en:'Send my suggestion →'},
-    successTitle:{fr:'Merci pour votre suggestion !', sv:'Tack för ditt förslag!', en:'Thanks for your suggestion!'},
-    successSub:  {fr:'Nous en prenons note et reviendrons vers vous si disponible.', sv:'Vi noterar det och återkommer om vi hittar produkten.', en:"We've noted it and will get back to you if we find the product."},
+    btn:           {fr:'Suggérer un produit', sv:'Föreslå en produkt', en:'Suggest a product'},
+    title:         {fr:'Suggérer un produit', sv:'Föreslå en produkt', en:'Suggest a product'},
+    sub:           {fr:'Un produit suédois introuvable ici ? Dites-le nous, on fera le maximum pour le sourcer.', sv:'Hittar du inte det du söker? Berätta för oss, vi gör vårt bästa för att hitta det!', en:"Can't find a Swedish product here? Tell us and we'll do our best to source it."},
+    yourInfoTitle: {fr:'Vos coordonnées', sv:'Dina uppgifter', en:'Your details'},
+    customerLabel: {fr:'Votre prénom & nom *', sv:'Ditt namn *', en:'Your name *'},
+    customerPh:    {fr:'Marie Dupont', sv:'Anna Svensson', en:'Jane Smith'},
+    emailLabel:    {fr:'Votre email *', sv:'Din e-post *', en:'Your email *'},
+    emailPh:       {fr:'marie@exemple.fr', sv:'anna@exempel.se', en:'jane@example.com'},
+    productTitle:  {fr:'Le produit recherché', sv:'Produkten du söker', en:'The product you want'},
+    nameLabel:     {fr:'Nom du produit *', sv:'Produktnamn *', en:'Product name *'},
+    namePh:        {fr:'Ex: Lingonberry jam, Knäckebröd…', sv:'T.ex. Lingonsylt, Knäckebröd…', en:'E.g. Lingonberry jam, Knäckebröd…'},
+    descLabel:     {fr:'Description (optionnel)', sv:'Beskrivning (valfritt)', en:'Description (optional)'},
+    descPh:        {fr:'Pourquoi ce produit ? Où l\'avez-vous découvert ?', sv:'Varför vill du ha den? Var hittade du den?', en:'Why this product? Where did you discover it?'},
+    urlLabel:      {fr:'Lien où vous l\'avez vu (optionnel)', sv:'Länk där du såg den (valfritt)', en:'Link where you saw it (optional)'},
+    submit:        {fr:'Envoyer ma suggestion →', sv:'Skicka mitt förslag →', en:'Send my suggestion →'},
+    hint:          {fr:'Nous lisons chaque suggestion avec attention.', sv:'Vi läser varje förslag noggrant.', en:'We read every suggestion carefully.'},
+    successTitle:  {fr:'Merci pour votre suggestion !', sv:'Tack för ditt förslag!', en:'Thanks for your suggestion!'},
+    successSub:    {fr:'Nous en prenons note et vous recontacterons dès que ce produit est disponible.', sv:'Vi noterar det och återkommer till dig så snart produkten finns tillgänglig.', en:"We've noted it and will get back to you as soon as the product is available."},
   };
   function _t(k) { return T[k][l] || T[k].fr; }
   var els = {
     'suggest-btn-label': _t('btn'),
-    'sg-title': _t('title'),
-    'sg-sub': _t('sub'),
-    'sg-name-lbl': _t('nameLabel'),
-    'sg-desc-lbl': _t('descLabel'),
-    'sg-url-lbl': _t('urlLabel'),
-    'sg-email-lbl': _t('emailLabel'),
-    'sg-submit': _t('submit'),
-    'sg-ok-title': _t('successTitle'),
-    'sg-ok-sub': _t('successSub'),
+    'sg-title':          _t('title'),
+    'sg-sub':            _t('sub'),
+    'sg-your-info-title':_t('yourInfoTitle'),
+    'sg-product-title':  _t('productTitle'),
+    'sg-desc-lbl':       _t('descLabel'),
+    'sg-url-lbl':        _t('urlLabel'),
+    'sg-submit':         _t('submit'),
+    'sg-hint':           _t('hint'),
+    'sg-ok-title':       _t('successTitle'),
+    'sg-ok-sub':         _t('successSub'),
   };
   Object.keys(els).forEach(function(id) {
-    var el = document.getElementById(id);
-    if (el) el.textContent = els[id];
+    var el = document.getElementById(id); if (el) el.textContent = els[id];
   });
-  var nameInp = document.getElementById('sg-name');
-  if (nameInp) nameInp.placeholder = T.namePh[l] || T.namePh.fr;
-  var descInp = document.getElementById('sg-desc');
-  if (descInp) descInp.placeholder = T.descPh[l] || T.descPh.fr;
-  var emailInp = document.getElementById('sg-email');
-  if (emailInp) emailInp.placeholder = T.emailPh[l] || T.emailPh.fr;
+  var lbl = function(id, key) {
+    var el = document.getElementById(id);
+    if (el) el.innerHTML = _t(key).replace('*','<span class="req">*</span>');
+  };
+  lbl('sg-customer-lbl', 'customerLabel');
+  lbl('sg-email-lbl',    'emailLabel');
+  lbl('sg-name-lbl',     'nameLabel');
+  var ph = function(id, key) {
+    var el = document.getElementById(id); if (el) el.placeholder = T[key][l] || T[key].fr;
+  };
+  ph('sg-customer', 'customerPh');
+  ph('sg-email',    'emailPh');
+  ph('sg-name',     'namePh');
+  ph('sg-desc',     'descPh');
 }
 
 async function submitSuggestion() {
   var l = LANG || 'fr';
-  var nameEl  = document.getElementById('sg-name');
-  var descEl  = document.getElementById('sg-desc');
-  var urlEl   = document.getElementById('sg-url');
-  var emailEl = document.getElementById('sg-email');
-  var btn     = document.getElementById('sg-submit');
-  var name    = nameEl ? nameEl.value.trim() : '';
-  var errs    = {fr:'Merci d\'indiquer un nom de produit.', sv:'Ange ett produktnamn.', en:'Please enter a product name.'};
-  var errSend = {fr:'Erreur lors de l\'envoi. Réessayez.', sv:'Det gick inte att skicka. Försök igen.', en:'Could not send. Please try again.'};
-  if (!name) { showToast(errs[l] || errs.fr); nameEl && nameEl.focus(); return; }
+  var customerEl = document.getElementById('sg-customer');
+  var emailEl    = document.getElementById('sg-email');
+  var nameEl     = document.getElementById('sg-name');
+  var descEl     = document.getElementById('sg-desc');
+  var urlEl      = document.getElementById('sg-url');
+  var btn        = document.getElementById('sg-submit');
+  var customer   = customerEl ? customerEl.value.trim() : '';
+  var email      = emailEl    ? emailEl.value.trim()    : '';
+  var name       = nameEl     ? nameEl.value.trim()     : '';
+  var T = {
+    errCustomer:{fr:'Merci d\'indiquer votre prénom et nom.', sv:'Ange ditt namn.', en:'Please enter your name.'},
+    errEmail:   {fr:'Merci d\'indiquer votre adresse email.', sv:'Ange din e-postadress.', en:'Please enter your email address.'},
+    errName:    {fr:'Merci d\'indiquer le nom du produit.', sv:'Ange ett produktnamn.', en:'Please enter the product name.'},
+    errSend:    {fr:'Erreur lors de l\'envoi. Réessayez.', sv:'Det gick inte att skicka. Försök igen.', en:'Could not send. Please try again.'},
+  };
+  function _t(k) { return T[k][l] || T[k].fr; }
+  [customerEl, emailEl, nameEl].forEach(function(el){ if(el) el.classList.remove('error'); });
+  if (!customer) { customerEl && customerEl.classList.add('error'); showToast(_t('errCustomer')); customerEl && customerEl.focus(); return; }
+  if (!email)    { emailEl    && emailEl.classList.add('error');    showToast(_t('errEmail'));    emailEl    && emailEl.focus();    return; }
+  if (!name)     { nameEl     && nameEl.classList.add('error');     showToast(_t('errName'));     nameEl     && nameEl.focus();     return; }
   if (btn) btn.disabled = true;
   try {
     var res = await fetch(SD_API_URL + '/api/product-suggestions', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
+        customer_name: customer,
         product_name:  name,
-        description:   descEl  ? descEl.value.trim()  : '',
-        source_url:    urlEl   ? urlEl.value.trim()   : '',
-        customer_email:emailEl ? emailEl.value.trim() : '',
+        description:   descEl ? descEl.value.trim() : '',
+        source_url:    urlEl  ? urlEl.value.trim()  : '',
+        customer_email:email,
         lang: l,
       }),
     });
     if (!res.ok) throw new Error('error');
     document.getElementById('suggest-form-view').style.display = 'none';
     document.getElementById('suggest-success-view').style.display = '';
-    if (nameEl)  nameEl.value  = '';
-    if (descEl)  descEl.value  = '';
-    if (urlEl)   urlEl.value   = '';
-    if (emailEl) emailEl.value = '';
-    setTimeout(closeSuggest, 3200);
+    if (customerEl) customerEl.value = '';
+    if (nameEl)     nameEl.value     = '';
+    if (descEl)     descEl.value     = '';
+    if (urlEl)      urlEl.value      = '';
+    if (emailEl)    emailEl.value    = '';
+    setTimeout(closeSuggest, 3800);
   } catch(e) {
-    showToast(errSend[l] || errSend.fr);
+    showToast(_t('errSend'));
     if (btn) btn.disabled = false;
   }
 }
