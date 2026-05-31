@@ -258,7 +258,7 @@ function renderCartPageFull() {
       }
     }
     const selectedHtml = window._selectedRelay
-      ? '<div class="relay-selected-info">✓ '+window._selectedRelay.name+' — '+window._selectedRelay.adresse+', '+window._selectedRelay.cp+' '+window._selectedRelay.ville+'</div>'
+      ? '<div class="relay-selected-info">✓ '+window._selectedRelay.name+' — '+window._selectedRelay.adresse+', '+window._selectedRelay.cp+' '+window._selectedRelay.ville+(window._selectedRelay.carrier_name?' ('+window._selectedRelay.carrier_name+')':'')+'</div>'
       : '';
     const cpPlaceholder = L==='sv'?'Postnummer':L==='en'?'Postal code':'Code postal';
     const searchTxt = L==='sv'?'Sök':L==='en'?'Search':'Chercher';
@@ -430,7 +430,15 @@ async function searchRelayPoints(cp) {
   const BASE = window.SD_API_URL || 'https://admin.swedishcravings.fr';
   const pays = window._relayCountry || 'FR';
   try {
-    const res = await fetch(BASE + '/api/mondial-relay/points?cp=' + encodeURIComponent(cp.trim()) + '&pays=' + encodeURIComponent(pays));
+    let url;
+    if (pays === 'FR') {
+      // France → Mondial Relay (SOAP, plus précis)
+      url = BASE + '/api/mondial-relay/points?cp=' + encodeURIComponent(cp.trim()) + '&pays=FR';
+    } else {
+      // International → LogSpher (Chronopost 2Shop + autres)
+      url = BASE + '/api/logspher/relay-points?cp=' + encodeURIComponent(cp.trim()) + '&country=' + encodeURIComponent(pays);
+    }
+    const res = await fetch(url);
     if (!res.ok) throw new Error('fetch failed');
     const data = await res.json();
     window._relayPoints = Array.isArray(data) ? data : (data.points || []);
@@ -514,7 +522,8 @@ async function doCheckout() {
           relay_point_id: window._selectedRelay.id,
           relay_point_name: window._selectedRelay.name,
           relay_point_address: window._selectedRelay.adresse + ', ' + window._selectedRelay.cp + ' ' + window._selectedRelay.ville,
-          relay_point_pays: window._selectedRelay.pays || 'FR',
+          relay_point_pays: window._selectedRelay.pays || window._relayCountry || 'FR',
+          relay_carrier_uuid: window._selectedRelay.carrier_uuid || null,
         } : {}),
       }),
     });
