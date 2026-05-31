@@ -209,13 +209,20 @@ function renderCartPageFull() {
 
   const remaining = 50 - subtotal;
   const pct = Math.min(100, (subtotal / 50) * 100);
+  const intlNote = LANG==='sv'
+    ? `<div style="font-size:11px;color:var(--dust);margin-top:4px;">Internationellt: 9,90€ · Gratis från 70€</div>`
+    : LANG==='en'
+    ? `<div style="font-size:11px;color:var(--dust);margin-top:4px;">International delivery: €9.90 · Free from €70</div>`
+    : `<div style="font-size:11px;color:var(--dust);margin-top:4px;">Livraison internationale : 9,90€ · Offerte dès 70€</div>`;
   const shipHtml = remaining > 0
     ? `<div class="summary-ship-bar">
         <div class="summary-ship-text">${LANG==='sv'?`${fmtPrice(remaining)} kvar till fri frakt`:LANG==='en'?`${fmtPrice(remaining)} away from free delivery`:`Plus que ${fmtPrice(remaining)} pour la livraison gratuite`}</div>
         <div class="summary-bar"><div class="summary-bar-fill" style="width:${pct}%"></div></div>
+        ${intlNote}
        </div>`
     : `<div class="summary-ship-bar">
         <div class="summary-ship-text" style="color:var(--moss);">${UI[LANG].freeShip} ✓</div>
+        ${intlNote}
        </div>`;
 
   const shipping = subtotal >= 50 ? 0 : 4.90;
