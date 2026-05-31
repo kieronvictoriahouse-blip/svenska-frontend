@@ -144,6 +144,7 @@ function renderSuggestionWidget() {
       transform:translate(-50%,-48%) scale(0.96);opacity:0;pointer-events:none;
       transition:transform 0.28s cubic-bezier(.34,1.4,.64,1),opacity 0.22s;}
     #suggest-modal.open{transform:translate(-50%,-50%) scale(1);opacity:1;pointer-events:all;}
+    #suggest-form-view{display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden;}
     #suggest-modal .sm-hero{background:var(--heather,#3E5238);padding:28px 32px 24px;position:relative;flex-shrink:0;}
     #suggest-modal .sm-hero-close{position:absolute;top:16px;right:18px;background:rgba(255,255,255,0.15);
       border:none;color:#fff;width:32px;height:32px;border-radius:50%;font-size:18px;line-height:32px;text-align:center;
