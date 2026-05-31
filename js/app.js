@@ -153,7 +153,7 @@ function renderSuggestionWidget() {
     #suggest-modal .sm-title{font-family:var(--font-display,'Cormorant Garamond',Georgia,serif);font-size:26px;
       color:#fff;font-weight:600;line-height:1.2;margin-bottom:6px;}
     #suggest-modal .sm-sub{font-size:14px;color:rgba(255,255,255,0.75);font-family:var(--font-body,'Crimson Pro',Georgia,serif);line-height:1.5;}
-    #suggest-modal .sm-body{padding:26px 32px 28px;overflow-y:auto;flex:1;}
+    #suggest-modal .sm-body{padding:26px 32px 28px;overflow-y:auto;flex:1;min-height:0;}
     #suggest-modal .sm-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
     #suggest-modal .sm-field{margin-bottom:16px;}
     #suggest-modal .sm-field:last-of-type{margin-bottom:0;}
