@@ -430,18 +430,18 @@ async function searchRelayPoints(cp) {
   const BASE = window.SD_API_URL || 'https://admin.swedishcravings.fr';
   const pays = window._relayCountry || 'FR';
   try {
-    let url;
-    if (pays === 'FR') {
-      // France → Mondial Relay (SOAP, plus précis)
-      url = BASE + '/api/mondial-relay/points?cp=' + encodeURIComponent(cp.trim()) + '&pays=FR';
-    } else {
-      // International → LogSpher (Chronopost 2Shop + autres)
-      url = BASE + '/api/logspher/relay-points?cp=' + encodeURIComponent(cp.trim()) + '&country=' + encodeURIComponent(pays);
-    }
-    const res = await fetch(url);
-    if (!res.ok) throw new Error('fetch failed');
-    const data = await res.json();
-    window._relayPoints = Array.isArray(data) ? data : (data.points || []);
+    // Interroger Mondial Relay ET LogSpher en parallèle pour tous les pays
+    const [mrRes, lsRes] = await Promise.allSettled([
+      fetch(BASE + '/api/mondial-relay/points?cp=' + encodeURIComponent(cp.trim()) + '&pays=' + encodeURIComponent(pays))
+        .then(r => r.ok ? r.json() : null).then(d => d ? (Array.isArray(d) ? d : (d.points || [])) : []),
+      fetch(BASE + '/api/logspher/relay-points?cp=' + encodeURIComponent(cp.trim()) + '&country=' + encodeURIComponent(pays))
+        .then(r => r.ok ? r.json() : null).then(d => d ? (d.points || []) : []),
+    ]);
+    const mrPoints = (mrRes.status === 'fulfilled' ? mrRes.value : []).map(function(p) { return Object.assign({}, p, { carrier_name: p.carrier_name || 'Mondial Relay' }); });
+    const lsPoints = lsRes.status === 'fulfilled' ? lsRes.value : [];
+    // Fusionner sans doublons (par id)
+    var seen = new Set(mrPoints.map(function(p) { return p.id; }));
+    window._relayPoints = mrPoints.concat(lsPoints.filter(function(p) { return !seen.has(p.id); }));
   } catch(e) {
     window._relayPoints = [];
   }
