@@ -148,9 +148,10 @@ window._deliveryMode = window._deliveryMode || 'pickup';
 window._selectedRelay = window._selectedRelay || null;
 window._relayPoints = window._relayPoints || null;
 window._relaySearchCp = window._relaySearchCp || '';
+window._relayCountry = window._relayCountry || 'FR';
 function setDeliveryMode(mode) {
   window._deliveryMode = mode;
-  if (mode !== 'mondial_relay') { window._selectedRelay = null; window._relayPoints = null; window._relaySearchCp = ''; }
+  if (mode !== 'mondial_relay') { window._selectedRelay = null; window._relayPoints = null; window._relaySearchCp = ''; window._relayCountry = 'FR'; }
 }
 
 initPage('');
@@ -261,8 +262,23 @@ function renderCartPageFull() {
       : '';
     const cpPlaceholder = L==='sv'?'Postnummer':L==='en'?'Postal code':'Code postal';
     const searchTxt = L==='sv'?'Sök':L==='en'?'Search':'Chercher';
+    const countries = [
+      {code:'FR', label:'France'},
+      {code:'ES', label:'Espagne'},
+      {code:'PT', label:'Portugal'},
+      {code:'BE', label:'Belgique'},
+      {code:'LU', label:'Luxembourg'},
+      {code:'NL', label:'Pays-Bas'},
+      {code:'DE', label:'Allemagne'},
+      {code:'IT', label:'Italie'},
+      {code:'CH', label:'Suisse'},
+    ];
+    const countrySelect = '<select id="relay-country-select" style="border:1px solid var(--linen);background:var(--cream);padding:10px 12px;font-family:var(--font-ui);font-size:13px;color:var(--midnight);outline:none;cursor:pointer;" onchange="window._relayCountry=this.value;window._relayPoints=null;window._selectedRelay=null;window._relaySearchCp=\'\';renderCartPageFull();">'
+      + countries.map(c => '<option value="'+c.code+'"'+(window._relayCountry===c.code?' selected':'')+'>'+c.label+'</option>').join('')
+      + '</select>';
     return '<div class="relay-picker">'
-      +'<div class="relay-search-row">'
+      +'<div class="relay-search-row" style="flex-wrap:wrap;gap:6px;">'
+      + countrySelect
       +'<input id="relay-cp-input" class="relay-cp-input" type="text" placeholder="'+cpPlaceholder+'" value="'+(window._relaySearchCp||'')+'" oninput="window._relaySearchCp=this.value" onkeydown="if(event.key===\'Enter\')searchRelayPoints(this.value)">'
       +'<button class="relay-search-btn" onclick="searchRelayPoints(document.getElementById(\'relay-cp-input\')?.value||\'\')">'+ searchTxt+'</button>'
       +'</div>'
@@ -412,8 +428,9 @@ async function searchRelayPoints(cp) {
   window._selectedRelay = null;
   renderCartPageFull();
   const BASE = window.SD_API_URL || 'https://admin.swedishcravings.fr';
+  const pays = window._relayCountry || 'FR';
   try {
-    const res = await fetch(BASE + '/api/mondial-relay/points?cp=' + encodeURIComponent(cp.trim()) + '&pays=FR');
+    const res = await fetch(BASE + '/api/mondial-relay/points?cp=' + encodeURIComponent(cp.trim()) + '&pays=' + encodeURIComponent(pays));
     if (!res.ok) throw new Error('fetch failed');
     const data = await res.json();
     window._relayPoints = Array.isArray(data) ? data : (data.points || []);
