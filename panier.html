@@ -432,14 +432,25 @@ async function searchRelayPoints(cp) {
   const BASE = window.SD_API_URL || 'https://admin.swedishcravings.fr';
   const pays = window._relayCountry || 'FR';
   try {
-    // LogSpher compare les prix et renvoie uniquement les points du carrier le moins cher
-    var url = BASE + '/api/logspher/relay-points?cp=' + encodeURIComponent(cp.trim()) + '&country=' + encodeURIComponent(pays);
-    var res = await fetch(url);
-    if (!res.ok) throw new Error('fetch failed');
-    var data = await res.json();
-    window._relayPoints = data.points || [];
-    window._relayCarrierName = data.carrier_name || '';
-    window._relayPriceTE = data.price_te ?? null;
+    // Pour la France : Mondial Relay SOAP (fiable) + LogSpher en parallèle
+    // Pour l'international : LogSpher uniquement
+    var fetchPromises = pays === 'FR'
+      ? [
+          fetch(BASE + '/api/mondial-relay/points?cp=' + encodeURIComponent(cp.trim()) + '&pays=FR').then(function(r){ return r.ok ? r.json() : null; }).then(function(d){ return d ? (Array.isArray(d) ? d : (d.points||[])) : []; }),
+          fetch(BASE + '/api/logspher/relay-points?cp=' + encodeURIComponent(cp.trim()) + '&country=FR').then(function(r){ return r.ok ? r.json() : null; }).then(function(d){ return d ? (d.points||[]) : []; })
+        ]
+      : [
+          Promise.resolve([]),
+          fetch(BASE + '/api/logspher/relay-points?cp=' + encodeURIComponent(cp.trim()) + '&country=' + encodeURIComponent(pays)).then(function(r){ return r.ok ? r.json() : null; }).then(function(d){ return d ? (d.points||[]) : []; })
+        ];
+
+    var results = await Promise.allSettled(fetchPromises);
+    var mrPoints = (results[0].status === 'fulfilled' ? results[0].value : []).map(function(p){ return Object.assign({}, p, { carrier_name: p.carrier_name || 'Mondial Relay' }); });
+    var lsPoints = results[1].status === 'fulfilled' ? results[1].value : [];
+    var seen = new Set(mrPoints.map(function(p){ return p.id; }));
+    window._relayPoints = mrPoints.concat(lsPoints.filter(function(p){ return !seen.has(p.id); }));
+    window._relayCarrierName = '';
+    window._relayPriceTE = null;
   } catch(e) {
     window._relayPoints = [];
   }
