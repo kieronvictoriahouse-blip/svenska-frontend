@@ -432,17 +432,11 @@ async function searchRelayPoints(cp) {
   const BASE = window.SD_API_URL || 'https://admin.swedishcravings.fr';
   const pays = window._relayCountry || 'FR';
   try {
-    // Tous les pays : Mondial Relay SOAP + LogSpher (Chronopost) en parallèle
-    var fetchPromises = [
-      fetch(BASE + '/api/mondial-relay/points?cp=' + encodeURIComponent(cp.trim()) + '&pays=' + encodeURIComponent(pays)).then(function(r){ return r.ok ? r.json() : null; }).then(function(d){ return d ? (Array.isArray(d) ? d : (d.points||[])) : []; }),
-      fetch(BASE + '/api/logspher/relay-points?cp=' + encodeURIComponent(cp.trim()) + '&country=' + encodeURIComponent(pays)).then(function(r){ return r.ok ? r.json() : null; }).then(function(d){ return d ? (d.points||[]) : []; })
-    ];
-
-    var results = await Promise.allSettled(fetchPromises);
-    var mrPoints = (results[0].status === 'fulfilled' ? results[0].value : []).map(function(p){ return Object.assign({}, p, { carrier_name: p.carrier_name || 'Mondial Relay' }); });
-    var lsPoints = results[1].status === 'fulfilled' ? results[1].value : [];
-    var seen = new Set(mrPoints.map(function(p){ return p.id; }));
-    window._relayPoints = mrPoints.concat(lsPoints.filter(function(p){ return !seen.has(p.id); }));
+    // Mondial Relay SOAP — couvre FR, ES, PT, BE, LU, NL avec rayon précis
+    var res = await fetch(BASE + '/api/mondial-relay/points?cp=' + encodeURIComponent(cp.trim()) + '&pays=' + encodeURIComponent(pays));
+    var data = res.ok ? await res.json() : null;
+    var pts = data ? (Array.isArray(data) ? data : (data.points || [])) : [];
+    window._relayPoints = pts.map(function(p){ return Object.assign({}, p, { carrier_name: p.carrier_name || 'Mondial Relay' }); });
     window._relayCarrierName = '';
     window._relayPriceTE = null;
   } catch(e) {
