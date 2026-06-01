@@ -276,9 +276,7 @@ function renderCartPageFull() {
     const countrySelect = '<select id="relay-country-select" style="border:1px solid var(--linen);background:var(--cream);padding:10px 12px;font-family:var(--font-ui);font-size:13px;color:var(--midnight);outline:none;cursor:pointer;" onchange="window._relayCountry=this.value;window._relayPoints=null;window._selectedRelay=null;window._relaySearchCp=\'\';renderCartPageFull();">'
       + countries.map(c => '<option value="'+c.code+'"'+(window._relayCountry===c.code?' selected':'')+'>'+c.label+'</option>').join('')
       + '</select>';
-    const carrierBadge = (window._relayCarrierName && window._relayPoints !== 'loading' && Array.isArray(window._relayPoints) && window._relayPoints.length > 0)
-      ? '<div style="font-size:11px;color:var(--moss);margin:6px 0 2px;font-family:var(--font-ui);">✓ Transporteur le moins cher : <strong>'+window._relayCarrierName+'</strong>'+(window._relayPriceTE !== null ? ' — '+window._relayPriceTE.toFixed(2)+' €' : '')+'</div>'
-      : '';
+    const carrierBadge = '';
     return '<div class="relay-picker">'
       +'<div class="relay-search-row" style="flex-wrap:wrap;gap:6px;">'
       + countrySelect
