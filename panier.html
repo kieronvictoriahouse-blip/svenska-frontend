@@ -149,9 +149,11 @@ window._selectedRelay = window._selectedRelay || null;
 window._relayPoints = window._relayPoints || null;
 window._relaySearchCp = window._relaySearchCp || '';
 window._relayCountry = window._relayCountry || 'FR';
+window._relayCarrierName = window._relayCarrierName || '';
+window._relayPriceTE = window._relayPriceTE ?? null;
 function setDeliveryMode(mode) {
   window._deliveryMode = mode;
-  if (mode !== 'mondial_relay') { window._selectedRelay = null; window._relayPoints = null; window._relaySearchCp = ''; window._relayCountry = 'FR'; }
+  if (mode !== 'mondial_relay') { window._selectedRelay = null; window._relayPoints = null; window._relaySearchCp = ''; window._relayCountry = 'FR'; window._relayCarrierName = ''; window._relayPriceTE = null; }
 }
 
 initPage('');
@@ -274,12 +276,16 @@ function renderCartPageFull() {
     const countrySelect = '<select id="relay-country-select" style="border:1px solid var(--linen);background:var(--cream);padding:10px 12px;font-family:var(--font-ui);font-size:13px;color:var(--midnight);outline:none;cursor:pointer;" onchange="window._relayCountry=this.value;window._relayPoints=null;window._selectedRelay=null;window._relaySearchCp=\'\';renderCartPageFull();">'
       + countries.map(c => '<option value="'+c.code+'"'+(window._relayCountry===c.code?' selected':'')+'>'+c.label+'</option>').join('')
       + '</select>';
+    const carrierBadge = (window._relayCarrierName && window._relayPoints !== 'loading' && Array.isArray(window._relayPoints) && window._relayPoints.length > 0)
+      ? '<div style="font-size:11px;color:var(--moss);margin:6px 0 2px;font-family:var(--font-ui);">✓ Transporteur le moins cher : <strong>'+window._relayCarrierName+'</strong>'+(window._relayPriceTE !== null ? ' — '+window._relayPriceTE.toFixed(2)+' €' : '')+'</div>'
+      : '';
     return '<div class="relay-picker">'
       +'<div class="relay-search-row" style="flex-wrap:wrap;gap:6px;">'
       + countrySelect
       +'<input id="relay-cp-input" class="relay-cp-input" type="text" placeholder="'+cpPlaceholder+'" value="'+(window._relaySearchCp||'')+'" oninput="window._relaySearchCp=this.value" onkeydown="if(event.key===\'Enter\')searchRelayPoints(this.value)">'
       +'<button class="relay-search-btn" onclick="searchRelayPoints(document.getElementById(\'relay-cp-input\')?.value||\'\')">'+ searchTxt+'</button>'
       +'</div>'
+      + carrierBadge
       +listHtml
       +selectedHtml
       +'</div>';
@@ -428,18 +434,14 @@ async function searchRelayPoints(cp) {
   const BASE = window.SD_API_URL || 'https://admin.swedishcravings.fr';
   const pays = window._relayCountry || 'FR';
   try {
-    // Interroger Mondial Relay ET LogSpher en parallèle pour tous les pays
-    const [mrRes, lsRes] = await Promise.allSettled([
-      fetch(BASE + '/api/mondial-relay/points?cp=' + encodeURIComponent(cp.trim()) + '&pays=' + encodeURIComponent(pays))
-        .then(r => r.ok ? r.json() : null).then(d => d ? (Array.isArray(d) ? d : (d.points || [])) : []),
-      fetch(BASE + '/api/logspher/relay-points?cp=' + encodeURIComponent(cp.trim()) + '&country=' + encodeURIComponent(pays))
-        .then(r => r.ok ? r.json() : null).then(d => d ? (d.points || []) : []),
-    ]);
-    const mrPoints = (mrRes.status === 'fulfilled' ? mrRes.value : []).map(function(p) { return Object.assign({}, p, { carrier_name: p.carrier_name || 'Mondial Relay' }); });
-    const lsPoints = lsRes.status === 'fulfilled' ? lsRes.value : [];
-    // Fusionner sans doublons (par id)
-    var seen = new Set(mrPoints.map(function(p) { return p.id; }));
-    window._relayPoints = mrPoints.concat(lsPoints.filter(function(p) { return !seen.has(p.id); }));
+    // LogSpher compare les prix et renvoie uniquement les points du carrier le moins cher
+    var url = BASE + '/api/logspher/relay-points?cp=' + encodeURIComponent(cp.trim()) + '&country=' + encodeURIComponent(pays);
+    var res = await fetch(url);
+    if (!res.ok) throw new Error('fetch failed');
+    var data = await res.json();
+    window._relayPoints = data.points || [];
+    window._relayCarrierName = data.carrier_name || '';
+    window._relayPriceTE = data.price_te ?? null;
   } catch(e) {
     window._relayPoints = [];
   }
