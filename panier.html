@@ -132,7 +132,7 @@
 <div id="profile-gate" style="display:none;position:fixed;inset:0;background:rgba(27,33,24,0.65);z-index:2000;align-items:center;justify-content:center;padding:20px;">
   <div style="background:var(--snow);max-width:460px;width:100%;padding:40px 36px;position:relative;max-height:90vh;overflow-y:auto;">
     <button onclick="document.getElementById('profile-gate').style.display='none'" style="position:absolute;top:16px;right:16px;background:none;border:none;font-size:22px;cursor:pointer;color:var(--dust);line-height:1;" aria-label="Fermer">×</button>
-    <h2 style="font-family:var(--font-display);font-size:22px;font-weight:500;color:var(--midnight);margin-bottom:8px;">Avant de commander</h2>
+    <h2 id="profile-gate-title" style="font-family:var(--font-display);font-size:22px;font-weight:500;color:var(--midnight);margin-bottom:8px;">Avant de commander</h2>
     <p style="font-family:var(--font-body);font-size:15px;color:var(--dust);margin-bottom:28px;line-height:1.6;" id="profile-gate-subtitle"></p>
     <div id="profile-gate-fields"></div>
     <button id="profile-gate-btn" onclick="submitProfileGate()" style="width:100%;background:var(--heather);color:var(--snow);border:none;padding:16px 24px;font-family:var(--font-ui);font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;margin-top:4px;transition:background 0.2s;" onmouseover="this.style.background='var(--midnight)'" onmouseout="this.style.background='var(--heather)'">
@@ -451,11 +451,11 @@ function selectRelay(i) {
 }
 
 async function doCheckout() {
-  // 1. Auth check — must be logged in
+  // 1. Auth check — show inline email gate if not logged in
   let session;
   try { session = JSON.parse(localStorage.getItem('sd_customer_v1') || 'null'); } catch(e) {}
   if (!session?.token) {
-    window.location.href = 'compte.html?next=checkout';
+    showEmailGate();
     return;
   }
 
@@ -538,10 +538,63 @@ async function doCheckout() {
   }
 }
 
+function showEmailGate() {
+  const gate = document.getElementById('profile-gate');
+  if (!gate) return;
+  const L = LANG || 'fr';
+  const titleEl = document.getElementById('profile-gate-title');
+  if (titleEl) titleEl.textContent = L==='en'?'Your order':L==='sv'?'Din beställning':'Votre commande';
+  document.getElementById('profile-gate-subtitle').textContent =
+    L==='en' ? 'Enter your email address to continue to payment. No account needed.' :
+    L==='sv' ? 'Ange din e-postadress för att fortsätta till betalning. Inget konto behövs.' :
+    'Entrez votre email pour continuer vers le paiement. Aucun compte nécessaire.';
+  document.getElementById('profile-gate-fields').innerHTML = `
+    <div class="pg-field">
+      <label>${L==='en'?'Email address':L==='sv'?'E-postadress':'Adresse email'} *</label>
+      <input id="pg-email-guest" type="email" autocomplete="email" placeholder="vous@exemple.fr">
+    </div>`;
+  document.getElementById('profile-gate-error').textContent = '';
+  document.getElementById('profile-gate-btn').onclick = submitEmailGate;
+  gate.style.display = 'flex';
+  setTimeout(() => document.getElementById('pg-email-guest')?.focus(), 50);
+}
+
+async function submitEmailGate() {
+  const errEl = document.getElementById('profile-gate-error');
+  const btn = document.getElementById('profile-gate-btn');
+  const L = LANG || 'fr';
+  const email = (document.getElementById('pg-email-guest')?.value || '').trim().toLowerCase();
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    errEl.textContent = L==='en'?'Please enter a valid email address.':L==='sv'?'Ange en giltig e-postadress.':'Veuillez saisir une adresse email valide.';
+    return;
+  }
+  errEl.textContent = '';
+  if (btn) { btn.disabled = true; btn.textContent = '…'; }
+  const BASE = window.SD_API_URL || 'https://admin.swedishcravings.fr';
+  try {
+    const res = await fetch(BASE + '/api/customer/auth', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, name: '' }),
+    });
+    if (!res.ok) { errEl.textContent = L==='en'?'Error, please retry.':'Erreur, réessayez.'; if(btn){btn.disabled=false;btn.textContent='CONTINUER →';} return; }
+    const data = await res.json();
+    try { localStorage.setItem('sd_customer_v1', JSON.stringify({ token: data.token, customer_email: data.customer_email, customer_name: data.customer_name, orders: [] })); } catch(e) {}
+    document.getElementById('profile-gate').style.display = 'none';
+    await doCheckout();
+  } catch(e) {
+    errEl.textContent = L==='en'?'Connection error. Please retry.':'Erreur de connexion. Réessayez.';
+    if (btn) { btn.disabled = false; btn.textContent = 'CONTINUER →'; }
+  }
+}
+
 function showProfileGate(token, isPickup, onSaved) {
   const gate = document.getElementById('profile-gate');
   if (!gate) return;
   const L = LANG || 'fr';
+  const titleEl = document.getElementById('profile-gate-title');
+  if (titleEl) titleEl.textContent = L==='en'?'Before ordering':L==='sv'?'Innan du beställer':'Avant de commander';
+  document.getElementById('profile-gate-btn').onclick = submitProfileGate;
   const _isMRMode = window._deliveryMode === 'mondial_relay';
   const subtitles = {
     fr: isPickup ? (_isMRMode ? 'Indiquez votre nom pour commander en point relais Mondial Relay.' : 'Indiquez votre nom pour finaliser la commande (click & collect).') : 'Renseignez vos coordonnées de livraison pour continuer.',

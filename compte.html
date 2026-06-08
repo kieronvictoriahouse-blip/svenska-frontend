@@ -317,7 +317,11 @@ async function loginWithEmail(emailArg, isGoogle, googleName) {
     if (!res.ok) {
       if (data.error === 'no_orders') {
         if (isGoogle) { await renderNewGoogleUser(email, googleName); }
-        else { renderLogin('no_orders'); }
+        else {
+          const _next = new URLSearchParams(window.location.search).get('next');
+          if (_next === 'checkout') { await renderNewGoogleUser(email, null); }
+          else { renderLogin('no_orders'); }
+        }
       } else {
         renderLogin(data.error || 'network');
       }
