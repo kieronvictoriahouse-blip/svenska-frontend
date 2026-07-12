@@ -172,6 +172,7 @@
       <div><div class="pdp-per" id="pdp-per"></div><div class="pdp-per-kg" id="pdp-per-kg"></div></div>
     </div>
     <div class="pdp-weight" id="pdp-weight" style="display:none;"></div>
+    <div id="pdp-pickup-note" style="display:none;background:var(--parchment);border-left:3px solid var(--heather);padding:10px 14px;margin-bottom:18px;font-family:var(--font-ui);font-size:13px;color:var(--midnight);line-height:1.45;"></div>
     <p class="pdp-desc" id="pdp-desc"></p>
     <div id="variants-block" style="margin-bottom:26px;display:none;">
       <div class="opt-label" data-sv="Förpackning" data-fr="Conditionnement" data-en="Packaging">Conditionnement</div>
@@ -208,7 +209,7 @@
 </section>
 
 <div id="footer-root"></div>
-<script src="js/app.js?v=6"></script>
+<script src="js/app.js?v=7"></script>
 <script>
 let pdpQtyVal = 1;
 let selectedVariant = null;
@@ -264,6 +265,22 @@ function renderPDP(p) {
   const weightEl = document.getElementById('pdp-weight');
   const _cleanPdpW = (p.weight||'').replace(/^\d+\s*[xX×]\s*/,'').trim();
   if (weightEl) { weightEl.textContent = _cleanPdpW; weightEl.style.display = _cleanPdpW ? '' : 'none'; }
+
+  // Retrait uniquement (produit frais / non expédiable)
+  const pickupNoteEl = document.getElementById('pdp-pickup-note');
+  if (pickupNoteEl) {
+    if (p.pickup_only) {
+      const l = {
+        fr: '🏪 <strong>Retrait en magasin uniquement</strong> — ce produit frais ne peut pas être expédié. Commandez-le en Click & Collect.',
+        en: '🏪 <strong>In-store pickup only</strong> — this fresh item cannot be shipped. Order it via Click & Collect.',
+        sv: '🏪 <strong>Endast avhämtning i butik</strong> — denna färskvara kan inte skickas. Beställ via Click & Collect.',
+      };
+      pickupNoteEl.innerHTML = l[LANG] || l.fr;
+      pickupNoteEl.style.display = '';
+    } else {
+      pickupNoteEl.style.display = 'none';
+    }
+  }
 
   // Stock badge — always show, fallback to green "En stock" if not tracked
   const stockBadgeEl = document.getElementById('pdp-stock-badge');
@@ -510,6 +527,7 @@ function toggleAcc(trigger) {
         bestseller: raw.is_bestseller || false, isNew: raw.is_new || false,
         stock:      typeof raw.stock === 'number' ? raw.stock : null,
         trackStock: !!(raw.track_stock),
+        pickup_only: !!(raw.pickup_only),
       };
       renderPDP(product);
       return;
@@ -545,6 +563,6 @@ window.addEventListener('sdapi:ready', () => {
 });
 </script>
   <script>(function(){var _hr=document.getElementById("header-root");if(_hr&&typeof MutationObserver!=="undefined")new MutationObserver(function(){if(typeof updateCartBadge==="function")updateCartBadge();}).observe(_hr,{childList:true});})();</script>
-<script src="js/sd-api-client.js?v=4"></script>
+<script src="js/sd-api-client.js?v=5"></script>
 </body>
 </html>

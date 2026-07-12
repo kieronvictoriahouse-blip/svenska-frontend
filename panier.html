@@ -142,7 +142,7 @@
   </div>
 </div>
 <div id="footer-root"></div>
-<script src="js/app.js?v=6"></script>
+<script src="js/app.js?v=7"></script>
 <script>
 window._deliveryMode = window._deliveryMode || 'pickup';
 window._selectedRelay = window._selectedRelay || null;
@@ -209,6 +209,16 @@ function renderCartPageFull() {
         <div class="cpr-price">${fmtPrice(line)}</div>
       </div>`;
   }).join('');
+
+  // Produit "retrait uniquement" (frais, fragile…) dans le panier → toute la commande passe en click & collect
+  const cartHasPickupOnly = entries.some(([key]) => {
+    const _pi = key.indexOf('_');
+    const idStr = _pi === -1 ? key : key.slice(0, _pi);
+    const _cpp = JSON.parse(localStorage.getItem('sd_cart_products') || '{}');
+    const pp = PRODUCTS.find(x => String(x.uuid || x.id) === idStr || x.id === parseInt(idStr)) || _cpp[idStr] || (window._SD_STATIC||[]).find(x => String(x.id) === idStr);
+    return !!(pp && pp.pickup_only);
+  });
+  if (cartHasPickupOnly && window._deliveryMode !== 'pickup') setDeliveryMode('pickup');
 
   const INTL_COUNTRIES = ['ES','PT','IT','DE','NL','BE','LU','CH'];
   const isIntl = INTL_COUNTRIES.includes(window._relayCountry || 'FR');
@@ -312,13 +322,14 @@ function renderCartPageFull() {
       <div class="cart-page-summary">
         <div class="summary-title" data-sv="Orderöversikt" data-fr="Récapitulatif" data-en="Order summary">${LANG==='sv'?'Orderöversikt':LANG==='en'?'Order summary':'Récapitulatif'}</div>
         <div class="delivery-toggle">
-          <button class="dt-btn${window._deliveryMode==='mondial_relay'?' active':''}" onclick="setDeliveryMode('mondial_relay');renderCartPageFull()">
+          <button class="dt-btn${window._deliveryMode==='mondial_relay'?' active':''}"${cartHasPickupOnly?' disabled style="opacity:.4;cursor:not-allowed;"':''} onclick="${cartHasPickupOnly?'':`setDeliveryMode('mondial_relay');renderCartPageFull()`}">
             📦 ${LANG==='sv'?'Utlämning':LANG==='en'?'Relay point':'Point Relais'}
           </button>
           <button class="dt-btn${window._deliveryMode==='pickup'?' active':''}" onclick="setDeliveryMode('pickup');renderCartPageFull()">
             🏪 Click &amp; Collect
           </button>
         </div>
+        ${cartHasPickupOnly?`<div class="summary-ship-bar"><div class="summary-ship-text" style="color:var(--heather);line-height:1.4;">❄️ ${LANG==='sv'?'Din korg innehåller en färskvara som endast kan hämtas i butiken. Hela beställningen sker som Click & Collect.':LANG==='en'?'Your cart contains a fresh item available for in-store pickup only. The whole order will be Click & Collect.':'Votre panier contient un produit frais disponible en retrait uniquement. Toute la commande passe en Click & Collect.'}</div></div>`:''}
         ${relayPickerHtml}
         <div class="promo-section">
           <div class="promo-row">
@@ -659,6 +670,6 @@ async function submitProfileGate() {
 window.addEventListener('sdapi:ready', () => { renderCartPageFull(); });
 </script>
 <script>(function(){var _hr=document.getElementById("header-root");if(_hr&&typeof MutationObserver!=="undefined")new MutationObserver(function(){if(typeof updateCartBadge==="function")updateCartBadge();}).observe(_hr,{childList:true});})();</script>
-<script src="js/sd-api-client.js?v=4"></script>
+<script src="js/sd-api-client.js?v=5"></script>
 </body>
 </html>

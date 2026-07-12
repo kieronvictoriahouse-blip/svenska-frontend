@@ -110,6 +110,7 @@
       isNew:       !!(p.is_new ?? p.isNew),
       stock:       typeof p.stock === 'number' ? p.stock : null,
       trackStock:  !!(p.track_stock),
+      pickup_only: !!(p.pickup_only),
     };
   }
 
