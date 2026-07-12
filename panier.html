@@ -462,15 +462,14 @@ function selectRelay(i) {
 }
 
 async function doCheckout() {
-  // 1. Auth check — show inline email gate if not logged in
-  let session;
+  // Checkout direct : plus de gate email/profil. Stripe Checkout collecte
+  // lui-même l'email, le nom, le téléphone (et l'adresse si besoin) de façon
+  // fiable + Apple/Google Pay. On passe juste le token si le client est déjà
+  // connecté (pour rattacher la commande à son compte) — jamais obligatoire.
+  let session = null;
   try { session = JSON.parse(localStorage.getItem('sd_customer_v1') || 'null'); } catch(e) {}
-  if (!session?.token) {
-    showEmailGate();
-    return;
-  }
 
-  // 2. Build item list
+  // Build item list
   const items = Object.entries(cart)
     .filter(([,q]) => q > 0)
     .map(([key, qty]) => {
@@ -496,23 +495,7 @@ async function doCheckout() {
     return;
   }
 
-  // 3. Profile check — require name (+ address for home delivery only)
-  let profile = null;
-  try {
-    const pr = await fetch(BASE + '/api/customer/profile', { headers: { Authorization: 'Bearer ' + session.token } });
-    if (pr.ok) profile = (await pr.json()).profile || null;
-  } catch(e) {}
-
-  const profileOk = (isPickup || isMR)
-    ? !!(profile?.name)
-    : !!(profile?.name && profile?.address1 && profile?.city && profile?.postal_code);
-
-  if (!profileOk) {
-    showProfileGate(session.token, isPickup || isMR, () => doCheckout());
-    return;
-  }
-
-  // 4. Proceed to Stripe checkout
+  // Proceed to Stripe checkout — Stripe collecte email/nom/téléphone/adresse
   const btn = document.querySelector('.btn-pay');
   if (btn) { btn.disabled = true; btn.textContent = '…'; }
   try {
@@ -522,8 +505,8 @@ async function doCheckout() {
       body: JSON.stringify({
         items,
         delivery_mode: window._deliveryMode || 'delivery',
-        customer_token: session.token,
-        customer_email: session.customer_email,
+        ...(session?.token ? { customer_token: session.token } : {}),
+        ...(session?.customer_email ? { customer_email: session.customer_email } : {}),
         promo_code: window._appliedPromo?.code || null,
         customer_note: (window._orderNote || '').trim() || null,
         ...(window._deliveryMode === 'mondial_relay' && window._selectedRelay ? {
@@ -539,7 +522,7 @@ async function doCheckout() {
     if (data.url) {
       window.location.href = data.url;
     } else {
-      alert('Erreur lors du paiement. Veuillez réessayer.');
+      alert(data.error || (LANG === 'en' ? 'Payment error. Please try again.' : LANG === 'sv' ? 'Betalningsfel. Försök igen.' : 'Erreur lors du paiement. Veuillez réessayer.'));
       if (btn) { btn.disabled = false; btn.textContent = LANG === 'sv' ? 'Betala säkert →' : LANG === 'en' ? 'Pay securely →' : 'Payer en toute sécurité →'; }
     }
   } catch(e) {
