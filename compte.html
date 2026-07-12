@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+<meta charset="UTF-8">
+<!-- Espace compte retiré : le suivi de commande passe par l'email de confirmation.
+     Redirection immédiate vers l'accueil (l'URL reste accessible en direct). -->
+<script>window.location.replace('index.html');</script>
+<meta http-equiv="refresh" content="0; url=index.html">
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-14P3X9NYVY"></script>
 <script>
@@ -178,7 +183,7 @@
 </div>
 
 <div id="footer-root"></div>
-<script src="js/app.js?v=7"></script>
+<script src="js/app.js?v=8"></script>
 <script>
 // Magic link depuis l'admin : ?token=XXX → stocke la session automatiquement
 (function(){

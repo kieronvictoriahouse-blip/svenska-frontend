@@ -57,13 +57,12 @@
   <div id="order-recap"></div>
 
   <div class="success-actions">
-    <a href="compte.html" class="btn-secondary" id="btn-compte">Mon compte</a>
     <a href="boutique.html" class="btn-primary" id="btn-shop">Continuer mes achats</a>
   </div>
 </div>
 
 <div id="footer-root"></div>
-<script src="js/app.js?v=7"></script>
+<script src="js/app.js?v=8"></script>
 <script>
 const LANG = localStorage.getItem('sd_lang') || 'fr';
 const T_SUCCESS = {
@@ -85,7 +84,6 @@ const L = LANG === 'en' ? 'en' : LANG === 'sv' ? 'sv' : 'fr';
 
 document.getElementById('success-title').innerHTML = T_SUCCESS.title[L];
 document.getElementById('success-sub').textContent = T_SUCCESS.sub[L];
-document.getElementById('btn-compte').textContent  = T_SUCCESS.account[L];
 document.getElementById('btn-shop').textContent    = T_SUCCESS.shop[L];
 
 // Clear cart
