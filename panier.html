@@ -395,7 +395,7 @@ async function applyPromoCode() {
       window._promoMsg = { ok: false, text: L==='en'?'Code not yet valid':L==='sv'?'Koden är inte giltig ännu':'Code pas encore valide' };
       renderCartPageFull(); return;
     }
-    if (found.valid_until && now > new Date(found.valid_until)) {
+    if (found.valid_until && now > new Date(String(found.valid_until).slice(0, 10) + 'T23:59:59')) {
       window._appliedPromo = null; window._promoInput = code;
       window._promoMsg = { ok: false, text: L==='en'?'Code expired':L==='sv'?'Koden har gått ut':'Code expiré' };
       renderCartPageFull(); return;
