@@ -105,8 +105,11 @@ let _bsReady = false;
 function bsRender() {
   const container = document.getElementById('products-container');
   if (!container || typeof PRODUCTS === 'undefined') return;
-  // Bonbons = catégories Confiseries (+ snacks sucrés éventuels)
-  const list = PRODUCTS.filter(p => p.cat === 'Confiseries');
+  // Bonbons : catégorie Confiseries si elle existe, sinon détection par nom
+  // (les bonbons sont actuellement rangés dans "Chips & Snacks" en base).
+  const CANDY = /bilar|ahlgrens|djungel|daim|r[ée]glisse|lakrits|bonbon|voiture|acidul|godis|polkagris|salmiak|klubba|nappar|skumtomt/i;
+  const nameOf = p => [p.name && p.name.fr, p.name && p.name.sv, p.name && p.name.en, p.subtitle && p.subtitle.fr].filter(Boolean).join(' ');
+  const list = PRODUCTS.filter(p => p.cat === 'Confiseries' || CANDY.test(nameOf(p)));
   if (list.length === 0) {
     container.innerHTML = '<p style="text-align:center;font-style:italic;color:var(--dust);padding:24px 0;">Bientôt de nouveaux bonbons — <a href="boutique.html" style="color:var(--heather);">voir toute la boutique</a>.</p>';
     return;
