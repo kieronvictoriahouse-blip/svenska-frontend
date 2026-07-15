@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /panier
+Disallow: /compte
+Disallow: /success
+
+Sitemap: https://www.swedishcravings.fr/sitemap.xml

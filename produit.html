@@ -11,8 +11,9 @@
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Produit</title>
-<meta name="description" content="Produit authentique.">
+<title>Produit suédois | Swedish Cravings — épicerie suédoise en ligne</title>
+<meta name="description" content="Produit suédois authentique, livré en France. Découvrez toute l'épicerie suédoise sur Swedish Cravings.">
+<link rel="canonical" id="canonical-link" href="https://www.swedishcravings.fr/boutique">
 <meta property="og:type" content="product">
 <meta property="og:url" content="https://swedishcravings.fr/produit.html">
 <meta property="og:title" id="og-title" content="Produit">
@@ -399,6 +400,11 @@ function renderPDP(p) {
   if (ogTitle) ogTitle.content = document.title;
   if (ogDesc && p.desc[LANG]) ogDesc.content = p.desc[LANG].slice(0,160);
   if (ogImg && p.photo) ogImg.content = p.photo;
+  // Canonical + meta description dynamiques (SEO par produit)
+  const canon = document.getElementById('canonical-link');
+  if (canon) canon.setAttribute('href', 'https://www.swedishcravings.fr/produit?id=' + (p.uuid || p.id));
+  const metaDesc = document.querySelector('meta[name="description"]');
+  if (metaDesc && p.desc[LANG]) metaDesc.setAttribute('content', p.desc[LANG].slice(0, 160));
   if (ldProd) ldProd.textContent = JSON.stringify({
     '@context': 'https://schema.org', '@type': 'Product',
     name: p.name[LANG], description: p.desc[LANG],
