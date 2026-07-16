@@ -21,7 +21,7 @@
 <meta property="og:image" content="https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=1200&q=80">
 <meta property="og:site_name" content="">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/style.css?v=10">
 <script>const SD_API_URL = 'https://admin.swedishcravings.fr';</script>
 <script>(function(){try{var w=JSON.parse(localStorage.getItem('sd_wl_v1'));if(w&&w.id){var r=document.documentElement.style;if(w.color_primary){r.setProperty('--heather',w.color_primary);r.setProperty('--heather-mid',w.color_primary+'CC');}if(w.color_secondary){r.setProperty('--lingon',w.color_secondary);r.setProperty('--lingon-mid',w.color_secondary+'CC');}if(w.color_bg)r.setProperty('--cream',w.color_bg);if(w.color_text)r.setProperty('--midnight',w.color_text);if(w.font_display)r.setProperty('--font-display',"'"+w.font_display+"',Georgia,serif");if(w.font_body)r.setProperty('--font-body',"'"+w.font_body+"',Georgia,serif");if(w.font_ui)r.setProperty('--font-ui',"'"+w.font_ui+"',sans-serif");}}catch(e){}}());</script>
 <script>(function(){try{var w=JSON.parse(localStorage.getItem('sd_wl_v1'));var n=w&&w.site_name;if(n){var qm=function(s){return document.querySelector(s);};var el;var _t=document.title;document.title=n+(_t?' — '+_t:'');el=qm('meta[property="og:title"]');if(el)el.setAttribute('content',document.title);el=qm('meta[property="og:site_name"]');if(el)el.setAttribute('content',n);el=qm('meta[name="twitter:title"]');if(el)el.setAttribute('content',document.title);var jld=qm('script[type="application/ld+json"]');if(jld){try{var d=JSON.parse(jld.textContent);if(d.name!==undefined)d.name=n;if(w.email&&d.email!==undefined)d.email=w.email;if(d.url!==undefined)d.url=location.origin;jld.textContent=JSON.stringify(d);}catch(e){}}}var u=document.querySelector('meta[property="og:url"]');if(u)u.setAttribute('content',location.href);}catch(e){}}());</script>
@@ -211,7 +211,7 @@
 </div>
 
 <div id="footer-root"></div>
-<script src="js/app.js?v=9"></script>
+<script src="js/app.js?v=10"></script>
 <script>
 const params = new URLSearchParams(window.location.search);
 let currentCat = params.get('cat') ? decodeURIComponent(params.get('cat')) : 'Tous';
@@ -230,6 +230,10 @@ const CAT_BTN_MAP = {
 
 initPage('shop');
 
+// Filtres repliés par défaut sur mobile (la sidebar est visible par défaut sur desktop)
+const _isMobileShop = () => window.matchMedia('(max-width:1024px)').matches;
+if (_isMobileShop()) toggleMobFilter();
+
 function onLangChange() { render(); }
 
 function setCat(cat) {
@@ -238,6 +242,12 @@ function setCat(cat) {
   const el = document.getElementById(CAT_BTN_MAP[cat]);
   if (el) el.classList.add('active');
   render();
+  // Sur mobile : replier les filtres et remonter vers les produits
+  if (_isMobileShop()) {
+    const sb = document.querySelector('.sidebar');
+    if (sb && !sb.classList.contains('mob-hidden')) toggleMobFilter();
+    document.getElementById('products-container')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 }
 
 function setPriceMax(v) {

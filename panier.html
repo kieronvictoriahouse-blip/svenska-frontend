@@ -16,7 +16,7 @@
 <meta name="robots" content="noindex">
 <meta property="og:site_name" content="">
 <meta name="twitter:card" content="summary">
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/style.css?v=10">
 <script>const SD_API_URL = 'https://admin.swedishcravings.fr';</script>
 <script>(function(){try{var w=JSON.parse(localStorage.getItem('sd_wl_v1'));if(w&&w.id){var r=document.documentElement.style;if(w.color_primary){r.setProperty('--heather',w.color_primary);r.setProperty('--heather-mid',w.color_primary+'CC');}if(w.color_secondary){r.setProperty('--lingon',w.color_secondary);r.setProperty('--lingon-mid',w.color_secondary+'CC');}if(w.color_bg)r.setProperty('--cream',w.color_bg);if(w.color_text)r.setProperty('--midnight',w.color_text);if(w.font_display)r.setProperty('--font-display',"'"+w.font_display+"',Georgia,serif");if(w.font_body)r.setProperty('--font-body',"'"+w.font_body+"',Georgia,serif");if(w.font_ui)r.setProperty('--font-ui',"'"+w.font_ui+"',sans-serif");}}catch(e){}}());</script>
 <style>
@@ -80,9 +80,11 @@
   .page-hero{padding:48px 20px;}
 }
 @media(max-width:600px){
-  .cart-page-row{grid-template-columns:68px 1fr;gap:14px;}
-  .cpr-qty,.cpr-price{grid-column:2;}
-  .cpr-del{grid-column:2;justify-self:end;}
+  .cart-page-heading{display:none;}
+  .cart-page-row{grid-template-columns:68px 1fr;gap:12px 14px;align-items:start;}
+  .cpr-qty{grid-column:2;grid-row:2;justify-self:start;}
+  .cpr-price{grid-column:2;grid-row:2;justify-self:end;align-self:center;}
+  .cpr-name{font-size:16px;}
 }
 /* Profile gate modal */
 .pg-field{margin-bottom:18px;}
@@ -142,7 +144,7 @@
   </div>
 </div>
 <div id="footer-root"></div>
-<script src="js/app.js?v=9"></script>
+<script src="js/app.js?v=10"></script>
 <script>
 window._deliveryMode = window._deliveryMode || 'pickup';
 window._selectedRelay = window._selectedRelay || null;
