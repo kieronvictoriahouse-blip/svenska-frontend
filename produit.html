@@ -210,7 +210,7 @@
 </section>
 
 <div id="footer-root"></div>
-<script src="js/app.js?v=10"></script>
+<script src="js/app.js?v=11"></script>
 <script>
 let pdpQtyVal = 1;
 let selectedVariant = null;
@@ -405,12 +405,16 @@ function renderPDP(p) {
   if (canon) canon.setAttribute('href', 'https://www.swedishcravings.fr/produit?id=' + (p.uuid || p.id));
   const metaDesc = document.querySelector('meta[name="description"]');
   if (metaDesc && p.desc[LANG]) metaDesc.setAttribute('content', p.desc[LANG].slice(0, 160));
-  if (ldProd) ldProd.textContent = JSON.stringify({
-    '@context': 'https://schema.org', '@type': 'Product',
-    name: p.name[LANG], description: p.desc[LANG],
-    image: p.photo, brand: { '@type': 'Brand', name: _bn || '' },
-    offers: { '@type': 'Offer', price: price, priceCurrency: 'EUR', availability: 'https://schema.org/InStock' }
-  });
+  if (ldProd) {
+    const _avail = (p.trackStock && (p.stock || 0) <= 0) ? 'https://schema.org/PreOrder' : 'https://schema.org/InStock';
+    const _prodUrl = 'https://www.swedishcravings.fr/produit?id=' + (p.uuid || p.id);
+    ldProd.textContent = JSON.stringify({
+      '@context': 'https://schema.org', '@type': 'Product',
+      name: p.name[LANG], description: p.desc[LANG],
+      image: p.photo, brand: { '@type': 'Brand', name: _bn || 'Swedish Cravings' },
+      offers: { '@type': 'Offer', price: price, priceCurrency: 'EUR', availability: _avail, url: _prodUrl }
+    });
+  }
 
   // Reveal sections
   initScrollReveal();
