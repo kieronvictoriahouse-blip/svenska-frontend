@@ -29,6 +29,8 @@
 
 /* Cart layout */
 .cart-page-layout{display:grid;grid-template-columns:1fr 360px;gap:48px;align-items:start;}
+/* Empêche le contenu large (carrousel, champ relais) de forcer la grille à déborder l'écran */
+.cart-page-items,.cart-page-summary{min-width:0;}
 
 /* Items list */
 .cart-page-items{}
@@ -73,6 +75,38 @@
 .btn-continue:hover{border-color:var(--heather);color:var(--heather);}
 .pay-methods{display:flex;gap:6px;justify-content:center;margin-top:20px;flex-wrap:wrap;}
 .pay-m{font-family:var(--font-ui);font-size:9px;letter-spacing:1px;text-transform:uppercase;border:1px solid var(--linen);padding:4px 8px;color:var(--dust);}
+
+/* ── Upsell livraison gratuite (barre de progression) ── */
+.ship-upsell{display:flex;align-items:center;gap:10px;margin-top:12px;padding:10px;background:var(--lingon-pale);border:1px solid var(--lingon-mid);border-radius:6px;animation:upsellIn .35s ease;}
+.ship-upsell img{width:36px;height:36px;object-fit:contain;flex-shrink:0;background:#fff;border-radius:4px;}
+.ship-upsell-txt{flex:1;font-family:var(--font-body);font-size:13px;line-height:1.35;color:var(--lingon-deep);}
+.ship-upsell-txt strong{font-weight:600;}
+.ship-upsell-btn{flex-shrink:0;background:var(--lingon);color:#fff;border:none;padding:9px 13px;font-family:var(--font-ui);font-size:10px;letter-spacing:1px;text-transform:uppercase;border-radius:4px;cursor:pointer;transition:background .15s,transform .12s;white-space:nowrap;}
+.ship-upsell-btn:hover{background:var(--lingon-mid);}
+.ship-upsell-btn:active{transform:scale(.96);}
+@keyframes upsellIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+
+/* ── Cross-sell "Complétez votre commande" ── */
+.xsell{margin-top:32px;border-top:1px solid var(--linen);padding-top:24px;}
+.xsell-h{font-family:var(--font-display);font-size:20px;font-weight:500;color:var(--midnight);margin-bottom:4px;}
+.xsell-sub{font-family:var(--font-body);font-size:13px;font-style:italic;color:var(--dust);margin-bottom:16px;}
+.xsell-track{display:flex;gap:14px;overflow-x:auto;padding-bottom:10px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;}
+.xsell-track::-webkit-scrollbar{height:5px;}
+.xsell-track::-webkit-scrollbar-thumb{background:var(--linen);border-radius:3px;}
+.xsell-card{flex:0 0 148px;scroll-snap-align:start;border:1px solid var(--linen);border-radius:6px;padding:12px;background:var(--snow);display:flex;flex-direction:column;gap:8px;transition:border-color .15s,box-shadow .15s,transform .15s;}
+.xsell-card:hover{border-color:var(--driftwood);box-shadow:var(--shadow-sm);transform:translateY(-2px);}
+.xsell-card img{width:100%;aspect-ratio:1;object-fit:contain;background:var(--cream);border-radius:4px;padding:6px;}
+.xsell-name{font-family:var(--font-display);font-size:14px;font-weight:600;color:var(--heather);line-height:1.25;min-height:35px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.xsell-foot{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-top:auto;}
+.xsell-price{font-family:var(--font-display);font-size:16px;font-weight:600;color:var(--midnight);}
+.xsell-add{background:var(--heather);color:#fff;border:none;width:30px;height:30px;font-size:17px;line-height:1;border-radius:4px;cursor:pointer;transition:background .15s,transform .12s;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.xsell-add:hover{background:var(--heather-mid);}
+.xsell-add:active{transform:scale(.9);}
+
+/* ── Réassurance avant paiement ── */
+.trust-list{margin:4px 0 16px;padding:0;list-style:none;}
+.trust-list li{display:flex;align-items:center;gap:9px;font-family:var(--font-body);font-size:13px;color:var(--slate);padding:5px 0;}
+.trust-list li svg{flex-shrink:0;color:var(--heather);}
 
 @media(max-width:1024px){
   .cart-page-layout{grid-template-columns:1fr;gap:32px;}
@@ -158,6 +192,59 @@ function setDeliveryMode(mode) {
   if (mode !== 'mondial_relay') { window._selectedRelay = null; window._relayPoints = null; window._relaySearchCp = ''; window._relayCountry = 'FR'; window._relayCarrierName = ''; window._relayPriceTE = null; }
 }
 
+const _TRUST_CHK = '<svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13.5 4.5 6.5 11.5 3 8"/></svg>';
+
+// Produit le moins cher qui, ajouté, fait franchir le seuil de livraison gratuite
+function _upsellPick(remaining, cartIds) {
+  const avail = (window.PRODUCTS || []).filter(function(p) {
+    const id = String(p.uuid || p.id);
+    if (cartIds.has(id)) return false;
+    if (p.pickup_only) return false;
+    if (p.trackStock && p.stock !== null && p.stock <= 0) return false;
+    return (p.price || 0) > 0;
+  });
+  const crossers = avail.filter(function(p) { return p.price >= remaining; })
+                        .sort(function(a, b) { return a.price - b.price; });
+  return crossers.length ? crossers[0] : null;
+}
+
+// Ajout depuis le panier sans ouvrir le tiroir latéral (on est déjà sur la page)
+function cartAddQuick(id) {
+  addToCart(id);
+  if (typeof closeCart === 'function') closeCart();
+  renderCartPageFull();
+}
+
+// Carrousel "Complétez votre commande" — produits en stock absents du panier
+function _crossSellHtml(cartIds) {
+  const picks = (window.PRODUCTS || []).filter(function(p) {
+    const id = String(p.uuid || p.id);
+    if (cartIds.has(id)) return false;
+    if (p.pickup_only) return false;
+    if (p.trackStock && p.stock !== null && p.stock <= 0) return false;
+    return (p.price || 0) > 0;
+  });
+  if (picks.length < 2) return '';
+  const rank = function(x) { return x.badge === 'badge-pop' ? 0 : x.badge === 'badge-must' ? 1 : x.badge ? 2 : 3; };
+  picks.sort(function(a, b) { return rank(a) - rank(b); });
+  const list = picks.slice(0, 8);
+  const addTxt = LANG === 'sv' ? 'Lägg till' : LANG === 'en' ? 'Add' : 'Ajouter';
+  const title = LANG === 'sv' ? 'Komplettera din beställning' : LANG === 'en' ? 'Complete your order' : 'Complétez votre commande';
+  const sub = LANG === 'sv' ? 'Populära tillägg till din korg' : LANG === 'en' ? 'Popular add-ons for your cart' : "Les petits plus qu'on ajoute souvent";
+  return '<div class="xsell"><div class="xsell-h">' + title + '</div><div class="xsell-sub">' + sub + '</div><div class="xsell-track">'
+    + list.map(function(p) {
+        const id = p.uuid || p.id;
+        const nm = (p.name && (p.name[LANG] || p.name.fr)) || '';
+        return '<div class="xsell-card">'
+          + '<img src="' + (p.photo || '') + '" onerror="this.style.display=\'none\'" alt="' + nm.replace(/"/g, '') + '" loading="lazy">'
+          + '<div class="xsell-name">' + nm + '</div>'
+          + '<div class="xsell-foot"><span class="xsell-price">' + fmtPrice(p.price) + '</span>'
+          + '<button class="xsell-add" title="' + addTxt + '" aria-label="' + addTxt + '" onclick="cartAddQuick(\'' + id + '\')">+</button></div>'
+          + '</div>';
+      }).join('')
+    + '</div></div>';
+}
+
 initPage('');
 renderCartPageFull();
 
@@ -180,6 +267,8 @@ function renderCartPageFull() {
       </div>`;
     return;
   }
+
+  const cartIdSet = new Set(entries.map(([key]) => { const i = key.indexOf('_'); return i === -1 ? key : key.slice(0, i); }));
 
   let subtotal = 0;
   const itemRows = entries.map(([key, qty]) => {
@@ -229,19 +318,32 @@ function renderCartPageFull() {
 
   const remaining = freeThreshold - subtotal;
   const pct = Math.min(100, (subtotal / freeThreshold) * 100);
-  const shipHtml = remaining > 0
-    ? `<div class="summary-ship-bar">
-        <div class="summary-ship-text">${LANG==='sv'?`${fmtPrice(remaining)} kvar till fri frakt`:LANG==='en'?`${fmtPrice(remaining)} away from free delivery`:`Plus que ${fmtPrice(remaining)} pour la livraison gratuite`}</div>
+  const _upProd = remaining > 0 ? _upsellPick(remaining, cartIdSet) : null;
+  const _upHtml = _upProd ? (function(){
+    const uid = _upProd.uuid || _upProd.id;
+    const _unmRaw = _upProd.name?.[LANG] || _upProd.name?.fr || '';
+    const unm = _unmRaw.length > 30 ? _unmRaw.slice(0, 30).trim() + '…' : _unmRaw;
+    const addTxt = LANG==='sv'?'Lägg till':LANG==='en'?'Add':'Ajouter';
+    const lead = LANG==='sv'?'Lägg till':LANG==='en'?'Add':'Ajoutez';
+    const tail = LANG==='sv'?'→ fri frakt':LANG==='en'?'→ free delivery':'→ livraison offerte';
+    return `<div class="ship-upsell">
+        <img src="${_upProd.photo||''}" onerror="this.style.display='none'" alt="">
+        <div class="ship-upsell-txt">${lead} <strong>${unm}</strong> (${fmtPrice(_upProd.price)}) ${tail} 🎉</div>
+        <button class="ship-upsell-btn" onclick="cartAddQuick('${uid}')">+ ${addTxt}</button>
+      </div>`;
+  })() : '';
+  const _freeShipInner = `<div class="summary-ship-text">${LANG==='sv'?`${fmtPrice(remaining)} kvar till fri frakt`:LANG==='en'?`${fmtPrice(remaining)} away from free delivery`:`Plus que ${fmtPrice(remaining)} pour la livraison gratuite`}</div>
         <div class="summary-bar"><div class="summary-bar-fill" style="width:${pct}%"></div></div>
-       </div>`
-    : `<div class="summary-ship-bar">
-        <div class="summary-ship-text" style="color:var(--moss);">${UI[LANG].freeShip} ✓</div>
-       </div>`;
+        ${_upHtml}`;
+  const _freeDoneInner = `<div class="summary-ship-text" style="color:var(--moss);">${UI[LANG].freeShip} ✓</div>`;
+  const shipHtml = `<div class="summary-ship-bar">${remaining > 0 ? _freeShipInner : _freeDoneInner}</div>`;
 
   const shipping = subtotal >= freeThreshold ? 0 : baseShipping;
   const _promoValid = !!(window._appliedPromo && subtotal >= (window._appliedPromo.min_order || 0));
   const _discountAmt = _promoValid ? _calcPromoDiscount(window._appliedPromo, subtotal) : 0;
   const _isFreeShip = _promoValid && window._appliedPromo.type === 'free_shipping';
+  // Nudge "livraison gratuite" (barre + upsell), affiché en point relais où des frais s'appliquent
+  const freeShipNudge = _isFreeShip ? '' : shipHtml;
   const _effectiveShipping = (_isFreeShip || window._deliveryMode === 'pickup') ? 0 : shipping;
   const _totalToPay = Math.max(0, subtotal - _discountAmt) + _effectiveShipping;
   const _promoLabel = LANG==='sv'?'Kampanjkod':LANG==='en'?'Promo code':'Code promo';
@@ -310,6 +412,7 @@ function renderCartPageFull() {
           <span data-sv="Pris" data-fr="Prix" data-en="Price">${LANG==='sv'?'Pris':LANG==='en'?'Price':'Prix'}</span>
         </div>
         ${itemRows}
+        ${_crossSellHtml(cartIdSet)}
         <div style="margin-top:32px;border-top:1px solid var(--linen);padding-top:24px;">
           <label style="display:block;font-family:var(--font-ui);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dust);margin-bottom:10px;">${LANG==='sv'?'Kommentar till din beställning (valfritt)':LANG==='en'?'Order note (optional)':'Note pour votre commande (optionnel)'}</label>
           <textarea id="order-note-input" rows="3" oninput="window._orderNote=this.value" style="width:100%;border:1px solid var(--linen);background:var(--cream);padding:12px 14px;font-family:var(--font-body);font-size:15px;color:var(--midnight);outline:none;resize:vertical;box-sizing:border-box;transition:border-color 0.2s;" onfocus="this.style.borderColor='var(--heather)'" onblur="this.style.borderColor='var(--linen)'" placeholder="${LANG==='sv'?'Ex: Cadeau, allergie non signalée, instructions spéciales...':LANG==='en'?'E.g. gift, special instructions...':'Ex : cadeau, instruction particulière...'}">${window._orderNote||''}</textarea>
@@ -349,11 +452,16 @@ function renderCartPageFull() {
           <span data-sv="Leverans" data-fr="Livraison" data-en="Shipping">${LANG==='sv'?'Leverans':LANG==='en'?'Shipping':'Livraison'}</span>
           <span>${window._deliveryMode==='pickup'?`<span style="color:var(--moss)">${LANG==='sv'?'Gratis':LANG==='en'?'Free':'Gratuit'}</span>`:_effectiveShipping===0?`<span style="color:var(--moss)">${LANG==='sv'?'Gratis':LANG==='en'?'Free':'Gratuite'}</span>`:`${fmtPrice(_effectiveShipping)}`}</span>
         </div>
-        ${window._deliveryMode==='pickup'?`<div class="summary-ship-bar"><div class="summary-ship-text" style="color:var(--moss);">${LANG==='sv'?'Hämtas i butiken':'🏪 '+(LANG==='en'?'In-store pickup':'Retrait en magasin')}</div></div>`:window._deliveryMode==='mondial_relay'?`<div class="summary-ship-bar"><div class="summary-ship-text" style="color:var(--heather);">📦 ${LANG==='sv'?'Leverans till utlämningsställe':LANG==='en'?'Mondial Relay pickup point':'Livraison en point relais Mondial Relay'}</div></div>`:_isFreeShip?`<div class="summary-ship-bar"><div class="summary-ship-text" style="color:var(--moss);">🎟 ${LANG==='sv'?'Fri frakt via kampanjkod':LANG==='en'?'Free shipping via promo code':'Livraison offerte via code promo'}</div></div>`:shipHtml}
+        ${window._deliveryMode==='pickup'?`<div class="summary-ship-bar"><div class="summary-ship-text" style="color:var(--moss);">${LANG==='sv'?'Hämtas i butiken':'🏪 '+(LANG==='en'?'In-store pickup':'Retrait en magasin')}</div></div>`:window._deliveryMode==='mondial_relay'?`<div class="summary-ship-bar"><div class="summary-ship-text" style="color:var(--heather);">📦 ${LANG==='sv'?'Leverans till utlämningsställe':LANG==='en'?'Mondial Relay pickup point':'Livraison en point relais Mondial Relay'}</div></div>${freeShipNudge}`:_isFreeShip?`<div class="summary-ship-bar"><div class="summary-ship-text" style="color:var(--moss);">🎟 ${LANG==='sv'?'Fri frakt via kampanjkod':LANG==='en'?'Free shipping via promo code':'Livraison offerte via code promo'}</div></div>`:shipHtml}
         <div class="summary-line total">
           <span>Total</span>
           <span>${fmtPrice(_totalToPay)}</span>
         </div>
+        <ul class="trust-list">
+          <li>${_TRUST_CHK}${LANG==='sv'?'Skickas inom 24-48h':LANG==='en'?'Shipped within 24-48h':'Expédié sous 24-48h'}</li>
+          <li>${_TRUST_CHK}${LANG==='sv'?'Äkta svenska produkter':LANG==='en'?'Authentic Swedish products':'Produits suédois authentiques'}</li>
+          <li>${_TRUST_CHK}${LANG==='sv'?'Enkel retur inom 14 dagar':LANG==='en'?'Easy 14-day returns':'Retour facile sous 14 jours'}</li>
+        </ul>
         <button class="btn-pay" onclick="doCheckout()">
           ${LANG==='sv'?'Betala säkert →':LANG==='en'?'Pay securely →':'Payer en toute sécurité →'}
         </button>
