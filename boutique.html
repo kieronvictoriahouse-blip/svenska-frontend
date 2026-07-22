@@ -116,54 +116,7 @@
     <div class="sidebar">
       <div class="sb-block">
         <div class="sb-title" data-sv="Kategorier" data-fr="Catégories" data-en="Categories">Catégories</div>
-        <button class="sb-btn active" onclick="setCat('Tous')" id="sb-ALL">
-          <span data-sv="Alla produkter" data-fr="Tous les produits" data-en="All products">Tous les produits</span>
-          <span class="sb-cnt" id="cnt-ALL">36</span>
-        </button>
-        <button class="sb-btn" onclick="setCat('Épices')" id="sb-Epices">
-          <span data-sv="Épices" data-fr="Épices & Aromates" data-en="Spices">Épices & Aromates</span>
-          <span class="sb-cnt" id="cnt-Epices">7</span>
-        </button>
-        <button class="sb-btn" onclick="setCat('Chips & Snacks')" id="sb-Chips">
-          <span data-sv="Chips & Snacks" data-fr="Chips & Snacks" data-en="Chips & Snacks">Chips & Snacks</span>
-          <span class="sb-cnt" id="cnt-Chips">3</span>
-        </button>
-        <button class="sb-btn" onclick="setCat('Confiseries')" id="sb-Confis">
-          <span data-sv="Konfektyr" data-fr="Confiseries" data-en="Confectionery">Confiseries</span>
-          <span class="sb-cnt" id="cnt-Confis">5</span>
-        </button>
-        <button class="sb-btn" onclick="setCat('Basics suédois')" id="sb-Basics">
-          <span data-sv="Svenska baser" data-fr="Basics suédois" data-en="Swedish basics">Basics suédois</span>
-          <span class="sb-cnt" id="cnt-Basics">4</span>
-        </button>
-        <button class="sb-btn" onclick="setCat('Fika & Boulangerie')" id="sb-Fika">
-          <span data-sv="Fika & Bakning" data-fr="Fika & Boulangerie" data-en="Fika & Baking">Fika & Boulangerie</span>
-          <span class="sb-cnt" id="cnt-Fika">4</span>
-        </button>
-        <button class="sb-btn" onclick="setCat('Mélanges')" id="sb-Mel">
-          <span data-sv="Blandningar" data-fr="Mélanges suédois" data-en="Swedish blends">Mélanges suédois</span>
-          <span class="sb-cnt" id="cnt-Mel">2</span>
-        </button>
-        <button class="sb-btn" onclick="setCat('Thés & Tisanes')" id="sb-Thes">
-          <span data-sv="Thés & Tisanes" data-fr="Thés & Tisanes" data-en="Teas">Thés & Tisanes</span>
-          <span class="sb-cnt" id="cnt-Thes">2</span>
-        </button>
-        <button class="sb-btn" onclick="setCat('Baies séchées')" id="sb-Baies">
-          <span data-sv="Baies séchées" data-fr="Baies séchées" data-en="Dried berries">Baies séchées</span>
-          <span class="sb-cnt" id="cnt-Baies">3</span>
-        </button>
-        <button class="sb-btn" onclick="setCat('Flocons & Céréales')" id="sb-Flocons">
-          <span data-sv="Flocons & Céréales" data-fr="Flocons & Céréales" data-en="Oats">Flocons & Céréales</span>
-          <span class="sb-cnt" id="cnt-Flocons">2</span>
-        </button>
-        <button class="sb-btn" onclick="setCat('Farines & Graines')" id="sb-Farines">
-          <span data-sv="Farines & Graines" data-fr="Farines & Graines" data-en="Flours">Farines & Graines</span>
-          <span class="sb-cnt" id="cnt-Farines">2</span>
-        </button>
-        <button class="sb-btn" onclick="setCat('Sucres & Sirops')" id="sb-Sucres">
-          <span data-sv="Sucres & Sirops" data-fr="Sucres & Sirops" data-en="Sugars">Sucres & Sirops</span>
-          <span class="sb-cnt" id="cnt-Sucres">2</span>
-        </button>
+        <div id="cat-filters"><button class="sb-btn active" data-cat="Tous"><span data-sv="Alla produkter" data-fr="Tous les produits" data-en="All products">Tous les produits</span></button></div>
       </div>
 
       <div class="sb-block">
@@ -211,7 +164,7 @@
 </div>
 
 <div id="footer-root"></div>
-<script src="js/app.js?v=12"></script>
+<script src="js/app.js?v=13"></script>
 <script>
 const params = new URLSearchParams(window.location.search);
 let currentCat = params.get('cat') ? decodeURIComponent(params.get('cat')) : 'Tous';
@@ -221,14 +174,35 @@ let currentView = 'grid3';
 let activeTags = new Set();
 let _ready = false;
 
-const CAT_BTN_MAP = {
-  'Tous':'sb-ALL','Épices':'sb-Epices','Chips & Snacks':'sb-Chips',
-  'Confiseries':'sb-Confis','Basics suédois':'sb-Basics','Fika & Boulangerie':'sb-Fika',
-  'Mélanges':'sb-Mel','Thés & Tisanes':'sb-Thes','Baies séchées':'sb-Baies',
-  'Flocons & Céréales':'sb-Flocons','Farines & Graines':'sb-Farines','Sucres & Sirops':'sb-Sucres'
-};
+// ── Catégories dynamiques (white-label) : construites depuis les produits ──
+// Tout rayon créé dans le back office apparaît ici automatiquement, sans toucher au code.
+function _esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;'); }
+function catLabel(cat){ return (typeof CAT_LABELS !== 'undefined' && CAT_LABELS[cat] && CAT_LABELS[cat][LANG]) || cat; }
+
+function renderCatFilters() {
+  const box = document.getElementById('cat-filters');
+  if (!box) return;
+  const counts = {};
+  (PRODUCTS || []).forEach(p => { if (p && p.cat) counts[p.cat] = (counts[p.cat] || 0) + 1; });
+  // Ordre : d'abord les rayons "connus" (ordre CATS), puis les nouveaux par ordre alphabétique
+  const knownOrder = (typeof CATS !== 'undefined' ? CATS.map(c => c.id) : []).filter(id => counts[id] > 0);
+  const extra = Object.keys(counts).filter(c => !knownOrder.includes(c)).sort((a, b) => catLabel(a).localeCompare(catLabel(b)));
+  const ordered = [...knownOrder, ...extra];
+  const allLabel = LANG === 'sv' ? 'Alla produkter' : LANG === 'en' ? 'All products' : 'Tous les produits';
+  let html = `<button class="sb-btn${currentCat === 'Tous' ? ' active' : ''}" data-cat="Tous"><span>${allLabel}</span><span class="sb-cnt">${(PRODUCTS || []).length}</span></button>`;
+  ordered.forEach(cat => {
+    html += `<button class="sb-btn${currentCat === cat ? ' active' : ''}" data-cat="${_esc(cat)}"><span>${_esc(catLabel(cat))}</span><span class="sb-cnt">${counts[cat]}</span></button>`;
+  });
+  box.innerHTML = html;
+}
 
 initPage('shop');
+
+// Clic sur un rayon (délégation → gère les rayons générés dynamiquement)
+document.getElementById('cat-filters')?.addEventListener('click', e => {
+  const b = e.target.closest('.sb-btn');
+  if (b && b.dataset.cat) setCat(b.dataset.cat);
+});
 
 // Filtres repliés par défaut sur mobile (la sidebar est visible par défaut sur desktop)
 const _isMobileShop = () => window.matchMedia('(max-width:1024px)').matches;
@@ -238,9 +212,7 @@ function onLangChange() { render(); }
 
 function setCat(cat) {
   currentCat = cat;
-  document.querySelectorAll('.sb-btn').forEach(b => b.classList.remove('active'));
-  const el = document.getElementById(CAT_BTN_MAP[cat]);
-  if (el) el.classList.add('active');
+  renderCatFilters();
   render();
   // Sur mobile : replier les filtres et remonter vers les produits
   if (_isMobileShop()) {
@@ -290,25 +262,8 @@ function render() {
   const c = document.getElementById('shop-count');
   if (c) c.textContent = `${list.length} ${list.length <= 1 ? UI[LANG].product : UI[LANG].products}`;
 
-  // Update sidebar counts — hide categories with 0 products (only once Supabase has loaded)
-  const allCounts = {};
-  CATS.forEach(cat => { allCounts[cat.id] = PRODUCTS.filter(p => p.cat === cat.id).length; });
-  const el_ALL = document.getElementById('cnt-ALL');
-  if (el_ALL) el_ALL.textContent = PRODUCTS.length;
-  const CAT_CNT_MAP = {
-    'Épices':'cnt-Epices','Chips & Snacks':'cnt-Chips','Confiseries':'cnt-Confis',
-    'Basics suédois':'cnt-Basics','Fika & Boulangerie':'cnt-Fika','Mélanges':'cnt-Mel',
-    'Thés & Tisanes':'cnt-Thes','Baies séchées':'cnt-Baies','Flocons & Céréales':'cnt-Flocons',
-    'Farines & Graines':'cnt-Farines','Sucres & Sirops':'cnt-Sucres'
-  };
-  const supaLoaded = !!(window.SDApi && window.SDApi.isReady);
-  Object.entries(CAT_CNT_MAP).forEach(([cat, cntId]) => {
-    const count = allCounts[cat] || 0;
-    const cntEl = document.getElementById(cntId);
-    if (cntEl) cntEl.textContent = count;
-    const btnEl = document.getElementById(CAT_BTN_MAP[cat]);
-    if (btnEl) btnEl.style.display = (supaLoaded && count === 0) ? 'none' : '';
-  });
+  // Rayons dynamiques : (re)construits depuis les catégories réellement présentes dans les produits.
+  renderCatFilters();
 
   // Active filters strip
   const af = document.getElementById('active-filters');
@@ -356,12 +311,8 @@ function render() {
   }
 }
 
-// Highlight the active category button (state only, no render yet)
-(function() {
-  document.querySelectorAll('.sb-btn').forEach(b => b.classList.remove('active'));
-  const el = document.getElementById(CAT_BTN_MAP[currentCat]);
-  if (el) el.classList.add('active');
-})();
+// Rayons initiaux (se peuplent au chargement des produits via render → renderCatFilters)
+renderCatFilters();
 
 // Show skeleton while waiting for API data
 const _SKL = '<div class="sk-card"><div class="sk-img"></div><div class="sk-line sk-lg"></div><div class="sk-line sk-md"></div><div class="sk-line sk-sm"></div></div>';
@@ -380,10 +331,7 @@ window.addEventListener('sdapi:ready', (e) => {
     if (currentCat !== 'Tous') {
       const inCat = PRODUCTS.filter(p => p.cat === currentCat);
       if (inCat.length === 0) {
-        currentCat = 'Tous';
-        document.querySelectorAll('.sb-btn').forEach(b => b.classList.remove('active'));
-        const allBtn = document.getElementById('sb-ALL');
-        if (allBtn) allBtn.classList.add('active');
+        currentCat = 'Tous'; // render() → renderCatFilters() rétablit l'état actif
       }
     }
     const heroEl = document.getElementById('hero-count-text');
