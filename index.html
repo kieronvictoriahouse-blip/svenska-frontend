@@ -645,7 +645,7 @@
 </div>
 
 <div id="footer-root"></div>
-<script src="js/app.js?v=13"></script>
+<script src="js/app.js?v=14"></script>
 <script>
 initPage('home');
 
@@ -814,10 +814,18 @@ function renderHome() {
 }
 
 function nlSubscribe() {
-  const v = document.getElementById('nl-email').value;
-  if (!v) return;
-  showToast(UI[LANG].subscribe);
-  document.getElementById('nl-email').value = '';
+  const el = document.getElementById('nl-email');
+  const v = (el.value || '').trim();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) {
+    showToast(LANG === 'sv' ? 'Ogiltig e-post' : LANG === 'en' ? 'Invalid email' : 'E-mail invalide');
+    return;
+  }
+  const done = (ok) => {
+    showToast(ok ? UI[LANG].subscribe : (LANG === 'sv' ? 'Försök igen' : LANG === 'en' ? 'Please try again' : 'Réessayez'));
+    if (ok) el.value = '';
+  };
+  if (typeof sdNewsletterSubscribe === 'function') sdNewsletterSubscribe(v).then(done);
+  else done(true);
 }
 
 // Show skeleton in product sections while waiting for API
