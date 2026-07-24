@@ -536,11 +536,15 @@ function toggleAcc(trigger) {
       // Fallback : données hardcodées si champs absents en DB
       const local = (window.PRODUCTS || []).find(p => p.id === _numId || p.id === raw.sort_order);
       const fb = (apiVal, localVal) => apiVal || localVal || '';
-      const fbObj = (svKey, frKey, enKey, localField) => ({
-        sv: raw[svKey] || local?.[localField]?.sv || '',
-        fr: raw[frKey] || local?.[localField]?.fr || '',
-        en: raw[enKey] || local?.[localField]?.en || '',
-      });
+      const fbObj = (svKey, frKey, enKey, localField) => {
+        const sv = raw[svKey] || local?.[localField]?.sv || '';
+        const fr = raw[frKey] || local?.[localField]?.fr || '';
+        const en = raw[enKey] || local?.[localField]?.en || '';
+        // Comble les langues vides par le français (puis anglais, suédois) : jamais de nom/desc vide.
+        const base = fr || en || sv;
+        if (!base) return { sv: '', fr: '', en: '' };
+        return { sv: sv || base, fr: fr || base, en: en || base };
+      };
       const product = {
         id: raw.sort_order || _numId, uuid: raw.id, cat, emoji: CAT_EMOJI[cat] || '🛒',
         badge: raw.badge || '', rating: raw.rating || 4.5, reviews: raw.reviews_count || 0,
@@ -596,6 +600,6 @@ window.addEventListener('sdapi:ready', () => {
 });
 </script>
   <script>(function(){var _hr=document.getElementById("header-root");if(_hr&&typeof MutationObserver!=="undefined")new MutationObserver(function(){if(typeof updateCartBadge==="function")updateCartBadge();}).observe(_hr,{childList:true});})();</script>
-<script src="js/sd-api-client.js?v=5"></script>
+<script src="js/sd-api-client.js?v=6"></script>
 </body>
 </html>

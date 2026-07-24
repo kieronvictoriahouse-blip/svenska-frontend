@@ -179,17 +179,23 @@ let _ready = false;
 function _esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;'); }
 function catLabel(cat){ return (typeof CAT_LABELS !== 'undefined' && CAT_LABELS[cat] && CAT_LABELS[cat][LANG]) || cat; }
 
+// La boutique = épicerie (alimentaire). Les produits Maison (Home) ont leur propre
+// page /maison et ne doivent pas apparaître ici ni dans les rayons.
+const SHOP_EXCLUDED_CATS = ['Art de la table', 'Maison & Déco'];
+const isShopProduct = p => p && SHOP_EXCLUDED_CATS.indexOf(p.cat) === -1;
+const shopProducts = () => (PRODUCTS || []).filter(isShopProduct);
+
 function renderCatFilters() {
   const box = document.getElementById('cat-filters');
   if (!box) return;
   const counts = {};
-  (PRODUCTS || []).forEach(p => { if (p && p.cat) counts[p.cat] = (counts[p.cat] || 0) + 1; });
+  shopProducts().forEach(p => { if (p && p.cat) counts[p.cat] = (counts[p.cat] || 0) + 1; });
   // Ordre : d'abord les rayons "connus" (ordre CATS), puis les nouveaux par ordre alphabétique
   const knownOrder = (typeof CATS !== 'undefined' ? CATS.map(c => c.id) : []).filter(id => counts[id] > 0);
   const extra = Object.keys(counts).filter(c => !knownOrder.includes(c)).sort((a, b) => catLabel(a).localeCompare(catLabel(b)));
   const ordered = [...knownOrder, ...extra];
   const allLabel = LANG === 'sv' ? 'Alla produkter' : LANG === 'en' ? 'All products' : 'Tous les produits';
-  let html = `<button class="sb-btn${currentCat === 'Tous' ? ' active' : ''}" data-cat="Tous"><span>${allLabel}</span><span class="sb-cnt">${(PRODUCTS || []).length}</span></button>`;
+  let html = `<button class="sb-btn${currentCat === 'Tous' ? ' active' : ''}" data-cat="Tous"><span>${allLabel}</span><span class="sb-cnt">${shopProducts().length}</span></button>`;
   ordered.forEach(cat => {
     html += `<button class="sb-btn${currentCat === cat ? ' active' : ''}" data-cat="${_esc(cat)}"><span>${_esc(catLabel(cat))}</span><span class="sb-cnt">${counts[cat]}</span></button>`;
   });
@@ -245,7 +251,7 @@ function toggleTag(tag) {
 }
 
 function getFiltered() {
-  let list = [...PRODUCTS];
+  let list = shopProducts();
   if (currentCat !== 'Tous') list = list.filter(p => p.cat === currentCat);
   list = list.filter(p => p.price <= currentMaxPrice);
   if (activeTags.size > 0) list = list.filter(p => [...activeTags].every(t => p.tags.includes(t)));
@@ -357,6 +363,6 @@ window.addEventListener('sdapi:ready', (e) => {
 });
 </script>
   <script>(function(){var _hr=document.getElementById("header-root");if(_hr&&typeof MutationObserver!=="undefined")new MutationObserver(function(){if(typeof updateCartBadge==="function")updateCartBadge();}).observe(_hr,{childList:true});})();</script>
-<script src="js/sd-api-client.js?v=5"></script>
+<script src="js/sd-api-client.js?v=6"></script>
 </body>
 </html>

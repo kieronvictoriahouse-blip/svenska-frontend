@@ -86,6 +86,16 @@
       .filter(v => v && v.price != null)
       .map(v => ({ label: v.label || p.weight || '', price: parseFloat(v.price) }));
 
+    // Champ multilingue : on construit l'objet dès qu'AU MOINS une langue est remplie,
+    // et on comble les langues vides par le français (puis anglais, puis suédois).
+    // Évite le bug où un produit sans traduction suédoise perdait aussi son nom français.
+    const ml = (sv, fr, en, fallback) => {
+      sv = sv || ''; fr = fr || ''; en = en || '';
+      if (!sv && !fr && !en) return fallback || { sv: '', fr: '', en: '' };
+      const base = fr || en || sv;
+      return { sv: sv || base, fr: fr || base, en: en || base };
+    };
+
     return {
       id:          p.sort_order || p.id,
       uuid:        p.id,
@@ -95,13 +105,13 @@
       rating:      parseFloat(p.rating) || 4.5,
       reviews:     p.reviews_count || 0,
       photo:       p.image_url || p.photo || '',
-      name:        p.name_sv ? { sv: p.name_sv, fr: p.name_fr, en: p.name_en } : (p.name || { sv: '', fr: '', en: '' }),
-      subtitle:    p.subtitle_sv ? { sv: p.subtitle_sv, fr: p.subtitle_fr, en: p.subtitle_en } : (p.subtitle || { sv: '', fr: '', en: '' }),
-      origin:      p.origin_sv ? { sv: p.origin_sv, fr: p.origin_fr, en: p.origin_en } : (p.origin || { sv: '', fr: '', en: '' }),
-      desc:        p.desc_sv ? { sv: p.desc_sv, fr: p.desc_fr, en: p.desc_en } : (p.desc || { sv: '', fr: '', en: '' }),
-      usage:       p.usage_sv ? { sv: p.usage_sv, fr: p.usage_fr, en: p.usage_en } : (p.usage || { sv: '', fr: '', en: '' }),
-      ingredients: p.ingredients_sv ? { sv: p.ingredients_sv, fr: p.ingredients_fr, en: p.ingredients_en } : (p.ingredients || { sv: '', fr: '', en: '' }),
-      storage:     p.storage_sv ? { sv: p.storage_sv, fr: p.storage_fr, en: p.storage_en } : (p.storage || { sv: '', fr: '', en: '' }),
+      name:        ml(p.name_sv, p.name_fr, p.name_en, p.name),
+      subtitle:    ml(p.subtitle_sv, p.subtitle_fr, p.subtitle_en, p.subtitle),
+      origin:      ml(p.origin_sv, p.origin_fr, p.origin_en, p.origin),
+      desc:        ml(p.desc_sv, p.desc_fr, p.desc_en, p.desc),
+      usage:       ml(p.usage_sv, p.usage_fr, p.usage_en, p.usage),
+      ingredients: ml(p.ingredients_sv, p.ingredients_fr, p.ingredients_en, p.ingredients),
+      storage:     ml(p.storage_sv, p.storage_fr, p.storage_en, p.storage),
       price:       parseFloat(p.price) || 0,
       weight:      p.weight || '',
       tags:        Array.isArray(p.tags) ? p.tags : [],
