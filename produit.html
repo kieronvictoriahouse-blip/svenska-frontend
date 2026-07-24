@@ -144,7 +144,7 @@
 <div class="breadcrumb">
   <a href="index.html" data-sv="Hem" data-fr="Accueil" data-en="Home">Accueil</a>
   <span>/</span>
-  <a href="boutique.html" data-sv="Butiken" data-fr="Boutique" data-en="Shop">Boutique</a>
+  <a href="boutique.html" id="bc-cat-link" data-sv="Butiken" data-fr="Boutique" data-en="Shop">Boutique</a>
   <span>/</span>
   <strong id="bc-name">—</strong>
 </div>
@@ -247,6 +247,21 @@ function renderPDP(p) {
     mainEmoji.textContent = (p.name?.[LANG] || 'H&L').charAt(0);
   }
   document.getElementById('pdp-cat').textContent = CAT_LABELS[p.cat]?.[LANG] || p.cat;
+  // Fil d'ariane dynamique : un produit Maison (Home) pointe vers /maison, sinon vers la boutique.
+  (function(){
+    const bc = document.getElementById('bc-cat-link');
+    if (!bc) return;
+    const HOME_CATS = ['Art de la table','Maison & Déco'];
+    if (HOME_CATS.indexOf(p.cat) !== -1) {
+      bc.href = 'maison.html';
+      bc.setAttribute('data-sv','Home'); bc.setAttribute('data-fr','Home'); bc.setAttribute('data-en','Home');
+      bc.textContent = 'Home';
+    } else {
+      bc.href = 'boutique.html';
+      bc.setAttribute('data-sv','Butiken'); bc.setAttribute('data-fr','Boutique'); bc.setAttribute('data-en','Shop');
+      bc.textContent = (LANG==='sv'?'Butiken':LANG==='en'?'Shop':'Boutique');
+    }
+  })();
   // Gallery origin
   const originEl = document.getElementById('gallery-origin');
   if (originEl && p.origin) {
@@ -495,6 +510,10 @@ function toggleAcc(trigger) {
     
     if (raw) {
       const resolveCat = (p) => {
+        // Source de vérité = la catégorie réelle en base (jointure). On ne devine par le nom
+        // qu'en dernier recours (produits importés sans category_id).
+        const dbCat = (p.categories && p.categories.name_fr) || (p.category && p.category.name_fr) || '';
+        if (dbCat) return dbCat;
         const n = (p.name_fr || '').toLowerCase();
         if (n.includes('chips')||n.includes('olw')) return 'Chips & Snacks';
         if (n.includes('daim')||n.includes('bilar')||n.includes('fish')||n.includes('lakrits')||n.includes('skipper')) return 'Confiseries';
