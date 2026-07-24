@@ -210,7 +210,7 @@
 </section>
 
 <div id="footer-root"></div>
-<script src="js/app.js?v=16"></script>
+<script src="js/app.js?v=17"></script>
 <script>
 let pdpQtyVal = 1;
 let selectedVariant = null;
@@ -321,6 +321,16 @@ function renderPDP(p) {
       stockBadgeEl.innerHTML = _sb('psb-ok', l[LANG]||l.fr);
     }
   }
+
+  // Épuisé : on bloque l'achat (bouton principal + barre collante).
+  const _pdpOut = !!(p.trackStock && p.stock != null && p.stock <= 0);
+  [document.getElementById('btn-add-pdp'), document.querySelector('.sticky-atc-btn')].forEach(function(b){
+    if (!b) return;
+    b.disabled = _pdpOut;
+    b.style.opacity = _pdpOut ? '0.5' : '';
+    b.style.cursor  = _pdpOut ? 'not-allowed' : '';
+    if (_pdpOut) { const t={fr:'Épuisé',en:'Out of stock',sv:'Slut i lager'}; b.textContent = t[LANG]||t.fr; }
+  });
 
   selectedVariant = p.variants[0] || { label: '', price: p.price };
   updatePrice();
@@ -464,7 +474,10 @@ function selectThumbImg(el, url) {
 }
 
 function changeQtyPdp(d) {
+  // Plafonne la quantité au stock réel (produits en suivi de stock).
+  const _stock = (pdpProduct && pdpProduct.trackStock && pdpProduct.stock != null) ? pdpProduct.stock : Infinity;
   pdpQtyVal = Math.max(1, pdpQtyVal + d);
+  if (_stock !== Infinity) pdpQtyVal = Math.min(pdpQtyVal, Math.max(1, _stock));
   document.getElementById('pdp-qty').textContent = pdpQtyVal;
 }
 

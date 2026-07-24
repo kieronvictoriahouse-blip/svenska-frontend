@@ -178,7 +178,7 @@
   </div>
 </div>
 <div id="footer-root"></div>
-<script src="js/app.js?v=16"></script>
+<script src="js/app.js?v=17"></script>
 <script>
 window._deliveryMode = window._deliveryMode || 'pickup';
 window._selectedRelay = window._selectedRelay || null;
@@ -629,11 +629,25 @@ async function doCheckout() {
       }),
     });
     const data = await res.json();
+    const _restoreBtn = () => { if (btn) { btn.disabled = false; btn.textContent = LANG === 'sv' ? 'Betala säkert →' : LANG === 'en' ? 'Pay securely →' : 'Payer en toute sécurité →'; } };
     if (data.url) {
       window.location.href = data.url;
+    } else if (data.code === 'OUT_OF_STOCK') {
+      // Stock insuffisant refusé par le serveur → message clair + on rafraîchit le panier.
+      const lines = (data.items || []).map(function(it){
+        const s = it.available > 0
+          ? (LANG === 'en' ? ('only ' + it.available + ' left') : LANG === 'sv' ? ('endast ' + it.available + ' kvar') : ('plus que ' + it.available + ' en stock'))
+          : (LANG === 'en' ? 'out of stock' : LANG === 'sv' ? 'slut i lager' : 'épuisé');
+        return '• ' + it.name + ' — ' + s;
+      }).join('\n');
+      const head = LANG === 'en' ? 'Some items are no longer available in the requested quantity:' : LANG === 'sv' ? 'Vissa varor finns inte i önskat antal:' : 'Certains articles ne sont plus disponibles dans la quantité demandée :';
+      const foot = LANG === 'en' ? 'Please adjust your cart.' : LANG === 'sv' ? 'Justera din varukorg.' : 'Ajustez votre panier.';
+      alert(head + '\n\n' + lines + '\n\n' + foot);
+      renderCartPageFull();
+      _restoreBtn();
     } else {
       alert(data.error || (LANG === 'en' ? 'Payment error. Please try again.' : LANG === 'sv' ? 'Betalningsfel. Försök igen.' : 'Erreur lors du paiement. Veuillez réessayer.'));
-      if (btn) { btn.disabled = false; btn.textContent = LANG === 'sv' ? 'Betala säkert →' : LANG === 'en' ? 'Pay securely →' : 'Payer en toute sécurité →'; }
+      _restoreBtn();
     }
   } catch(e) {
     console.error('[checkout]', e);
