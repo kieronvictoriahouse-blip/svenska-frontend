@@ -224,6 +224,9 @@ function onLangChange() { if (pdpProduct) renderPDP(pdpProduct); }
 
 function renderPDP(p) {
   pdpProduct = p;
+  // Repli de langue : si le champ est vide dans la langue courante, on montre le français,
+  // puis l'anglais, puis le suédois — pour ne jamais laisser une zone vide sur la fiche.
+  const pick = (o) => { if (!o || typeof o !== 'object') return o || ''; return o[LANG] || o.fr || o.en || o.sv || ''; };
   var _bn = window.SD_WL && window.SD_WL.brand_name ? window.SD_WL.brand_name : '';
   document.title = p.name[LANG] + (_bn ? ' — ' + _bn : '');
   document.getElementById('bc-name').textContent = p.name[LANG];
@@ -274,8 +277,8 @@ function renderPDP(p) {
     }
   }
   document.getElementById('pdp-name').textContent = p.name[LANG];
-  document.getElementById('pdp-sub').textContent = p.subtitle[LANG];
-  document.getElementById('pdp-desc').textContent = p.desc[LANG];
+  document.getElementById('pdp-sub').textContent = pick(p.subtitle);
+  document.getElementById('pdp-desc').textContent = pick(p.desc);
 
   // Weight badge — strip bulk format "16x22g" → "22g"
   const weightEl = document.getElementById('pdp-weight');
@@ -354,10 +357,11 @@ function renderPDP(p) {
 
   // Accordion — build sections including allergens and nutrition
   const allSections = [];
-  if (p.usage?.[LANG]) allSections.push({ label: LANG==='sv'?'Användning':LANG==='en'?'Usage':'Utilisation', html: `<div class="acc-content">${p.usage[LANG]}</div>` });
-  if (p.ingredients?.[LANG]) allSections.push({ label: LANG==='sv'?'Ingredienser':LANG==='en'?'Ingredients':'Ingrédients', html: `<div class="acc-content">${p.ingredients[LANG]}</div>` });
-  if (p.allergens?.[LANG]) allSections.push({ label: LANG==='sv'?'Allergener':LANG==='en'?'Allergens':'Allergènes', html: `<div style="padding-bottom:16px"><div class="allergen-box">${p.allergens[LANG]}</div></div>` });
-  if (p.storage?.[LANG]) allSections.push({ label: LANG==='sv'?'Förvaring':LANG==='en'?'Storage':'Conservation', html: `<div class="acc-content">${p.storage[LANG]}</div>` });
+  const _usage=pick(p.usage), _ingr=pick(p.ingredients), _allerg=pick(p.allergens), _stor=pick(p.storage);
+  if (_usage) allSections.push({ label: LANG==='sv'?'Användning':LANG==='en'?'Usage':'Utilisation', html: `<div class="acc-content">${_usage}</div>` });
+  if (_ingr) allSections.push({ label: LANG==='sv'?'Ingredienser':LANG==='en'?'Ingredients':'Ingrédients', html: `<div class="acc-content">${_ingr}</div>` });
+  if (_allerg) allSections.push({ label: LANG==='sv'?'Allergener':LANG==='en'?'Allergens':'Allergènes', html: `<div style="padding-bottom:16px"><div class="allergen-box">${_allerg}</div></div>` });
+  if (_stor) allSections.push({ label: LANG==='sv'?'Förvaring':LANG==='en'?'Storage':'Conservation', html: `<div class="acc-content">${_stor}</div>` });
   // Nutrition table
   const n = p.nutrition || {};
   const nutriRows = [
@@ -413,19 +417,19 @@ function renderPDP(p) {
   const ogImg = document.getElementById('og-image');
   const ldProd = document.getElementById('ld-product');
   if (ogTitle) ogTitle.content = document.title;
-  if (ogDesc && p.desc[LANG]) ogDesc.content = p.desc[LANG].slice(0,160);
+  if (ogDesc && pick(p.desc)) ogDesc.content = pick(p.desc).slice(0,160);
   if (ogImg && p.photo) ogImg.content = p.photo;
   // Canonical + meta description dynamiques (SEO par produit)
   const canon = document.getElementById('canonical-link');
   if (canon) canon.setAttribute('href', 'https://www.swedishcravings.fr/produit?id=' + (p.uuid || p.id));
   const metaDesc = document.querySelector('meta[name="description"]');
-  if (metaDesc && p.desc[LANG]) metaDesc.setAttribute('content', p.desc[LANG].slice(0, 160));
+  if (metaDesc && pick(p.desc)) metaDesc.setAttribute('content', pick(p.desc).slice(0, 160));
   if (ldProd) {
     const _avail = (p.trackStock && (p.stock || 0) <= 0) ? 'https://schema.org/PreOrder' : 'https://schema.org/InStock';
     const _prodUrl = 'https://www.swedishcravings.fr/produit?id=' + (p.uuid || p.id);
     ldProd.textContent = JSON.stringify({
       '@context': 'https://schema.org', '@type': 'Product',
-      name: p.name[LANG], description: p.desc[LANG],
+      name: pick(p.name), description: pick(p.desc),
       image: p.photo, brand: { '@type': 'Brand', name: _bn || 'Swedish Cravings' },
       offers: { '@type': 'Offer', price: price, priceCurrency: 'EUR', availability: _avail, url: _prodUrl }
     });
