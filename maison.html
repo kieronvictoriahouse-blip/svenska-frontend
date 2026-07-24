@@ -114,8 +114,15 @@ function homeRender() {
   if (!container || typeof PRODUCTS === 'undefined') return;
   const list = (PRODUCTS || []).filter(isHomeProduct);
   if (list.length === 0) {
-    container.innerHTML = '<div class="bs-soon" data-fr="Notre collection maison arrive très bientôt. En attendant, découvrez notre épicerie suédoise." data-sv="Vårt hemsortiment kommer snart. Upptäck vår svenska delikatessbutik under tiden." data-en="Our home collection is coming very soon. Meanwhile, explore our Swedish grocery.">Notre collection maison arrive très bientôt. En attendant, découvrez notre épicerie suédoise.</div>';
-    if (typeof setLang === 'function') setLang(LANG);
+    // NB : surtout PAS d'appel à setLang() ici — setLang() rappelle onLangChange() → homeRender(),
+    // ce qui créait une récursion infinie ("Maximum call stack") et cassait tout le chargement de la page.
+    // On traduit donc le message directement selon la langue courante.
+    const _soon = {
+      fr: 'Notre collection maison arrive très bientôt. En attendant, découvrez notre épicerie suédoise.',
+      sv: 'Vårt hemsortiment kommer snart. Upptäck vår svenska delikatessbutik under tiden.',
+      en: 'Our home collection is coming very soon. Meanwhile, explore our Swedish grocery.'
+    };
+    container.innerHTML = '<div class="bs-soon" data-fr="' + _soon.fr + '" data-sv="' + _soon.sv + '" data-en="' + _soon.en + '">' + (_soon[LANG] || _soon.fr) + '</div>';
     return;
   }
   function safeCard(p){ try { return productCardHTML(p); } catch(e){ return ''; } }
