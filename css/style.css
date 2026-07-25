@@ -590,3 +590,10 @@ header.shrunk { box-shadow: 0 4px 24px rgba(28,32,40,0.15); background: var(--wa
 @media (max-width: 400px) {
   .logo-tag { display: none; }
 }
+
+/* ── Logo monogramme dans le header (ajouté avec le rebranding) ── */
+.logo { flex-direction: row; align-items: center; gap: 11px; }
+.logo-mark { height: 44px; width: auto; display: block; flex-shrink: 0; transition: height 0.3s ease; }
+.logo-text { display: flex; flex-direction: column; line-height: 1; }
+header.shrunk .logo-mark { height: 38px; }
+@media (max-width: 768px) { .logo-mark { height: 34px; } .logo { gap: 8px; } }

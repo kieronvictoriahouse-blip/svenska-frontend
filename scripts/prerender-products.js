@@ -47,7 +47,11 @@ async function main() {
   const products = (data && data.products || []).filter(p => p.is_active);
   if (!products.length) { console.log('Aucun produit — prerender ignoré'); return; }
 
-  const template = fs.readFileSync('produit.html', 'utf8');
+  let template = fs.readFileSync('produit.html', 'utf8');
+  // Pages servies sous /produit/<slug> (sous-dossier) : sans <base>, les chemins relatifs
+  // (css/, js/, img/, liens de nav) se résoudraient vers /produit/... → 404 (page cassée).
+  // <base> les réancre sur la racine du site.
+  template = template.replace(/<meta charset="UTF-8">/i, '<meta charset="UTF-8">\n<base href="https://www.swedishcravings.fr/">');
   const outDir = path.join(process.cwd(), 'produit');
   fs.mkdirSync(outDir, { recursive: true });
 
