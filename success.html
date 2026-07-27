@@ -64,7 +64,7 @@
 </div>
 
 <div id="footer-root"></div>
-<script src="js/app.js?v=18"></script>
+<script src="js/app.js?v=19"></script>
 <script>
 const LANG = localStorage.getItem('sd_lang') || 'fr';
 const T_SUCCESS = {
@@ -115,6 +115,15 @@ if (typeof clearCart === 'function') clearCart();
   }
 
   if (!order) { recap.innerHTML = ''; return; }
+
+  // Conversion "achat" (GA4 + Meta Pixel) — une seule fois par commande payée
+  try {
+    var _tk = 'sd_purch_' + orderId;
+    if (order.status === 'paid' && !localStorage.getItem(_tk)) {
+      if (typeof sdTrackPurchase === 'function') sdTrackPurchase(order);
+      localStorage.setItem(_tk, '1');
+    }
+  } catch(e) {}
 
   // Adapt subtitle for pickup orders
   if (order.delivery_mode === 'pickup') {
