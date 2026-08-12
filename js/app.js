@@ -6,6 +6,51 @@ var CATS=[{id:'Épices',emoji:'🌶️'},{id:'Flocons & Céréales',emoji:'🌾'
 const CAT_LABELS={'Épices':{sv:'Épices & Aromates',fr:'Épices & Aromates',en:'Spices & Herbs'},'Flocons & Céréales':{sv:'Flocons & Céréales',fr:'Flocons & Céréales',en:'Oats & Cereals'},'Baies séchées':{sv:'Baies séchées',fr:'Baies séchées',en:'Dried berries'},'Sucres & Sirops':{sv:'Sucres & Sirops',fr:'Sucres & Sirops',en:'Sugars & Syrups'},'Thés & Tisanes':{sv:'Thés & Tisanes',fr:'Thés & Tisanes',en:'Teas & Infusions'},'Farines & Graines':{sv:'Farines & Graines',fr:'Farines & Graines',en:'Flours & Seeds'},'Mélanges':{sv:'Blandningar',fr:'Mélanges suédois',en:'Swedish blends'},'Chips & Snacks':{sv:'Chips & Snacks',fr:'Chips & Snacks',en:'Chips & Snacks'},'Basics suédois':{sv:'Svenska baser',fr:'Basics suédois',en:'Swedish basics'},'Confiseries':{sv:'Konfektyr',fr:'Confiseries',en:'Confectionery'},'Fika & Boulangerie':{sv:'Fika & Bakning',fr:'Fika & Boulangerie',en:'Fika & Baking'},'Art de la table':{sv:'Dukning',fr:'Art de la table',en:'Tableware'},'Maison & Déco':{sv:'Hem & Inredning',fr:'Maison & Déco',en:'Home & Decor'}};
 const UI={sv:{addedCart:'Tillagd i korgen!',emptyCart:'Din korg är tom',subtotal:'Delsumma',checkout:'Beställ →',keepShopping:'Fortsätt handla',freeShip:'Fri frakt från 50€',searchPlaceholder:'Sök en krydda, ett produkt...',noResults:'Inga resultat',cartTitle:'Din korg',products:'produkter',product:'produkt',filterAll:'Alla',sortDefault:'Standard',sortPriceAsc:'Pris stigande',sortPriceDesc:'Pris fallande',sortName:'Namn A→Ö',subscribe:'Tack!'},fr:{addedCart:'Ajouté au panier !',emptyCart:'Votre panier est vide',subtotal:'Sous-total',checkout:'Commander →',keepShopping:'Continuer mes achats',freeShip:'Livraison offerte dès 50€',searchPlaceholder:'Rechercher une épice, un produit...',noResults:'Aucun résultat',cartTitle:'Votre panier',products:'produits',product:'produit',filterAll:'Tous',sortDefault:'Par défaut',sortPriceAsc:'Prix croissant',sortPriceDesc:'Prix décroissant',sortName:'Nom A→Z',subscribe:'Merci !'},en:{addedCart:'Added to cart!',emptyCart:'Your cart is empty',subtotal:'Subtotal',checkout:'Checkout →',keepShopping:'Continue shopping',freeShip:'Free delivery from €50',searchPlaceholder:'Search for a spice, product...',noResults:'No results',cartTitle:'Your cart',products:'products',product:'product',filterAll:'All',sortDefault:'Default',sortPriceAsc:'Price: low to high',sortPriceDesc:'Price: high to low',sortName:'Name A→Z',subscribe:'Thanks!'}};
 
+/* Règles de frais de port — miroir de `src/lib/shipping.ts` du back-office.
+   Le serveur reste l'autorité (c'est /api/checkout qui facture) ; ici on
+   n'affiche qu'une estimation. La fenêtre de dates est recalculée à chaque
+   appel : une opération expirée retombe seule au seuil normal, même si le
+   cache localStorage n'a pas été rafraîchi. */
+window.SD_SHIP=(function(){
+  var DEF={FR:{threshold:50,cost:4.90},INTL:{threshold:70,cost:9.90}};
+  function cfg(){try{return JSON.parse(localStorage.getItem('sd_wl_v1'))||{};}catch(e){return {};}}
+  function today(){var d=new Date();var p=function(n){return String(n).padStart(2,'0');};
+    return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate());}
+  function promoOn(c){
+    if(!c||c.ship_promo_active!==true)return false;
+    var t=today();
+    var f=c.ship_promo_from?String(c.ship_promo_from).slice(0,10):null;
+    var u=c.ship_promo_until?String(c.ship_promo_until).slice(0,10):null;
+    if(f&&t<f)return false;
+    if(u&&t>u)return false;
+    return true;
+  }
+  function rules(isIntl){
+    var c=cfg();
+    var base=isIntl?DEF.INTL:DEF.FR;
+    var configured=parseFloat(c.free_shipping_threshold);
+    var baseThreshold=(!isIntl&&configured>0)?configured:base.threshold;
+    if(promoOn(c)){
+      var raw=isIntl?c.ship_promo_threshold_intl:c.ship_promo_threshold;
+      var thr=parseFloat(raw);
+      if(raw!==null&&raw!==undefined&&raw!==''&&!isNaN(thr)&&thr>=0){
+        return {threshold:thr,cost:base.cost,promoActive:true,baseThreshold:baseThreshold};
+      }
+    }
+    return {threshold:baseThreshold,cost:base.cost,promoActive:false,baseThreshold:baseThreshold};
+  }
+  return {
+    rules:rules,
+    threshold:function(isIntl){return rules(isIntl).threshold;},
+    cost:function(isIntl){return rules(isIntl).cost;},
+    /* Message d'opération dans la langue courante, '' si pas d'opération */
+    label:function(lang){
+      var c=cfg();
+      if(!promoOn(c))return '';
+      return c['ship_promo_label_'+(lang||'fr')]||c.ship_promo_label_fr||'';
+    }
+  };
+})();
 window.SD_WL=(function(){var _w={};var _ok=false;try{var _r=localStorage.getItem('sd_wl_v1');if(_r){_w=JSON.parse(_r)||{};_ok=!!_w.site_name;}}catch(e){}var n=_w.site_name||'';return{brand_name:n,brand_tagline:_w.site_slogan||'',contact_email:_w.email||'',instagram:_w.instagram||'',facebook:_w.facebook||'',pinterest:_w.pinterest||'',free_shipping_threshold:_w.free_shipping_threshold||50,announcement:{sv:_w.announcement_sv||'',fr:_w.announcement_fr||'',en:_w.announcement_en||''},footer_desc:{sv:_w.footer_desc_sv||'',fr:_w.footer_desc_fr||'',en:_w.footer_desc_en||''},footer_tagline:{sv:_w.footer_tagline_sv||'',fr:_w.footer_tagline_fr||'',en:_w.footer_tagline_en||''},copyright:{sv:'© 2026 '+n+' · Alla rättigheter förbehållna',fr:'© 2026 '+n+' · Tous droits réservés',en:'© 2026 '+n+' · All rights reserved'},_ready:_ok};})();
 let _favorites=(function(){try{return JSON.parse(localStorage.getItem('sd_favorites')||'[]');}catch(e){return[];}})();
 function saveFavorites(){try{localStorage.setItem('sd_favorites',JSON.stringify(_favorites));}catch(e){}}
@@ -44,7 +89,7 @@ function removeItem(key){delete cart[key];saveCart();updateCartBadge();renderCar
 function updateCartBadge(){const total=Object.values(cart).reduce((a,b)=>a+b,0);document.querySelectorAll('.cart-badge').forEach(el=>el.textContent=total);}
 function cartTotal(){return Object.entries(cart).filter(([,q])=>q>0).reduce((sum,[key,qty])=>{const _ti=key.indexOf('_');const idStr=_ti===-1?key:key.slice(0,_ti);const variant=_ti===-1?undefined:key.slice(_ti+1);const _cpt=JSON.parse(localStorage.getItem('sd_cart_products')||'{}');const p=PRODUCTS.find(x=>String(x.uuid||x.id)===idStr||x.id===parseInt(idStr))||_cpt[idStr]||(window._SD_STATIC||[]).find(x=>String(x.id)===idStr);if(!p)return sum;const v=variant?p.variants?.find(x=>x.label===variant):p.variants?.[0];return sum+(v?v.price:p.price)*qty;},0);}
 
-function renderCartDrawer(){const list=document.getElementById('drawer-items-list');const foot=document.getElementById('drawer-footer');if(!list)return;const entries=Object.entries(cart).filter(([,q])=>q>0);if(entries.length===0){list.innerHTML=`<div class="cart-empty-msg">${UI[LANG].emptyCart}</div>`;if(foot)foot.style.display='none';return;}if(foot)foot.style.display='block';let total=0;list.innerHTML=entries.map(([key,qty])=>{const _ri=key.indexOf('_');const idStr=_ri===-1?key:key.slice(0,_ri);const variant=_ri===-1?undefined:key.slice(_ri+1);const _cpd=JSON.parse(localStorage.getItem('sd_cart_products')||'{}');const p=PRODUCTS.find(x=>String(x.uuid||x.id)===idStr||x.id===parseInt(idStr))||_cpd[idStr]||(window._SD_STATIC||[]).find(x=>String(x.id)===idStr);if(!p)return'';const v=variant?p.variants?.find(x=>x.label===variant):p.variants?.[0];const price=v?v.price:p.price;const line=price*qty;total+=line;return`<div class="cart-row"><div class="cart-row-thumb" style="background-image:url('${p.photo}')"></div><div class="cart-row-info"><div class="cart-row-name">${p.name[LANG]}</div><div class="cart-row-sub">${variant||p.weight}</div><div class="cart-qty"><button class="cq-btn" onclick="changeQty('${key}',-1)">−</button><span class="cq-num">${qty}</span><button class="cq-btn" onclick="changeQty('${key}',1)">+</button></div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;"><span class="cart-row-price">${fmtPrice(line)}</span><button class="cart-del" onclick="removeItem('${key}')">✕</button></div></div>`;}).join('');const totalEl=document.getElementById('cart-total-price');if(totalEl)totalEl.textContent=fmtPrice(total);const shipEl=document.getElementById('cart-ship-note');if(shipEl){const remaining=50-total;if(remaining>0){const pct=Math.min(100,(total/50)*100);shipEl.innerHTML=`<div class="ship-bar"><div class="ship-bar-fill" style="width:${pct}%"></div></div><span>${LANG==='fr'?`Plus que ${fmtPrice(remaining)} pour la livraison gratuite`:LANG==='en'?`${fmtPrice(remaining)} away from free delivery`:`${fmtPrice(remaining)} kvar till fri frakt`}</span>`;}else{shipEl.innerHTML=`<span style="color:var(--moss);font-weight:600;">${UI[LANG].freeShip} ✓</span>`;}}}
+function renderCartDrawer(){const list=document.getElementById('drawer-items-list');const foot=document.getElementById('drawer-footer');if(!list)return;const entries=Object.entries(cart).filter(([,q])=>q>0);if(entries.length===0){list.innerHTML=`<div class="cart-empty-msg">${UI[LANG].emptyCart}</div>`;if(foot)foot.style.display='none';return;}if(foot)foot.style.display='block';let total=0;list.innerHTML=entries.map(([key,qty])=>{const _ri=key.indexOf('_');const idStr=_ri===-1?key:key.slice(0,_ri);const variant=_ri===-1?undefined:key.slice(_ri+1);const _cpd=JSON.parse(localStorage.getItem('sd_cart_products')||'{}');const p=PRODUCTS.find(x=>String(x.uuid||x.id)===idStr||x.id===parseInt(idStr))||_cpd[idStr]||(window._SD_STATIC||[]).find(x=>String(x.id)===idStr);if(!p)return'';const v=variant?p.variants?.find(x=>x.label===variant):p.variants?.[0];const price=v?v.price:p.price;const line=price*qty;total+=line;return`<div class="cart-row"><div class="cart-row-thumb" style="background-image:url('${p.photo}')"></div><div class="cart-row-info"><div class="cart-row-name">${p.name[LANG]}</div><div class="cart-row-sub">${variant||p.weight}</div><div class="cart-qty"><button class="cq-btn" onclick="changeQty('${key}',-1)">−</button><span class="cq-num">${qty}</span><button class="cq-btn" onclick="changeQty('${key}',1)">+</button></div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;"><span class="cart-row-price">${fmtPrice(line)}</span><button class="cart-del" onclick="removeItem('${key}')">✕</button></div></div>`;}).join('');const totalEl=document.getElementById('cart-total-price');if(totalEl)totalEl.textContent=fmtPrice(total);const shipEl=document.getElementById('cart-ship-note');if(shipEl){const _thr=window.SD_SHIP?SD_SHIP.threshold(false):50;const _freeTxt=(window.SD_SHIP&&SD_SHIP.label(LANG))||(LANG==='fr'?`Livraison offerte dès ${fmtPrice(_thr)}`:LANG==='en'?`Free delivery from ${fmtPrice(_thr)}`:`Fri frakt från ${fmtPrice(_thr)}`);const remaining=_thr-total;if(remaining>0){const pct=Math.min(100,(total/_thr)*100);shipEl.innerHTML=`<div class="ship-bar"><div class="ship-bar-fill" style="width:${pct}%"></div></div><span>${LANG==='fr'?`Plus que ${fmtPrice(remaining)} pour la livraison gratuite`:LANG==='en'?`${fmtPrice(remaining)} away from free delivery`:`${fmtPrice(remaining)} kvar till fri frakt`}</span>`;}else{shipEl.innerHTML=`<span style="color:var(--moss);font-weight:600;">${_freeTxt} ✓</span>`;}}}
 
 function openCart(){renderCartDrawer();document.getElementById('cart-drawer')?.classList.add('open');document.getElementById('drawer-overlay')?.classList.add('open');document.body.style.overflow='hidden';}
 function closeCart(){document.getElementById('cart-drawer')?.classList.remove('open');document.getElementById('drawer-overlay')?.classList.remove('open');document.body.style.overflow='';}
