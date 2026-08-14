@@ -105,7 +105,7 @@ if (typeof clearCart === 'function') clearCart();
   for (var attempt = 0; attempt < 8; attempt++) {
     if (attempt > 0) await new Promise(r => setTimeout(r, 1500));
     try {
-      var res = await fetch(SD_API_URL + '/api/orders/' + encodeURIComponent(orderId));
+      var res = await fetch(SD_API_URL + '/api/orders/' + encodeURIComponent(orderId) + '/public');
       if (res.ok) {
         var d = await res.json();
         if (d.order && d.order.status === 'paid') { order = d.order; break; }
