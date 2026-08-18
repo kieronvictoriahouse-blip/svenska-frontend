@@ -264,13 +264,72 @@ initPage('');
 renderCartPageFull();
 
 // ── Offre "cadeau offert" : chargée une fois, re-render au retour ──
-window._giftChoice = (function(){ try { return localStorage.getItem('sd_gift_choice') || null; } catch(e){ return null; } })();
-function selectGift(id){ window._giftChoice = id; try { localStorage.setItem('sd_gift_choice', id); } catch(e){}; renderCartPageFull(); }
+/* Reprise de l'ancien choix unique : un client qui avait deja un cadeau
+   memorise le retrouve, sans quoi son panier semblerait l'avoir perdu. */
+window._giftChoices = (function(){
+  try {
+    var m = JSON.parse(localStorage.getItem('sd_gift_choices') || 'null');
+    if (Array.isArray(m)) return m;
+    var seul = localStorage.getItem('sd_gift_choice');
+    return seul ? [seul] : [];
+  } catch(e){ return []; }
+})();
+window._giftEarned = 0;
+/* Une offre « 2 achetés, 1 offert » peut en accorder plusieurs : le
+   choix est donc une liste, plafonnée par ce que le panier a mérité.
+   Recliquer sur un cadeau déjà pris le retire. */
+function selectGift(id){
+  var l = window._giftChoices || [];
+  var i = l.indexOf(id);
+  if (i >= 0) l.splice(i, 1);
+  else {
+    var max = window._giftEarned || 0;
+    if (l.length >= max) l.shift();      // le plus ancien cède la place
+    l.push(id);
+  }
+  window._giftChoices = l;
+  try { localStorage.setItem('sd_gift_choices', JSON.stringify(l)); } catch(e){}
+  renderCartPageFull();
+}
+
+/* Combien de cadeaux le panier mérite. Copie fidèle de la règle du
+   serveur (src/lib/cadeau.ts) : les deux DOIVENT dire la même chose,
+   sinon le client choisit un cadeau qu'on lui retire au paiement. */
+function giftEarned(offer, cart, subtotal){
+  if (!offer) return 0;
+  var trigIds = (offer.trigger_products || []).map(function(p){ return p.id; });
+  var pas = Number(offer.trigger_qty) || 0;
+
+  /* Réglage incomplet — des produits déclencheurs sans quantité, ou
+     l'inverse : aucun cadeau. Échouer fermé, jamais ouvert. */
+  if ((trigIds.length && !pas) || (pas && !trigIds.length)) return 0;
+
+  var n = 0;
+  if (offer.mode === 'quantite' && trigIds.length && pas) {
+    var comptees = 0;
+    Object.entries(cart || {}).forEach(function(e){
+      var key = e[0], qty = e[1];
+      if (!(qty > 0)) return;
+      var ri = key.indexOf('_');
+      var idStr = ri === -1 ? key : key.slice(0, ri);
+      if (trigIds.indexOf(idStr) !== -1) comptees += qty;
+    });
+    n = Math.floor(comptees / pas);
+  } else {
+    n = subtotal >= (Number(offer.threshold) || 0) ? 1 : 0;
+  }
+  if (offer.max > 0) n = Math.min(n, offer.max);
+  return Math.max(0, n);
+}
 (async function(){
   try {
     const r = await fetch((window.SD_API_URL || 'https://admin.swedishcravings.fr') + '/api/gift-offer');
     const j = await r.json();
     window._giftOffer = (j && j.offer) || null;
+    try {
+      var m = JSON.parse(localStorage.getItem('sd_gift_choices') || '[]');
+      window._giftChoices = Array.isArray(m) ? m : [];
+    } catch(e) { window._giftChoices = []; }
   } catch(e) { window._giftOffer = null; }
   renderCartPageFull();
 })();
@@ -443,26 +502,68 @@ function renderCartPageFull() {
   let _giftBlockHtml = '';
   (function(){
     const offer = window._giftOffer;
-    if (!offer || !offer.products || !offer.products.length) { window._giftChoice = null; return; }
-    const thr = offer.threshold || 0;
-    if (subtotal < thr) {
-      window._giftChoice = null;
-      const left = thr - subtotal;
-      _giftBlockHtml = `<div class="gift-nudge">🎁 ${LANG==='sv'?`Bara ${fmtPrice(left)} kvar till din gratis gåva`:LANG==='en'?`Only ${fmtPrice(left)} away from your free gift`:`Plus que ${fmtPrice(left)} pour votre cadeau offert`}</div>`;
+    if (!offer || !offer.products || !offer.products.length) { window._giftChoices = []; return; }
+
+    /* Ce que le panier a RÉELLEMENT mérité. Le seuil seul ne suffit
+       plus : une offre « 2 Piffi achetés » ne se déclenche pas parce
+       que le sous-total dépasse zéro. */
+    const earned = giftEarned(offer, cart, subtotal);
+    window._giftEarned = earned;
+
+    if (earned < 1) {
+      window._giftChoices = [];
+      let msg;
+      if (offer.mode === 'quantite') {
+        const noms = (offer.trigger_products || [])
+          .map(p => p['name_' + LANG] || p.name_fr || '').filter(Boolean).join(' / ');
+        const pas = Number(offer.trigger_qty) || 0;
+        let dedans = 0;
+        Object.entries(cart || {}).forEach(function(e){
+          const key = e[0], qty = e[1];
+          if (!(qty > 0)) return;
+          const ri = key.indexOf('_');
+          const idStr = ri === -1 ? key : key.slice(0, ri);
+          if ((offer.trigger_products || []).some(p => p.id === idStr)) dedans += qty;
+        });
+        const manque = pas - (dedans % pas);
+        msg = LANG==='sv' ? `Lägg till ${manque} × ${noms} för din gratis gåva`
+            : LANG==='en' ? `Add ${manque} × ${noms} for your free gift`
+            : `Encore ${manque} × ${noms} pour votre cadeau offert`;
+      } else {
+        const left = (offer.threshold || 0) - subtotal;
+        if (left <= 0) return;               // rien à annoncer
+        msg = LANG==='sv' ? `Bara ${fmtPrice(left)} kvar till din gratis gåva`
+            : LANG==='en' ? `Only ${fmtPrice(left)} away from your free gift`
+            : `Plus que ${fmtPrice(left)} pour votre cadeau offert`;
+      }
+      _giftBlockHtml = `<div class="gift-nudge">🎁 ${msg}</div>`;
       return;
     }
+
     const ids = offer.products.map(p => p.id);
-    if (!window._giftChoice || !ids.includes(window._giftChoice)) {
-      window._giftChoice = offer.products.length === 1 ? offer.products[0].id : (ids.includes(window._giftChoice) ? window._giftChoice : null);
-    }
+    /* On purge les choix devenus invalides, et on plafonne à ce qui est
+       mérité : retirer un Piffi du panier doit retirer le cadeau. */
+    window._giftChoices = (window._giftChoices || []).filter(id => ids.includes(id)).slice(0, earned);
+    /* Un seul cadeau possible et un seul produit proposé : on le pose,
+       il n'y a rien à choisir. */
+    if (earned === 1 && offer.products.length === 1) window._giftChoices = [offer.products[0].id];
+
+    const choisis = window._giftChoices;
     const choices = offer.products.map(p => {
       const nm = p['name_' + LANG] || p.name_fr || '';
-      const sel = window._giftChoice === p.id;
+      const sel = choisis.includes(p.id);
       return `<button type="button" class="gift-choice${sel?' sel':''}" onclick="selectGift('${p.id}')"><img src="${p.image_url||''}" onerror="this.style.display='none'" alt=""><span class="gift-choice-nm">${nm}</span>${sel?'<span class="gift-check">✓</span>':''}</button>`;
     }).join('');
-    const title = offer.products.length > 1
+
+    const reste = earned - choisis.length;
+    const titleBase = offer.products.length > 1
       ? (LANG==='sv'?'Välj din gåva':LANG==='en'?'Choose your free gift':'Choisissez votre cadeau')
       : (LANG==='sv'?'Din gratis gåva':LANG==='en'?'Your free gift':'Votre cadeau offert');
+    /* Quand plusieurs cadeaux sont acquis, on dit combien il en reste à
+       choisir — sinon le client en prend un et laisse l'autre. */
+    const title = earned > 1
+      ? `${titleBase} — ${choisis.length}/${earned}`
+      : titleBase;
     _giftBlockHtml = `<div class="gift-block"><div class="gift-title"><span>🎁 ${title}</span><span class="gift-free">${LANG==='en'?'Free':LANG==='sv'?'Gratis':'Offert'} · 0 €</span></div><div class="gift-choices">${choices}</div></div>`;
   })();
 
@@ -668,7 +769,7 @@ async function doCheckout() {
 
   // Cadeau offert : envoyé si un choix est fait et le seuil atteint (revalidé côté serveur)
   try {
-    if (window._giftOffer && window._giftChoice && (window._giftOffer.products || []).some(p => p.id === window._giftChoice)) {
+    if (window._giftOffer && (window._giftChoices || []).length) {
       let _sub = 0;
       Object.entries(cart).filter(([, q]) => q > 0).forEach(([key, qty]) => {
         const ri = key.indexOf('_'); const idStr = ri === -1 ? key : key.slice(0, ri);
@@ -679,7 +780,14 @@ async function doCheckout() {
         const v = variant ? (p.variants || []).find(x => x.label === variant) : (p.variants || [])[0];
         _sub += ((v ? v.price : p.price) || 0) * qty;
       });
-      if (_sub >= (window._giftOffer.threshold || 0)) items.push({ id: window._giftChoice, quantity: 1, gift: true });
+      /* Le serveur revalide et tranche : on n'envoie que ce qui est
+         mérité selon la même règle, un article par cadeau. */
+      const _earned = giftEarned(window._giftOffer, cart, _sub);
+      (window._giftChoices || []).slice(0, _earned).forEach(function(gid){
+        if ((window._giftOffer.products || []).some(p => p.id === gid)) {
+          items.push({ id: gid, quantity: 1, gift: true });
+        }
+      });
     }
   } catch(e) {}
 
