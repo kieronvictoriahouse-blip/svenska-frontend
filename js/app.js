@@ -79,6 +79,53 @@ function sdTrackPurchase(order){try{if(!order)return;var total=parseFloat(order.
 // Un produit sans suivi de stock (trackStock=false ou stock null) = stock illimité.
 function _sdFindProd(id){return ((typeof PRODUCTS!=='undefined'&&PRODUCTS)||[]).find(x=>x.id===id||x.uuid===id||String(x.id)===String(id)||String(x.uuid)===String(id))||(window._SD_STATIC||[]).find(x=>x.id===id||String(x.id)===String(id));}
 function _sdStock(p){return (!p||!p.trackStock||p.stock===null||p.stock===undefined)?Infinity:p.stock;}
+/* Recale le panier sur le stock reellement disponible.
+   Un panier vit dans le localStorage : celui d'avant-hier peut demander
+   3 boites d'un article dont il ne reste rien. Sans ce recalage, le
+   client remplit son adresse, clique Payer, et decouvre le refus a la
+   toute derniere etape — la pire place pour l'apprendre.
+   Retourne la liste de ce qui a bouge, pour pouvoir le lui dire. */
+function sdRevaliderPanier(){
+  var changes=[];
+  var parProduit={};
+  Object.keys(cart).forEach(function(k){
+    var ri=k.indexOf('_');var base=ri===-1?k:k.slice(0,ri);
+    (parProduit[base]=parProduit[base]||[]).push(k);
+  });
+  Object.keys(parProduit).forEach(function(cid){
+    var p=_sdFindProd(cid);
+    /* Produit inconnu du catalogue courant : on n'y touche pas. Il peut
+       s'agir d'un chargement partiel, et vider un panier sur un doute
+       serait pire que le laisser. */
+    if(!p)return;
+    var stock=_sdStock(p);
+    if(stock===Infinity)return;
+    var reste=Math.max(0,stock);
+    parProduit[cid].forEach(function(k){
+      var veut=cart[k]||0;
+      var garde=Math.min(veut,reste);
+      reste-=garde;
+      if(garde!==veut){
+        changes.push({nom:(p.name&&p.name[LANG])||'',avant:veut,apres:garde});
+        if(garde<=0)delete cart[k];else cart[k]=garde;
+      }
+    });
+  });
+  if(changes.length){saveCart();if(typeof updateCartBadge==='function')updateCartBadge();}
+  return changes;
+}
+function sdMessageRevalidation(changes){
+  if(!changes||!changes.length)return'';
+  return changes.map(function(c){
+    return c.apres<=0
+      ? (LANG==='en'?(c.nom+' is no longer available and was removed')
+        :LANG==='sv'?(c.nom+' finns inte langre och togs bort')
+        :(c.nom+" n'est plus disponible et a ete retire"))
+      : (LANG==='en'?(c.nom+': quantity reduced to '+c.apres)
+        :LANG==='sv'?(c.nom+': antal minskat till '+c.apres)
+        :(c.nom+' : quantite ramenee a '+c.apres));
+  }).join('\n');
+}
 function _sdCartQtyForProduct(cid){let n=0;Object.keys(cart).forEach(function(k){var ri=k.indexOf('_');var base=ri===-1?k:k.slice(0,ri);if(base===String(cid))n+=cart[k]||0;});return n;}
 function _sdStockMsg(kind,n){if(kind==='out')return LANG==='en'?'Out of stock':LANG==='sv'?'Slut i lager':'Produit épuisé';if(kind==='max')return LANG==='en'?'Maximum available quantity reached':LANG==='sv'?'Max antal i lager nått':'Quantité maximale en stock atteinte';return LANG==='en'?('Only '+n+' left in stock'):LANG==='sv'?(n+' kvar i lager'):('Il ne reste que '+n+' en stock');}
 function addToCart(id,qty=1,variant=null){if(id===undefined||id===null||String(id)==='NaN'||String(id)==='undefined')return;const p=_sdFindProd(id);const cid=(p&&p.uuid)?p.uuid:id;const key=variant?`${cid}_${variant}`:`${cid}`;const stock=_sdStock(p);if(stock<=0){showToast(_sdStockMsg('out'));return;}const already=_sdCartQtyForProduct(cid);let add=qty;if(stock!==Infinity)add=Math.min(qty,Math.max(0,stock-already));if(add<=0){showToast(_sdStockMsg('max'));openCart();return;}cart[key]=(cart[key]||0)+add;saveCart();updateCartBadge();if(p){try{const cp=JSON.parse(localStorage.getItem('sd_cart_products')||'{}');cp[String(cid)]={name:p.name,photo:p.photo,price:p.price,weight:p.weight,variants:p.variants||[],pickup_only:!!p.pickup_only};localStorage.setItem('sd_cart_products',JSON.stringify(cp));}catch(e){}}if(stock!==Infinity&&add<qty){showToast(_sdStockMsg('only',stock));}else if(p){const name=p.name[LANG];showToast(name.substring(0,28)+(name.length>28?'…':'')+' — '+UI[LANG].addedCart);}sdTrackAddToCart(p,add);openCart();}

@@ -337,6 +337,24 @@ function giftEarned(offer, cart, subtotal){
 function renderCartPageFull() {
   const root = document.getElementById('cart-page-root');
   if (!root) return;
+
+  /* Le panier se recale sur le stock avant d'etre dessine : ce que le
+     client lit doit etre ce qu'il pourra payer. On ne le previent qu'une
+     fois par changement, sinon chaque rendu re-affiche la meme alerte. */
+  if (typeof sdRevaliderPanier === 'function') {
+    const _chg = sdRevaliderPanier();
+    if (_chg.length) {
+      const _sig = JSON.stringify(_chg);
+      if (window._sdDernierRecalage !== _sig) {
+        window._sdDernierRecalage = _sig;
+        const _tete = LANG === 'en' ? 'Your cart was adjusted to what is left in stock:'
+                    : LANG === 'sv' ? 'Din korg justerades efter vad som finns kvar:'
+                    : 'Votre panier a ete ajuste au stock restant :';
+        alert(_tete + '\n\n' + sdMessageRevalidation(_chg));
+      }
+    }
+  }
+
   const entries = Object.entries(cart).filter(([,q]) => q > 0);
 
   if (entries.length === 0) {
