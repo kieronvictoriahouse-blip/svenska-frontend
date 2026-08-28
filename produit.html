@@ -611,8 +611,13 @@ function _sdProductSlug(nameFr, id) {
 window.addEventListener('sdapi:ready', () => {
   if (!pdpProduct && window.PRODUCTS && window.PRODUCTS.length > 0) {
     const _rawId = new URLSearchParams(window.location.search).get('id');
-    const _numId = parseInt(_rawId);
-    const found = window.PRODUCTS.find(p => p.id === _numId);
+    /* parseInt('7a02b22b-…') = 7 : un UUID commençant par des chiffres
+       matchait le produit numéro 7 (les Serviettes) et la fiche rendait
+       le MAUVAIS produit. La comparaison numérique n'a de sens que si
+       l'identifiant est entièrement numérique. */
+    const found = window.PRODUCTS.find(p =>
+      String(p.uuid || p.id) === String(_rawId)
+      || (/^\d+$/.test(_rawId || '') && p.id === parseInt(_rawId)));
     if (found) renderPDP(found);
   }
   if (pdpProduct && pdpProduct.photo) {

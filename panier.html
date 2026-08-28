@@ -685,7 +685,7 @@ async function applyPromoCode() {
   entries.forEach(([key, qty]) => {
     const ri = key.indexOf('_'); const idStr = ri===-1?key:key.slice(0,ri);
     const _cpd = JSON.parse(localStorage.getItem('sd_cart_products')||'{}');
-    const p = PRODUCTS.find(x => String(x.uuid||x.id)===idStr||x.id===parseInt(idStr))||_cpd[idStr]||(window._SD_STATIC||[]).find(x=>String(x.id)===idStr);
+    const p = PRODUCTS.find(x => String(x.uuid||x.id)===idStr||(/^d+$/.test(idStr)&&x.id===parseInt(idStr)))||_cpd[idStr]||(window._SD_STATIC||[]).find(x=>String(x.id)===idStr);
     if (!p) return;
     const variant = ri===-1?undefined:key.slice(ri+1);
     const v = variant?p.variants?.find(x=>x.label===variant):p.variants?.[0];
