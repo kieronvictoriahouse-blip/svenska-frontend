@@ -58,7 +58,7 @@ async function main() {
     <g:title>${esc((p.name_fr || '').slice(0, 150))}</g:title>
     <g:description>${esc(descOf(p))}</g:description>
     <g:link>${url}</g:link>
-    <g:image_link>${esc(p.image_url)}</g:image_link>
+    <g:image_link>${esc((p.image_url || '').replace(/^https?:\/\/[a-z0-9]+\.supabase\.co\/storage\/v1\/object\/public\/svenska-media\//i, `${SITE}/media/`))}</g:image_link>
     <g:availability>${avail}</g:availability>
     <g:price>${price} EUR</g:price>
     <g:brand>${esc(brandOf(p.name_fr))}</g:brand>

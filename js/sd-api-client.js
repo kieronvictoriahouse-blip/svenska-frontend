@@ -96,6 +96,12 @@
       return { sv: sv || base, fr: fr || base, en: en || base };
     };
 
+    // Sert les images du Storage Supabase via le domaine du site (/media/…)
+    // pour que le CDN Vercel + le cache navigateur absorbent les vues répétées
+    // (réduit fortement le « Cached Egress » Supabase). Voir rewrite dans vercel.json.
+    const SUPA_MEDIA = /^https?:\/\/[a-z0-9]+\.supabase\.co\/storage\/v1\/object\/public\/svenska-media\//i;
+    const mediaUrl = (u) => (typeof u === 'string' ? u.replace(SUPA_MEDIA, '/media/') : u);
+
     return {
       id:          p.sort_order || p.id,
       uuid:        p.id,
@@ -104,7 +110,8 @@
       badge:       p.badge || '',
       rating:      parseFloat(p.rating) || 4.5,
       reviews:     p.reviews_count || 0,
-      photo:       p.image_url || p.photo || '',
+      photo:       mediaUrl(p.image_url || p.photo || ''),
+      extra_images: Array.isArray(p.extra_images) ? p.extra_images.map(mediaUrl) : undefined,
       name:        ml(p.name_sv, p.name_fr, p.name_en, p.name),
       subtitle:    ml(p.subtitle_sv, p.subtitle_fr, p.subtitle_en, p.subtitle),
       origin:      ml(p.origin_sv, p.origin_fr, p.origin_en, p.origin),

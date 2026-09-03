@@ -63,7 +63,11 @@ async function main() {
     const url = `${SITE}/produit/${slug}`;
     const title = `${p.name_fr} | Swedish Cravings`;
     const desc = descOf(p);
-    const img = p.image_url || `${SITE}/css/og-default.jpg`;
+    // og:image / JSON-LD : URL absolue, mais servie via le domaine du site
+    // (/media/…) pour passer par le CDN Vercel plutôt que le Storage Supabase.
+    const img = (p.image_url || '')
+      .replace(/^https?:\/\/[a-z0-9]+\.supabase\.co\/storage\/v1\/object\/public\/svenska-media\//i, `${SITE}/media/`)
+      || `${SITE}/css/og-default.jpg`;
     const price = (parseFloat(p.price) || 0).toFixed(2);
     const avail = (p.track_stock === true && (p.stock || 0) <= 0)
       ? 'https://schema.org/OutOfStock' : 'https://schema.org/InStock';
