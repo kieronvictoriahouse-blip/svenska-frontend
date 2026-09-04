@@ -25,7 +25,7 @@
 <meta property="og:site_name" content="Swedish Cravings">
 <meta name="twitter:card" content="summary_large_image">
 <script type="application/ld+json" id="ld-product">{"@context":"https://schema.org","@type":"Product","name":"Pastilles Läkerol Original Sans Sucre ","description":"Un classique suédois incontournable depuis 1909, Läkerol Original séduit par son alliance raffinée de réglisse et de menthol. Ces pastilles apaisent délicatemen","image":"https://www.swedishcravings.fr/media/products/500x500-1784748497134-270817.jpg","sku":"958a9acd-dab8-4c7f-b956-068652fe82b2","brand":{"@type":"Brand","name":"Swedish Cravings"},"offers":{"@type":"Offer","price":"3.49","priceCurrency":"EUR","availability":"https://schema.org/InStock","url":"https://www.swedishcravings.fr/produit/pastilles-lakerol-original-sans-sucre-958a9acd"}}</script>
-<link rel="stylesheet" href="css/style.css?v=15">
+<link rel="stylesheet" href="css/style.css?v=16">
 <script>const SD_API_URL = 'https://admin.swedishcravings.fr';</script>
 <script>(function(){try{var w=JSON.parse(localStorage.getItem('sd_wl_v1'));if(w&&w.id){var r=document.documentElement.style;if(w.color_primary){r.setProperty('--heather',w.color_primary);r.setProperty('--heather-mid',w.color_primary+'CC');}if(w.color_secondary){r.setProperty('--lingon',w.color_secondary);r.setProperty('--lingon-mid',w.color_secondary+'CC');}if(w.color_bg)r.setProperty('--cream',w.color_bg);if(w.color_text)r.setProperty('--midnight',w.color_text);if(w.font_display)r.setProperty('--font-display',"'"+w.font_display+"',Georgia,serif");if(w.font_body)r.setProperty('--font-body',"'"+w.font_body+"',Georgia,serif");if(w.font_ui)r.setProperty('--font-ui',"'"+w.font_ui+"',sans-serif");}}catch(e){}}());</script>
 <style>
@@ -173,6 +173,7 @@
 <div class="pdp-rating" style="display:none;"><span class="pdp-rating-score" id="pdp-stars"></span><span class="pdp-rev" id="pdp-rev"></span></div>
     <div id="pdp-stock-badge" style="margin-bottom:14px;"></div>
     <div class="price-row">
+      <span class="pdp-price-old" id="pdp-price-old" style="display:none;"></span>
       <span class="pdp-price" id="pdp-price"></span>
       <div><div class="pdp-per" id="pdp-per"></div><div class="pdp-per-kg" id="pdp-per-kg"></div></div>
     </div>
@@ -214,7 +215,7 @@
 </section>
 
 <div id="footer-root"></div>
-<script src="js/app.js?v=20"></script>
+<script src="js/app.js?v=21"></script>
 <script>
 let pdpQtyVal = 1;
 let selectedVariant = null;
@@ -352,7 +353,12 @@ function renderPDP(p) {
   }
 
   // Pills
+  const _pdpSale = !!(window.SDPrice && SDPrice.active(p));
+  const _pdpSaleLabel = _pdpSale
+    ? (p.discountType === 'percent' ? `−${p.discountValue}%` : `−${(parseFloat(p.discountValue)||0).toFixed(2)} €`)
+    : '';
   document.getElementById('pdp-pills').innerHTML =
+    (_pdpSale ? `<span class="pdp-pill promo-pill">${LANG==='en'?'Sale':LANG==='sv'?'Rea':'Promo'} ${_pdpSaleLabel}</span>` : '') +
     p.tags.map(t=>`<span class="pdp-pill">${t}</span>`).join('') +
     (p.badge ? `<span class="pdp-pill copper-pill">${getBadgeLabel(p.badge)}</span>` : '');
 
@@ -421,8 +427,9 @@ function renderPDP(p) {
   const btnWishEl = document.getElementById('btn-wish');
   if (btnWishEl) { btnWishEl.setAttribute('data-fav-id', String(_pdpFavId)); btnWishEl.classList.toggle('liked', isWished); }
 
-  // Sticky ATC
-  const price = selectedVariant ? selectedVariant.price : p.price;
+  // Sticky ATC — prix effectif (remise appliquée), cohérent avec l'affichage.
+  const _basePrice = selectedVariant ? selectedVariant.price : p.price;
+  const price = (window.SDPrice && SDPrice.active(p)) ? SDPrice.effective(_basePrice, p) : _basePrice;
   initStickyAtc(p.name[LANG], price);
 
   // Open Graph + JSON-LD dynamiques
@@ -460,8 +467,17 @@ function renderPDP(p) {
 
 function updatePrice() {
   if (!selectedVariant) return;
-  const fp = fmtPrice(selectedVariant.price);
-  document.getElementById('pdp-price').textContent = fp;
+  const base = selectedVariant.price;
+  const onSale = !!(window.SDPrice && pdpProduct && SDPrice.active(pdpProduct));
+  const eff = onSale ? SDPrice.effective(base, pdpProduct) : base;
+  const priceEl = document.getElementById('pdp-price');
+  const oldEl = document.getElementById('pdp-price-old');
+  priceEl.textContent = fmtPrice(eff);
+  priceEl.classList.toggle('pdp-price--sale', onSale);
+  if (oldEl) {
+    if (onSale) { oldEl.textContent = fmtPrice(base); oldEl.style.display = ''; }
+    else { oldEl.style.display = 'none'; }
+  }
   document.getElementById('pdp-per').textContent = selectedVariant.label;
 }
 
@@ -495,7 +511,7 @@ function pdpAdd() {
   const _cid = String(pdpProduct.uuid || pdpProduct.id);
   try {
     const _cp = JSON.parse(localStorage.getItem('sd_cart_products') || '{}');
-    _cp[_cid] = { name: pdpProduct.name, photo: pdpProduct.photo, price: pdpProduct.price, weight: pdpProduct.weight, variants: pdpProduct.variants || [] };
+    _cp[_cid] = { name: pdpProduct.name, photo: pdpProduct.photo, price: pdpProduct.price, weight: pdpProduct.weight, variants: pdpProduct.variants || [], discountType: pdpProduct.discountType||null, discountValue: pdpProduct.discountValue!=null?pdpProduct.discountValue:null, discountStart: pdpProduct.discountStart||null, discountEnd: pdpProduct.discountEnd||null };
     localStorage.setItem('sd_cart_products', JSON.stringify(_cp));
   } catch(e) {}
   addToCart(pdpProduct.uuid || pdpProduct.id, pdpQtyVal, selectedVariant?.label);
@@ -613,8 +629,13 @@ function _sdProductSlug(nameFr, id) {
 window.addEventListener('sdapi:ready', () => {
   if (!pdpProduct && window.PRODUCTS && window.PRODUCTS.length > 0) {
     const _rawId = new URLSearchParams(window.location.search).get('id');
-    const _numId = parseInt(_rawId);
-    const found = window.PRODUCTS.find(p => p.id === _numId);
+    /* parseInt('7a02b22b-…') = 7 : un UUID commençant par des chiffres
+       matchait le produit numéro 7 (les Serviettes) et la fiche rendait
+       le MAUVAIS produit. La comparaison numérique n'a de sens que si
+       l'identifiant est entièrement numérique. */
+    const found = window.PRODUCTS.find(p =>
+      String(p.uuid || p.id) === String(_rawId)
+      || (/^\d+$/.test(_rawId || '') && p.id === parseInt(_rawId)));
     if (found) renderPDP(found);
   }
   if (pdpProduct && pdpProduct.photo) {
@@ -630,6 +651,6 @@ window.addEventListener('sdapi:ready', () => {
 });
 </script>
   <script>(function(){var _hr=document.getElementById("header-root");if(_hr&&typeof MutationObserver!=="undefined")new MutationObserver(function(){if(typeof updateCartBadge==="function")updateCartBadge();}).observe(_hr,{childList:true});})();</script>
-<script src="js/sd-api-client.js?v=6"></script>
+<script src="js/sd-api-client.js?v=7"></script>
 </body>
 </html>

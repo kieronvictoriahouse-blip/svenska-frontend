@@ -18,7 +18,7 @@
 <meta name="robots" content="noindex">
 <meta property="og:site_name" content="Swedish Cravings">
 <meta name="twitter:card" content="summary">
-<link rel="stylesheet" href="css/style.css?v=15">
+<link rel="stylesheet" href="css/style.css?v=16">
 <script>const SD_API_URL = 'https://admin.swedishcravings.fr';</script>
 <script>(function(){try{var w=JSON.parse(localStorage.getItem('sd_wl_v1'));if(w&&w.id){var r=document.documentElement.style;if(w.color_primary){r.setProperty('--heather',w.color_primary);r.setProperty('--heather-mid',w.color_primary+'CC');}if(w.color_secondary){r.setProperty('--lingon',w.color_secondary);r.setProperty('--lingon-mid',w.color_secondary+'CC');}if(w.color_bg)r.setProperty('--cream',w.color_bg);if(w.color_text)r.setProperty('--midnight',w.color_text);if(w.font_display)r.setProperty('--font-display',"'"+w.font_display+"',Georgia,serif");if(w.font_body)r.setProperty('--font-body',"'"+w.font_body+"',Georgia,serif");if(w.font_ui)r.setProperty('--font-ui',"'"+w.font_ui+"',sans-serif");}}catch(e){}}());</script>
 <style>
@@ -193,7 +193,7 @@
   </div>
 </div>
 <div id="footer-root"></div>
-<script src="js/app.js?v=20"></script>
+<script src="js/app.js?v=21"></script>
 <script>
 window._deliveryMode = window._deliveryMode || 'pickup';
 window._selectedRelay = window._selectedRelay || null;
@@ -383,9 +383,14 @@ function renderCartPageFull() {
     const p = PRODUCTS.find(x => String(x.uuid || x.id) === idStr || x.id === parseInt(idStr)) || _cpd[idStr] || (window._SD_STATIC||[]).find(x => String(x.id) === idStr);
     if (!p) return '';
     const v = variant ? p.variants?.find(x => x.label === variant) : p.variants?.[0];
-    const price = v ? v.price : p.price;
+    const _base = v ? v.price : p.price;
+    const _onSale = !!(window.SDPrice && SDPrice.active(p));
+    const price = window.SDPrice ? SDPrice.effective(_base, p) : _base;
     const line = price * qty;
     subtotal += line;
+    const _priceCell = _onSale
+      ? `<span class="cart-row-price-old">${fmtPrice(_base * qty)}</span><span class="cpr-price cart-row-price--sale">${fmtPrice(line)}</span>`
+      : `<span class="cpr-price">${fmtPrice(line)}</span>`;
     return `
       <div class="cart-page-row">
         <img class="cpr-img" src="${p.photo || ''}" alt="${p.name?.[LANG] || p.name?.fr || ''}" onerror="this.style.display='none'">
@@ -401,7 +406,7 @@ function renderCartPageFull() {
           <span>${qty}</span>
           <button onclick="changeQty('${key}',1);renderCartPageFull();">+</button>
         </div>
-        <div class="cpr-price">${fmtPrice(line)}</div>
+        <div class="cpr-price-wrap" style="text-align:right;">${_priceCell}</div>
       </div>`;
   }).join('');
 
@@ -689,7 +694,8 @@ async function applyPromoCode() {
     if (!p) return;
     const variant = ri===-1?undefined:key.slice(ri+1);
     const v = variant?p.variants?.find(x=>x.label===variant):p.variants?.[0];
-    st += (v?v.price:p.price) * qty;
+    const _base = v?v.price:p.price;
+    st += (window.SDPrice?SDPrice.effective(_base,p):_base) * qty;
   });
 
   const fail = (text) => {
@@ -992,6 +998,6 @@ async function submitProfileGate() {
 window.addEventListener('sdapi:ready', () => { renderCartPageFull(); });
 </script>
 <script>(function(){var _hr=document.getElementById("header-root");if(_hr&&typeof MutationObserver!=="undefined")new MutationObserver(function(){if(typeof updateCartBadge==="function")updateCartBadge();}).observe(_hr,{childList:true});})();</script>
-<script src="js/sd-api-client.js?v=6"></script>
+<script src="js/sd-api-client.js?v=7"></script>
 </body>
 </html>

@@ -8,6 +8,37 @@
 
   const BASE = window.SD_API_URL || 'https://admin.swedishcravings.fr';
 
+  /* ── Remise par article ─────────────────────────────────────────
+     Miroir EXACT de src/lib/product-price.ts côté serveur. Le prix
+     effectif est recalculé pour l'affichage et le panier ; le checkout
+     serveur refait foi sur le montant facturé. Dates comparées en
+     YYYY-MM-DD, bornes incluses (« du 10 au 12 » = 10, 11 et 12). */
+  window.SDPrice = window.SDPrice || {
+    _today() { return new Date().toISOString().slice(0, 10); },
+    active(p, today) {
+      if (!p) return false;
+      const type = p.discountType || p.discount_type;
+      if (type !== 'percent' && type !== 'fixed') return false;
+      const val = parseFloat(p.discountValue != null ? p.discountValue : p.discount_value);
+      if (!(val > 0)) return false;
+      const t = today || this._today();
+      const s = String(p.discountStart || p.discount_start || '').slice(0, 10);
+      const e = String(p.discountEnd || p.discount_end || '').slice(0, 10);
+      if (s && t < s) return false;
+      if (e && t > e) return false;
+      return true;
+    },
+    // Prix TTC après remise pour un prix de base donné (produit OU variante).
+    effective(base, p, today) {
+      const b = parseFloat(base) || 0;
+      if (!this.active(p, today)) return Math.round(b * 100) / 100;
+      const type = p.discountType || p.discount_type;
+      const val = parseFloat(p.discountValue != null ? p.discountValue : p.discount_value);
+      const out = type === 'percent' ? b * (1 - val / 100) : b - val;
+      return Math.max(0, Math.round(out * 100) / 100);
+    },
+  };
+
   // sessionStorage cache — produits + CMS + white-label, évite tout flash entre pages
   const CACHE_KEY = 'sd_full_v1';
   const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
@@ -120,6 +151,12 @@
       ingredients: ml(p.ingredients_sv, p.ingredients_fr, p.ingredients_en, p.ingredients),
       storage:     ml(p.storage_sv, p.storage_fr, p.storage_en, p.storage),
       price:       parseFloat(p.price) || 0,
+      // Remise par article (migration 049) — champs bruts ; le prix effectif
+      // se calcule via window.SDPrice.effective() (gère aussi les variantes).
+      discountType:  p.discount_type || null,
+      discountValue: p.discount_value != null ? parseFloat(p.discount_value) : null,
+      discountStart: p.discount_start || null,
+      discountEnd:   p.discount_end || null,
       weight:      p.weight || '',
       tags:        Array.isArray(p.tags) ? p.tags : [],
       variants,

@@ -299,6 +299,20 @@ footer { background:var(--midnight); color:rgba(255,255,255,0.55); padding:64px 
 .psb-ok  { background:#D1FAE5; color:#065F46; }
 .psb-low { background:#FEF3C7; color:#92400E; }
 .psb-out { background:#FEE2E2; color:#991B1B; }
+
+/* ── Remise par article (promo) ───────────────────────────────── */
+.badge-promo { background:#C0392B; color:var(--snow); }
+/* Si un produit a déjà un badge, la pastille promo se place en dessous. */
+.prod-img .prod-badge + .prod-badge { top:40px; }
+/* Prix barré (ancien) + nouveau prix en rouge, partout où le prix s'affiche */
+.prod-price-old, .pli-price-old, .pdp-price-old, .cart-row-price-old, .search-item-price-old {
+  color:var(--dust,#9A948C); text-decoration:line-through; font-weight:400; margin-right:7px;
+}
+.prod-price--sale, .pli-price--sale, .pdp-price--sale, .cart-row-price--sale, .search-item-price .prod-price--sale { color:#C0392B !important; }
+.pdp-price-old { font-family:var(--font-display); font-size:20px; }
+.cart-row-price-old { font-family:var(--font-display); font-size:13px; }
+.search-item-price-old { font-size:12px; }
+.promo-pill { background:#FDECEC !important; color:#C0392B !important; border-color:#E7B9B9 !important; font-weight:700; }
 .prod-quick {
   position:absolute; bottom:10px; right:10px; z-index:2;
   background:var(--heather); color:var(--snow); border:none;
