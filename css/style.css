@@ -301,7 +301,9 @@ footer { background:var(--midnight); color:rgba(255,255,255,0.55); padding:64px 
 .psb-out { background:#FEE2E2; color:#991B1B; }
 
 /* ── Remise par article (promo) ───────────────────────────────── */
-.badge-promo { background:#C0392B; color:var(--snow); }
+.badge-promo { background:#C0392B; color:var(--snow); white-space:nowrap; }
+.sticky-atc-price-old { font-family:var(--font-display); font-size:15px; color:var(--dust,#9A948C); text-decoration:line-through; margin-right:8px; }
+.sticky-atc-price.pdp-price--sale { color:#C0392B !important; }
 /* Si un produit a déjà un badge, la pastille promo se place en dessous. */
 .prod-img .prod-badge + .prod-badge { top:40px; }
 /* Prix barré (ancien) + nouveau prix en rouge, partout où le prix s'affiche */

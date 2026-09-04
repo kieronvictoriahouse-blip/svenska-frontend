@@ -25,7 +25,7 @@
 <meta property="og:site_name" content="Swedish Cravings">
 <meta name="twitter:card" content="summary_large_image">
 <script type="application/ld+json" id="ld-product">{"@context":"https://schema.org","@type":"Product","name":"Sauce Café de Paris","description":"Une sauce onctueuse aux herbes aromatiques inspirée du célèbre beurre Café de Paris. Ses notes de persil, basilique, cerfeuil et thym subliment volailles et poi","image":"https://www.swedishcravings.fr/media/products/cafe-de-paris-9207-se-1783834373894-978215.jpg","sku":"7e314fec-a93d-4a52-851b-d14035a4544a","brand":{"@type":"Brand","name":"Swedish Cravings"},"offers":{"@type":"Offer","price":"3.89","priceCurrency":"EUR","availability":"https://schema.org/InStock","url":"https://www.swedishcravings.fr/produit/sauce-cafe-de-paris-7e314fec"}}</script>
-<link rel="stylesheet" href="css/style.css?v=16">
+<link rel="stylesheet" href="css/style.css?v=17">
 <script>const SD_API_URL = 'https://admin.swedishcravings.fr';</script>
 <script>(function(){try{var w=JSON.parse(localStorage.getItem('sd_wl_v1'));if(w&&w.id){var r=document.documentElement.style;if(w.color_primary){r.setProperty('--heather',w.color_primary);r.setProperty('--heather-mid',w.color_primary+'CC');}if(w.color_secondary){r.setProperty('--lingon',w.color_secondary);r.setProperty('--lingon-mid',w.color_secondary+'CC');}if(w.color_bg)r.setProperty('--cream',w.color_bg);if(w.color_text)r.setProperty('--midnight',w.color_text);if(w.font_display)r.setProperty('--font-display',"'"+w.font_display+"',Georgia,serif");if(w.font_body)r.setProperty('--font-body',"'"+w.font_body+"',Georgia,serif");if(w.font_ui)r.setProperty('--font-ui',"'"+w.font_ui+"',sans-serif");}}catch(e){}}());</script>
 <style>
@@ -140,6 +140,7 @@
 <!-- STICKY ADD TO CART -->
 <div class="sticky-atc" id="sticky-atc">
   <span class="sticky-atc-name" id="sticky-atc-name"></span>
+  <span class="sticky-atc-price-old" id="sticky-atc-price-old" style="display:none;"></span>
   <span class="sticky-atc-price" id="sticky-atc-price"></span>
   <button class="sticky-atc-btn" onclick="pdpAdd()" data-fr="Ajouter au panier" data-en="Add to cart" data-sv="Lägg i korg">Ajouter au panier</button>
 </div>
@@ -215,7 +216,7 @@
 </section>
 
 <div id="footer-root"></div>
-<script src="js/app.js?v=21"></script>
+<script src="js/app.js?v=22"></script>
 <script>
 let pdpQtyVal = 1;
 let selectedVariant = null;
@@ -358,7 +359,7 @@ function renderPDP(p) {
     ? (p.discountType === 'percent' ? `−${p.discountValue}%` : `−${(parseFloat(p.discountValue)||0).toFixed(2)} €`)
     : '';
   document.getElementById('pdp-pills').innerHTML =
-    (_pdpSale ? `<span class="pdp-pill promo-pill">${LANG==='en'?'Sale':LANG==='sv'?'Rea':'Promo'} ${_pdpSaleLabel}</span>` : '') +
+    (_pdpSale ? `<span class="pdp-pill promo-pill">${LANG==='en'?'Special offer':LANG==='sv'?'Erbjudande':'Offre spéciale'} ${_pdpSaleLabel}</span>` : '') +
     p.tags.map(t=>`<span class="pdp-pill">${t}</span>`).join('') +
     (p.badge ? `<span class="pdp-pill copper-pill">${getBadgeLabel(p.badge)}</span>` : '');
 
@@ -429,8 +430,16 @@ function renderPDP(p) {
 
   // Sticky ATC — prix effectif (remise appliquée), cohérent avec l'affichage.
   const _basePrice = selectedVariant ? selectedVariant.price : p.price;
-  const price = (window.SDPrice && SDPrice.active(p)) ? SDPrice.effective(_basePrice, p) : _basePrice;
+  const _stOnSale = !!(window.SDPrice && SDPrice.active(p));
+  const price = _stOnSale ? SDPrice.effective(_basePrice, p) : _basePrice;
   initStickyAtc(p.name[LANG], price);
+  // Barre du bas : ancien prix barré + prix en rouge quand une promo est active.
+  const _stOldEl = document.getElementById('sticky-atc-price-old');
+  const _stPriceEl = document.getElementById('sticky-atc-price');
+  if (_stOldEl && _stPriceEl) {
+    if (_stOnSale) { _stOldEl.textContent = fmtPrice(_basePrice); _stOldEl.style.display = ''; _stPriceEl.classList.add('pdp-price--sale'); }
+    else { _stOldEl.style.display = 'none'; _stPriceEl.classList.remove('pdp-price--sale'); }
+  }
 
   // Open Graph + JSON-LD dynamiques
   const ogTitle = document.getElementById('og-title');
@@ -603,6 +612,12 @@ function _sdProductSlug(nameFr, id) {
         ingredients: fbObj('ingredients_sv', 'ingredients_fr', 'ingredients_en', 'ingredients'),
         storage:     fbObj('storage_sv',     'storage_fr',     'storage_en',     'storage'),
         price: raw.price, weight: raw.weight || local?.weight || '', tags: raw.tags || local?.tags || [],
+        // Remise par article : sans ces champs, la promo s'affichait au 1er rendu
+        // (depuis PRODUCTS mappé) puis DISPARAISSAIT à ce re-render depuis l'API.
+        discountType:  raw.discount_type || null,
+        discountValue: raw.discount_value != null ? parseFloat(raw.discount_value) : null,
+        discountStart: raw.discount_start || null,
+        discountEnd:   raw.discount_end || null,
         allergens:   fbObj('allergens_sv',   'allergens_fr',   'allergens_en',   'allergens'),
         nutrition:   raw.nutrition || {},
         extra_images: raw.extra_images || [],
