@@ -66,7 +66,11 @@
 <div id="footer-root"></div>
 <script src="js/app.js?v=23"></script>
 <script>
-const LANG = localStorage.getItem('sd_lang') || 'fr';
+/* LANG vient d'app.js (let global, chargé juste au-dessus). Le redéclarer
+   ici jetait « Identifier 'LANG' has already been declared » : tout ce bloc
+   mourait — récapitulatif jamais affiché, conversion `purchase` jamais
+   envoyée à GA4. 17 commandes payées, zéro conversion mesurée (constat du
+   09/09/2026). Ne JAMAIS redéclarer LANG au niveau global d'une page. */
 const T_SUCCESS = {
   title:    { fr: 'Commande <em style="font-style:italic;color:var(--lingon-mid);">confirmée</em>', en: 'Order <em style="font-style:italic;color:var(--lingon-mid);">confirmed</em>', sv: 'Beställning <em style="font-style:italic;color:var(--lingon-mid);">bekräftad</em>' },
   sub:      { fr: 'Merci pour votre commande ! Vous recevrez un email de confirmation dans quelques minutes.', en: 'Thank you for your order! You will receive a confirmation email shortly.', sv: 'Tack för din beställning! Du får ett bekräftelsemail inom några minuter.' },
