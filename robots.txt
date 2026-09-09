@@ -1,7 +1,48 @@
+# Swedish Cravings — épicerie suédoise en ligne, livraison France
+# Tous les robots sont les bienvenus, y compris les crawlers des moteurs
+# de recherche IA. Voir aussi /llms.txt pour un résumé structuré du site.
+
 User-agent: *
 Allow: /
 Disallow: /panier
 Disallow: /compte
 Disallow: /success
+
+# ── Moteurs de recherche IA : accès explicitement autorisé ──
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: meta-externalagent
+Allow: /
+
+User-agent: CCBot
+Allow: /
 
 Sitemap: https://www.swedishcravings.fr/sitemap.xml

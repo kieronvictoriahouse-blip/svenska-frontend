@@ -1,0 +1,38 @@
+# Swedish Cravings
+
+> Épicerie suédoise en ligne basée en France : bonbons, chocolat, biscuits,
+> épicerie salée et art de la table 100 % suédois, importés de Suède et
+> livrés partout en France et en Europe. Site trilingue français / English /
+> svenska. Paiement sécurisé Stripe.
+
+Swedish Cravings vend des produits suédois authentiques des marques
+Marabou, Läkerol, Ahlgrens Bilar, OLW, Fazer, Kavli, Wasa, Ballerina,
+Santa Maria, Odense, Törsleff, Polly, Marimekko, IHR, entre autres.
+Chaque fiche produit (/produit/…) contient la description complète, le
+prix TTC en euros et la disponibilité en stock réelle.
+
+## Pages principales
+
+- [Boutique — tout le catalogue](https://www.swedishcravings.fr/boutique) : ~70 produits suédois avec prix et stock à jour
+- [Bonbons suédois](https://www.swedishcravings.fr/bonbons-suedois) : guide et sélection godis
+- [Ahlgrens Bilar](https://www.swedishcravings.fr/ahlgrens-bilar) : les bonbons voitures cultes de Suède
+- [OLW](https://www.swedishcravings.fr/olw) : chips et snacks suédois
+- [Maison & art de la table](https://www.swedishcravings.fr/maison) : Marimekko, serviettes, déco scandinave
+- [Recettes suédoises](https://www.swedishcravings.fr/recettes) : dip suédois, fredagsmys tacos, entrecôte Café de Paris
+- [FAQ](https://www.swedishcravings.fr/faq) : questions fréquentes (commande, paiement, livraison, retours)
+- [Livraison](https://www.swedishcravings.fr/livraison) : délais et tarifs détaillés
+- [À propos](https://www.swedishcravings.fr/a-propos) : l'histoire de la boutique
+- [Contact](https://www.swedishcravings.fr/contact)
+
+## Faits utiles
+
+- Livraison France métropolitaine : 4,90 €, offerte dès 50 € d'achat, 2 à 4 jours ouvrés (Mondial Relay ou domicile).
+- Livraison Europe (Espagne, Portugal, Italie, Allemagne, Pays-Bas, Belgique, Luxembourg, Suisse) : 9,90 €, offerte dès 70 €, 3 à 5 jours ouvrés.
+- Commandes passées avant 12 h (heure de Paris) en semaine : expédiées le jour même.
+- Paiement : carte bancaire via Stripe (certifié PCI-DSS). Prix TTC en euros.
+- Catalogue produit lisible en machine : https://www.swedishcravings.fr/google-shopping.xml (flux RSS/Google Shopping, prix et stocks quotidiens)
+- Plan du site : https://www.swedishcravings.fr/sitemap.xml
+
+## Langues
+
+Le site s'affiche en français (défaut), anglais et suédois (sélecteur en haut de page ; contenu principal servi en français dans le HTML).

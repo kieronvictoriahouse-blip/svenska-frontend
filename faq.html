@@ -39,6 +39,7 @@
 .faq-a-inner a { color: var(--lingon); }
 @media(max-width:600px) { .faq-wrap { padding: 40px 20px; } }
 </style>
+<script type="application/ld+json" id="ld-faq">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Comment passer une commande ?","acceptedAnswer":{"@type":"Answer","text":"Ajoutez vos produits au panier, puis cliquez sur \"Commander\". Vous serez dirigé vers notre paiement sécurisé Stripe. Vous pouvez payer par carte bancaire (Visa, Mastercard) ou PayPal."}},{"@type":"Question","name":"Mes données de paiement sont-elles sécurisées ?","acceptedAnswer":{"@type":"Answer","text":"Oui, absolument. Le paiement est géré par Stripe, certifié PCI-DSS niveau 1. Vos coordonnées bancaires ne transitent jamais par nos serveurs et sont entièrement chiffrées."}},{"@type":"Question","name":"Puis-je modifier ou annuler ma commande ?","acceptedAnswer":{"@type":"Answer","text":"Vous pouvez modifier ou annuler votre commande dans les 2 heures suivant la validation. Passé ce délai, contactez-nous rapidement à contact. Nous ferons notre maximum."}},{"@type":"Question","name":"Quels sont les délais de livraison ?","acceptedAnswer":{"@type":"Answer","text":"En France métropolitaine : 2 à 4 jours ouvrés. En Belgique/Luxembourg/Suisse : 3 à 5 jours. Reste de l'Europe : 4 à 7 jours. Consultez notre page livraison pour le détail complet."}},{"@type":"Question","name":"La livraison est-elle gratuite ?","acceptedAnswer":{"@type":"Answer","text":"La livraison est offerte dès 50€ en France métropolitaine. Pour l'Espagne, le Portugal, l'Italie, l'Allemagne, les Pays-Bas, la Belgique, le Luxembourg et la Suisse : livraison à 9,90€, offerte dès 70€."}},{"@type":"Question","name":"Comment suivre ma commande ?","acceptedAnswer":{"@type":"Answer","text":"Un email contenant votre numéro de suivi vous est envoyé dès l'expédition de votre colis. Vous pouvez suivre votre livraison directement sur le site du transporteur."}},{"@type":"Question","name":"D'où viennent vos produits ?","acceptedAnswer":{"@type":"Answer","text":"Nos produits proviennent directement de Suède. Nous travaillons avec des producteurs et importateurs soigneusement sélectionnés pour garantir l'authenticité et la qualité de chaque référence."}},{"@type":"Question","name":"Les produits sont-ils adaptés aux régimes alimentaires particuliers ?","acceptedAnswer":{"@type":"Answer","text":"Chaque fiche produit indique la liste d'ingrédients complète et les allergènes. Les mentions Bio, Vegan ou Sans gluten sont indiquées sur les fiches concernées. En cas de doute, contactez-nous avant d'acheter."}},{"@type":"Question","name":"Comment conserver les produits ?","acceptedAnswer":{"@type":"Answer","text":"Les conseils de conservation sont indiqués sur chaque fiche produit. En général, les épices se conservent à l'abri de la lumière et de l'humidité. La DLC (Date Limite de Consommation) est indiquée sur chaque emballage."}}]}</script>
 </head>
 <body>
 <div id="header-root"></div>
@@ -56,14 +57,14 @@
     <button class="faq-q" onclick="toggleFaq(this)">
       Comment passer une commande ?<span class="faq-arrow">▾</span>
     </button>
-    <div class="faq-a"><div class="faq-a-inner">Ajoutez vos produits au panier, puis cliquez sur "Commander". Vous serez dirigé vers notre système de paiement sécurisé Snipcart. Vous pouvez payer par carte bancaire (Visa, Mastercard) ou PayPal.</div></div>
+    <div class="faq-a"><div class="faq-a-inner">Ajoutez vos produits au panier, puis cliquez sur "Commander". Vous serez dirigé vers notre paiement sécurisé Stripe. Vous pouvez payer par carte bancaire (Visa, Mastercard) ou PayPal.</div></div>
   </div>
 
   <div class="faq-item">
     <button class="faq-q" onclick="toggleFaq(this)">
       Mes données de paiement sont-elles sécurisées ?<span class="faq-arrow">▾</span>
     </button>
-    <div class="faq-a"><div class="faq-a-inner">Oui, absolument. Le paiement est géré par Snipcart, certifié PCI-DSS. Vos coordonnées bancaires ne transitent jamais par nos serveurs et sont entièrement chiffrées.</div></div>
+    <div class="faq-a"><div class="faq-a-inner">Oui, absolument. Le paiement est géré par Stripe, certifié PCI-DSS niveau 1. Vos coordonnées bancaires ne transitent jamais par nos serveurs et sont entièrement chiffrées.</div></div>
   </div>
 
   <div class="faq-item">
