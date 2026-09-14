@@ -17,7 +17,7 @@
 
   // ── Familles → sous-rayons (ordre d'affichage du design) ──
   var GROUPS = [
-    ['Confiseries', ['Bonbons gélifiés', 'Réglisse & salmiak', 'Chocolat', 'Biscuits & barres']],
+    ['Confiseries', ['Bonbons']],
     ['Apéritif & Snacks', ['Chips', 'Mélanges pour dips', 'Noix & apéritif', 'Fromages & tartinables', 'Soufflés & popcorn']],
     ['Épices & Marinades', ['Épices & poivres', 'Marinades & BBQ', 'Sel & aromates']],
     ['Sauces', ['Sauces & condiments']],
@@ -26,7 +26,7 @@
   ];
 
   var TINTS = {
-    'Bonbons gélifiés': '#F6E3DC', 'Réglisse & salmiak': '#E6E2DE', 'Chocolat': '#EADCCC', 'Biscuits & barres': '#F2E8D9',
+    'Bonbons': '#F6E3DC',
     'Épices & poivres': '#F3E7D2', 'Mélanges pour dips': '#EDE8D8', 'Sel & aromates': '#F0EBE0',
     'Marinades & BBQ': '#F2E4D0', 'Noix & apéritif': '#F3E9D9', 'Fromages & tartinables': '#F0E8D6',
     'Chips': '#F7E9D0', 'Soufflés & popcorn': '#F8EED4',
@@ -34,7 +34,7 @@
   };
 
   var SHORT = {
-    'Bonbons gélifiés': 'Gélifiés', 'Réglisse & salmiak': 'Réglisse', 'Chocolat': 'Chocolat', 'Biscuits & barres': 'Biscuits',
+    'Bonbons': 'Bonbons',
     'Épices & poivres': 'Épices', 'Mélanges pour dips': 'Dips', 'Sel & aromates': 'Sel',
     'Marinades & BBQ': 'Marinades', 'Noix & apéritif': 'Noix', 'Fromages & tartinables': 'Fromages',
     'Chips': 'Chips', 'Soufflés & popcorn': 'Soufflés',
@@ -43,10 +43,7 @@
 
   // Traductions des noms de sous-rayons / familles (FR/EN/SV)
   var SUB_I18N = {
-    'Bonbons gélifiés':   { fr: 'Bonbons gélifiés',   en: 'Gummy sweets',        sv: 'Gelégodis' },
-    'Réglisse & salmiak': { fr: 'Réglisse & salmiak', en: 'Liquorice & salmiak', sv: 'Lakrits & salmiak' },
-    'Chocolat':           { fr: 'Chocolat',           en: 'Chocolate',           sv: 'Choklad' },
-    'Biscuits & barres':  { fr: 'Biscuits & barres',  en: 'Biscuits & bars',     sv: 'Kex & bars' },
+    'Bonbons':            { fr: 'Bonbons',            en: 'Sweets',              sv: 'Godis' },
     'Épices & poivres':   { fr: 'Épices & poivres',   en: 'Spices & peppers',    sv: 'Kryddor & peppar' },
     'Marinades & BBQ':    { fr: 'Marinades & BBQ',    en: 'Marinades & BBQ',     sv: 'Marinader & BBQ' },
     'Mélanges pour dips': { fr: 'Mélanges pour dips', en: 'Dip mixes',           sv: 'Dipmixer' },
@@ -60,10 +57,7 @@
     'Boissons':           { fr: 'Boissons',           en: 'Drinks',              sv: 'Drycker' }
   };
   var SHORT_I18N = {
-    'Bonbons gélifiés': { fr: 'Gélifiés', en: 'Gummies', sv: 'Gelé' },
-    'Réglisse & salmiak': { fr: 'Réglisse', en: 'Liquorice', sv: 'Lakrits' },
-    'Chocolat': { fr: 'Chocolat', en: 'Chocolate', sv: 'Choklad' },
-    'Biscuits & barres': { fr: 'Biscuits', en: 'Biscuits', sv: 'Kex' },
+    'Bonbons': { fr: 'Bonbons', en: 'Sweets', sv: 'Godis' },
     'Épices & poivres': { fr: 'Épices', en: 'Spices', sv: 'Kryddor' },
     'Marinades & BBQ': { fr: 'Marinades', en: 'Marinades', sv: 'Marinader' },
     'Mélanges pour dips': { fr: 'Dips', en: 'Dips', sv: 'Dip' },
@@ -77,7 +71,7 @@
     'Boissons': { fr: 'Boissons', en: 'Drinks', sv: 'Dryck' }
   };
   var FAM_I18N = {
-    'Confiseries': { fr: 'Confiseries', en: 'Sweets', sv: 'Godis' },
+    'Confiseries': { fr: 'Bonbons', en: 'Sweets', sv: 'Godis' },
     'Apéritif & Snacks': { fr: 'Apéritif & Snacks', en: 'Snacks & nibbles', sv: 'Tilltugg & snacks' },
     'Épices & Marinades': { fr: 'Épices & Marinades', en: 'Spices & marinades', sv: 'Kryddor & marinader' },
     'Bake & Fika': { fr: 'Bake & Fika', en: 'Bake & Fika', sv: 'Baka & Fika' },
@@ -207,8 +201,7 @@
   // sauces AVANT le poivre (« sauce au poivre vert ») ; les biscuits AVANT le
   // chocolat (biscuits au chocolat). Testé sur les 82 produits réels.
   var CLASSIFY = [
-    [/lakerol.*fraise/, 'Bonbons gélifiés'],                                  // Läkerol Fraise = fruité, pas réglisse
-    [/kexchoklad|\bjapp\b|ballerina|singoalla|biscuit/, 'Biscuits & barres'], // biscuits avant chocolat
+    [/kexchoklad|\bjapp\b|ballerina|singoalla|biscuit/, 'Bonbons'],           // biscuits sucrés → Bonbons
     [/\bdip\b|dipmix|bearnaise/, 'Mélanges pour dips'],                       // avant fromage (dips « au fromage »)
     [/fromage|graddost|gräddost|vasterbotten|västerbotten|kavli|tartiner|\bost\b/, 'Fromages & tartinables'],
     [/\bnoix\b|cajou|edamame|\bfeves?\b|\bfèves?\b|pistache|cacahu|amandes? grill/, 'Noix & apéritif'],
@@ -217,16 +210,16 @@
     [/cheez|doodles|ostbagar|skruvar|popcorn|soufflé|souffle|\bbagar\b/, 'Soufflés & popcorn'],
     [/chips|dillchips|grillchips|lantchips|estrella|crackers?/, 'Chips'],
     [/o.?boy|chocolat chaud|chocolat en poudre|\bcacao\b|glogg|glögg|\bo\W?boy\b/, 'Boissons'],  // avant chocolat
-    [/marabou|\bplopp\b|\bcenter\b|\bdumle\b|kexchoklad|choklad|chocolat|\bkorkat\b/, 'Chocolat'],
-    [/lakrits|reglisse|salmiak|djungelvral|salta katten|tyrkisk|lakerol|\bkick\b|skumgodis|sockerbitar|spattor/, 'Réglisse & salmiak'],
-    [/\bbilar\b|ahlgrens|voitures|gott ?& ?blandat|tutti frutti|skumbanan|\bbubs\b|zoo|malaco|nappar|sursnoren|gelifi|\bgodis\b|gummy|pasteque|pastèque/, 'Bonbons gélifiés'],
+    [/marabou|\bplopp\b|\bcenter\b|\bdumle\b|kexchoklad|choklad|chocolat|\bkorkat\b/, 'Bonbons'],
+    [/lakrits|reglisse|salmiak|djungelvral|salta katten|tyrkisk|lakerol|\bkick\b|skumgodis|sockerbitar|spattor/, 'Bonbons'],
+    [/\bbilar\b|ahlgrens|voitures|gott ?& ?blandat|tutti frutti|skumbanan|\bbubs\b|zoo|malaco|nappar|sursnoren|gelifi|\bgodis\b|gummy|pasteque|pastèque/, 'Bonbons'],
     [/falksalt|flingsalt|flocons de sel|sel d.?ail|herbes a gravlax|\bsel\b/, 'Sel & aromates'],
     [/parlsocker|kanelbullar|sucre perle|sucre perlé|sucre vanille|vaniljsocker|pate d.?amande|pâte d.?amande|dulce|\bamande/, 'Fika & pâtisserie'],
     [/poivre|peppar|cannelle|\bkanel\b|cardamome|kardemumma|genevrier|enbar|\baneth\b|\bdill\b|gravlax|kockens|santa maria|\bepice|krydd|paprika/, 'Épices & poivres'],
     [/kaviar|kalles|airelles|lingon|confiture|\bsylt\b|bla band/, 'Sauces & condiments']
   ];
   var CAT_FALLBACK = {
-    'Confiseries': 'Bonbons gélifiés', 'Chips & Snacks': 'Chips',
+    'Confiseries': 'Bonbons', 'Chips & Snacks': 'Chips',
     'Épices': 'Épices & poivres', 'Mélanges': 'Épices & poivres', 'Farines & Graines': 'Épices & poivres', 'Flocons & Céréales': 'Épices & poivres',
     'Fika & Boulangerie': 'Fika & pâtisserie', 'Sucres & Sirops': 'Fika & pâtisserie', 'Pâtisserie & Essentiels': 'Fika & pâtisserie', 'Bake & Fika': 'Fika & pâtisserie',
     'Basics suédois': 'Sauces & condiments', 'Sauces': 'Sauces & condiments', 'Boissons': 'Boissons'
@@ -261,7 +254,7 @@
     var tags = {};
     if (parent === 'Apéritif & Snacks' || parent === 'Épices & Marinades' || parent === 'Sauces') tags.sale = true;
     if (parent === 'Confiseries' || parent === 'Bake & Fika' || parent === 'Boissons') tags.sucre = true;
-    if (sub === 'Réglisse & salmiak' || /lakrits|reglisse|salmiak/.test(nn)) tags.reglisse = true;
+    if (/lakrits|reglisse|salmiak|djungelvral|salta katten|tyrkisk|\bkick\b|skumgodis|sockerbitar|spattor/.test(nn)) tags.reglisse = true;
     if (sub === 'Fika & pâtisserie' || /kanel|cannelle|kardemumma|cardamome|\bkex\b|ballerina|singoalla|parlsocker|kanelbullar/.test(nn)) tags.fika = true;
     if (realTags.indexOf('vegan') > -1 || realTags.indexOf('vegansk') > -1) tags.vegan = true;
     if (price > 0 && price < 3) tags.petit = true;
@@ -542,7 +535,7 @@
     var used = {};
     var picks = [
       pick(function (p) { return p.parent === 'Confiseries'; }),
-      pick(function (p) { return p.sub === 'Chocolat' || p.parent === 'Bake & Fika' || p.sub === 'Fika & pâtisserie'; }),
+      pick(function (p) { return p.parent === 'Bake & Fika' || p.sub === 'Fika & pâtisserie'; }),
       pick(function (p) { return p.parent === 'Apéritif & Snacks' || p.sub === 'Chips'; })
     ];
     var pool = withPhoto.slice();
