@@ -24,349 +24,243 @@
 <meta property="og:site_name" content="Swedish Cravings">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" href="css/style.css?v=18">
+<!-- Polices du catalogue v3 : Cormorant Garamond + EB Garamond + Jost (EB Garamond n'était pas chargé) -->
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
 <script>const SD_API_URL = 'https://admin.swedishcravings.fr';</script>
 <script>(function(){try{var w=JSON.parse(localStorage.getItem('sd_wl_v1'));if(w&&w.id){var r=document.documentElement.style;if(w.color_primary){r.setProperty('--heather',w.color_primary);r.setProperty('--heather-mid',w.color_primary+'CC');}if(w.color_secondary){r.setProperty('--lingon',w.color_secondary);r.setProperty('--lingon-mid',w.color_secondary+'CC');}if(w.color_bg)r.setProperty('--cream',w.color_bg);if(w.color_text)r.setProperty('--midnight',w.color_text);if(w.font_display)r.setProperty('--font-display',"'"+w.font_display+"',Georgia,serif");if(w.font_body)r.setProperty('--font-body',"'"+w.font_body+"',Georgia,serif");if(w.font_ui)r.setProperty('--font-ui',"'"+w.font_ui+"',sans-serif");}}catch(e){}}());</script>
 <script>(function(){try{var w=JSON.parse(localStorage.getItem('sd_wl_v1'));var n=w&&w.site_name;if(n){var qm=function(s){return document.querySelector(s);};var el;var _t=document.title;document.title=(_t&&_t.toLowerCase().indexOf((n||'').toLowerCase())>=0)?_t:(n+(_t?' — '+_t:''));el=qm('meta[property="og:title"]');if(el)el.setAttribute('content',document.title);el=qm('meta[property="og:site_name"]');if(el)el.setAttribute('content',n);el=qm('meta[name="twitter:title"]');if(el)el.setAttribute('content',document.title);var jld=qm('script[type="application/ld+json"]');if(jld){try{var d=JSON.parse(jld.textContent);if(d.name!==undefined)d.name=n;if(w.email&&d.email!==undefined)d.email=w.email;if(d.url!==undefined)d.url=location.origin;jld.textContent=JSON.stringify(d);}catch(e){}}}var u=document.querySelector('meta[property="og:url"]');if(u)u.setAttribute('content',location.href);}catch(e){}}());</script>
+
 <style>
-.shop-hero { background:var(--heather); padding:56px 40px; text-align:center; }
-.shop-hero h1 { font-family:var(--font-display); font-size:clamp(36px,5vw,64px); font-weight:300; color:var(--snow); }
-.shop-hero h1 em { font-style:italic; color:var(--lingon-mid); }
-.shop-hero p { font-family:var(--font-body); font-size:17px; color:rgba(255,255,255,0.65); margin-top:12px; }
+/* ═══════════════════════════════════════════════════════════════
+   CATALOGUE v3 — styles (handoff « Restructuration du catalogue »)
+   Valeurs reprises au pixel. Desktop = base ; bascule mobile à 768 px.
+   Tout est préfixé .c3- et scopé à #cat3-root pour ne pas toucher au
+   header/footer du site.
+   ═══════════════════════════════════════════════════════════════ */
+#cat3-root{ --c3-top:0px; --c3-top2:0px;
+  font-family:'EB Garamond',Georgia,serif; color:#241F1B; background:#FBF6EE; }
+#cat3-root *{ box-sizing:border-box; }
+#cat3-root a{ color:#8E7566; text-decoration:none; }
+#cat3-root a:hover{ color:#B8492F; }
+#cat3-root button{ font-family:inherit; }
+#cat3-root input::placeholder{ color:#8E8478; }
+@keyframes c3-in{ from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:none} }
+@keyframes c3-pop{ 0%{transform:scale(.9)} 60%{transform:scale(1.06)} 100%{transform:scale(1)} }
+@keyframes c3-sheet{ from{transform:translateY(100%)} to{transform:none} }
 
-.shop-wrap { max-width:var(--max-width); margin:0 auto; padding:48px 40px; }
-.shop-layout { display:grid; grid-template-columns:240px 1fr; gap:48px; align-items:start; }
+/* HERO */
+.c3-hero{ background:#F4EADB; border-bottom:1px solid #EADFCD; }
+.c3-hero-in{ max-width:1460px; margin:0 auto; padding:40px 30px 36px; display:flex; gap:40px; align-items:center; flex-wrap:wrap; }
+.c3-hero-txt{ flex:1 1 420px; min-width:300px; }
+.c3-eyebrow{ font-family:'Jost',sans-serif; font-size:9.5px; letter-spacing:3.4px; text-transform:uppercase; color:#6E6459; }
+.c3-h1{ font-family:'Cormorant Garamond',serif; font-weight:300; font-size:clamp(32px,4.2vw,52px); line-height:1.05; margin:12px 0 0; }
+.c3-h1 em{ font-style:italic; color:#8E7566; }
+.c3-hero-p{ font-family:'EB Garamond',serif; font-size:17px; line-height:1.55; color:#5B534B; max-width:440px; margin:12px 0 0; }
+.c3-hero-grid{ flex:0 1 380px; min-width:260px; display:grid; grid-template-columns:1.4fr 1fr; grid-template-rows:repeat(2,84px); gap:8px; }
+.c3-hg{ border-radius:1px; }
+.c3-hg1{ grid-row:span 2; background:#E7D3C6; } .c3-hg2{ background:#DCE3D2; } .c3-hg3{ background:#EBDDBE; }
 
-/* SIDEBAR */
-.sidebar { position:sticky; top:100px; }
-.sb-block { margin-bottom:28px; }
-.sb-title { font-family:var(--font-ui); font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--dust); margin-bottom:12px; padding-bottom:8px; border-bottom:1px solid var(--linen); }
-.sb-btn { display:flex; align-items:center; justify-content:space-between; width:100%; background:none; border:none; font-family:var(--font-body); font-size:15px; color:var(--slate); padding:7px 0; border-bottom:1px solid var(--parchment); transition:color 0.2s; cursor:pointer; }
-.sb-btn:hover { color:var(--lingon); }
-.sb-btn.active { color:var(--heather); font-weight:500; }
-.sb-btn .sb-cnt { font-family:var(--font-ui); font-size:11px; color:var(--birch); background:var(--parchment); padding:1px 7px; border-radius:8px; }
-.sb-btn.active .sb-cnt { background:var(--heather-pale); color:var(--heather); }
-.price-wrap { display:flex; flex-direction:column; gap:8px; }
-.price-wrap input[type=range] { width:100%; accent-color:var(--heather); }
-.price-display { font-family:var(--font-ui); font-size:12px; color:var(--dust); display:flex; justify-content:space-between; }
-.sort-sel { width:100%; padding:9px 12px; border:1px solid var(--linen); background:var(--warm-white); font-family:var(--font-ui); font-size:12px; color:var(--slate); outline:none; cursor:pointer; }
-.tag-filter-btn { display:flex; align-items:center; gap:8px; background:none; border:none; font-family:var(--font-body); font-size:15px; color:var(--slate); padding:5px 0; transition:color 0.2s; cursor:pointer; width:100%; }
-.tag-filter-btn .check { width:16px; height:16px; border:1px solid var(--linen); border-radius:2px; flex-shrink:0; transition:all 0.2s; display:flex; align-items:center; justify-content:center; font-size:10px; }
-.tag-filter-btn.active .check { background:var(--heather); border-color:var(--heather); color:var(--snow); }
-.tag-filter-btn:hover { color:var(--heather); }
+/* BARRE STICKY (recherche + envies) */
+.c3-filterbar{ position:sticky; top:var(--c3-top); z-index:30; background:rgba(251,246,238,.96); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); border-bottom:1px solid #EADFCD; }
+.c3-filterbar-in{ max-width:1460px; margin:0 auto; padding:11px 30px; display:flex; align-items:center; gap:14px; flex-wrap:wrap; }
+.c3-search{ flex:1 1 240px; max-width:300px; padding:10px 14px; border:1px solid #DFD3C0; background:#fff; font-size:16px; color:#241F1B; outline:none; border-radius:3px; }
+.c3-envies{ display:flex; gap:6px; flex-wrap:wrap; }
+.c3-envies-desk{ flex:1; }
+.c3-envie{ padding:7px 14px; border:1px solid #E0D3C0; background:#fff; color:#5B534B; font-family:'Jost',sans-serif; font-size:10px; letter-spacing:1.5px; text-transform:uppercase; cursor:pointer; border-radius:999px; }
+.c3-envie.on{ background:#8E7566; color:#fff; border-color:#8E7566; }
+.c3-result{ font-family:'Jost',sans-serif; font-size:10.5px; letter-spacing:1.6px; text-transform:uppercase; color:#6E6459; }
+.c3-clear{ background:none; border:none; padding:0; cursor:pointer; font-family:'Jost',sans-serif; font-size:10.5px; letter-spacing:1.6px; text-transform:uppercase; color:#B8492F; }
 
-/* MAIN */
-.shop-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:24px; flex-wrap:wrap; gap:12px; }
-.shop-count { font-family:var(--font-ui); font-size:12px; color:var(--dust); letter-spacing:1px; }
-.view-btns { display:flex; gap:4px; }
-.vb { background:none; border:1px solid var(--linen); padding:7px 10px; font-size:14px; transition:all 0.2s; color:var(--dust); cursor:pointer; }
-.vb.active, .vb:hover { background:var(--heather); border-color:var(--heather); color:var(--snow); }
-.active-filters { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px; }
-.af-tag { display:flex; align-items:center; gap:6px; background:var(--heather-pale); color:var(--heather); font-family:var(--font-ui); font-size:10px; letter-spacing:1px; text-transform:uppercase; padding:5px 12px; border-radius:1px; }
-.af-tag button { background:none; border:none; color:var(--heather); font-size:14px; line-height:1; padding:0 0 0 4px; cursor:pointer; }
-.empty-state { text-align:center; padding:80px 20px; }
-.empty-state p { font-family:var(--font-body); font-size:20px; font-style:italic; color:var(--dust); margin-bottom:20px; }
+/* CORPS : rail / produits / panier */
+.c3-body-in{ max-width:1460px; margin:0 auto; padding:30px 30px 80px; display:flex; gap:34px; align-items:flex-start; flex-wrap:wrap; }
+.c3-rail{ position:sticky; top:var(--c3-top2); flex:0 0 194px; display:flex; flex-direction:column; gap:3px; }
+.c3-railtitle{ font-family:'Jost',sans-serif; font-size:9.5px; letter-spacing:3px; text-transform:uppercase; color:#6E6459; padding-bottom:10px; }
+.c3-railfam{ display:flex; align-items:baseline; justify-content:space-between; gap:8px; width:100%; text-align:left; background:transparent; border:none; border-left:2px solid transparent; padding:11px 10px 5px 10px; cursor:pointer; font-family:'Jost',sans-serif; font-size:9.5px; font-weight:500; color:#8C8276; letter-spacing:2.4px; text-transform:uppercase; }
+.c3-railsub{ display:flex; align-items:baseline; justify-content:space-between; gap:8px; width:100%; text-align:left; background:transparent; border:none; border-left:2px solid transparent; padding:6px 10px; cursor:pointer; font-family:'EB Garamond',serif; font-size:15px; font-weight:400; color:#3E3830; }
+.c3-railsub.on{ background:#F2E9D9; border-left-color:#8E7566; color:#6B564A; }
+.c3-railcnt{ font-family:'Jost',sans-serif; font-size:10px; letter-spacing:0; text-transform:none; color:#8C8276; }
+.c3-railfoot{ margin-top:16px; padding-top:14px; border-top:1px solid #EADFCD; font-family:'EB Garamond',serif; font-size:14.5px; line-height:1.5; color:#6E6459; }
 
-/* LIST VIEW */
-.prod-list-item { background:var(--snow); border:1px solid var(--linen); display:grid; grid-template-columns:100px 1fr auto; cursor:pointer; transition:all 0.2s; margin-bottom:12px; }
-.prod-list-item:hover { border-color:var(--lingon); box-shadow:var(--shadow-sm); }
-.pli-img { width:100px; aspect-ratio:1; overflow:hidden; }
-.pli-img img { width:100%; height:100%; object-fit:cover; }
-.pli-body { padding:14px 20px; display:flex; flex-direction:column; justify-content:center; }
-.pli-name { font-family:var(--font-display); font-size:18px; font-weight:600; color:var(--heather); margin-bottom:4px; }
-.pli-sub  { font-family:var(--font-body); font-size:14px; color:var(--dust); font-style:italic; }
-.pli-tags { display:flex; gap:6px; margin-top:8px; flex-wrap:wrap; }
-.pli-tag  { background:var(--heather-pale); color:var(--heather); font-family:var(--font-ui); font-size:9px; letter-spacing:1px; text-transform:uppercase; padding:3px 8px; }
-.pli-action { padding:16px 20px; display:flex; flex-direction:column; align-items:flex-end; justify-content:center; gap:10px; border-left:1px solid var(--parchment); min-width:110px; }
-.pli-price  { font-family:var(--font-display); font-size:22px; font-weight:600; color:var(--midnight); }
-.pli-weight { font-family:var(--font-ui); font-size:10px; color:var(--dust); letter-spacing:1px; text-transform:uppercase; }
-.btn-add-small { background:var(--heather); color:var(--snow); border:none; padding:8px 16px; font-family:var(--font-ui); font-size:10px; letter-spacing:1.5px; text-transform:uppercase; border-radius:1px; transition:background 0.2s; cursor:pointer; }
-.btn-add-small:hover { background:var(--heather-mid); }
+.c3-main{ flex:5 1 460px; min-width:320px; display:flex; flex-direction:column; gap:6px; }
+.c3-section{ padding-top:26px; }
+.c3-sechead{ display:flex; align-items:baseline; gap:12px; padding-bottom:12px; margin-bottom:16px; border-bottom:1px solid #E3D8C6; }
+.c3-sechead h2{ font-family:'Cormorant Garamond',serif; font-size:27px; font-weight:600; margin:0; }
+.c3-seccount{ font-family:'Jost',sans-serif; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:#8C8276; }
+.c3-secfam{ margin-left:auto; font-family:'EB Garamond',serif; font-size:14.5px; font-style:italic; color:#6E6459; }
+.c3-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(178px,1fr)); gap:14px; }
 
-@media(max-width:1024px) {
-  .shop-layout { grid-template-columns:1fr; }
-  .sidebar { position:static; display:grid; grid-template-columns:repeat(2,1fr); gap:20px; }
-  .sb-block { margin-bottom:0; }
-  .shop-wrap { padding:32px 24px; }
+/* CARTE PRODUIT */
+.c3-card{ background:#fff; border:1px solid #EADFCD; border-radius:3px; display:flex; flex-direction:column; animation:c3-in .2s ease both; transition:box-shadow .16s, transform .16s; }
+.c3-card:hover{ box-shadow:0 10px 22px rgba(80,62,48,.10); transform:translateY(-2px); }
+.c3-imgwrap{ position:relative; aspect-ratio:1/1; border-radius:3px 3px 0 0; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+.c3-photo{ font-family:'Jost',sans-serif; font-size:8px; letter-spacing:2.2px; text-transform:uppercase; color:#7A6F62; }
+.c3-flag{ position:absolute; top:9px; left:9px; font-family:'Jost',sans-serif; font-size:8.5px; letter-spacing:1.5px; text-transform:uppercase; padding:4px 8px; border-radius:2px; }
+.c3-add{ position:absolute; right:10px; bottom:-19px; width:40px; height:40px; border-radius:50%; background:#fff; border:1px solid #E0D3C0; color:#8E7566; font-size:20px; line-height:1; cursor:pointer; box-shadow:0 3px 10px rgba(80,62,48,.14); z-index:2; transition:background .15s, color .15s, border-color .15s; }
+.c3-add:hover{ background:#8E7566; color:#fff; border-color:#8E7566; }
+.c3-step{ position:absolute; right:10px; bottom:-19px; display:flex; align-items:center; height:40px; background:#8E7566; border-radius:999px; box-shadow:0 3px 10px rgba(80,62,48,.18); animation:c3-pop .18s ease; z-index:2; }
+.c3-step button{ width:34px; height:40px; background:none; border:none; color:#fff; font-size:17px; cursor:pointer; }
+.c3-step button:first-child{ border-radius:999px 0 0 999px; } .c3-step button:last-child{ border-radius:0 999px 999px 0; }
+.c3-step span{ min-width:16px; text-align:center; font-family:'Jost',sans-serif; font-size:13px; color:#fff; }
+.c3-notify{ position:absolute; right:10px; bottom:-15px; height:32px; padding:0 13px; border-radius:999px; background:#fff; border:1px solid #E0D3C0; color:#5B534B; font-family:'Jost',sans-serif; font-size:9.5px; letter-spacing:1.3px; text-transform:uppercase; cursor:pointer; box-shadow:0 3px 10px rgba(80,62,48,.12); z-index:2; }
+.c3-cbody{ padding:26px 13px 13px; flex:1; display:flex; flex-direction:column; gap:4px; }
+.c3-name{ font-family:'Cormorant Garamond',serif; font-size:18px; font-weight:600; line-height:1.2; min-height:43px; }
+.c3-meta{ font-family:'EB Garamond',serif; font-size:13.5px; font-style:italic; color:#6E6459; }
+.c3-prices{ display:flex; align-items:baseline; gap:7px; margin-top:6px; }
+.c3-price{ font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:600; }
+.c3-old{ font-family:'EB Garamond',serif; font-size:13px; font-style:italic; color:#8C8276; text-decoration:line-through; }
+.c3-kilo{ font-family:'Jost',sans-serif; font-size:9.5px; letter-spacing:1.1px; color:#8C8276; }
+
+/* PANIER (desktop) */
+.c3-cart{ position:sticky; top:var(--c3-top2); flex:1 1 296px; min-width:270px; align-self:flex-start; background:#fff; border:1px solid #EADFCD; border-radius:4px; display:flex; flex-direction:column; overflow:hidden; }
+.c3-cart-head{ padding:16px 18px 14px; border-bottom:1px solid #F0E8DA; display:flex; align-items:baseline; justify-content:space-between; }
+.c3-cart-title{ font-family:'Cormorant Garamond',serif; font-size:21px; font-weight:600; }
+.c3-cart-count{ font-family:'Jost',sans-serif; font-size:10px; letter-spacing:1.8px; text-transform:uppercase; color:#8C8276; }
+.c3-cart-empty{ padding:26px 18px 24px; }
+.c3-cart-empty p{ font-family:'EB Garamond',serif; font-size:16px; line-height:1.5; color:#5B534B; margin:0 0 14px; }
+.c3-suggs{ display:flex; flex-direction:column; gap:8px; }
+.c3-sugg{ display:flex; align-items:center; gap:10px; width:100%; text-align:left; background:#FBF6EE; border:1px solid #EFE6D6; padding:8px 10px; cursor:pointer; border-radius:3px; transition:border-color .15s; }
+.c3-sugg:hover{ border-color:#8E7566; }
+.c3-sugg-tint{ width:34px; height:34px; flex:none; border-radius:2px; }
+.c3-sugg-name{ flex:1; font-family:'EB Garamond',serif; font-size:15px; line-height:1.25; color:#241F1B; }
+.c3-sugg-price{ font-family:'Cormorant Garamond',serif; font-size:16px; font-weight:600; color:#6B564A; }
+.c3-cart-lines{ padding:6px 8px; max-height:320px; overflow:auto; display:flex; flex-direction:column; }
+.c3-line{ display:flex; align-items:center; gap:10px; padding:9px 10px; border-bottom:1px solid #F5EFE3; }
+.c3-line-tint{ width:38px; height:38px; flex:none; border-radius:2px; }
+.c3-line-info{ flex:1; min-width:0; display:flex; flex-direction:column; gap:2px; }
+.c3-line-name{ font-family:'EB Garamond',serif; font-size:15px; line-height:1.2; color:#241F1B; }
+.c3-line-unit{ font-family:'Jost',sans-serif; font-size:9.5px; letter-spacing:1.2px; color:#8C8276; }
+.c3-line-step{ display:flex; align-items:center; border:1px solid #E5DACA; border-radius:999px; }
+.c3-line-step button{ width:26px; height:28px; background:none; border:none; color:#6B564A; font-size:15px; cursor:pointer; }
+.c3-line-step span{ min-width:15px; text-align:center; font-family:'Jost',sans-serif; font-size:12px; }
+.c3-line-total{ font-family:'Cormorant Garamond',serif; font-size:17px; font-weight:600; min-width:52px; text-align:right; }
+.c3-cart-foot{ margin-top:auto; padding:14px 18px 18px; background:#FBF6EE; border-top:1px solid #F0E8DA; }
+.c3-bar{ height:4px; border-radius:999px; background:#EDE2CF; overflow:hidden; }
+.c3-bar-fill{ height:4px; background:#7E9464; transition:width .25s ease; }
+.c3-shipmsg{ font-family:'EB Garamond',serif; font-size:14.5px; line-height:1.45; color:#5B534B; margin:9px 0 14px; }
+.c3-subtotal{ display:flex; align-items:baseline; justify-content:space-between; margin-bottom:12px; }
+.c3-subtotal>span:first-child{ font-family:'Jost',sans-serif; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:#6E6459; }
+.c3-total{ font-family:'Cormorant Garamond',serif; font-size:26px; font-weight:600; }
+.c3-order{ width:100%; padding:14px; background:#8E7566; color:#fff; border:none; border-radius:3px; font-family:'Jost',sans-serif; font-size:11px; letter-spacing:2.2px; text-transform:uppercase; cursor:pointer; }
+.c3-order.off{ background:#E5DACA; color:#9A9086; cursor:not-allowed; }
+.c3-trust{ display:flex; justify-content:center; gap:14px; margin-top:11px; font-family:'Jost',sans-serif; font-size:9px; letter-spacing:1.4px; text-transform:uppercase; color:#8C8276; }
+
+/* ÉTAT VIDE (recherche) */
+.c3-empty{ text-align:center; padding:80px 20px; background:#fff; border:1px solid #EADFCD; }
+.c3-empty-t{ font-family:'Cormorant Garamond',serif; font-size:27px; font-style:italic; color:#5B534B; margin:0 0 8px; }
+.c3-empty-h{ font-family:'EB Garamond',serif; font-size:16px; color:#6E6459; margin:0 0 22px; }
+.c3-empty-btn{ padding:13px 28px; background:#8E7566; color:#fff; border:none; font-family:'Jost',sans-serif; font-size:10.5px; letter-spacing:2px; text-transform:uppercase; cursor:pointer; }
+
+/* Éléments mobile masqués en desktop */
+.c3-mhead, .c3-menvies, .c3-mobar{ display:none; }
+
+/* ══════════════════ MOBILE (< 768 px) ══════════════════ */
+@media(max-width:767px){
+  #cat3-root{ background:#FBF6EE; }
+  .c3-hero, .c3-filterbar, .c3-rail, .c3-cart{ display:none; }
+  .c3-mhead, .c3-menvies{ display:block; }
+  .c3-mobar{ display:block; }
+
+  /* En-tête compact collant */
+  .c3-mhead{ position:sticky; top:var(--c3-top); z-index:20; padding:12px 14px 0; background:rgba(251,246,238,.94); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border-bottom:1px solid #EADFCD; }
+  .c3-mhead-row{ display:flex; align-items:center; gap:10px; padding-bottom:10px; }
+  .c3-mbrand{ flex:1; font-family:'Cormorant Garamond',serif; font-size:19px; font-weight:600; line-height:1; }
+  .c3-mref{ font-family:'Jost',sans-serif; font-size:9px; letter-spacing:1.6px; text-transform:uppercase; color:#8C8276; }
+  .c3-search-m{ width:100%; height:44px; padding:0 14px; border:1px solid #DFD3C0; background:#fff; font-size:16px; color:#241F1B; outline:none; border-radius:10px; }
+  .c3-chips{ display:flex; gap:7px; overflow-x:auto; padding:10px 0 9px; scrollbar-width:none; }
+  .c3-chips::-webkit-scrollbar{ display:none; }
+  .c3-chip{ flex:none; height:32px; padding:0 13px; border:1px solid #E0D3C0; background:#fff; color:#5B534B; font-family:'Jost',sans-serif; font-size:10.5px; letter-spacing:1.3px; text-transform:uppercase; white-space:nowrap; cursor:pointer; border-radius:999px; display:inline-flex; align-items:center; }
+  .c3-chip.on{ background:#8E7566; color:#fff; border-color:#8E7566; }
+
+  /* Envies mobile + résultat */
+  .c3-menvies{ padding:14px 14px 0; }
+  .c3-envies-mob{ display:flex; gap:7px; overflow-x:auto; padding-bottom:12px; scrollbar-width:none; }
+  .c3-envies-mob::-webkit-scrollbar{ display:none; }
+  .c3-envies-mob .c3-envie{ flex:none; height:34px; padding:0 14px; white-space:nowrap; letter-spacing:1.4px; display:inline-flex; align-items:center; }
+  .c3-mclear{ display:flex; align-items:center; justify-content:space-between; padding:0 2px 10px; }
+  .c3-mclear .c3-result{ letter-spacing:1.5px; }
+
+  /* Corps : produits pleine largeur, 2 colonnes */
+  .c3-body-in{ padding:0; }
+  .c3-main{ flex:1 1 100%; min-width:0; width:100%; padding:0 14px 150px; gap:0; }
+  .c3-section{ padding-top:20px; }
+  .c3-sechead{ gap:9px; padding-bottom:10px; margin-bottom:12px; }
+  .c3-sechead h2{ font-size:22px; }
+  .c3-seccount{ font-size:9.5px; letter-spacing:1.8px; }
+  .c3-secfam{ display:none; }
+  .c3-grid{ grid-template-columns:1fr 1fr; gap:11px; }
+
+  /* Carte mobile */
+  .c3-card{ border-radius:10px; }
+  .c3-imgwrap{ border-radius:9px 9px 0 0; }
+  .c3-photo{ font-size:7.5px; letter-spacing:2px; }
+  .c3-flag{ top:8px; left:8px; font-size:8px; letter-spacing:1.3px; padding:3px 7px; border-radius:3px; }
+  .c3-add{ right:8px; bottom:-20px; width:44px; height:44px; font-size:22px; box-shadow:0 3px 10px rgba(80,62,48,.16); }
+  .c3-step{ right:8px; bottom:-20px; height:44px; box-shadow:0 3px 10px rgba(80,62,48,.2); }
+  .c3-step button{ width:36px; height:44px; font-size:19px; }
+  .c3-step span{ min-width:14px; }
+  .c3-notify{ right:8px; bottom:-17px; height:36px; font-size:9px; letter-spacing:1.2px; box-shadow:0 3px 10px rgba(80,62,48,.14); }
+  .c3-cbody{ padding:27px 11px 12px; gap:3px; }
+  .c3-name{ font-size:16.5px; line-height:1.18; min-height:39px; }
+  .c3-meta{ font-size:13px; }
+  .c3-meta-o{ display:none; }
+  .c3-prices{ gap:6px; margin-top:4px; }
+  .c3-price{ font-size:20px; }
+  .c3-kilo{ font-size:8.5px; letter-spacing:.8px; }
+
+  /* Barre panier collante + feuille */
+  .c3-mobar{ position:fixed; bottom:0; left:0; right:0; z-index:40; }
+  .c3-mobar-inner{ background:#8E7566; padding-bottom:max(8px, env(safe-area-inset-bottom)); }
+  .c3-mobar-bar{ height:3px; background:#A48D7D; }
+  .c3-mobar-fill{ height:3px; background:#C8D6BC; transition:width .25s ease; }
+  .c3-mobar-pad{ padding:10px 14px 8px; }
+  .c3-mobar-msg{ font-family:'EB Garamond',serif; font-size:13.5px; color:#F7EFE5; margin:0 0 8px; text-align:center; }
+  .c3-mobar-btn{ width:100%; height:50px; display:flex; align-items:center; justify-content:space-between; gap:10px; padding:0 16px; background:#FFFDF9; border:none; border-radius:10px; cursor:pointer; }
+  .c3-mobar-label{ font-family:'Jost',sans-serif; font-size:10.5px; letter-spacing:1.8px; text-transform:uppercase; color:#6B564A; }
+  .c3-mobar-right{ display:flex; align-items:center; gap:9px; }
+  .c3-mobar-total{ font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:700; color:#241F1B; }
+  .c3-mobar-chev{ font-family:'Jost',sans-serif; font-size:14px; color:#8E7566; }
+  .c3-sheet{ background:#fff; border-top:1px solid #EADFCD; border-radius:16px 16px 0 0; box-shadow:0 -14px 34px rgba(80,62,48,.16); animation:c3-sheet .22s ease both; }
+  .c3-sheet-head{ display:flex; align-items:center; justify-content:space-between; padding:13px 16px 10px; border-bottom:1px solid #F3EBDD; }
+  .c3-sheet-head span{ font-family:'Cormorant Garamond',serif; font-size:19px; font-weight:600; }
+  .c3-sheet-x{ width:44px; height:36px; background:none; border:none; color:#8C8276; font-size:17px; cursor:pointer; }
+  .c3-sheet-lines{ max-height:250px; overflow:auto; padding:4px 8px; }
+  .c3-sheet .c3-line{ border-bottom:1px solid #F7F1E6; padding:9px 8px; }
+  .c3-sheet .c3-line-tint{ width:40px; height:40px; border-radius:6px; }
+  .c3-sheet .c3-line-unit{ font-size:9px; letter-spacing:1.1px; }
+  .c3-sheet .c3-line-step button{ width:32px; height:32px; font-size:16px; }
+  .c3-sheet .c3-line-total{ font-size:16px; min-width:50px; }
+  .c3-sheet-empty{ padding:16px; }
+  .c3-sheet-empty p{ font-family:'EB Garamond',serif; font-size:15.5px; line-height:1.45; color:#5B534B; margin:0 0 10px; }
+  .c3-sheet-empty .c3-sugg{ border-radius:8px; min-height:44px; }
+  .c3-sheet-empty .c3-sugg-tint{ width:30px; height:30px; border-radius:5px; }
 }
-@media(max-width:600px) {
-  .sidebar { grid-template-columns:1fr; }
-  .shop-hero { padding:40px 20px; }
-  .shop-wrap { padding:24px 16px; }
+
+@media(prefers-reduced-motion:reduce){
+  .c3-card, .c3-step, .c3-sheet{ animation:none !important; }
 }
-/* ── Skeleton loader ── */
-.sk-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
-.sk-card { background:var(--snow); border:1px solid var(--linen); overflow:hidden; animation:sk-pulse 1.4s ease-in-out infinite; }
-.sk-img  { aspect-ratio:1; background:linear-gradient(135deg,var(--parchment),var(--linen)); }
-.sk-line { height:11px; background:var(--parchment); margin:12px 16px 0; border-radius:2px; }
-.sk-lg { width:68%; } .sk-md { width:50%; } .sk-sm { width:35%; }
-@keyframes sk-pulse { 0%,100%{opacity:.55} 50%{opacity:1} }
-@media(max-width:600px) { .sk-grid { grid-template-columns:repeat(2,1fr); gap:12px; } }
 </style>
 </head>
 <body>
 <div id="header-root"></div>
 
-<div class="shop-hero">
-  <h1 data-sv="Hela <em>sortimentet</em>" data-fr="Toute la <em>boutique</em>" data-en="The full <em>shop</em>">Toute la <em>boutique</em></h1>
-  <p id="hero-count-text" data-sv="Sélection de produits nordiques s" data-fr="Sélection de produits nordiques s" data-en="Selection of Nordic products">Sélection de produits nordiques s</p>
-</div>
-
-<div class="shop-wrap">
-  <button class="mob-filter-btn" onclick="toggleMobFilter()" data-sv="🔍 Filter & Sortering" data-fr="🔍 Filtres & Tri" data-en="🔍 Filters & Sort">🔍 Filtres &amp; Tri</button>
-  <div class="shop-layout">
-    <!-- SIDEBAR -->
-    <div class="sidebar">
-      <div class="sb-block">
-        <div class="sb-title" data-sv="Kategorier" data-fr="Catégories" data-en="Categories">Catégories</div>
-        <div id="cat-filters"><button class="sb-btn active" data-cat="Tous"><span data-sv="Alla produkter" data-fr="Tous les produits" data-en="All products">Tous les produits</span></button></div>
-      </div>
-
-      <div class="sb-block">
-        <div class="sb-title" data-sv="Prisintervall" data-fr="Prix maximum" data-en="Max price">Prix maximum</div>
-        <div class="price-wrap">
-          <input type="range" min="2" max="25" value="25" step="0.5" id="price-range" oninput="setPriceMax(this.value)">
-          <div class="price-display"><span>€2</span><span>≤ €<span id="price-max-val">25</span></span></div>
-        </div>
-      </div>
-
-      <div class="sb-block">
-        <div class="sb-title" data-sv="Sortera" data-fr="Trier par" data-en="Sort by">Trier par</div>
-        <select class="sort-sel" id="sort-sel" onchange="setSort(this.value)">
-          <option value="default" data-sv="Standard" data-fr="Par défaut" data-en="Default">Par défaut</option>
-          <option value="price-asc" data-sv="Pris stigande" data-fr="Prix croissant" data-en="Price low→high">Prix croissant</option>
-          <option value="price-desc" data-sv="Pris fallande" data-fr="Prix décroissant" data-en="Price high→low">Prix décroissant</option>
-          <option value="rating" data-sv="Bästa betyg" data-fr="Meilleures notes" data-en="Best rated">Meilleures notes</option>
-          <option value="name" data-sv="Namn A→Ö" data-fr="Nom A→Z" data-en="Name A→Z">Nom A→Z</option>
-        </select>
-      </div>
-
-      <div class="sb-block">
-        <div class="sb-title" data-sv="Filtrera" data-fr="Filtres" data-en="Filters">Filtres</div>
-        <button class="tag-filter-btn" onclick="toggleTag('Bio')" id="tag-Bio"><span class="check"></span><span data-sv="Bio / Naturel" data-fr="Bio / Naturel" data-en="Organic / Natural">Bio / Naturel</span></button>
-        <button class="tag-filter-btn" onclick="toggleTag('Vegan')" id="tag-Vegan"><span class="check"></span><span>Vegan</span></button>
-        <button class="tag-filter-btn" onclick="toggleTag('Signature')" id="tag-Signature"><span class="check"></span><span data-sv="Signatur" data-fr="Signature" data-en="Signature">Signature</span></button>
-        <button class="tag-filter-btn" onclick="toggleTag('Saisonnier')" id="tag-Saisonnier"><span class="check"></span><span data-sv="Säsongsbetonad" data-fr="Saisonnier" data-en="Seasonal">Saisonnier</span></button>
-      </div>
-    </div>
-
-    <!-- PRODUCTS MAIN -->
-    <div>
-      <div class="shop-top">
-        <span class="shop-count" id="shop-count">— produits</span>
-        <div class="view-btns">
-          <button class="vb active" onclick="setView('grid3',this)" title="Grille 3">⊞</button>
-          <button class="vb" onclick="setView('grid4',this)" title="Grille 4">⊟</button>
-          <button class="vb" onclick="setView('list',this)" title="Liste">☰</button>
-        </div>
-      </div>
-      <div class="active-filters" id="active-filters"></div>
-      <div id="products-container"></div>
-    </div>
+<!-- HERO statique (SEO : h1 + intro dans le HTML ; i18n via data-sv/fr/en) -->
+<section class="c3-hero"><div class="c3-hero-in">
+  <div class="c3-hero-txt">
+    <div class="c3-eyebrow"><span data-sv="Svensk delikatess" data-fr="Épicerie suédoise" data-en="Swedish grocery">Épicerie suédoise</span> · <span class="c3-refcount">69</span> <span data-sv="varor i lager" data-fr="références en stock" data-en="items in stock">références en stock</span></div>
+    <h1 class="c3-h1" data-sv="Sätt ihop ditt <em>svenska paket</em>" data-fr="Composez votre <em>colis suédois</em>" data-en="Build your <em>Swedish parcel</em>">Composez votre <em>colis suédois</em></h1>
+    <p class="c3-hero-p"><span data-sv="Hela sortimentet på en sida. Lägg till medan du bläddrar, korgen fylls till höger — fri frakt från €" data-fr="Tout le catalogue sur une seule page. Vous ajoutez au fil du scroll, le panier se remplit à droite — livraison offerte dès €" data-en="The whole catalogue on one page. Add as you scroll, the basket fills up on the right — free delivery from €">Tout le catalogue sur une seule page. Vous ajoutez au fil du scroll, le panier se remplit à droite — livraison offerte dès €</span><span class="c3-shipthr">29</span>.</p>
   </div>
-</div>
+  <div class="c3-hero-grid"><div class="c3-hg c3-hg1"></div><div class="c3-hg c3-hg2"></div><div class="c3-hg c3-hg3"></div></div>
+</div></section>
+
+<div id="cat3-root"></div>
 
 <div id="footer-root"></div>
+
 <script src="js/app.js?v=23"></script>
-<script>
-const params = new URLSearchParams(window.location.search);
-let currentCat = params.get('cat') ? decodeURIComponent(params.get('cat')) : 'Tous';
-let currentMaxPrice = 25;
-let currentSort = 'default';
-let currentView = 'grid3';
-let activeTags = new Set();
-let _ready = false;
-
-// ── Catégories dynamiques (white-label) : construites depuis les produits ──
-// Tout rayon créé dans le back office apparaît ici automatiquement, sans toucher au code.
-function _esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;'); }
-function catLabel(cat){ return (typeof CAT_LABELS !== 'undefined' && CAT_LABELS[cat] && CAT_LABELS[cat][LANG]) || cat; }
-
-// La boutique = épicerie (alimentaire). Les produits Maison (Home) ont leur propre
-// page /maison et ne doivent pas apparaître ici ni dans les rayons.
-const SHOP_EXCLUDED_CATS = ['Art de la table', 'Maison & Déco'];
-const isShopProduct = p => p && SHOP_EXCLUDED_CATS.indexOf(p.cat) === -1;
-const shopProducts = () => (PRODUCTS || []).filter(isShopProduct);
-
-function renderCatFilters() {
-  const box = document.getElementById('cat-filters');
-  if (!box) return;
-  const counts = {};
-  shopProducts().forEach(p => { if (p && p.cat) counts[p.cat] = (counts[p.cat] || 0) + 1; });
-  // Ordre : d'abord les rayons "connus" (ordre CATS), puis les nouveaux par ordre alphabétique
-  const knownOrder = (typeof CATS !== 'undefined' ? CATS.map(c => c.id) : []).filter(id => counts[id] > 0);
-  const extra = Object.keys(counts).filter(c => !knownOrder.includes(c)).sort((a, b) => catLabel(a).localeCompare(catLabel(b)));
-  const ordered = [...knownOrder, ...extra];
-  const allLabel = LANG === 'sv' ? 'Alla produkter' : LANG === 'en' ? 'All products' : 'Tous les produits';
-  let html = `<button class="sb-btn${currentCat === 'Tous' ? ' active' : ''}" data-cat="Tous"><span>${allLabel}</span><span class="sb-cnt">${shopProducts().length}</span></button>`;
-  ordered.forEach(cat => {
-    html += `<button class="sb-btn${currentCat === cat ? ' active' : ''}" data-cat="${_esc(cat)}"><span>${_esc(catLabel(cat))}</span><span class="sb-cnt">${counts[cat]}</span></button>`;
-  });
-  box.innerHTML = html;
-}
-
-initPage('shop');
-
-// Clic sur un rayon (délégation → gère les rayons générés dynamiquement)
-document.getElementById('cat-filters')?.addEventListener('click', e => {
-  const b = e.target.closest('.sb-btn');
-  if (b && b.dataset.cat) setCat(b.dataset.cat);
-});
-
-// Filtres repliés par défaut sur mobile (la sidebar est visible par défaut sur desktop)
-const _isMobileShop = () => window.matchMedia('(max-width:1024px)').matches;
-if (_isMobileShop()) toggleMobFilter();
-
-function onLangChange() { render(); }
-
-function setCat(cat) {
-  currentCat = cat;
-  renderCatFilters();
-  render();
-  // Sur mobile : replier les filtres et remonter vers les produits
-  if (_isMobileShop()) {
-    const sb = document.querySelector('.sidebar');
-    if (sb && !sb.classList.contains('mob-hidden')) toggleMobFilter();
-    document.getElementById('products-container')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
-}
-
-function setPriceMax(v) {
-  currentMaxPrice = parseFloat(v);
-  document.getElementById('price-max-val').textContent = v;
-  render();
-}
-
-function setSort(v) { currentSort = v; render(); }
-
-function setView(v, btn) {
-  currentView = v;
-  document.querySelectorAll('.vb').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  render();
-}
-
-function toggleTag(tag) {
-  if (activeTags.has(tag)) activeTags.delete(tag);
-  else activeTags.add(tag);
-  document.getElementById('tag-'+tag)?.classList.toggle('active', activeTags.has(tag));
-  render();
-}
-
-function getFiltered() {
-  let list = shopProducts();
-  if (currentCat !== 'Tous') list = list.filter(p => p.cat === currentCat);
-  list = list.filter(p => p.price <= currentMaxPrice);
-  if (activeTags.size > 0) list = list.filter(p => [...activeTags].every(t => p.tags.includes(t)));
-  if (currentSort === 'price-asc')  list.sort((a,b) => a.price - b.price);
-  if (currentSort === 'price-desc') list.sort((a,b) => b.price - a.price);
-  if (currentSort === 'rating')     list.sort((a,b) => b.rating - a.rating);
-  if (currentSort === 'name')       list.sort((a,b) => a.name[LANG].localeCompare(b.name[LANG]));
-  return list;
-}
-
-function render() {
-  if (!_ready) return;
-  const list = getFiltered();
-  const c = document.getElementById('shop-count');
-  if (c) c.textContent = `${list.length} ${list.length <= 1 ? UI[LANG].product : UI[LANG].products}`;
-
-  // Rayons dynamiques : (re)construits depuis les catégories réellement présentes dans les produits.
-  renderCatFilters();
-
-  // Active filters strip
-  const af = document.getElementById('active-filters');
-  const afTags = [];
-  if (currentCat !== 'Tous') afTags.push(`<span class="af-tag">${CAT_LABELS[currentCat]?.[LANG]||currentCat}<button onclick="setCat('Tous')">✕</button></span>`);
-  activeTags.forEach(t => afTags.push(`<span class="af-tag">${t}<button onclick="toggleTag('${t}')">✕</button></span>`));
-  if (af) af.innerHTML = afTags.join('');
-
-  const container = document.getElementById('products-container');
-  if (!container) return;
-
-  if (list.length === 0) {
-    const _emptyMsg = {sv:'Inga produkter matchar dessa filter.',fr:'Aucun produit ne correspond à ces filtres.',en:'No products match these filters.'};
-    const _resetLbl = {sv:'Återställ',fr:'Réinitialiser',en:'Reset'};
-    container.innerHTML = `<div class="empty-state"><p>${_emptyMsg[LANG]||_emptyMsg.fr}</p><button onclick="setCat('Tous')" style="background:var(--heather);color:var(--snow);border:none;padding:12px 28px;font-family:var(--font-ui);font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;">${_resetLbl[LANG]||_resetLbl.fr}</button></div>`;
-    return;
-  }
-
-  function safeCard(p) {
-    try { return productCardHTML(p); }
-    catch(e) { console.warn('[boutique] card error', p?.id, e.message); return ''; }
-  }
-
-  if (currentView === 'list') {
-    container.innerHTML = list.map(p => {
-      const origin = typeof p.origin === 'object' ? p.origin[LANG] : p.origin;
-      const pid = p.uuid ? `'${p.uuid}'` : (typeof p.id === 'string' ? `'${p.id}'` : p.id);
-      return `<div class="prod-list-item" onclick="window.location.href='produit.html?id=${p.uuid||p.id}'">
-        <div class="pli-img"><img src="${p.photo}" alt="${p.name['fr']||''}" loading="lazy" style="width:100%;height:100%;object-fit:cover;"></div>
-        <div class="pli-body">
-          <div class="pli-name">${p.name[LANG]||''}</div>
-          <div class="pli-sub">${p.subtitle[LANG]||''}</div>
-          <div class="pli-tags">${(p.tags||[]).slice(0,3).map(t=>`<span class="pli-tag">${t}</span>`).join('')}</div>
-        </div>
-        <div class="pli-action">
-          ${(window.SDPrice&&SDPrice.active(p))
-            ? `<span class="pli-price-old">€${(p.price||0).toFixed(2)}</span><span class="pli-price pli-price--sale">€${SDPrice.effective(p.price,p).toFixed(2)}</span>`
-            : `<span class="pli-price">€${(p.price||0).toFixed(2)}</span>`}
-          <span class="pli-weight">${p.weight||''}</span>
-          <button class="btn-add-small" onclick="event.stopPropagation();addToCart(${pid})">${{sv:'Lägg till',fr:'Ajouter',en:'Add'}[LANG]||'Ajouter'}</button>
-        </div>
-      </div>`;
-    }).join('');
-  } else {
-    const cls = currentView === 'grid4' ? 'grid-4' : 'grid-3';
-    container.innerHTML = `<div class="${cls}">${list.map(p=>safeCard(p)).join('')}</div>`;
-  }
-}
-
-// Rayons initiaux (se peuplent au chargement des produits via render → renderCatFilters)
-renderCatFilters();
-
-// Show skeleton while waiting for API data
-const _SKL = '<div class="sk-card"><div class="sk-img"></div><div class="sk-line sk-lg"></div><div class="sk-line sk-md"></div><div class="sk-line sk-sm"></div></div>';
-document.getElementById('products-container').innerHTML = '<div class="sk-grid">' + Array(9).fill(_SKL).join('') + '</div>';
-
-// Fallback: render with static data if API doesn't respond within 4s
-const _fallback = setTimeout(() => { _ready = true; render(); }, 4000);
-
-// Render once API data (or cache) is ready
-window.addEventListener('sdapi:ready', (e) => {
-  clearTimeout(_fallback);
-  const wasReady = _ready;
-  _ready = true;
-
-  function doRender() {
-    if (currentCat !== 'Tous') {
-      const inCat = PRODUCTS.filter(p => p.cat === currentCat);
-      if (inCat.length === 0) {
-        currentCat = 'Tous'; // render() → renderCatFilters() rétablit l'état actif
-      }
-    }
-    const heroEl = document.getElementById('hero-count-text');
-    if (heroEl && PRODUCTS.length > 0) {
-      const n = PRODUCTS.length;
-      const txt = { sv: `${n} svenska produkter`, fr: `${n} produits suédois`, en: `${n} Swedish products` };
-      heroEl.textContent = txt[LANG] || txt.fr;
-    }
-    render();
-  }
-
-  // If already rendered from cache and API returns updated data → smooth fade
-  if (wasReady && !e.detail?.fromCache) {
-    const pc = document.getElementById('products-container');
-    if (pc) {
-      pc.style.transition = 'opacity 0.18s ease';
-      pc.style.opacity = '0.3';
-      setTimeout(() => { doRender(); pc.style.opacity = '1'; setTimeout(() => { pc.style.transition = ''; }, 220); }, 140);
-    } else { doRender(); }
-  } else {
-    doRender();
-  }
-});
-</script>
-  <script>(function(){var _hr=document.getElementById("header-root");if(_hr&&typeof MutationObserver!=="undefined")new MutationObserver(function(){if(typeof updateCartBadge==="function")updateCartBadge();}).observe(_hr,{childList:true});})();</script>
+<script src="js/catalog-v3.js?v=1"></script>
+<script>(function(){var _hr=document.getElementById("header-root");if(_hr&&typeof MutationObserver!=="undefined")new MutationObserver(function(){if(typeof updateCartBadge==="function")updateCartBadge();}).observe(_hr,{childList:true});})();</script>
 <script src="js/sd-api-client.js?v=7"></script>
 </body>
 </html>
