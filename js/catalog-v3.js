@@ -136,11 +136,11 @@
     articles: { fr: 'articles', en: 'items', sv: 'varor' },
     article: { fr: 'article', en: 'item', sv: 'vara' },
     cartEmptyExplain: {
-      fr: 'Votre panier est vide. Ajoutez avec le « + » sur les produits — les plus commandés :',
-      en: 'Your basket is empty. Add with the “+” on products — the most ordered:',
-      sv: 'Din korg är tom. Lägg till med ”+” på produkterna — de mest beställda:'
+      fr: 'Votre panier est vide. Ajoutez des produits avec le « + ».',
+      en: 'Your basket is empty. Add products with the “+”.',
+      sv: 'Din korg är tom. Lägg till varor med ”+”.'
     },
-    cartEmptyShort: { fr: 'Panier vide — les plus commandés :', en: 'Empty basket — most ordered:', sv: 'Tom korg — mest beställda:' },
+    cartEmptyShort: { fr: 'Votre panier est vide.', en: 'Your basket is empty.', sv: 'Din korg är tom.' },
     subtotal: { fr: 'Sous-total', en: 'Subtotal', sv: 'Delsumma' },
     order: { fr: 'Commander', en: 'Checkout', sv: 'Till kassan' },
     securePay: { fr: 'Paiement sécurisé', en: 'Secure payment', sv: 'Säker betalning' },
@@ -405,7 +405,7 @@
     var price = v.sale
       ? '<span class="c3-old">' + money(v.oldPrice) + '</span><span class="c3-price">' + money(v.price) + '</span>'
       : '<span class="c3-price">' + money(v.price) + '</span>';
-    return '<article class="c3-card">' +
+    return '<article class="c3-card" data-nav="' + esc(v.id) + '">' +
       '<div class="c3-imgwrap" style="background:' + v.tint + '">' + img +
       (flag ? '<span class="c3-flag" style="background:' + flag.bg + ';color:' + flag.fg + '">' + esc(flag.t) + '</span>' : '') +
       control +
@@ -518,7 +518,40 @@
     document.querySelectorAll('.c3-refcount').forEach(function (el) { el.textContent = d.products.length; });
     document.querySelectorAll('.c3-shipthr').forEach(function (el) { el.textContent = d.threshold.toFixed(0); });
 
+    fillHero(d.products);
     updateScrollSpy();
+  }
+
+  // Remplit les 3 blocs d'ambiance du hero avec de vraies photos produit variées.
+  var _heroFilled = false;
+  function fillHero(products) {
+    var blocks = [document.querySelector('.c3-hg1'), document.querySelector('.c3-hg2'), document.querySelector('.c3-hg3')];
+    if (!blocks[0]) return;
+    var withPhoto = products.filter(function (p) { return p.photo; });
+    if (_heroFilled || !withPhoto.length) return;
+    function pick(pred) {
+      var b = withPhoto.filter(function (p) { return pred(p) && p.tags.best; });
+      if (!b.length) b = withPhoto.filter(pred);
+      return b[0] || null;
+    }
+    var used = {};
+    var picks = [
+      pick(function (p) { return p.parent === 'Confiseries'; }),
+      pick(function (p) { return p.sub === 'Chocolat' || p.parent === 'Pâtisserie & Essentiels' || p.sub === 'Fika & pâtisserie'; }),
+      pick(function (p) { return p.parent === 'Apéritif & Snacks' || p.sub === 'Chips'; })
+    ];
+    var pool = withPhoto.slice();
+    picks = picks.map(function (pk) {
+      // évite les doublons ; complète depuis le pool si un créneau est vide
+      while ((!pk || used[pk.id]) && pool.length) pk = pool.shift();
+      if (pk) used[pk.id] = true;
+      return pk;
+    });
+    blocks.forEach(function (el, i) {
+      var pk = picks[i]; if (!el || !pk) return;
+      el.innerHTML = '<img src="' + esc(pk.photo) + '" alt="' + esc(pk.name) + '" loading="lazy" onerror="this.remove()" style="width:100%;height:100%;object-fit:contain;padding:14px;display:block">';
+    });
+    _heroFilled = true;
   }
 
   function cartPanelHTML(d) {
@@ -526,7 +559,7 @@
       '<span class="c3-cart-count">' + (d.empty ? esc(tr(T.cartEmptyWord)) : d.cartCount + ' ' + esc(d.cartCount > 1 ? tr(T.articles) : tr(T.article))) + '</span></div>';
     var body;
     if (d.empty) {
-      body = '<div class="c3-cart-empty"><p>' + esc(tr(T.cartEmptyExplain)) + '</p><div class="c3-suggs">' + suggestionsHTML(d.suggestions) + '</div></div>';
+      body = '<div class="c3-cart-empty"><p>' + esc(tr(T.cartEmptyExplain)) + '</p></div>';
     } else {
       body = '<div class="c3-cart-lines">' + cartLinesHTML(d.lines) + '</div>';
     }
@@ -546,7 +579,7 @@
     var sheet = '';
     if (state.sheet) {
       var inner = d.empty
-        ? '<div class="c3-sheet-empty"><p>' + esc(tr(T.cartEmptyShort)) + '</p><div class="c3-suggs">' + suggestionsHTML(d.suggestions, true) + '</div></div>'
+        ? '<div class="c3-sheet-empty"><p>' + esc(tr(T.cartEmptyShort)) + '</p></div>'
         : '<div class="c3-sheet-lines">' + cartLinesHTML(d.lines) + '</div>';
       sheet = '<div class="c3-sheet"><div class="c3-sheet-head"><span>' + esc(tr(T.cartTitle)) + '</span>' +
         '<button class="c3-sheet-x" data-sheet-close>✕</button></div>' + inner + '</div>';
@@ -612,7 +645,12 @@
 
   function onClick(e) {
     var el = e.target.closest('[data-add],[data-inc],[data-dec],[data-notify],[data-go],[data-envie],[data-clear],[data-checkout],[data-sheet-toggle],[data-sheet-close]');
-    if (!el) return;
+    if (!el) {
+      // Clic ailleurs sur une carte → fiche produit (allergènes, ingrédients, etc.)
+      var card = e.target.closest('.c3-card[data-nav]');
+      if (card) window.location.href = 'produit.html?id=' + encodeURIComponent(card.getAttribute('data-nav'));
+      return;
+    }
     if (el.hasAttribute('data-add')) { bumpId(el.getAttribute('data-add'), 1); return; }
     if (el.hasAttribute('data-inc')) { bumpId(el.getAttribute('data-inc'), 1); return; }
     if (el.hasAttribute('data-dec')) { bumpId(el.getAttribute('data-dec'), -1); return; }
