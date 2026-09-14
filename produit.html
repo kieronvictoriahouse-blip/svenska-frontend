@@ -575,7 +575,7 @@ function _sdProductSlug(nameFr, id) {
   
   // Appel direct à l'API sans passer par PRODUCTS
   const BASE = 'https://admin.swedishcravings.fr';
-  const CAT_EMOJI = {'Épices':'🌶️','Flocons & Céréales':'🌾','Baies séchées':'🫐','Sucres & Sirops':'🍯','Thés & Tisanes':'🫖','Farines & Graines':'🌻','Mélanges':'🎄','Chips & Snacks':'🍟','Basics suédois':'🇸🇪','Confiseries':'🍬','Fika & Boulangerie':'🧁'};
+  const CAT_EMOJI = {'Épices':'🌶️','Flocons & Céréales':'🌾','Baies séchées':'🫐','Sucres & Sirops':'🍯','Thés & Tisanes':'🫖','Farines & Graines':'🌻','Mélanges':'🎄','Chips & Snacks':'🍟','Basics suédois':'🇸🇪','Bonbons':'🍬','Confiseries':'🍬','Fika & Boulangerie':'🧁'};
   
   try {
     const url = _isUUID 
@@ -593,7 +593,7 @@ function _sdProductSlug(nameFr, id) {
         if (dbCat) return dbCat;
         const n = (p.name_fr || '').toLowerCase();
         if (n.includes('chips')||n.includes('olw')) return 'Chips & Snacks';
-        if (n.includes('daim')||n.includes('bilar')||n.includes('fish')||n.includes('lakrits')||n.includes('skipper')) return 'Confiseries';
+        if (n.includes('daim')||n.includes('bilar')||n.includes('fish')||n.includes('lakrits')||n.includes('skipper')) return 'Bonbons';
         if (n.includes('kanelbulle')||n.includes('semla')||n.includes('chokladboll')||n.includes('vaniljsocker')) return 'Fika & Boulangerie';
         if (n.includes('kanel')||n.includes('kardemumma')||n.includes('glögg')||n.includes('dill')||n.includes('peppar')||n.includes('santa maria')||n.includes('allkrydda')) return 'Épices';
         if (n.includes('lingon')||n.includes('fläder')||n.includes('nypon')) return 'Baies séchées';

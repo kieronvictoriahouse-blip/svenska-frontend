@@ -224,8 +224,8 @@
     <div class="grid-4" id="related-grid" style="margin-top:32px;">
 <a href="/produit/snacks-au-seigle-creme-fraiche-oignon-bfa49184" style="display:block;text-decoration:none;color:inherit;"><img src="https://www.swedishcravings.fr/media/products/finn-crisp-sour-cream-onion-rye-snacks-1784749112086-835305.webp" alt="Snacks au Seigle Crème Fraîche &amp; Oignon" loading="lazy" style="width:100%;aspect-ratio:1;object-fit:contain;background:var(--parchment);"><div style="font-family:var(--font-ui);font-size:13px;margin-top:8px;">Snacks au Seigle Crème Fraîche &amp; Oignon</div><div style="font-family:var(--font-ui);font-size:13px;color:var(--dust);">4,32 €</div></a>
 <a href="/produit/chips-de-seigle-complet-au-cheddar-c8709b25" style="display:block;text-decoration:none;color:inherit;"><img src="https://www.swedishcravings.fr/media/products/finn-crisp-cheddar-cheese-snacks-2023-1789408105874-739874.png" alt="Chips de Seigle Complet au Cheddar" loading="lazy" style="width:100%;aspect-ratio:1;object-fit:contain;background:var(--parchment);"><div style="font-family:var(--font-ui);font-size:13px;margin-top:8px;">Chips de Seigle Complet au Cheddar</div><div style="font-family:var(--font-ui);font-size:13px;color:var(--dust);">4,32 €</div></a>
-<a href="/produit/ahlgrens-bilar-sodakombi-x-trocadero-6088879c" style="display:block;text-decoration:none;color:inherit;"><img src="https://www.swedishcravings.fr/media/products/07310350504954-c1n1-1789412096272-285026.jpg" alt="Ahlgrens Bilar Sodakombi x Trocadero" loading="lazy" style="width:100%;aspect-ratio:1;object-fit:contain;background:var(--parchment);"><div style="font-family:var(--font-ui);font-size:13px;margin-top:8px;">Ahlgrens Bilar Sodakombi x Trocadero</div><div style="font-family:var(--font-ui);font-size:13px;color:var(--dust);">3,10 €</div></a>
-<a href="/produit/fromage-suedois-42fd5043" style="display:block;text-decoration:none;color:inherit;"><img src="https://www.swedishcravings.fr/media/products/w-26593-1706-1783834374446-162636.jpg" alt="Fromage suédois" loading="lazy" style="width:100%;aspect-ratio:1;object-fit:contain;background:var(--parchment);"><div style="font-family:var(--font-ui);font-size:13px;margin-top:8px;">Fromage suédois</div><div style="font-family:var(--font-ui);font-size:13px;color:var(--dust);">7,19 €</div></a>
+<a href="/produit/chips-de-seigle-beurre-noisette-sel-de-mer-2e241e25" style="display:block;text-decoration:none;color:inherit;"><img src="https://www.swedishcravings.fr/media/products/finn-crisp-snacks-brynt-smor--havssalt-n-1789376563391-972584.png" alt="Chips de Seigle Beurre Noisette &amp; Sel de Mer" loading="lazy" style="width:100%;aspect-ratio:1;object-fit:contain;background:var(--parchment);"><div style="font-family:var(--font-ui);font-size:13px;margin-top:8px;">Chips de Seigle Beurre Noisette &amp; Sel de Mer</div><div style="font-family:var(--font-ui);font-size:13px;color:var(--dust);">4,32 €</div></a>
+<a href="/produit/edamame-grilles-a-l-huile-d-olive-et-sel-de-mer-dave-jon-s-f5bd07d4" style="display:block;text-decoration:none;color:inherit;"><img src="https://www.swedishcravings.fr/media/products/6448ff54e9b77-1784906419436-653032.avif" alt="Edamame grillés à l'huile d'olive et sel de mer Dave &amp; Jon's" loading="lazy" style="width:100%;aspect-ratio:1;object-fit:contain;background:var(--parchment);"><div style="font-family:var(--font-ui);font-size:13px;margin-top:8px;">Edamame grillés à l'huile d'olive et sel de mer Dave &amp; Jon's</div><div style="font-family:var(--font-ui);font-size:13px;color:var(--dust);">3,15 €</div></a>
 </div>
   </div>
 </section>
@@ -586,7 +586,7 @@ function _sdProductSlug(nameFr, id) {
   
   // Appel direct à l'API sans passer par PRODUCTS
   const BASE = 'https://admin.swedishcravings.fr';
-  const CAT_EMOJI = {'Épices':'🌶️','Flocons & Céréales':'🌾','Baies séchées':'🫐','Sucres & Sirops':'🍯','Thés & Tisanes':'🫖','Farines & Graines':'🌻','Mélanges':'🎄','Chips & Snacks':'🍟','Basics suédois':'🇸🇪','Confiseries':'🍬','Fika & Boulangerie':'🧁'};
+  const CAT_EMOJI = {'Épices':'🌶️','Flocons & Céréales':'🌾','Baies séchées':'🫐','Sucres & Sirops':'🍯','Thés & Tisanes':'🫖','Farines & Graines':'🌻','Mélanges':'🎄','Chips & Snacks':'🍟','Basics suédois':'🇸🇪','Bonbons':'🍬','Confiseries':'🍬','Fika & Boulangerie':'🧁'};
   
   try {
     const url = _isUUID 
@@ -604,7 +604,7 @@ function _sdProductSlug(nameFr, id) {
         if (dbCat) return dbCat;
         const n = (p.name_fr || '').toLowerCase();
         if (n.includes('chips')||n.includes('olw')) return 'Chips & Snacks';
-        if (n.includes('daim')||n.includes('bilar')||n.includes('fish')||n.includes('lakrits')||n.includes('skipper')) return 'Confiseries';
+        if (n.includes('daim')||n.includes('bilar')||n.includes('fish')||n.includes('lakrits')||n.includes('skipper')) return 'Bonbons';
         if (n.includes('kanelbulle')||n.includes('semla')||n.includes('chokladboll')||n.includes('vaniljsocker')) return 'Fika & Boulangerie';
         if (n.includes('kanel')||n.includes('kardemumma')||n.includes('glögg')||n.includes('dill')||n.includes('peppar')||n.includes('santa maria')||n.includes('allkrydda')) return 'Épices';
         if (n.includes('lingon')||n.includes('fläder')||n.includes('nypon')) return 'Baies séchées';
