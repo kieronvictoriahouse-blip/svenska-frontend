@@ -18,10 +18,10 @@
   // ── Familles → sous-rayons (ordre d'affichage du design) ──
   var GROUPS = [
     ['Confiseries', ['Bonbons gélifiés', 'Réglisse & salmiak', 'Chocolat', 'Biscuits & barres']],
-    ['Épices & Aromates', ['Épices & poivres', 'Mélanges pour dips', 'Sel & aromates']],
-    ['Chips & Snacks', ['Chips', 'Soufflés & popcorn']],
-    ['Pâtisserie & Essentiels', ['Fika & pâtisserie']],
-    ['Sauces', ['Sauces & condiments']]
+    ['Apéritif & Snacks', ['Chips', 'Mélanges pour dips', 'Noix & apéritif', 'Fromages & tartinables', 'Soufflés & popcorn']],
+    ['Épices & Marinades', ['Épices & poivres', 'Marinades & BBQ', 'Sel & aromates']],
+    ['Sauces', ['Sauces & condiments']],
+    ['Pâtisserie & Essentiels', ['Fika & pâtisserie']]
   ];
 
   var TINTS = {
@@ -373,9 +373,8 @@
     var qty = qtyOf(v.id);
     var soon = v.stock === 'soon';
     var flag = flagOf(v, false);
-    var kilo = v.grams ? '· ' + money((v.price / v.grams) * 1000) + '/kg' : '';
     var img = v.photo
-      ? '<img src="' + esc(v.photo) + '" alt="' + esc(v.name) + '" loading="lazy" onerror="this.style.display=\'none\'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">'
+      ? '<img class="c3-img" src="' + esc(v.photo) + '" alt="' + esc(v.name) + '" loading="lazy" onerror="this.style.display=\'none\'">'
       : '<span class="c3-photo">' + esc(tr(T.photo)) + '</span>';
     var control;
     if (soon) {
@@ -397,7 +396,7 @@
       '<div class="c3-cbody">' +
       '<div class="c3-name">' + esc(v.name) + '</div>' +
       '<div class="c3-meta"><span class="c3-meta-w">' + esc(v.weight) + '</span>' + (v.origin ? '<span class="c3-meta-o"> · ' + esc(v.origin) + '</span>' : '') + '</div>' +
-      '<div class="c3-prices">' + price + (kilo ? '<span class="c3-kilo">' + esc(kilo) + '</span>' : '') + '</div>' +
+      '<div class="c3-prices">' + price + '</div>' +
       '</div></article>';
   }
 

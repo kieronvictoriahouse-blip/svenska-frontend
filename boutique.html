@@ -93,7 +93,9 @@
 /* CARTE PRODUIT */
 .c3-card{ background:#fff; border:1px solid #EADFCD; border-radius:3px; display:flex; flex-direction:column; animation:c3-in .2s ease both; transition:box-shadow .16s, transform .16s; }
 .c3-card:hover{ box-shadow:0 10px 22px rgba(80,62,48,.10); transform:translateY(-2px); }
-.c3-imgwrap{ position:relative; aspect-ratio:1/1; border-radius:3px 3px 0 0; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+.c3-imgwrap{ position:relative; aspect-ratio:1/1; border-radius:3px 3px 0 0; display:flex; align-items:center; justify-content:center; }
+/* La photo tient ENTIÈRE dans le cadre (packshots) — jamais recadrée. */
+.c3-img{ position:absolute; inset:0; width:100%; height:100%; object-fit:contain; padding:16px; border-radius:3px 3px 0 0; }
 .c3-photo{ font-family:'Jost',sans-serif; font-size:8px; letter-spacing:2.2px; text-transform:uppercase; color:#7A6F62; }
 .c3-flag{ position:absolute; top:9px; left:9px; font-family:'Jost',sans-serif; font-size:8.5px; letter-spacing:1.5px; text-transform:uppercase; padding:4px 8px; border-radius:2px; }
 .c3-add{ position:absolute; right:10px; bottom:-19px; width:40px; height:40px; border-radius:50%; background:#fff; border:1px solid #E0D3C0; color:#8E7566; font-size:20px; line-height:1; cursor:pointer; box-shadow:0 3px 10px rgba(80,62,48,.14); z-index:2; transition:background .15s, color .15s, border-color .15s; }
@@ -193,6 +195,7 @@
   /* Carte mobile */
   .c3-card{ border-radius:10px; }
   .c3-imgwrap{ border-radius:9px 9px 0 0; }
+  .c3-img{ padding:11px; border-radius:9px 9px 0 0; }
   .c3-photo{ font-size:7.5px; letter-spacing:2px; }
   .c3-flag{ top:8px; left:8px; font-size:8px; letter-spacing:1.3px; padding:3px 7px; border-radius:3px; }
   .c3-add{ right:8px; bottom:-20px; width:44px; height:44px; font-size:22px; box-shadow:0 3px 10px rgba(80,62,48,.16); }
