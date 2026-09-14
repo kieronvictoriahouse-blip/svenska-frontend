@@ -12,7 +12,7 @@ const UI={sv:{addedCart:'Tillagd i korgen!',emptyCart:'Din korg är tom',subtota
    appel : une opération expirée retombe seule au seuil normal, même si le
    cache localStorage n'a pas été rafraîchi. */
 window.SD_SHIP=(function(){
-  var DEF={FR:{threshold:50,cost:4.90},INTL:{threshold:70,cost:9.90}};
+  var DEF={FR:{threshold:29,cost:4.90},INTL:{threshold:70,cost:9.90}};
   function cfg(){try{return JSON.parse(localStorage.getItem('sd_wl_v1'))||{};}catch(e){return {};}}
   function today(){var d=new Date();var p=function(n){return String(n).padStart(2,'0');};
     return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate());}

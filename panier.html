@@ -195,7 +195,16 @@
 <div id="footer-root"></div>
 <script src="js/app.js?v=23"></script>
 <script>
-window._deliveryMode = window._deliveryMode || 'pickup';
+/* Mode de livraison par defaut : POINT RELAIS, pas le retrait.
+   Le retrait etait presolectionne, si bien qu'un visiteur de Lille lisait
+   « Retrait en magasin — Gratuit » pour un atelier situe dans la Drome :
+   pour lui, la boutique ne livrait pas. Constat du 14/09/2026 : 48 des 69
+   commandes payees etaient des retraits, et juillet n'a fait aucune
+   expedition. Le Point Relais coute 4,79 EUR reels et reste propose au
+   meme prix — c'est le mode qui doit s'afficher en premier.
+   Le Click & Collect reste disponible d'un clic, et redevient
+   automatiquement obligatoire si le panier contient un produit frais. */
+window._deliveryMode = window._deliveryMode || 'mondial_relay';
 window._selectedRelay = window._selectedRelay || null;
 window._relayPoints = window._relayPoints || null;
 window._relaySearchCp = window._relaySearchCp || '';

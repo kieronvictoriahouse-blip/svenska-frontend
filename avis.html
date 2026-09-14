@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/img/favicon.png">
+<link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Donner mon avis | Swedish Cravings</title>
+<meta name="description" content="Donnez votre avis sur les produits suédois de votre commande Swedish Cravings.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="stylesheet" href="css/style.css?v=18">
+<script>const SD_API_URL = 'https://admin.swedishcravings.fr';</script>
+<script>(function(){try{var w=JSON.parse(localStorage.getItem('sd_wl_v1'));if(w&&w.id){var r=document.documentElement.style;if(w.color_primary){r.setProperty('--heather',w.color_primary);r.setProperty('--heather-mid',w.color_primary+'CC');}if(w.color_secondary){r.setProperty('--lingon',w.color_secondary);r.setProperty('--lingon-mid',w.color_secondary+'CC');}if(w.color_bg)r.setProperty('--cream',w.color_bg);if(w.color_text)r.setProperty('--midnight',w.color_text);}}catch(e){}}());</script>
+<style>
+.page-hero { background:var(--heather); padding:56px 40px; text-align:center; }
+.page-hero h1 { font-family:var(--font-display); font-size:clamp(30px,5vw,54px); font-weight:300; color:var(--snow); }
+.page-hero p { color:rgba(255,255,255,.82); font-family:var(--font-ui); font-size:15px; margin-top:12px; }
+.avis-wrap { max-width:720px; margin:0 auto; padding:56px 24px 88px; }
+.avis-item { border:1px solid var(--linen); background:var(--warm-white); padding:22px; margin-bottom:18px; display:grid; grid-template-columns:78px 1fr; gap:20px; align-items:start; }
+.avis-item img { width:78px; height:78px; object-fit:contain; background:var(--parchment); }
+.avis-nom { font-family:var(--font-display); font-size:20px; font-weight:600; margin-bottom:10px; line-height:1.25; }
+.etoiles { display:flex; gap:4px; margin-bottom:12px; }
+.etoile { font-size:30px; line-height:1; cursor:pointer; color:var(--linen); background:none; border:none; padding:0 2px; transition:color .15s, transform .15s; }
+.etoile:hover { transform:scale(1.14); }
+.etoile.on { color:var(--lingon); }
+.etoile:focus-visible { outline:2px solid var(--heather); outline-offset:2px; }
+.avis-txt { width:100%; border:1px solid var(--linen); background:var(--snow); padding:11px 13px; font-family:var(--font-body); font-size:15px; resize:vertical; min-height:74px; color:var(--midnight); }
+.avis-txt:focus { outline:none; border-color:var(--heather); }
+.avis-etat { font-family:var(--font-ui); font-size:13px; margin-top:9px; min-height:19px; }
+.avis-etat.ok { color:var(--heather); }
+.avis-etat.ko { color:#9A5228; }
+.avis-intro { font-family:var(--font-body); font-size:17px; line-height:1.6; color:var(--slate); margin-bottom:30px; }
+.avis-msg { text-align:center; padding:60px 20px; font-family:var(--font-body); font-size:17px; color:var(--dust); }
+.btn-envoyer { background:var(--heather); color:var(--snow); border:none; padding:10px 22px; font-family:var(--font-ui); font-size:13px; letter-spacing:1px; text-transform:uppercase; cursor:pointer; margin-top:11px; }
+.btn-envoyer:hover { background:var(--heather-mid); }
+.btn-envoyer:disabled { opacity:.45; cursor:default; }
+@media(max-width:560px){ .avis-item{grid-template-columns:1fr;} .avis-item img{width:64px;height:64px;} }
+</style>
+</head>
+<body>
+<div id="header-root"></div>
+
+<div class="page-hero">
+  <h1>Votre <em>avis</em></h1>
+  <p>Il aide les prochains clients a se decider, et nous a bien choisir.</p>
+</div>
+
+<div class="avis-wrap">
+  <div id="avis-contenu" class="avis-msg">Chargement de votre commande...</div>
+</div>
+
+<div id="footer-root"></div>
+<script src="js/app.js?v=23"></script>
+<script>
+/* Page de depot d'avis, atteinte depuis l'email post-achat : /avis?c=<id commande>.
+   Le serveur verifie que la commande est payee et qu'elle contenait bien le
+   produit note. LANG vient d'app.js : ne jamais le redeclarer ici. */
+(async function () {
+  var params  = new URLSearchParams(location.search);
+  var orderId = params.get('c') || params.get('order_id');
+  var box     = document.getElementById('avis-contenu');
+
+  if (!orderId) {
+    box.textContent = "Ce lien est incomplet. Utilisez celui recu par email apres votre commande.";
+    return;
+  }
+
+  var order = null;
+  try {
+    var res = await fetch(SD_API_URL + '/api/orders/' + encodeURIComponent(orderId) + '/public');
+    if (res.ok) { var d = await res.json(); order = d.order; }
+  } catch (e) {}
+
+  if (!order) {
+    box.textContent = "Nous n'avons pas retrouve cette commande. Le lien a peut-etre expire.";
+    return;
+  }
+
+  var lignes = [];
+  try { lignes = typeof order.lines === 'string' ? JSON.parse(order.lines) : (order.lines || []); } catch (e) {}
+
+  /* Un produit peut apparaitre sur plusieurs lignes (variantes) :
+     on ne propose qu'un seul avis par produit. */
+  var vus = {}, produits = [];
+  lignes.forEach(function (l) {
+    var pid = l.product_id || l.id;
+    if (!pid || vus[pid]) return;
+    vus[pid] = 1;
+    produits.push({ id: pid, nom: l.name, img: l.image_url });
+  });
+
+  if (!produits.length) {
+    box.textContent = "Cette commande ne contient aucun produit a noter.";
+    return;
+  }
+
+  var esc = function (s) {
+    return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  };
+
+  box.className = '';
+  box.innerHTML =
+    '<p class="avis-intro">Commande <strong>' + esc(order.order_number) + '</strong> — ' +
+    'donnez une note a ce que vous avez goute. Une etoile suffit, un mot fait plaisir.</p>' +
+    produits.map(function (p, i) {
+      return '<div class="avis-item">' +
+        (p.img ? '<img src="' + esc(p.img) + '" alt="' + esc(p.nom) + '" loading="lazy">' : '<div></div>') +
+        '<div>' +
+          '<div class="avis-nom">' + esc(p.nom) + '</div>' +
+          '<div class="etoiles" id="et-' + i + '" role="group" aria-label="Note sur 5">' +
+            [1, 2, 3, 4, 5].map(function (n) {
+              return '<button type="button" class="etoile" data-n="' + n + '" ' +
+                     'aria-label="' + n + ' etoile' + (n > 1 ? 's' : '') + '" ' +
+                     'onclick="noter(' + i + ',' + n + ')">&#9733;</button>';
+            }).join('') +
+          '</div>' +
+          '<textarea class="avis-txt" id="tx-' + i + '" placeholder="Ce que vous en avez pense (facultatif)"></textarea>' +
+          '<button class="btn-envoyer" id="bt-' + i + '" onclick="envoyer(' + i + ')" disabled>Envoyer</button>' +
+          '<div class="avis-etat" id="ms-' + i + '"></div>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+
+  window._avisProduits = produits;
+  window._avisNotes = {};
+  window._avisOrder = orderId;
+})();
+
+function noter(i, n) {
+  window._avisNotes[i] = n;
+  document.querySelectorAll('#et-' + i + ' .etoile').forEach(function (b) {
+    b.classList.toggle('on', parseInt(b.dataset.n, 10) <= n);
+  });
+  document.getElementById('bt-' + i).disabled = false;
+}
+
+async function envoyer(i) {
+  var note = window._avisNotes[i];
+  var msg  = document.getElementById('ms-' + i);
+  if (!note) { msg.className = 'avis-etat ko'; msg.textContent = 'Choisissez une note.'; return; }
+
+  var bt = document.getElementById('bt-' + i);
+  bt.disabled = true; bt.textContent = '...';
+  try {
+    var res = await fetch(SD_API_URL + '/api/reviews', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        order_id: window._avisOrder,
+        product_id: window._avisProduits[i].id,
+        rating: note,
+        comment: document.getElementById('tx-' + i).value,
+        lang: (typeof LANG !== 'undefined' ? LANG : 'fr')
+      })
+    });
+    var d = {};
+    try { d = await res.json(); } catch (e) {}
+    if (res.ok) {
+      msg.className = 'avis-etat ok';
+      msg.textContent = 'Merci ! Votre avis est en ligne.';
+      bt.textContent = 'Envoye';
+    } else {
+      msg.className = 'avis-etat ko';
+      msg.textContent = d.error || "L'envoi n'a pas abouti. Reessayez dans un instant.";
+      bt.disabled = false; bt.textContent = 'Envoyer';
+    }
+  } catch (e) {
+    msg.className = 'avis-etat ko';
+    msg.textContent = "Connexion impossible. Reessayez dans un instant.";
+    bt.disabled = false; bt.textContent = 'Envoyer';
+  }
+}
+</script>
+<script>initPage('');</script>
+<script src="js/sd-api-client.js?v=7"></script>
+</body>
+</html>
