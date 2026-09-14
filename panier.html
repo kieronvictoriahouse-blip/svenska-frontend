@@ -429,11 +429,14 @@ function renderCartPageFull() {
   });
   if (cartHasPickupOnly && window._deliveryMode !== 'pickup') setDeliveryMode('pickup');
 
-  const INTL_COUNTRIES = ['ES','PT','IT','DE','NL','BE','LU','CH'];
+  /* Miroir de INTERNATIONAL_COUNTRIES (back). La Suede y entre : elle
+     etait proposee au client mais facturee au tarif France. La Suisse
+     en sort — hors UE et 40 EUR TTC de port reel. */
+  const INTL_COUNTRIES = ['ES','PT','IT','DE','NL','BE','LU','SE'];
   const isIntl = INTL_COUNTRIES.includes(window._relayCountry || 'FR');
   // Seuil et coût pilotés par la boutique (opération « livraison offerte » comprise).
   // Estimation uniquement — /api/checkout recalcule et fait foi.
-  const _shipRules = window.SD_SHIP ? SD_SHIP.rules(isIntl) : { threshold: isIntl ? 70 : 50, cost: isIntl ? 9.90 : 4.90, promoActive: false, baseThreshold: isIntl ? 70 : 50 };
+  const _shipRules = window.SD_SHIP ? SD_SHIP.rules(isIntl) : { threshold: isIntl ? 50 : 29, cost: isIntl ? 9.90 : 4.90, promoActive: false, baseThreshold: isIntl ? 50 : 29 };
   const freeThreshold = _shipRules.threshold;
   const baseShipping  = _shipRules.cost;
   const _shipPromoLabel = window.SD_SHIP ? SD_SHIP.label(LANG) : '';
@@ -963,10 +966,10 @@ function showProfileGate(token, isPickup, onSaved) {
       <div class="pg-field" style="margin-bottom:0"><label>${L==='sv'?'Code postal':L==='en'?'Postal code':'Code postal'}</label><input id="pg-postal" type="text" autocomplete="postal-code" placeholder="75001"></div>
     </div>
     <div class="pg-field"><label>${L==='sv'?'Land':L==='en'?'Country':'Pays'}</label><select id="pg-country" autocomplete="country">
-      <option value="FR">France</option><option value="BE">Belgique</option><option value="CH">Suisse</option>
+      <option value="FR">France</option><option value="BE">Belgique</option>
       <option value="LU">Luxembourg</option><option value="DE">Allemagne</option><option value="ES">Espagne</option>
       <option value="IT">Italie</option><option value="NL">Pays-Bas</option><option value="PT">Portugal</option>
-      <option value="SE">Suède</option><option value="GB">Royaume-Uni</option>
+      <option value="SE">Suède</option>
     </select></div>`;
   document.getElementById('profile-gate-fields').innerHTML = `
     <div class="pg-field"><label>${L==='sv'?'Nom complet':L==='en'?'Full name':'Nom complet'} *</label><input id="pg-name" type="text" autocomplete="name" placeholder="${L==='sv'?'Prénom Nom':L==='en'?'First Last':'Prénom Nom'}"></div>
