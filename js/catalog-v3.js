@@ -21,7 +21,8 @@
     ['Apéritif & Snacks', ['Chips', 'Mélanges pour dips', 'Noix & apéritif', 'Fromages & tartinables', 'Soufflés & popcorn']],
     ['Épices & Marinades', ['Épices & poivres', 'Marinades & BBQ', 'Sel & aromates']],
     ['Sauces', ['Sauces & condiments']],
-    ['Pâtisserie & Essentiels', ['Fika & pâtisserie']]
+    ['Bake & Fika', ['Fika & pâtisserie']],
+    ['Boissons', ['Boissons']]
   ];
 
   var TINTS = {
@@ -29,7 +30,7 @@
     'Épices & poivres': '#F3E7D2', 'Mélanges pour dips': '#EDE8D8', 'Sel & aromates': '#F0EBE0',
     'Marinades & BBQ': '#F2E4D0', 'Noix & apéritif': '#F3E9D9', 'Fromages & tartinables': '#F0E8D6',
     'Chips': '#F7E9D0', 'Soufflés & popcorn': '#F8EED4',
-    'Fika & pâtisserie': '#F1EADC', 'Sauces & condiments': '#E6EDDE'
+    'Fika & pâtisserie': '#F1EADC', 'Sauces & condiments': '#E6EDDE', 'Boissons': '#E4DAC8'
   };
 
   var SHORT = {
@@ -37,7 +38,7 @@
     'Épices & poivres': 'Épices', 'Mélanges pour dips': 'Dips', 'Sel & aromates': 'Sel',
     'Marinades & BBQ': 'Marinades', 'Noix & apéritif': 'Noix', 'Fromages & tartinables': 'Fromages',
     'Chips': 'Chips', 'Soufflés & popcorn': 'Soufflés',
-    'Fika & pâtisserie': 'Fika', 'Sauces & condiments': 'Sauces'
+    'Fika & pâtisserie': 'Fika', 'Sauces & condiments': 'Sauces', 'Boissons': 'Boissons'
   };
 
   // Traductions des noms de sous-rayons / familles (FR/EN/SV)
@@ -54,8 +55,9 @@
     'Sel & aromates':     { fr: 'Sel & aromates',     en: 'Salt & seasonings',   sv: 'Salt & smaksättare' },
     'Chips':              { fr: 'Chips & crackers',   en: 'Crisps & crackers',   sv: 'Chips & knäcke' },
     'Soufflés & popcorn': { fr: 'Soufflés & popcorn', en: 'Puffs & popcorn',     sv: 'Ostbågar & popcorn' },
-    'Fika & pâtisserie':  { fr: 'Fika & pâtisserie',  en: 'Fika & baking',       sv: 'Fika & bakning' },
-    'Sauces & condiments':{ fr: 'Sauces & condiments',en: 'Sauces & condiments', sv: 'Såser & tillbehör' }
+    'Fika & pâtisserie':  { fr: 'Bake & Fika',        en: 'Bake & Fika',         sv: 'Baka & Fika' },
+    'Sauces & condiments':{ fr: 'Sauces & condiments',en: 'Sauces & condiments', sv: 'Såser & tillbehör' },
+    'Boissons':           { fr: 'Boissons',           en: 'Drinks',              sv: 'Drycker' }
   };
   var SHORT_I18N = {
     'Bonbons gélifiés': { fr: 'Gélifiés', en: 'Gummies', sv: 'Gelé' },
@@ -70,14 +72,16 @@
     'Sel & aromates': { fr: 'Sel', en: 'Salt', sv: 'Salt' },
     'Chips': { fr: 'Chips', en: 'Crisps', sv: 'Chips' },
     'Soufflés & popcorn': { fr: 'Soufflés', en: 'Puffs', sv: 'Bågar' },
-    'Fika & pâtisserie': { fr: 'Fika', en: 'Fika', sv: 'Fika' },
-    'Sauces & condiments': { fr: 'Sauces', en: 'Sauces', sv: 'Såser' }
+    'Fika & pâtisserie': { fr: 'Bake & Fika', en: 'Bake & Fika', sv: 'Baka & Fika' },
+    'Sauces & condiments': { fr: 'Sauces', en: 'Sauces', sv: 'Såser' },
+    'Boissons': { fr: 'Boissons', en: 'Drinks', sv: 'Dryck' }
   };
   var FAM_I18N = {
     'Confiseries': { fr: 'Confiseries', en: 'Sweets', sv: 'Godis' },
     'Apéritif & Snacks': { fr: 'Apéritif & Snacks', en: 'Snacks & nibbles', sv: 'Tilltugg & snacks' },
     'Épices & Marinades': { fr: 'Épices & Marinades', en: 'Spices & marinades', sv: 'Kryddor & marinader' },
-    'Pâtisserie & Essentiels': { fr: 'Pâtisserie & Essentiels', en: 'Baking & basics', sv: 'Bakning & basvaror' },
+    'Bake & Fika': { fr: 'Bake & Fika', en: 'Bake & Fika', sv: 'Baka & Fika' },
+    'Boissons': { fr: 'Boissons', en: 'Drinks', sv: 'Drycker' },
     'Sauces': { fr: 'Sauces', en: 'Sauces', sv: 'Såser' },
     'Autres': { fr: 'Autres', en: 'Other', sv: 'Övrigt' }
   };
@@ -212,7 +216,8 @@
     [/\bsauce\b|hollandaise|cafe de paris|café de paris|bearnaise|béarnaise/, 'Sauces & condiments'], // avant poivre
     [/cheez|doodles|ostbagar|skruvar|popcorn|soufflé|souffle|\bbagar\b/, 'Soufflés & popcorn'],
     [/chips|dillchips|grillchips|lantchips|estrella|crackers?/, 'Chips'],
-    [/marabou|\bplopp\b|\bcenter\b|\bdumle\b|kexchoklad|choklad|chocolat|\bkorkat\b|o.?boy/, 'Chocolat'],
+    [/o.?boy|chocolat chaud|chocolat en poudre|\bcacao\b|glogg|glögg|\bo\W?boy\b/, 'Boissons'],  // avant chocolat
+    [/marabou|\bplopp\b|\bcenter\b|\bdumle\b|kexchoklad|choklad|chocolat|\bkorkat\b/, 'Chocolat'],
     [/lakrits|reglisse|salmiak|djungelvral|salta katten|tyrkisk|lakerol|\bkick\b|skumgodis|sockerbitar|spattor/, 'Réglisse & salmiak'],
     [/\bbilar\b|ahlgrens|voitures|gott ?& ?blandat|tutti frutti|skumbanan|\bbubs\b|zoo|malaco|nappar|sursnoren|gelifi|\bgodis\b|gummy|pasteque|pastèque/, 'Bonbons gélifiés'],
     [/falksalt|flingsalt|flocons de sel|sel d.?ail|herbes a gravlax|\bsel\b/, 'Sel & aromates'],
@@ -223,8 +228,8 @@
   var CAT_FALLBACK = {
     'Confiseries': 'Bonbons gélifiés', 'Chips & Snacks': 'Chips',
     'Épices': 'Épices & poivres', 'Mélanges': 'Épices & poivres', 'Farines & Graines': 'Épices & poivres', 'Flocons & Céréales': 'Épices & poivres',
-    'Fika & Boulangerie': 'Fika & pâtisserie', 'Sucres & Sirops': 'Fika & pâtisserie', 'Pâtisserie & Essentiels': 'Fika & pâtisserie',
-    'Basics suédois': 'Sauces & condiments', 'Sauces': 'Sauces & condiments'
+    'Fika & Boulangerie': 'Fika & pâtisserie', 'Sucres & Sirops': 'Fika & pâtisserie', 'Pâtisserie & Essentiels': 'Fika & pâtisserie', 'Bake & Fika': 'Fika & pâtisserie',
+    'Basics suédois': 'Sauces & condiments', 'Sauces': 'Sauces & condiments', 'Boissons': 'Boissons'
   };
 
   function sousRayonOf(p) {
@@ -255,7 +260,7 @@
     var nn = norm((p.name && (p.name.fr || p.name[L()])) || '');
     var tags = {};
     if (parent === 'Apéritif & Snacks' || parent === 'Épices & Marinades' || parent === 'Sauces') tags.sale = true;
-    if (parent === 'Confiseries' || parent === 'Pâtisserie & Essentiels') tags.sucre = true;
+    if (parent === 'Confiseries' || parent === 'Bake & Fika' || parent === 'Boissons') tags.sucre = true;
     if (sub === 'Réglisse & salmiak' || /lakrits|reglisse|salmiak/.test(nn)) tags.reglisse = true;
     if (sub === 'Fika & pâtisserie' || /kanel|cannelle|kardemumma|cardamome|\bkex\b|ballerina|singoalla|parlsocker|kanelbullar/.test(nn)) tags.fika = true;
     if (realTags.indexOf('vegan') > -1 || realTags.indexOf('vegansk') > -1) tags.vegan = true;
@@ -537,7 +542,7 @@
     var used = {};
     var picks = [
       pick(function (p) { return p.parent === 'Confiseries'; }),
-      pick(function (p) { return p.sub === 'Chocolat' || p.parent === 'Pâtisserie & Essentiels' || p.sub === 'Fika & pâtisserie'; }),
+      pick(function (p) { return p.sub === 'Chocolat' || p.parent === 'Bake & Fika' || p.sub === 'Fika & pâtisserie'; }),
       pick(function (p) { return p.parent === 'Apéritif & Snacks' || p.sub === 'Chips'; })
     ];
     var pool = withPhoto.slice();
