@@ -649,7 +649,7 @@ function renderCartPageFull() {
           <span data-sv="Leverans" data-fr="Livraison" data-en="Shipping">${LANG==='sv'?'Leverans':LANG==='en'?'Shipping':'Livraison'}</span>
           <span>${window._deliveryMode==='pickup'?`<span style="color:var(--moss)">${LANG==='sv'?'Gratis':LANG==='en'?'Free':'Gratuit'}</span>`:_effectiveShipping===0?`<span style="color:var(--moss)">${LANG==='sv'?'Gratis':LANG==='en'?'Free':'Gratuite'}</span>`:`${fmtPrice(_effectiveShipping)}`}</span>
         </div>
-        ${window._deliveryMode==='pickup'?`<div class="summary-ship-bar"><div class="summary-ship-text" style="color:var(--moss);">${LANG==='sv'?'Hämtas i butiken':'🏪 '+(LANG==='en'?'In-store pickup':'Retrait en magasin')}</div></div>`:window._deliveryMode==='mondial_relay'?`<div class="summary-ship-bar"><div class="summary-ship-text" style="color:var(--heather);">📦 ${LANG==='sv'?'Leverans till utlämningsställe':LANG==='en'?'Mondial Relay pickup point':'Livraison en point relais Mondial Relay'}</div></div>${freeShipNudge}`:_isFreeShip?`<div class="summary-ship-bar"><div class="summary-ship-text" style="color:var(--moss);">🎟 ${LANG==='sv'?'Fri frakt via kampanjkod':LANG==='en'?'Free shipping via promo code':'Livraison offerte via code promo'}</div></div>`:shipHtml}
+        ${window._deliveryMode==='pickup'?`<div class="summary-ship-bar"><div class="summary-ship-text" style="color:var(--moss);">${LANG==='sv'?'Hämtas i butiken':'🏪 '+(LANG==='en'?'In-store pickup':'Retrait en magasin')}</div></div>`:window._deliveryMode==='mondial_relay'?`<div class="summary-ship-bar"><div class="summary-ship-text" style="color:var(--heather);">📦 ${(function(){var t=window._relayCarrierName||'';return LANG==='sv'?('Leverans till utlämningsställe'+(t?' — '+t:'')):LANG==='en'?('Pickup point delivery'+(t?' — '+t:'')):('Livraison en point relais'+(t?' — '+t:''));})()}</div></div>${freeShipNudge}`:_isFreeShip?`<div class="summary-ship-bar"><div class="summary-ship-text" style="color:var(--moss);">🎟 ${LANG==='sv'?'Fri frakt via kampanjkod':LANG==='en'?'Free shipping via promo code':'Livraison offerte via code promo'}</div></div>`:shipHtml}
         <div class="summary-line total">
           <span>Total</span>
           <span>${fmtPrice(_totalToPay)}</span>
@@ -758,13 +758,19 @@ async function searchRelayPoints(cp) {
   const BASE = window.SD_API_URL || 'https://admin.swedishcravings.fr';
   const pays = window._relayCountry || 'FR';
   try {
-    // Mondial Relay SOAP — couvre FR, ES, PT, BE, LU, NL avec rayon précis
-    var res = await fetch(BASE + '/api/mondial-relay/points?cp=' + encodeURIComponent(cp.trim()) + '&pays=' + encodeURIComponent(pays));
+    /* Le panier n'interrogeait que Mondial Relay : il ne pouvait donc
+       proposer que ses points, meme la ou un autre transporteur est
+       moins cher — Shop2Shop est a 6,59 EUR vers l'Italie contre 7,88,
+       et il est le seul a desservir la Suede. La route ci-dessous
+       demande a UGO le transporteur le moins cher du pays, puis ne
+       renvoie que SES points : un point relais appartient a un
+       transporteur, le choix du point est donc celui du transporteur. */
+    var res = await fetch(BASE + '/api/logspher/relay-points?cp=' + encodeURIComponent(cp.trim()) + '&country=' + encodeURIComponent(pays));
     var data = res.ok ? await res.json() : null;
     var pts = data ? (Array.isArray(data) ? data : (data.points || [])) : [];
-    window._relayPoints = pts.map(function(p){ return Object.assign({}, p, { carrier_name: p.carrier_name || 'Mondial Relay' }); });
-    window._relayCarrierName = '';
-    window._relayPriceTE = null;
+    window._relayPoints = pts;
+    window._relayCarrierName = (data && data.carrier_name) || '';
+    window._relayPriceTE = (data && data.price_te) != null ? data.price_te : null;
   } catch(e) {
     window._relayPoints = [];
   }
@@ -945,8 +951,8 @@ function showProfileGate(token, isPickup, onSaved) {
   document.getElementById('profile-gate-btn').onclick = submitProfileGate;
   const _isMRMode = window._deliveryMode === 'mondial_relay';
   const subtitles = {
-    fr: isPickup ? (_isMRMode ? 'Indiquez votre nom pour commander en point relais Mondial Relay.' : 'Indiquez votre nom pour finaliser la commande (click & collect).') : 'Renseignez vos coordonnées de livraison pour continuer.',
-    en: isPickup ? (_isMRMode ? 'Enter your name to order to a Mondial Relay point.' : 'Enter your name to complete your order (click & collect).') : 'Enter your delivery address to continue.',
+    fr: isPickup ? (_isMRMode ? 'Indiquez votre nom pour commander en point relais.' : 'Indiquez votre nom pour finaliser la commande (click & collect).') : 'Renseignez vos coordonnées de livraison pour continuer.',
+    en: isPickup ? (_isMRMode ? 'Enter your name to order to a pickup point.' : 'Enter your name to complete your order (click & collect).') : 'Enter your delivery address to continue.',
     sv: isPickup ? (_isMRMode ? 'Ange ditt namn för att beställa till ett utlämningsställe.' : 'Ange ditt namn för att slutföra beställningen.') : 'Ange din leveransadress för att fortsätta.',
   };
   document.getElementById('profile-gate-subtitle').textContent = subtitles[L] || subtitles.fr;
