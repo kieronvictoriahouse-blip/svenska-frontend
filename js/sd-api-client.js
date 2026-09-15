@@ -112,6 +112,17 @@
       p.cat_name || p.cat || '';
     const cat = normalizeCat(rawCat) || guessCatFromName(p.name_fr) || 'Épices';
 
+    // Catégorie RÉELLE de la base (source de vérité du catalogue « front = admin »).
+    // On garde le nom exact saisi en admin + le slug + l'ordre, dans les 3 langues.
+    const _cRaw = p.categories || p.category || null;
+    const category = _cRaw ? {
+      fr:   _cRaw.name_fr || rawCat,
+      sv:   _cRaw.name_sv || _cRaw.name_fr || rawCat,
+      en:   _cRaw.name_en || _cRaw.name_fr || rawCat,
+      slug: _cRaw.slug || '',
+      sort: (typeof _cRaw.sort_order === 'number' ? _cRaw.sort_order : 999)
+    } : null;
+
     // Variants : normalise le format DB → {label, price}
     const variants = (p.product_variants || p.variants || [])
       .filter(v => v && v.price != null)
@@ -137,6 +148,7 @@
       id:          p.sort_order || p.id,
       uuid:        p.id,
       cat,
+      category,
       emoji:       CAT_EMOJI[cat] || '🛒',
       badge:       p.badge || '',
       rating:      parseFloat(p.rating) || 4.5,

@@ -192,8 +192,15 @@
   }
 
   function shopProducts() {
+    // Non-alimentaire exclu de la boutique (vitrine « Maison » à part) — par SLUG de catégorie.
+    var exclSlug = { 'art-de-la-table': 1, 'maison-deco': 1 };
     var excl = (typeof SHOP_EXCLUDED_CATS !== 'undefined') ? SHOP_EXCLUDED_CATS : ['Art de la table', 'Maison & Déco'];
-    return (window.PRODUCTS || []).filter(function (p) { return p && excl.indexOf(p.cat) === -1; });
+    return (window.PRODUCTS || []).filter(function (p) {
+      if (!p) return false;
+      var slug = p.category && p.category.slug;
+      if (slug && exclSlug[slug]) return false;
+      return excl.indexOf(p.cat) === -1;
+    });
   }
 
   // ⚠ ORDRE = priorité (première regex qui matche gagne). Les règles les plus
@@ -245,18 +252,22 @@
     var sale = !!(window.SDPrice && SDPrice.active(p));
     var price = sale ? SDPrice.effective(p.price, p) : (p.price || 0);
     var grams = gramsOf(p.weight);
-    var sub = sousRayonOf(p);
-    var parent = familyOf(sub);
+    // Catégorie = SOURCE DE VÉRITÉ (celle de l'admin/base). Plus de devineur par nom.
+    var c = p.category || null;
+    var catKey = c ? (c.slug || c.fr) : 'autres';
+    var catLabel = c ? (c[L()] || c.fr) : 'Autres';
+    var catSort = c ? c.sort : 999;
+    var slug = c ? (c.slug || '') : '';
     var tracked = !!p.trackStock && p.stock != null;
     var stock = tracked && p.stock <= 0 ? 'soon' : (tracked && p.stock <= 2 ? 'low' : 'in');
     // Envies dérivées
     var realTags = (p.tags || []).map(function (t) { return norm(t); });
     var nn = norm((p.name && (p.name.fr || p.name[L()])) || '');
     var tags = {};
-    if (parent === 'Apéritif & Snacks' || parent === 'Épices & Marinades' || parent === 'Sauces') tags.sale = true;
-    if (parent === 'Bonbons' || parent === 'Chocolat' || parent === 'Bake & Fika' || parent === 'Boissons') tags.sucre = true;
+    if (slug === 'dips' || slug === 'snacks-chips' || slug === 'epices' || slug === 'sauces' || slug === 'fromages-tartinables') tags.sale = true;
+    if (slug === 'confiseries' || slug === 'chocolat' || slug === 'patisserie-basics' || slug === 'boissons') tags.sucre = true;
     if (/lakrits|reglisse|salmiak|djungelvral|salta katten|tyrkisk|\bkick\b|skumgodis|sockerbitar|spattor/.test(nn)) tags.reglisse = true;
-    if (sub === 'Fika & pâtisserie' || /kanel|cannelle|kardemumma|cardamome|\bkex\b|ballerina|singoalla|parlsocker|kanelbullar/.test(nn)) tags.fika = true;
+    if (slug === 'patisserie-basics' || /kanel|cannelle|kardemumma|cardamome|\bkex\b|ballerina|singoalla|parlsocker|kanelbullar/.test(nn)) tags.fika = true;
     if (realTags.indexOf('vegan') > -1 || realTags.indexOf('vegansk') > -1) tags.vegan = true;
     if (price > 0 && price < 3) tags.petit = true;
     if (p.bestseller) tags.best = true;
@@ -264,7 +275,7 @@
     return {
       id: cid, uuid: p.uuid, rawId: p.id, ref: p,
       name: (p.name && p.name[L()]) || (p.name && p.name.fr) || '',
-      sub: sub, parent: parent,
+      sub: catKey, parent: catKey, catLabel: catLabel, catSort: catSort, slug: slug,
       price: price, sale: sale, oldPrice: p.price || 0,
       weight: p.weight || '',
       origin: (typeof p.origin === 'object' && p.origin) ? (p.origin[L()] || p.origin.fr || '') : (p.origin || ''),
@@ -327,31 +338,31 @@
     var list = products.filter(function (p) {
       if (on.length && !on.some(function (t) { return p.tags[t]; })) return false;
       if (q) {
-        var hay = (p.name + ' ' + p.sub + ' ' + p.parent + ' ' + p.origin).toLowerCase();
+        var hay = (p.name + ' ' + p.catLabel + ' ' + p.origin).toLowerCase();
         if (hay.indexOf(q) === -1) return false;
       }
       return true;
     });
 
-    // Sections + rail dans l'ordre des familles ; sous-rayons inconnus rattachés à leur famille
-    var order = [];
-    GROUPS.forEach(function (g) { g[1].forEach(function (s) { order.push([g[0], s]); }); });
-    // sous-rayons présents mais hors design → ajoutés à la fin (famille "Autres" ou repli)
-    var known = {}; order.forEach(function (o) { known[o[1]] = true; });
-    var extraSubs = {};
-    list.forEach(function (p) { if (!known[p.sub]) extraSubs[p.sub] = p.parent; });
-    Object.keys(extraSubs).forEach(function (s) { order.push([extraSubs[s], s]); });
+    // ── Rayons = CATÉGORIES DE L'ADMIN (source de vérité), ordonnées par
+    //    sort_order de l'admin puis par nom. Plus de familles/sous-rayons devinés. ──
+    var catsMap = {};
+    list.forEach(function (p) {
+      if (!catsMap[p.sub]) catsMap[p.sub] = { key: p.sub, label: p.catLabel, sort: p.catSort, items: [] };
+      catsMap[p.sub].items.push(p);
+    });
+    // Ordre d'affichage des rayons (par slug). L'API ne renvoie pas encore le
+    // sort_order des catégories → on fixe un ordre marchand ici ; toute catégorie
+    // inconnue passe à la fin, triée par nom.
+    var ORDER = { 'confiseries': 1, 'chocolat': 2, 'dips': 3, 'snacks-chips': 4, 'fromages-tartinables': 5, 'epices': 6, 'sauces': 7, 'patisserie-basics': 8, 'boissons': 9 };
+    var oi = function (c) { var s = (c.items[0] && c.items[0].slug) || c.key; return ORDER[s] || 99; };
+    var cats = Object.keys(catsMap).map(function (k) { return catsMap[k]; })
+      .sort(function (a, b) { return (oi(a) - oi(b)) || String(a.label).localeCompare(String(b.label)); });
 
-    var sections = [], rail = [], lastFam = null;
-    order.forEach(function (pair) {
-      var fam = pair[0], sub = pair[1];
-      var items = list.filter(function (p) { return p.sub === sub; });
-      if (!items.length) return;
-      if (fam !== lastFam) { rail.push({ lvl: 0, fam: fam, key: sub }); lastFam = fam; }
-      var subLabel = SUB_I18N[sub] ? tr(SUB_I18N[sub]) : subLabelFallback(sub);
-      var shortLabel = SHORT_I18N[sub] ? tr(SHORT_I18N[sub]) : subLabel;
-      sections.push({ key: sub, title: subLabel, parent: fam, count: items.length, items: items });
-      rail.push({ lvl: 1, key: sub, label: subLabel, short: shortLabel, count: items.length });
+    var sections = [], rail = [];
+    cats.forEach(function (c) {
+      sections.push({ key: c.key, title: c.label, parent: '', count: c.items.length, items: c.items });
+      rail.push({ lvl: 1, key: c.key, label: c.label, short: c.label, count: c.items.length });
     });
 
     // Panier
@@ -433,8 +444,7 @@
     }
     return sections.map(function (s) {
       var head = '<div class="c3-sechead"><h2>' + esc(s.title) + '</h2>' +
-        '<span class="c3-seccount">' + s.count + ' ' + esc(s.count > 1 ? tr(T.products) : tr(T.product)) + '</span>' +
-        '<span class="c3-secfam">' + esc(FAM_I18N[s.parent] ? tr(FAM_I18N[s.parent]) : s.parent) + '</span></div>';
+        '<span class="c3-seccount">' + s.count + ' ' + esc(s.count > 1 ? tr(T.products) : tr(T.product)) + '</span></div>';
       var grid = '<div class="c3-grid">' + s.items.map(cardHTML).join('') + '</div>';
       return '<section class="c3-section" data-sec="' + esc(s.key) + '">' + head + grid + '</section>';
     }).join('');
