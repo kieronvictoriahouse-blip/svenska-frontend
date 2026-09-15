@@ -109,19 +109,6 @@
     <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
   </item>
   <item>
-    <g:id>58907c8f-b61f-4e08-9b43-e2823c70d351</g:id>
-    <g:title>Poivre au Citron</g:title>
-    <g:description>Un mélange d'épices suédois au caractère vif et rafraîchissant, alliant poivre noir et zeste de citron. Idéal pour sublimer poissons, volailles et sauces, ce condiment polyvalent peut s'utiliser seul grâce à sa teneur en sel. Une touche nordique qui rehausse vos plats avec élégance, à table comme en cuisine.</g:description>
-    <g:link>https://www.swedishcravings.fr/produit/poivre-au-citron-58907c8f</g:link>
-    <g:image_link>https://www.swedishcravings.fr/media/products/citronpeppar-1784906914141-952645.jpg</g:image_link>
-    <g:availability>in_stock</g:availability>
-    <g:price>3.95 EUR</g:price>
-    <g:brand>Swedish Cravings</g:brand>
-    <g:condition>new</g:condition>
-    <g:identifier_exists>no</g:identifier_exists>
-    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
-  </item>
-  <item>
     <g:id>19130567-13ec-41b9-b9a8-b6baaa3ef9db</g:id>
     <g:title>Center - Chocolat au lait fourré au caramel</g:title>
     <g:description>Une douceur suédoise irrésistible où un cœur de toffee fondant au caramel rencontre un enrobage de chocolat au lait onctueux. Chaque bouchée offre ce contraste parfait entre la texture moelleuse du caramel et le croquant délicat du chocolat. Un classique scandinave à savourer lors d'une pause gourmande ou à partager entre amis.</g:description>
@@ -143,6 +130,19 @@
     <g:availability>in_stock</g:availability>
     <g:price>3.49 EUR</g:price>
     <g:brand>Läkerol</g:brand>
+    <g:condition>new</g:condition>
+    <g:identifier_exists>no</g:identifier_exists>
+    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
+  </item>
+  <item>
+    <g:id>58907c8f-b61f-4e08-9b43-e2823c70d351</g:id>
+    <g:title>Poivre au Citron</g:title>
+    <g:description>Un mélange d'épices suédois au caractère vif et rafraîchissant, alliant poivre noir et zeste de citron. Idéal pour sublimer poissons, volailles et sauces, ce condiment polyvalent peut s'utiliser seul grâce à sa teneur en sel. Une touche nordique qui rehausse vos plats avec élégance, à table comme en cuisine.</g:description>
+    <g:link>https://www.swedishcravings.fr/produit/poivre-au-citron-58907c8f</g:link>
+    <g:image_link>https://www.swedishcravings.fr/media/products/citronpeppar-1784906914141-952645.jpg</g:image_link>
+    <g:availability>in_stock</g:availability>
+    <g:price>3.95 EUR</g:price>
+    <g:brand>Swedish Cravings</g:brand>
     <g:condition>new</g:condition>
     <g:identifier_exists>no</g:identifier_exists>
     <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
