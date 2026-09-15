@@ -122,6 +122,7 @@
       sv: 'Något särskilt i åtanke? <a href="contact.html">Be oss om en produkt</a> — vi lägger till den i nästa container.'
     },
     photo: { fr: 'photo produit', en: 'product photo', sv: 'produktfoto' },
+    promo: { fr: 'Promo', en: 'Sale', sv: 'Rea' },
     notify: { fr: 'Me prévenir', en: 'Notify me', sv: 'Meddela mig' },
     notified: { fr: 'Inscrit ✓', en: 'Subscribed ✓', sv: 'Anmäld ✓' },
     emptyTitle: { fr: 'Rien trouvé.', en: 'Nothing found.', sv: 'Inget hittat.' },
@@ -401,11 +402,19 @@
       control = '<button class="c3-add" data-add="' + esc(v.id) + '" title="' + esc(tr(T.order)) + '">+</button>';
     }
     var price = v.sale
-      ? '<span class="c3-old">' + money(v.oldPrice) + '</span><span class="c3-price">' + money(v.price) + '</span>'
+      ? '<span class="c3-old">' + money(v.oldPrice) + '</span><span class="c3-price c3-price--sale">' + money(v.price) + '</span>'
       : '<span class="c3-price">' + money(v.price) + '</span>';
+    // Badge promo (rouge, haut-droite) : « -10% » si pourcentage, sinon « Promo »
+    var promo = '';
+    if (v.sale) {
+      var dt = v.ref && (v.ref.discountType || v.ref.discount_type);
+      var dv = parseFloat(v.ref && (v.ref.discountValue != null ? v.ref.discountValue : v.ref.discount_value));
+      promo = '<span class="c3-promo">' + esc(dt === 'percent' && dv > 0 ? '-' + Math.round(dv) + '%' : tr(T.promo)) + '</span>';
+    }
     return '<article class="c3-card" data-nav="' + esc(v.id) + '">' +
       '<div class="c3-imgwrap" style="background:' + v.tint + '">' + img +
       (flag ? '<span class="c3-flag" style="background:' + flag.bg + ';color:' + flag.fg + '">' + esc(flag.t) + '</span>' : '') +
+      promo +
       control +
       '</div>' +
       '<div class="c3-cbody">' +
