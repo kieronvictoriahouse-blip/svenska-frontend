@@ -25,13 +25,8 @@
     ['Boissons', ['Boissons']]
   ];
 
-  var TINTS = {
-    'Bonbons': '#F6E3DC',
-    'Épices & poivres': '#F3E7D2', 'Mélanges pour dips': '#EDE8D8', 'Sel & aromates': '#F0EBE0',
-    'Marinades & BBQ': '#F2E4D0', 'Noix & apéritif': '#F3E9D9', 'Fromages & tartinables': '#F0E8D6',
-    'Chips': '#F7E9D0', 'Soufflés & popcorn': '#F8EED4',
-    'Fika & pâtisserie': '#F1EADC', 'Sauces & condiments': '#E6EDDE', 'Boissons': '#E4DAC8'
-  };
+  // Fond uniforme derrière toutes les images produit (pas de couleur par catégorie)
+  var BEIGE = '#F1EADC';
 
   var SHORT = {
     'Bonbons': 'Bonbons',
@@ -201,7 +196,8 @@
   // sauces AVANT le poivre (« sauce au poivre vert ») ; les biscuits AVANT le
   // chocolat (biscuits au chocolat). Testé sur les 82 produits réels.
   var CLASSIFY = [
-    [/kexchoklad|\bjapp\b|ballerina|singoalla|biscuit/, 'Bonbons'],           // biscuits sucrés → Bonbons
+    [/ballerina/, 'Fika & pâtisserie'],                                       // Ballerina = biscuits fika (avant la règle biscuit→Bonbons)
+    [/kexchoklad|\bjapp\b|singoalla|biscuit/, 'Bonbons'],                     // autres biscuits sucrés → Bonbons
     [/\bdip\b|dipmix|bearnaise/, 'Mélanges pour dips'],                       // avant fromage (dips « au fromage »)
     [/fromage|graddost|gräddost|vasterbotten|västerbotten|kavli|tartiner|\bost\b/, 'Fromages & tartinables'],
     [/\bnoix\b|cajou|edamame|\bfeves?\b|\bfèves?\b|pistache|cacahu|amandes? grill/, 'Noix & apéritif'],
@@ -268,7 +264,7 @@
       weight: p.weight || '',
       origin: (typeof p.origin === 'object' && p.origin) ? (p.origin[L()] || p.origin.fr || '') : (p.origin || ''),
       grams: grams, stock: stock,
-      tint: TINTS[sub] || '#F1EADC',
+      tint: BEIGE,
       tags: tags,
       photo: p.photo || ''
     };
