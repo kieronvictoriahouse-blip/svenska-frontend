@@ -210,7 +210,7 @@
     [/cheez|doodles|ostbagar|skruvar|popcorn|soufflé|souffle|\bbagar\b/, 'Soufflés & popcorn'],
     [/chips|dillchips|grillchips|lantchips|estrella|crackers?/, 'Chips'],
     [/o.?boy|chocolat chaud|chocolat en poudre|\bcacao\b|glogg|glögg|\bo\W?boy\b/, 'Boissons'],  // avant chocolat
-    [/marabou|\bplopp\b|\bcenter\b|\bdumle\b|kexchoklad|\bjapp\b|\bpolly\b|\bdaim\b|choklad|chocolat|\bkorkat\b/, 'Chocolat'], // chocolats → rayon Chocolat
+    [/marabou|\bplopp\b|\bcenter\b|\bdumle\b|kexchoklad|\bjapp\b|\bdaim\b|\bkorkat\b/, 'Chocolat'], // chocolats → rayon Chocolat (Polly = guimauve, reste en Bonbons)
     [/lakrits|reglisse|salmiak|djungelvral|salta katten|tyrkisk|lakerol|\bkick\b|skumgodis|sockerbitar|spattor/, 'Bonbons'],
     [/\bbilar\b|ahlgrens|voitures|gott ?& ?blandat|tutti frutti|skumbanan|\bbubs\b|zoo|malaco|nappar|sursnoren|gelifi|\bgodis\b|gummy|pasteque|pastèque/, 'Bonbons'],
     [/falksalt|flingsalt|flocons de sel|sel d.?ail|herbes a gravlax|\bsel\b/, 'Sel & aromates'],
