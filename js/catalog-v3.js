@@ -597,7 +597,12 @@
     if (state.sheet) {
       var inner = d.empty
         ? '<div class="c3-sheet-empty"><p>' + esc(tr(T.cartEmptyShort)) + '</p></div>'
-        : '<div class="c3-sheet-lines">' + cartLinesHTML(d.lines) + '</div>';
+        : '<div class="c3-sheet-lines">' + cartLinesHTML(d.lines) + '</div>' +
+          '<div style="padding:14px 16px;border-top:1px solid #EADFCD;background:#FBF6EE;">' +
+            '<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;">' +
+              '<span style="font-family:\'Jost\',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#6E6459;">' + esc(tr(T.subtotal)) + '</span>' +
+              '<span class="c3-total">' + money(d.cartTotal) + '</span></div>' +
+            '<button class="c3-order" data-checkout style="width:100%;">' + esc(tr(T.order)) + '</button></div>';
       sheet = '<div class="c3-sheet"><div class="c3-sheet-head"><span>' + esc(tr(T.cartTitle)) + '</span>' +
         '<button class="c3-sheet-x" data-sheet-close>✕</button></div>' + inner + '</div>';
     }
