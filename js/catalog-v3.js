@@ -480,8 +480,11 @@
 
   function cartLinesHTML(lines) {
     return lines.map(function (l) {
+      var thumb = l.v && l.v.photo
+        ? "background:#fff center/contain no-repeat url('" + esc(l.v.photo) + "')"
+        : 'background:' + l.tint;
       return '<div class="c3-line">' +
-        '<span class="c3-line-tint" style="background:' + l.tint + '"></span>' +
+        '<span class="c3-line-tint" style="' + thumb + '"></span>' +
         '<div class="c3-line-info"><span class="c3-line-name">' + esc(l.name) + '</span><span class="c3-line-unit">' + esc(l.unit) + '</span></div>' +
         '<div class="c3-line-step"><button data-dec="' + esc(l.v.id) + '">−</button><span>' + l.qty + '</span><button data-inc="' + esc(l.v.id) + '">+</button></div>' +
         '<span class="c3-line-total">' + l.line + '</span></div>';
