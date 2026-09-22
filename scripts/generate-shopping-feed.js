@@ -48,7 +48,13 @@ const TYPE_BY_CAT = {
   epices: 'épices suédoises', sauces: 'sauce suédoise', 'snacks-chips': 'snack suédois',
   'patisserie-basics': 'pâtisserie suédoise', boissons: 'boisson suédoise',
 };
+/* Titres à la main pour les produits d'appel saisonniers (clé = 8 premiers car. de l'id). */
+const TITLE_OVERRIDES = {
+  '10adc88a': 'Sucre perlé suédois (pärlsocker) pour kanelbullar – brioches à la cannelle, 500 g',
+};
 function titleOf(p) {
+  const ov = TITLE_OVERRIDES[String(p.id || '').slice(0, 8)];
+  if (ov) return ov;
   const brand = brandOf(p.name_fr);
   const known = brand !== 'Swedish Cravings';
   let name = (p.name_fr || '').replace(/\s+/g, ' ').trim();
