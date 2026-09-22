@@ -25,12 +25,53 @@ const esc = s => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').re
 
 const BRANDS = ['Marimekko', 'IHR', 'Ihr', 'OLW', 'Ahlgrens', 'Läkerol', 'Lakerol', 'Kavli', 'Fazer',
   'Odense', 'Törsleff', 'Torsleff', "Dave & Jon's", 'Santa Maria', 'Polly', 'Ballerina', 'Wasa',
-  'Piffi', 'Marabou', 'P Design'];
+  'Piffi', 'Marabou', 'P Design', 'Malaco'];
+// Sous-marques → fabricant (le nom produit porte la sous-marque, pas le fabricant).
+const SUB_BRANDS = { 'Kexchoklad': 'Cloetta', 'Center': 'Cloetta', 'Djungelvrål': 'Malaco', 'Gott & Blandat': 'Malaco', 'Tyrkisk Peber': 'Fazer', 'Dumle': 'Fazer', "O'boy": "O'boy" };
 function brandOf(nameFr) {
   const n = (nameFr || '');
   for (const b of BRANDS) if (n.toLowerCase().includes(b.toLowerCase())) return b === 'Lakerol' ? 'Läkerol' : (b === 'Torsleff' ? 'Törsleff' : (b === 'Ihr' ? 'IHR' : b));
+  for (const [k, v] of Object.entries(SUB_BRANDS)) if (n.toLowerCase().includes(k.toLowerCase())) return v;
   return 'Swedish Cravings';
 }
+/* ── Titre Shopping ─────────────────────────────────────────────
+   Google Shopping n'a pas de mots-clés : il compare la recherche au TITRE.
+   Forme visée : « Marque + nom + type recherché, poids ». On ne réécrit que
+   le flux (la fiche produit garde son nom) et on n'invente rien :
+   - la marque n'est ajoutée que si on la connaît (BRANDS / SUB_BRANDS) ;
+   - « suédois » seulement pour une marque suédoise, sinon « importé de Suède »
+     (Fazer est finlandais, Törsleff/Odense danois, Marimekko finlandais…). */
+const SWEDISH_BRANDS = ['OLW', 'Ahlgrens', 'Läkerol', 'Malaco', 'Marabou', 'Polly', 'Santa Maria',
+  'Piffi', 'Ballerina', 'Cloetta', "O'boy", 'Wasa', "Dave & Jon's"];
+const TYPE_BY_CAT = {
+  confiseries: 'bonbons suédois', chocolat: 'chocolat suédois', dips: 'dip suédois',
+  epices: 'épices suédoises', sauces: 'sauce suédoise', 'snacks-chips': 'snack suédois',
+  'patisserie-basics': 'pâtisserie suédoise', boissons: 'boisson suédoise',
+};
+function titleOf(p) {
+  const brand = brandOf(p.name_fr);
+  const known = brand !== 'Swedish Cravings';
+  let name = (p.name_fr || '').replace(/\s+/g, ' ').trim();
+  const weight = String(p.weight || '').replace(/\s*gram(s)?$/i, ' g').replace(/(\d)\s*g$/i, '$1 g').trim();
+  // Poids déjà dans le nom (« … 180g ») : on le retire pour le remettre au format commun en fin de titre.
+  if (weight) name = name.replace(new RegExp('\\s*' + weight.replace(/\s/g, '').replace(/(\d+)/, '$1\\s*') + '\\s*$', 'i'), '').trim();
+  // Marque en tête, une seule fois (« Pastilles … sans sucre Läkerol » → « Läkerol Pastilles … sans sucre »).
+  if (known) {
+    const re = new RegExp('\\s*\\b' + brand.replace(/[.*+?^${}()|[\]\\']/g, '\\$&') + '\\b\\s*', 'gi');
+    const rest = name.replace(re, ' ').replace(/\s+/g, ' ').replace(/^[\s-]+|[\s-]+$/g, '').trim();
+    name = brand + ' ' + rest;
+  }
+  const cat = (p.categories && p.categories.slug) || '';
+  let type = '';
+  if (!/su[eé]d/i.test(name)) {
+    if (brand === 'Läkerol') type = 'pastilles suédoises';
+    else if (known && SWEDISH_BRANDS.includes(brand) && TYPE_BY_CAT[cat]) type = TYPE_BY_CAT[cat];
+    else if (cat !== 'art-de-la-table') type = 'importé de Suède';
+  }
+  const out = name + (type ? ' – ' + type : '') + (weight ? ', ' + weight : '');
+  return out.slice(0, 150);
+}
+
 function descOf(p) {
   const d = (p.desc_fr || '').trim();
   if (d) return d.replace(/\s+/g, ' ').slice(0, 500);
@@ -112,7 +153,7 @@ async function main() {
     ].filter(Boolean).join('\n');
     return `  <item>
     <g:id>${esc(p.id)}</g:id>
-    <g:title>${esc((p.name_fr || '').slice(0, 150))}</g:title>
+    <g:title>${esc(titleOf(p))}</g:title>
     <g:description>${esc(descOf(p))}</g:description>
     <g:link>${url}</g:link>
     <g:image_link>${esc((p.image_url || '').replace(/^https?:\/\/[a-z0-9]+\.supabase\.co\/storage\/v1\/object\/public\/svenska-media\//i, `${SITE}/media/`))}</g:image_link>

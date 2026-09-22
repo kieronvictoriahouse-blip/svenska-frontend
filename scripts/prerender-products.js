@@ -49,11 +49,14 @@ const escHtml = s => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;'
 // Identique à generate-shopping-feed.js — la marque réelle, pas un fourre-tout.
 const BRANDS = ['Marimekko', 'IHR', 'Ihr', 'OLW', 'Ahlgrens', 'Läkerol', 'Lakerol', 'Kavli', 'Fazer',
   'Odense', 'Törsleff', 'Torsleff', "Dave & Jon's", 'Santa Maria', 'Polly', 'Ballerina', 'Wasa',
-  'Piffi', 'Marabou', 'P Design'];
+  'Piffi', 'Marabou', 'P Design', 'Malaco'];
+// Sous-marques → fabricant (le nom produit porte la sous-marque, pas le fabricant).
+const SUB_BRANDS = { 'Kexchoklad': 'Cloetta', 'Center': 'Cloetta', 'Djungelvrål': 'Malaco', 'Gott & Blandat': 'Malaco', 'Tyrkisk Peber': 'Fazer', 'Dumle': 'Fazer', "O'boy": "O'boy" };
 function brandOf(nameFr) {
   const n = (nameFr || '');
   for (const b of BRANDS) if (n.toLowerCase().includes(b.toLowerCase()))
     return b === 'Lakerol' ? 'Läkerol' : (b === 'Torsleff' ? 'Törsleff' : (b === 'Ihr' ? 'IHR' : b));
+  for (const [k, v] of Object.entries(SUB_BRANDS)) if (n.toLowerCase().includes(k.toLowerCase())) return v;
   return 'Swedish Cravings';
 }
 
