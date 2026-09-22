@@ -1,14 +1,8 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-14P3X9NYVY"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag("js", new Date());
-  gtag("config", "G-14P3X9NYVY");
-</script>
+<!-- Google tag + consentement (source unique : js/sd-consent.js) -->
+<script src="/js/sd-consent.js?v=1"></script>
 <meta charset="UTF-8">
 <link rel="icon" type="image/png" href="/img/favicon.png">
 <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
@@ -193,7 +187,7 @@
   </div>
 </div>
 <div id="footer-root"></div>
-<script src="js/app.js?v=25"></script>
+<script src="js/app.js?v=26"></script>
 <script>
 /* Mode de livraison par defaut : POINT RELAIS, pas le retrait.
    Le retrait etait presolectionne, si bien qu'un visiteur de Lille lisait
@@ -843,6 +837,8 @@ async function doCheckout() {
     alert(LANG === 'en' ? 'Please select a relay point.' : LANG === 'sv' ? 'Välj ett utlämningsställe.' : 'Veuillez sélectionner un point relais.');
     return;
   }
+
+  if (typeof sdTrackBeginCheckout === 'function') sdTrackBeginCheckout();
 
   // Proceed to Stripe checkout — Stripe collecte email/nom/téléphone/adresse
   const btn = document.querySelector('.btn-pay');

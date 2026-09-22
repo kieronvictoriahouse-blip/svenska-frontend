@@ -1,14 +1,8 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-14P3X9NYVY"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag("js", new Date());
-  gtag("config", "G-14P3X9NYVY");
-</script>
+<!-- Google tag + consentement (source unique : js/sd-consent.js) -->
+<script src="/js/sd-consent.js?v=1"></script>
 <meta charset="UTF-8">
 <link rel="icon" type="image/png" href="/img/favicon.png">
 <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
@@ -64,7 +58,7 @@
 </div>
 
 <div id="footer-root"></div>
-<script src="js/app.js?v=25"></script>
+<script src="js/app.js?v=26"></script>
 <script>
 /* LANG vient d'app.js (let global, chargé juste au-dessus). Le redéclarer
    ici jetait « Identifier 'LANG' has already been declared » : tout ce bloc

@@ -1,14 +1,8 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-14P3X9NYVY"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag("js", new Date());
-  gtag("config", "G-14P3X9NYVY");
-</script>
+<!-- Google tag + consentement (source unique : js/sd-consent.js) -->
+<script src="/js/sd-consent.js?v=1"></script>
 <meta charset="UTF-8">
 <link rel="icon" type="image/png" href="/img/favicon.png">
 <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
@@ -57,8 +51,14 @@
   </ul>
   <p>Pour exercer ces droits : <a href="#" class="dyn-email">contact</a></p>
 
-  <h2>Cookies</h2>
-  <p>Ce site utilise des cookies fonctionnels nécessaires au bon fonctionnement du panier et des préférences de langue. Aucun cookie de tracking tiers n'est utilisé sans votre consentement.</p>
+  <h2 id="cookies">Cookies</h2>
+  <p>Des cookies <strong>fonctionnels</strong>, indispensables, mémorisent votre panier et votre langue. Ils ne nécessitent pas de consentement.</p>
+  <p>Avec votre accord uniquement, nous utilisons aussi :</p>
+  <ul>
+    <li><strong>Google Analytics</strong> (mesure d'audience) — comprendre quelles pages et quels produits intéressent les visiteurs ;</li>
+    <li><strong>Google Ads</strong> (publicité) — mesurer l'efficacité de nos annonces et vous présenter nos produits sur d'autres sites.</li>
+  </ul>
+  <p>Tant que vous n'avez pas cliqué « Accepter », aucun de ces cookies n'est déposé : Google ne reçoit que des signaux anonymes, sans identifiant. Votre choix est conservé 6 mois. Vous pouvez le modifier à tout moment : <a href="#" onclick="window.sdCookieSettings&&sdCookieSettings();return false;">gérer mes cookies</a>.</p>
 
   <h2>Liens hypertextes</h2>
   <p>Ce site peut contenir des liens vers des sites tiers. <span class="dyn-brand-name">notre boutique</span> n'est pas responsable du contenu de ces sites.</p>
@@ -66,11 +66,11 @@
   <h2>Droit applicable</h2>
   <p>Le présent site est soumis au droit français. En cas de litige, les tribunaux français seront seuls compétents.</p>
 
-  <p style="margin-top:40px;font-size:13px;color:var(--dust);">Dernière mise à jour : 1er janvier 2026</p>
+  <p style="margin-top:40px;font-size:13px;color:var(--dust);">Dernière mise à jour : 22 septembre 2026</p>
 </div>
 
 <div id="footer-root"></div>
-<script src="js/app.js?v=25"></script>
+<script src="js/app.js?v=26"></script>
 <script>initPage('');</script>
 <script>(function(){var _hr=document.getElementById("header-root");if(_hr&&typeof MutationObserver!=="undefined")new MutationObserver(function(){if(typeof updateCartBadge==="function")updateCartBadge();}).observe(_hr,{childList:true});})();</script>
 <script src="js/sd-api-client.js?v=8"></script>
