@@ -264,6 +264,49 @@ function _crossSellHtml(cartIds) {
 }
 
 initPage('');
+
+/* Email du panier : pré-rempli avec la dernière saisie, sinon le compte. */
+window._custEmail = window._custEmail || (function () {
+  try { return localStorage.getItem('sd_checkout_email') || _sessionEmail() || ''; } catch (e) { return ''; }
+})();
+
+/* ── Reprise d'un panier depuis un email de relance ─────────────
+   Lien : panier.html?reprise=<commande>.<jeton>[&code=XXX]. Le panier
+   abandonné est fusionné avec le panier en cours (on ne retire jamais
+   ce que le client a ajouté depuis), le code de la semaine est appliqué,
+   et la reprise est gardée pour que le serveur ajoute un éventuel
+   cadeau de relance au paiement. */
+window._reprise = (function () { try { return sessionStorage.getItem('sd_reprise') || null; } catch (e) { return null; } })();
+(function () {
+  var q = new URLSearchParams(location.search);
+  var rep = q.get('reprise');
+  if (!rep) return;
+  var code = (q.get('code') || '').trim().toUpperCase();
+  window._reprise = rep;
+  try { sessionStorage.setItem('sd_reprise', rep); } catch (e) {}
+  history.replaceState(null, '', location.pathname);
+  var BASE = window.SD_API_URL || 'https://admin.swedishcravings.fr';
+  fetch(BASE + '/api/relance/panier?reprise=' + encodeURIComponent(rep))
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (d) {
+      if (!d) return;
+      if (d.email && !window._custEmail) window._custEmail = d.email;
+      if (!d.deja_payee && Array.isArray(d.items)) {
+        d.items.forEach(function (it) { var k = String(it.id); cart[k] = Math.max(cart[k] || 0, it.qty); });
+        saveCart(); updateCartBadge();
+      }
+      if (d.delivery_mode === 'pickup' || d.delivery_mode === 'mondial_relay') setDeliveryMode(d.delivery_mode);
+      renderCartPageFull();
+      if (code) {
+        window._promoInput = code;
+        var appliquer = function () { applyPromoCode(); };
+        if (typeof PRODUCTS !== 'undefined' && PRODUCTS.length) appliquer();
+        else window.addEventListener('sdapi:ready', appliquer, { once: true });
+      }
+    })
+    .catch(function () {});
+})();
+
 renderCartPageFull();
 
 // ── Offre "cadeau offert" : chargée une fois, re-render au retour ──
@@ -656,6 +699,12 @@ function renderCartPageFull() {
           <li>${_TRUST_CHK}${LANG==='sv'?'Äkta svenska produkter':LANG==='en'?'Authentic Swedish products':'Produits suédois authentiques'}</li>
           <li>${_TRUST_CHK}${LANG==='sv'?'Kundservice som hjälper dig':LANG==='en'?'Responsive customer service':'Service client à votre écoute'}</li>
         </ul>
+        <div class="checkout-email">
+          <label for="checkout-email-input" style="display:block;font-family:var(--font-ui);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dust);margin-bottom:8px;">${LANG==='sv'?'Din e-postadress':LANG==='en'?'Your email':'Votre email'}</label>
+          <input id="checkout-email-input" type="email" autocomplete="email" inputmode="email" required value="${(window._custEmail||'').replace(/"/g,'&quot;')}" oninput="window._custEmail=this.value.trim();try{localStorage.setItem('sd_checkout_email',window._custEmail)}catch(e){};this.style.borderColor='var(--linen)';var er=document.getElementById('checkout-email-err');if(er)er.textContent='';" placeholder="${LANG==='sv'?'namn@exempel.se':LANG==='en'?'name@example.com':'prenom@exemple.fr'}" style="width:100%;border:1px solid var(--linen);background:var(--cream);padding:12px 14px;font-family:var(--font-body);font-size:15px;color:var(--midnight);outline:none;box-sizing:border-box;">
+          <div id="checkout-email-err" style="font-family:var(--font-body);font-size:13px;color:var(--lingon);min-height:0;margin-top:6px;"></div>
+          <p style="font-family:var(--font-body);font-size:12px;line-height:1.5;color:var(--dust);margin:6px 0 16px;">${LANG==='sv'?'För din orderbekräftelse. Slutför du inte betalningen kan vi skicka din varukorg till dig — högst två påminnelser, avregistrering med ett klick.':LANG==='en'?'For your order confirmation. If you don’t complete payment, we may send you your basket — two reminders at most, one-click unsubscribe.':'Pour votre confirmation de commande. Si vous ne finalisez pas le paiement, nous pourrons vous renvoyer votre panier — deux rappels maximum, désinscription en un clic.'}</p>
+        </div>
         <button class="btn-pay" onclick="doCheckout()">
           ${LANG==='sv'?'Betala säkert →':LANG==='en'?'Pay securely →':'Payer en toute sécurité →'}
         </button>
@@ -829,6 +878,20 @@ async function doCheckout() {
 
   if (items.length === 0) return;
 
+  /* Email obligatoire avant Stripe : il sert à la confirmation ET à la
+     relance si le paiement n'aboutit pas. Pré-rempli ensuite chez Stripe,
+     le client ne le tape qu'une fois. */
+  const _emailEl = document.getElementById('checkout-email-input');
+  const _email = ((_emailEl && _emailEl.value) || window._custEmail || '').trim();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(_email)) {
+    const _err = document.getElementById('checkout-email-err');
+    if (_err) _err.textContent = LANG === 'en' ? 'Please enter a valid email address.' : LANG === 'sv' ? 'Ange en giltig e-postadress.' : 'Merci d’indiquer une adresse email valide.';
+    if (_emailEl) { _emailEl.style.borderColor = 'var(--lingon)'; _emailEl.focus(); _emailEl.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+    return;
+  }
+  window._custEmail = _email;
+  try { localStorage.setItem('sd_checkout_email', _email); } catch (e) {}
+
   const isPickup = window._deliveryMode === 'pickup';
   const isMR = window._deliveryMode === 'mondial_relay';
   const BASE = window.SD_API_URL || 'https://admin.swedishcravings.fr';
@@ -851,7 +914,10 @@ async function doCheckout() {
         items,
         delivery_mode: window._deliveryMode || 'delivery',
         ...(session?.token ? { customer_token: session.token } : {}),
-        ...(session?.customer_email ? { customer_email: session.customer_email } : {}),
+        customer_email: _email,
+        lang: LANG,
+        // Arrivée par un email de relance : le serveur y retrouve le cadeau éventuel.
+        ...(window._reprise ? { reprise: window._reprise } : {}),
         promo_code: window._appliedPromo?.code || null,
         customer_note: (window._orderNote || '').trim() || null,
         ...(window._deliveryMode === 'mondial_relay' && window._selectedRelay ? {
