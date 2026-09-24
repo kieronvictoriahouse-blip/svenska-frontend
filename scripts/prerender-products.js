@@ -199,7 +199,7 @@ async function main() {
   // Sitemap régénéré : lastmod réel pour les produits
   const today = new Date().toISOString().slice(0, 10);
   const staticPages = [['/', 1.0], ['/boutique', 0.9], ['/maison', 0.8], ['/bonbons-suedois', 0.7],
-    ['/ahlgrens-bilar', 0.7], ['/olw', 0.7], ['/recettes', 0.7], ['/recette-dip-suedois', 0.6],
+    ['/ahlgrens-bilar', 0.7], ['/olw', 0.7], ['/recettes', 0.7], ['/recette-dip-suedois', 0.6], ['/recette-kanelbullar', 0.7],
     ['/recette-fredagsmys-tacos', 0.6], ['/recette-entrecote-cafe-de-paris', 0.6],
     ['/a-propos', 0.6], ['/contact', 0.5], ['/livraison', 0.4], ['/faq', 0.4]];
   const sm = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'];
