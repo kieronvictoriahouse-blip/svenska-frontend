@@ -3,7 +3,7 @@
   "trailingSlash": false,
   "rewrites": [
     { "source": "/a-propos", "destination": "/page" },
-    { "source": "/media/:path*", "destination": "https://joznctfeujgnfydbpsbm.supabase.co/storage/v1/object/public/svenska-media/:path*" }
+    { "source": "/media/:path*", "destination": "https://fdagtzhodyxulhqbkkoz.supabase.co/storage/v1/object/public/svenska-media/:path*" }
   ],
   "headers": [
     {
