@@ -316,7 +316,8 @@ function renderPDP(p) {
       const li = document.createElement('li');
       if (it.image_url) {
         const img = document.createElement('img');
-        img.src = String(it.image_url).replace(/^https://[a-z0-9]+.supabase.co/storage/v1/object/public/svenska-media//, '/media/');
+        const u = String(it.image_url), k = u.indexOf("/storage/v1/object/public/svenska-media/");
+        img.src = (u.indexOf(".supabase.co") > 0 && k > 0) ? "/media/" + u.slice(k + "/storage/v1/object/public/svenska-media/".length) : u;
         img.alt = ''; img.loading = 'lazy';
         li.appendChild(img);
       }
