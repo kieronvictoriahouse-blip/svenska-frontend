@@ -208,11 +208,11 @@ function renderWhatsAppBubble(){
   document.body.appendChild(a);
 }
 
-/* ── Panier qui s'abandonne : message d'aide + WhatsApp Victoria ───────
-   Quand un visiteur QUI A DES ARTICLES dans le panier s'apprête à partir
-   (souris qui sort par le haut sur desktop ; inactivité prolongée sur
-   mobile), on propose un coup de main en direct via WhatsApp pour l'aider
-   à finaliser. Une seule fois par session, jamais intrusif. */
+/* ── Panier non validé : message d'aide + WhatsApp Victoria ────────────
+   Quand le client RESSORT de Stripe sans avoir payé (il est renvoyé sur le
+   panier, panier encore plein), on propose un coup de main en direct via
+   WhatsApp pour l'aider à finaliser. Une seule fois par session, jamais si
+   le panier est vide. Déclenchement : voir initCartHelp(). */
 function _sdCartCount(){ try{ return Object.values(cart).reduce(function(a,b){return a+(b||0);},0); }catch(e){ return 0; } }
 function renderCartHelpModal(){
   if(document.getElementById('sd-cart-help'))return;
@@ -271,18 +271,21 @@ function _schMaybeShow(){
   var m=document.getElementById('sd-cart-help'); if(m) m.classList.add('open');
 }
 function initCartHelp(){
-  // Desktop : intention de sortie (la souris quitte la fenêtre par le haut).
-  document.addEventListener('mouseout',function(e){
-    if(e.clientY<=0 && !e.relatedTarget && !e.toElement) _schMaybeShow();
-  });
-  // Tactile (mobile) : pas de « mouseout » → on guette une inactivité prolongée.
-  var isTouch=('ontouchstart' in window)||(navigator.maxTouchPoints>0);
-  if(isTouch){
-    var idle;
-    var reset=function(){ clearTimeout(idle); idle=setTimeout(_schMaybeShow, 35000); };
-    ['touchstart','scroll','click','keydown'].forEach(function(ev){ document.addEventListener(ev,reset,{passive:true}); });
-    reset();
-  }
+  /* Déclencheur : le client RESSORT de Stripe sans avoir payé. Stripe le
+     renvoie alors sur le panier (cancel_url = panier.html) avec son panier
+     encore plein → c'est LE moment pour proposer de l'aide. Le repère
+     `sd_from_stripe` est posé juste avant le départ vers Stripe (panier.html).
+     On ne déclenche jamais à l'aller, ni sur la page de confirmation. */
+  if(/success/i.test(location.pathname)){ try{ sessionStorage.removeItem('sd_from_stripe'); }catch(e){} return; }
+  var fromStripe=false;
+  try{ fromStripe = sessionStorage.getItem('sd_from_stripe')==='1'; }catch(e){}
+  if(!fromStripe && /stripe\.com/i.test(document.referrer||'')) fromStripe=true;   // filet : retour direct depuis Stripe
+  if(!fromStripe) return;
+  try{ sessionStorage.removeItem('sd_from_stripe'); }catch(e){}
+  // Panier encore non validé → on propose Victoria. Petit délai + attente du
+  // fetch produits pour être sûr que le panier est bien chargé.
+  setTimeout(_schMaybeShow, 1000);
+  window.addEventListener('sdapi:ready', function(){ setTimeout(_schMaybeShow, 300); });
 }
 /* Bandeau saisonnier : Kanelbullens dag (4 octobre). Rendu DANS renderHeader (l'en-tête est redessiné après chargement du white-label : un élément inséré à côté serait effacé). Se retire tout seul après la date de fin. */
 function sdSeasonBannerHTML(){var today=new Date().toISOString().slice(0,10);if(today>'2026-10-04')return '';var T={fr:'🇸🇪 4 octobre, Kanelbullens dag — le sucre perlé pour vos kanelbullar est là · Voir la recette →',sv:'🇸🇪 4 oktober, Kanelbullens dag — pärlsocker till dina kanelbullar · Se receptet →',en:'🇸🇪 4 October, Cinnamon Bun Day — pearl sugar for your kanelbullar is here · See the recipe →'};return '<a id="sd-season" href="/recette-kanelbullar" data-sv="'+T.sv+'" data-fr="'+T.fr+'" data-en="'+T.en+'" style="display:block;text-align:center;background:var(--heather);color:var(--snow);text-decoration:none;padding:9px 16px;font-family:var(--font-ui);font-size:12px;letter-spacing:1px;">'+(T[LANG]||T.fr)+'</a>';}

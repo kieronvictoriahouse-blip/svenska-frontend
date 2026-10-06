@@ -187,7 +187,7 @@
   </div>
 </div>
 <div id="footer-root"></div>
-<script src="js/app.js?v=28"></script>
+<script src="js/app.js?v=29"></script>
 <script>
 /* Mode de livraison par defaut : POINT RELAIS, pas le retrait.
    Le retrait etait presolectionne, si bien qu'un visiteur de Lille lisait
@@ -932,6 +932,9 @@ async function doCheckout() {
     const data = await res.json();
     const _restoreBtn = () => { if (btn) { btn.disabled = false; btn.textContent = LANG === 'sv' ? 'Betala säkert →' : LANG === 'en' ? 'Pay securely →' : 'Payer en toute sécurité →'; } };
     if (data.url) {
+      // Repère : on part vers Stripe. Si le client revient ici sans avoir
+      // payé (cancel_url = panier), app.js proposera l'aide WhatsApp Victoria.
+      try { sessionStorage.setItem('sd_from_stripe', '1'); } catch (e) {}
       window.location.href = data.url;
     } else if (data.code === 'OUT_OF_STOCK') {
       // Stock insuffisant refusé par le serveur → message clair + on rafraîchit le panier.
