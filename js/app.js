@@ -207,9 +207,86 @@ function renderWhatsAppBubble(){
   a.innerHTML='<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16.04 3C9.4 3 4 8.4 4 15.04c0 2.12.55 4.13 1.6 5.93L4 29l8.24-1.56a12 12 0 0 0 3.8.62h.01c6.63 0 12.03-5.4 12.03-12.03C28.08 8.4 22.68 3 16.04 3zm7.05 17.1c-.3.83-1.74 1.6-2.4 1.66-.64.06-1.24.29-4.18-.87-3.53-1.39-5.8-4.98-5.98-5.21-.17-.24-1.44-1.92-1.44-3.66s.91-2.6 1.24-2.95c.3-.33.66-.41.88-.41l.63.01c.2 0 .47-.08.74.56.3.71 1.01 2.46 1.1 2.64.09.18.15.39.03.62-.12.24-.18.39-.35.6-.18.21-.37.47-.53.63-.18.18-.36.37-.16.72.2.35.9 1.48 1.93 2.4 1.33 1.18 2.44 1.55 2.79 1.73.35.18.55.15.76-.09.21-.24.87-1.02 1.1-1.37.24-.35.47-.29.79-.17.32.12 2.05.97 2.4 1.15.35.18.58.26.66.41.09.15.09.83-.21 1.66z"/></svg>';
   document.body.appendChild(a);
 }
+
+/* ── Panier qui s'abandonne : message d'aide + WhatsApp Victoria ───────
+   Quand un visiteur QUI A DES ARTICLES dans le panier s'apprête à partir
+   (souris qui sort par le haut sur desktop ; inactivité prolongée sur
+   mobile), on propose un coup de main en direct via WhatsApp pour l'aider
+   à finaliser. Une seule fois par session, jamais intrusif. */
+function _sdCartCount(){ try{ return Object.values(cart).reduce(function(a,b){return a+(b||0);},0); }catch(e){ return 0; } }
+function renderCartHelpModal(){
+  if(document.getElementById('sd-cart-help'))return;
+  var NUM='33625536443';
+  var lang=(typeof LANG!=='undefined'?LANG:'fr');
+  var T={
+    title:{fr:'Une question avant de valider ?',en:'A question before you check out?',sv:'En fråga innan du betalar?'},
+    body:{fr:'Victoria vous répond en direct sur WhatsApp — un doute sur un produit, la livraison ou le paiement ? On vous aide à finaliser votre commande.',en:'Victoria replies to you directly on WhatsApp — unsure about a product, delivery or payment? We’ll help you complete your order.',sv:'Victoria svarar dig direkt på WhatsApp — osäker på en produkt, leverans eller betalning? Vi hjälper dig att slutföra din beställning.'},
+    cta:{fr:'Écrire à Victoria sur WhatsApp',en:'Message Victoria on WhatsApp',sv:'Skriv till Victoria på WhatsApp'},
+    dismiss:{fr:'Non merci, je continue',en:'No thanks, continue',sv:'Nej tack, fortsätt'},
+    wamsg:{fr:"Bonjour Victoria, j'ai un panier en cours sur Swedish Cravings et une petite question 🙂",en:'Hello Victoria, I have a cart on Swedish Cravings and a quick question 🙂',sv:'Hej Victoria, jag har en varukorg på Swedish Cravings och en liten fråga 🙂'}
+  };
+  var tr=function(o){return o[lang]||o.fr;};
+  if(!document.getElementById('sd-cart-help-style')){
+    var st=document.createElement('style');st.id='sd-cart-help-style';
+    st.textContent='#sd-cart-help{position:fixed;inset:0;z-index:1200;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(30,26,22,.46);}'
+      +'#sd-cart-help.open{display:flex;}'
+      +'#sd-cart-help .sch-card{position:relative;background:#FBF6EE;max-width:384px;width:100%;border-radius:10px;padding:30px 24px 22px;text-align:center;box-shadow:0 18px 50px rgba(40,30,20,.32);animation:sch-pop .22s ease;}'
+      +'@keyframes sch-pop{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}'
+      +'#sch-close{position:absolute;top:10px;right:12px;background:none;border:none;font-size:22px;line-height:1;color:#9A8F7F;cursor:pointer;padding:4px;}'
+      +'.sch-ico{width:54px;height:54px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;margin:2px auto 14px;}'
+      +'.sch-ico svg{width:30px;height:30px;fill:#fff;display:block;}'
+      +'.sch-title{font-family:var(--font-display,Georgia),serif;font-size:22px;font-weight:600;color:#2A2420;margin:0 0 8px;}'
+      +'.sch-body{font-family:var(--font-body,Georgia),serif;font-size:14.5px;line-height:1.55;color:#5B534B;margin:0 0 18px;}'
+      +'.sch-cta{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;background:#25D366;color:#fff;text-decoration:none;padding:13px 16px;border-radius:7px;font-family:var(--font-ui,sans-serif);font-size:13.5px;font-weight:600;box-shadow:0 4px 14px rgba(37,211,102,.32);}'
+      +'.sch-cta svg{width:19px;height:19px;fill:#fff;}'
+      +'.sch-dismiss{display:inline-block;margin-top:13px;background:none;border:none;cursor:pointer;font-family:var(--font-ui,sans-serif);font-size:12px;letter-spacing:.3px;color:#9A8F7F;text-decoration:underline;}';
+    document.head.appendChild(st);
+  }
+  var waSvg='<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16.04 3C9.4 3 4 8.4 4 15.04c0 2.12.55 4.13 1.6 5.93L4 29l8.24-1.56a12 12 0 0 0 3.8.62h.01c6.63 0 12.03-5.4 12.03-12.03C28.08 8.4 22.68 3 16.04 3zm7.05 17.1c-.3.83-1.74 1.6-2.4 1.66-.64.06-1.24.29-4.18-.87-3.53-1.39-5.8-4.98-5.98-5.21-.17-.24-1.44-1.92-1.44-3.66s.91-2.6 1.24-2.95c.3-.33.66-.41.88-.41l.63.01c.2 0 .47-.08.74.56.3.71 1.01 2.46 1.1 2.64.09.18.15.39.03.62-.12.24-.18.39-.35.6-.18.21-.37.47-.53.63-.18.18-.36.37-.16.72.2.35.9 1.48 1.93 2.4 1.33 1.18 2.44 1.55 2.79 1.73.35.18.55.15.76-.09.21-.24.87-1.02 1.1-1.37.24-.35.47-.29.79-.17.32.12 2.05.97 2.4 1.15.35.18.58.26.66.41.09.15.09.83-.21 1.66z"/></svg>';
+  var ov=document.createElement('div');ov.id='sd-cart-help';
+  ov.innerHTML='<div class="sch-card" role="dialog" aria-modal="true">'
+    +'<button id="sch-close" aria-label="Fermer">&times;</button>'
+    +'<div class="sch-ico">'+waSvg+'</div>'
+    +'<p class="sch-title">'+tr(T.title)+'</p>'
+    +'<p class="sch-body">'+tr(T.body)+'</p>'
+    +'<a class="sch-cta" href="https://wa.me/'+NUM+'?text='+encodeURIComponent(tr(T.wamsg))+'" target="_blank" rel="noopener">'+waSvg+'<span>'+tr(T.cta)+'</span></a>'
+    +'<button class="sch-dismiss">'+tr(T.dismiss)+'</button>'
+    +'</div>';
+  document.body.appendChild(ov);
+  var close=function(){ ov.classList.remove('open'); };
+  ov.addEventListener('click',function(e){ if(e.target===ov) close(); });
+  ov.querySelector('#sch-close').addEventListener('click',close);
+  ov.querySelector('.sch-dismiss').addEventListener('click',close);
+  ov.querySelector('.sch-cta').addEventListener('click',function(){ setTimeout(close,100); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') close(); });
+}
+var _schShown=false;
+function _schMaybeShow(){
+  if(_schShown)return;
+  try{ if(sessionStorage.getItem('sd_cart_help_shown')) return; }catch(e){}
+  if(_sdCartCount()<=0) return;            // rien dans le panier → on ne dérange pas
+  _schShown=true;
+  try{ sessionStorage.setItem('sd_cart_help_shown','1'); }catch(e){}
+  renderCartHelpModal();
+  var m=document.getElementById('sd-cart-help'); if(m) m.classList.add('open');
+}
+function initCartHelp(){
+  // Desktop : intention de sortie (la souris quitte la fenêtre par le haut).
+  document.addEventListener('mouseout',function(e){
+    if(e.clientY<=0 && !e.relatedTarget && !e.toElement) _schMaybeShow();
+  });
+  // Tactile (mobile) : pas de « mouseout » → on guette une inactivité prolongée.
+  var isTouch=('ontouchstart' in window)||(navigator.maxTouchPoints>0);
+  if(isTouch){
+    var idle;
+    var reset=function(){ clearTimeout(idle); idle=setTimeout(_schMaybeShow, 35000); };
+    ['touchstart','scroll','click','keydown'].forEach(function(ev){ document.addEventListener(ev,reset,{passive:true}); });
+    reset();
+  }
+}
 /* Bandeau saisonnier : Kanelbullens dag (4 octobre). Rendu DANS renderHeader (l'en-tête est redessiné après chargement du white-label : un élément inséré à côté serait effacé). Se retire tout seul après la date de fin. */
 function sdSeasonBannerHTML(){var today=new Date().toISOString().slice(0,10);if(today>'2026-10-04')return '';var T={fr:'🇸🇪 4 octobre, Kanelbullens dag — le sucre perlé pour vos kanelbullar est là · Voir la recette →',sv:'🇸🇪 4 oktober, Kanelbullens dag — pärlsocker till dina kanelbullar · Se receptet →',en:'🇸🇪 4 October, Cinnamon Bun Day — pearl sugar for your kanelbullar is here · See the recipe →'};return '<a id="sd-season" href="/recette-kanelbullar" data-sv="'+T.sv+'" data-fr="'+T.fr+'" data-en="'+T.en+'" style="display:block;text-align:center;background:var(--heather);color:var(--snow);text-decoration:none;padding:9px 16px;font-family:var(--font-ui);font-size:12px;letter-spacing:1px;">'+(T[LANG]||T.fr)+'</a>';}
-function initPage(activePage){window._activePage=activePage;document.body.classList.add('js-ready');var _hr=document.getElementById('header-root');var _fr=document.getElementById('footer-root');_hr.innerHTML=renderHeader(activePage);_fr.innerHTML=renderFooter();if(SD_WL._ready){_hr.classList.add('wl-ready');_fr.classList.add('wl-ready');}setLang(LANG);updateCartBadge();renderCartDrawer();if(LANG==='sv')loadSekRate();initScrollReveal();initHeaderShrink();renderSuggestionWidget();renderWhatsAppBubble();if(SD_WL.brand_name){document.title=document.title.replace(/— .+$/,'— '+SD_WL.brand_name);const _m=document.querySelector('meta[property="og:title"]');if(_m)_m.setAttribute('content',document.title);}}
+function initPage(activePage){window._activePage=activePage;document.body.classList.add('js-ready');var _hr=document.getElementById('header-root');var _fr=document.getElementById('footer-root');_hr.innerHTML=renderHeader(activePage);_fr.innerHTML=renderFooter();if(SD_WL._ready){_hr.classList.add('wl-ready');_fr.classList.add('wl-ready');}setLang(LANG);updateCartBadge();renderCartDrawer();if(LANG==='sv')loadSekRate();initScrollReveal();initHeaderShrink();renderSuggestionWidget();renderWhatsAppBubble();initCartHelp();if(SD_WL.brand_name){document.title=document.title.replace(/— .+$/,'— '+SD_WL.brand_name);const _m=document.querySelector('meta[property="og:title"]');if(_m)_m.setAttribute('content',document.title);}}
 
 /* ── SCROLL REVEAL ── */
 function initScrollReveal() {
