@@ -18,10 +18,10 @@
 <meta property="og:image" id="og-image" content="https://www.swedishcravings.fr/media/products/svenskt-parlsocker-1789396524696-80245.png">
 <meta property="og:site_name" content="Swedish Cravings">
 <meta property="og:locale" content="fr_FR">
-<meta property="product:price:amount" content="3.10">
+<meta property="product:price:amount" content="4.49">
 <meta property="product:price:currency" content="EUR">
 <meta name="twitter:card" content="summary_large_image">
-<script type="application/ld+json" id="ld-product">{"@context":"https://schema.org","@type":"Product","name":"Sucre perlé suédois","description":"De gros cristaux de sucre irréguliers qui apportent une texture croquante irrésistible à vos brioches et pâtisseries nordiques. Fabriqué à partir de betteraves sucrières suédoises, ce sucre perlé conserve sa forme à la cuisson et offre un contraste délicieux entre douceur et croquant. Indispensable pour réaliser d'authentiques kanelbullar ou décorer vos biscuits et viennoiseries maison.","image":"https://www.swedishcravings.fr/media/products/svenskt-parlsocker-1789396524696-80245.png","sku":"10adc88a-c6bc-451c-a11b-767f2208d77b","brand":{"@type":"Brand","name":"Swedish Cravings"},"category":"Bake & Fika","countryOfOrigin":"SE","offers":{"@type":"Offer","price":"3.10","priceCurrency":"EUR","availability":"https://schema.org/InStock","url":"https://www.swedishcravings.fr/produit/sucre-perle-suedois-10adc88a","itemCondition":"https://schema.org/NewCondition","seller":{"@type":"Organization","name":"Swedish Cravings"}},"weight":{"@type":"QuantitativeValue","name":"500g"}}</script>
+<script type="application/ld+json" id="ld-product">{"@context":"https://schema.org","@type":"Product","name":"Sucre perlé suédois","description":"De gros cristaux de sucre irréguliers qui apportent une texture croquante irrésistible à vos brioches et pâtisseries nordiques. Fabriqué à partir de betteraves sucrières suédoises, ce sucre perlé conserve sa forme à la cuisson et offre un contraste délicieux entre douceur et croquant. Indispensable pour réaliser d'authentiques kanelbullar ou décorer vos biscuits et viennoiseries maison.","image":"https://www.swedishcravings.fr/media/products/svenskt-parlsocker-1789396524696-80245.png","sku":"10adc88a-c6bc-451c-a11b-767f2208d77b","brand":{"@type":"Brand","name":"Swedish Cravings"},"category":"Bake & Fika","countryOfOrigin":"SE","offers":{"@type":"Offer","price":"4.49","priceCurrency":"EUR","availability":"https://schema.org/InStock","url":"https://www.swedishcravings.fr/produit/sucre-perle-suedois-10adc88a","itemCondition":"https://schema.org/NewCondition","seller":{"@type":"Organization","name":"Swedish Cravings"}},"weight":{"@type":"QuantitativeValue","name":"500g"}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Accueil","item":"https://www.swedishcravings.fr/"},{"@type":"ListItem","position":2,"name":"Boutique","item":"https://www.swedishcravings.fr/boutique"},{"@type":"ListItem","position":3,"name":"Sucre perlé suédois","item":"https://www.swedishcravings.fr/produit/sucre-perle-suedois-10adc88a"}]}</script>
 <link rel="stylesheet" href="css/style.css?v=18">
 <script>const SD_API_URL = 'https://admin.swedishcravings.fr';</script>
@@ -67,6 +67,9 @@
 .pdp-per-kg { font-family:var(--font-ui); font-size:11px; color:var(--birch); letter-spacing:1px; }
 
 .pdp-desc { font-family:var(--font-body); font-size:17px; color:var(--slate); line-height:1.9; margin-bottom:26px; }
+.pdp-box-list { list-style:none; padding:0; margin:8px 0 26px; display:grid; gap:8px; }
+.pdp-box-list li { display:flex; align-items:center; gap:12px; font-family:var(--font-ui); font-size:14px; color:var(--midnight); }
+.pdp-box-list img { width:40px; height:40px; object-fit:contain; background:#F1EADC; border-radius:6px; padding:3px; flex:none; }
 
 .opt-label { font-family:var(--font-ui); font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--dust); margin-bottom:10px; }
 .variants { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:26px; }
@@ -179,12 +182,13 @@
     <div id="pdp-stock-badge" style="margin-bottom:14px;"></div>
     <div class="price-row">
       <span class="pdp-price-old" id="pdp-price-old" style="display:none;"></span>
-      <span class="pdp-price" id="pdp-price">3,10 €</span>
+      <span class="pdp-price" id="pdp-price">4,49 €</span>
       <div><div class="pdp-per" id="pdp-per"></div><div class="pdp-per-kg" id="pdp-per-kg"></div></div>
     </div>
     <div class="pdp-weight" id="pdp-weight">500g</div>
     <div id="pdp-pickup-note" style="display:none;background:var(--parchment);border-left:3px solid var(--heather);padding:10px 14px;margin-bottom:18px;font-family:var(--font-ui);font-size:13px;color:var(--midnight);line-height:1.45;"></div>
     <p class="pdp-desc" id="pdp-desc">De gros cristaux de sucre irréguliers qui apportent une texture croquante irrésistible à vos brioches et pâtisseries nordiques. Fabriqué à partir de betteraves sucrières suédoises, ce sucre perlé conserve sa forme à la cuisson et offre un contraste délicieux entre douceur et croquant. Indispensable pour réaliser d'authentiques kanelbullar ou décorer vos biscuits et viennoiseries maison.</p>
+    <div id="pdp-box" style="display:none;"></div>
     <div id="variants-block" style="margin-bottom:26px;display:none;">
       <div class="opt-label" data-sv="Förpackning" data-fr="Conditionnement" data-en="Packaging">Conditionnement</div>
       <div class="variants" id="variants-list"></div>
@@ -216,8 +220,8 @@
     <p class="sect-eyebrow" data-sv="Du kanske också gillar" data-fr="Vous aimerez aussi" data-en="You may also like">Vous aimerez aussi</p>
     <h2 class="sect-title" data-sv="Liknande <em>produkter</em>" data-fr="Produits <em>similaires</em>" data-en="Similar <em>products</em>">Produits <em>similaires</em></h2>
     <div class="grid-4" id="related-grid" style="margin-top:32px;">
-<a href="/produit/ballerina-original-biscuits-fourres-a-la-creme-nougat-148019ba" style="display:block;text-decoration:none;color:inherit;"><img src="https://www.swedishcravings.fr/media/products/picture-3-scaled-1784749275963-421207.png" alt="Ballerina Original - Biscuits fourrés à la crème nougat" loading="lazy" style="width:100%;aspect-ratio:1;object-fit:contain;background:var(--parchment);"><div style="font-family:var(--font-ui);font-size:13px;margin-top:8px;">Ballerina Original - Biscuits fourrés à la crème nougat</div><div style="font-family:var(--font-ui);font-size:13px;color:var(--dust);">3,99 €</div></a>
 <a href="/produit/pate-d-amande-verte-odense-35fe6591" style="display:block;text-decoration:none;color:inherit;"><img src="https://www.swedishcravings.fr/media/products/500x500-1784748242946-835363.jpg" alt="Pâte d'amande verte Odense" loading="lazy" style="width:100%;aspect-ratio:1;object-fit:contain;background:var(--parchment);"><div style="font-family:var(--font-ui);font-size:13px;margin-top:8px;">Pâte d'amande verte Odense</div><div style="font-family:var(--font-ui);font-size:13px;color:var(--dust);">6,99 €</div></a>
+<a href="/produit/ballerina-original-biscuits-fourres-a-la-creme-nougat-148019ba" style="display:block;text-decoration:none;color:inherit;"><img src="https://www.swedishcravings.fr/media/products/picture-3-scaled-1784749275963-421207.png" alt="Ballerina Original - Biscuits fourrés à la crème nougat" loading="lazy" style="width:100%;aspect-ratio:1;object-fit:contain;background:var(--parchment);"><div style="font-family:var(--font-ui);font-size:13px;margin-top:8px;">Ballerina Original - Biscuits fourrés à la crème nougat</div><div style="font-family:var(--font-ui);font-size:13px;color:var(--dust);">3,99 €</div></a>
 <a href="/produit/biscuits-fazer-dumle-original-au-caramel-et-chocolat-dd341752" style="display:block;text-decoration:none;color:inherit;"><img src="https://www.swedishcravings.fr/media/products/10072707-main-1788364799907-914081.jpg" alt="Biscuits Fazer Dumle Original au caramel et chocolat" loading="lazy" style="width:100%;aspect-ratio:1;object-fit:contain;background:var(--parchment);"><div style="font-family:var(--font-ui);font-size:13px;margin-top:8px;">Biscuits Fazer Dumle Original au caramel et chocolat</div><div style="font-family:var(--font-ui);font-size:13px;color:var(--dust);">3,90 €</div></a>
 <a href="/produit/lait-caramelise-dulce-de-leche-torsleff-e1c8b675" style="display:block;text-decoration:none;color:inherit;"><img src="https://www.swedishcravings.fr/media/products/500x500-1784748373804-624782.jpg" alt="Lait caramélisé Dulce de Leche Törsleff" loading="lazy" style="width:100%;aspect-ratio:1;object-fit:contain;background:var(--parchment);"><div style="font-family:var(--font-ui);font-size:13px;margin-top:8px;">Lait caramélisé Dulce de Leche Törsleff</div><div style="font-family:var(--font-ui);font-size:13px;color:var(--dust);">6,19 €</div></a>
 </div>
@@ -304,6 +308,40 @@ function renderPDP(p) {
   document.getElementById('pdp-name').textContent = p.name[LANG];
   document.getElementById('pdp-sub').textContent = pick(p.subtitle);
   document.getElementById('pdp-desc').textContent = pick(p.desc);
+
+  /* Box : la liste de ce qu'il y a dedans. Construite en nœuds DOM (pas
+     d'innerHTML sur des noms venus de la base) ; les vignettes passent par
+     /media du site, jamais en direct par Supabase. */
+  (function () {
+    const el = document.getElementById('pdp-box');
+    if (!el) return;
+    el.textContent = '';
+    const items = p.lotContenu || [];
+    if (!items.length) { el.style.display = 'none'; return; }
+    const titre = document.createElement('div');
+    titre.className = 'opt-label';
+    titre.textContent = LANG === 'sv' ? 'I lådan' : LANG === 'en' ? 'In this box' : 'Dans cette box';
+    const ul = document.createElement('ul');
+    ul.className = 'pdp-box-list';
+    for (const it of items) {
+      const li = document.createElement('li');
+      if (it.image_url) {
+        const img = document.createElement('img');
+        img.src = String(it.image_url).replace(/^https://[a-z0-9]+.supabase.co/storage/v1/object/public/svenska-media//, '/media/');
+        img.alt = ''; img.loading = 'lazy';
+        li.appendChild(img);
+      }
+      const span = document.createElement('span');
+      const b = document.createElement('b');
+      b.textContent = (Number(it.qty) || 1) + ' × ';
+      span.appendChild(b);
+      span.appendChild(document.createTextNode((LANG === 'sv' ? it.name_sv : LANG === 'en' ? it.name_en : it.name_fr) || it.name_fr || ''));
+      li.appendChild(span);
+      ul.appendChild(li);
+    }
+    el.appendChild(titre); el.appendChild(ul);
+    el.style.display = '';
+  })();
 
   /* Avis verifies : la note et les temoignages viennent de l'API, pas du
      cache catalogue, pour qu'un avis depose a l'instant apparaisse tout de
@@ -648,6 +686,8 @@ function _sdProductSlug(nameFr, id) {
         variants: (raw.product_variants || []).map(v => ({ label: v.label, price: v.price })) || local?.variants || [],
         bestseller: raw.is_bestseller || false, isNew: raw.is_new || false,
         stock:      typeof raw.stock === 'number' ? raw.stock : null,
+        // Box (migration 054) : ce qu'il y a dedans, fourni par l'API.
+        lotContenu: Array.isArray(raw.lot_contenu) ? raw.lot_contenu : [],
         trackStock: !!(raw.track_stock),
         pickup_only: !!(raw.pickup_only),
       };

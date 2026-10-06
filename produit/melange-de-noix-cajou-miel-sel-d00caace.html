@@ -67,6 +67,9 @@
 .pdp-per-kg { font-family:var(--font-ui); font-size:11px; color:var(--birch); letter-spacing:1px; }
 
 .pdp-desc { font-family:var(--font-body); font-size:17px; color:var(--slate); line-height:1.9; margin-bottom:26px; }
+.pdp-box-list { list-style:none; padding:0; margin:8px 0 26px; display:grid; gap:8px; }
+.pdp-box-list li { display:flex; align-items:center; gap:12px; font-family:var(--font-ui); font-size:14px; color:var(--midnight); }
+.pdp-box-list img { width:40px; height:40px; object-fit:contain; background:#F1EADC; border-radius:6px; padding:3px; flex:none; }
 
 .opt-label { font-family:var(--font-ui); font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--dust); margin-bottom:10px; }
 .variants { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:26px; }
@@ -185,6 +188,7 @@
     <div class="pdp-weight" id="pdp-weight">175g</div>
     <div id="pdp-pickup-note" style="display:none;background:var(--parchment);border-left:3px solid var(--heather);padding:10px 14px;margin-bottom:18px;font-family:var(--font-ui);font-size:13px;color:var(--midnight);line-height:1.45;"></div>
     <p class="pdp-desc" id="pdp-desc">Un mélange gourmand de cacahuètes grillées et de noix de cajou caramélisées au miel, relevé d'une touche de sel parfaitement dosée. La douceur du miel enrobe délicatement chaque noix tandis que le sel vient sublimer l'ensemble en créant un équilibre addictif. Le snack préféré des Suédois pour les moments de partage.</p>
+    <div id="pdp-box" style="display:none;"></div>
     <div id="variants-block" style="margin-bottom:26px;display:none;">
       <div class="opt-label" data-sv="Förpackning" data-fr="Conditionnement" data-en="Packaging">Conditionnement</div>
       <div class="variants" id="variants-list"></div>
@@ -219,7 +223,7 @@
 <a href="/produit/snacks-au-seigle-creme-fraiche-oignon-bfa49184" style="display:block;text-decoration:none;color:inherit;"><img src="https://www.swedishcravings.fr/media/products/finn-crisp-sour-cream-onion-rye-snacks-1784749112086-835305.webp" alt="Snacks au Seigle Crème Fraîche &amp; Oignon" loading="lazy" style="width:100%;aspect-ratio:1;object-fit:contain;background:var(--parchment);"><div style="font-family:var(--font-ui);font-size:13px;margin-top:8px;">Snacks au Seigle Crème Fraîche &amp; Oignon</div><div style="font-family:var(--font-ui);font-size:13px;color:var(--dust);">4,32 €</div></a>
 <a href="/produit/chips-de-seigle-complet-au-cheddar-c8709b25" style="display:block;text-decoration:none;color:inherit;"><img src="https://www.swedishcravings.fr/media/products/finn-crisp-cheddar-cheese-snacks-2023-1789408105874-739874.png" alt="Chips de Seigle Complet au Cheddar" loading="lazy" style="width:100%;aspect-ratio:1;object-fit:contain;background:var(--parchment);"><div style="font-family:var(--font-ui);font-size:13px;margin-top:8px;">Chips de Seigle Complet au Cheddar</div><div style="font-family:var(--font-ui);font-size:13px;color:var(--dust);">4,32 €</div></a>
 <a href="/produit/chips-de-seigle-beurre-noisette-sel-de-mer-2e241e25" style="display:block;text-decoration:none;color:inherit;"><img src="https://www.swedishcravings.fr/media/products/finn-crisp-snacks-brynt-smor--havssalt-n-1789376563391-972584.png" alt="Chips de Seigle Beurre Noisette &amp; Sel de Mer" loading="lazy" style="width:100%;aspect-ratio:1;object-fit:contain;background:var(--parchment);"><div style="font-family:var(--font-ui);font-size:13px;margin-top:8px;">Chips de Seigle Beurre Noisette &amp; Sel de Mer</div><div style="font-family:var(--font-ui);font-size:13px;color:var(--dust);">4,32 €</div></a>
-<a href="/produit/sauce-cafe-de-paris-7e314fec" style="display:block;text-decoration:none;color:inherit;"><img src="https://www.swedishcravings.fr/media/products/cafe-de-paris-9207-se-1783834373894-978215.jpg" alt="Sauce Café de Paris" loading="lazy" style="width:100%;aspect-ratio:1;object-fit:contain;background:var(--parchment);"><div style="font-family:var(--font-ui);font-size:13px;margin-top:8px;">Sauce Café de Paris</div><div style="font-family:var(--font-ui);font-size:13px;color:var(--dust);">3,89 €</div></a>
+<a href="/produit/sauce-hollandaise-8e07ce26" style="display:block;text-decoration:none;color:inherit;"><img src="https://www.swedishcravings.fr/media/products/hollandaise-1784906618125-665700.jpg" alt="Sauce Hollandaise" loading="lazy" style="width:100%;aspect-ratio:1;object-fit:contain;background:var(--parchment);"><div style="font-family:var(--font-ui);font-size:13px;margin-top:8px;">Sauce Hollandaise</div><div style="font-family:var(--font-ui);font-size:13px;color:var(--dust);">4,95 €</div></a>
 </div>
   </div>
 </section>
@@ -304,6 +308,40 @@ function renderPDP(p) {
   document.getElementById('pdp-name').textContent = p.name[LANG];
   document.getElementById('pdp-sub').textContent = pick(p.subtitle);
   document.getElementById('pdp-desc').textContent = pick(p.desc);
+
+  /* Box : la liste de ce qu'il y a dedans. Construite en nœuds DOM (pas
+     d'innerHTML sur des noms venus de la base) ; les vignettes passent par
+     /media du site, jamais en direct par Supabase. */
+  (function () {
+    const el = document.getElementById('pdp-box');
+    if (!el) return;
+    el.textContent = '';
+    const items = p.lotContenu || [];
+    if (!items.length) { el.style.display = 'none'; return; }
+    const titre = document.createElement('div');
+    titre.className = 'opt-label';
+    titre.textContent = LANG === 'sv' ? 'I lådan' : LANG === 'en' ? 'In this box' : 'Dans cette box';
+    const ul = document.createElement('ul');
+    ul.className = 'pdp-box-list';
+    for (const it of items) {
+      const li = document.createElement('li');
+      if (it.image_url) {
+        const img = document.createElement('img');
+        img.src = String(it.image_url).replace(/^https://[a-z0-9]+.supabase.co/storage/v1/object/public/svenska-media//, '/media/');
+        img.alt = ''; img.loading = 'lazy';
+        li.appendChild(img);
+      }
+      const span = document.createElement('span');
+      const b = document.createElement('b');
+      b.textContent = (Number(it.qty) || 1) + ' × ';
+      span.appendChild(b);
+      span.appendChild(document.createTextNode((LANG === 'sv' ? it.name_sv : LANG === 'en' ? it.name_en : it.name_fr) || it.name_fr || ''));
+      li.appendChild(span);
+      ul.appendChild(li);
+    }
+    el.appendChild(titre); el.appendChild(ul);
+    el.style.display = '';
+  })();
 
   /* Avis verifies : la note et les temoignages viennent de l'API, pas du
      cache catalogue, pour qu'un avis depose a l'instant apparaisse tout de
@@ -648,6 +686,8 @@ function _sdProductSlug(nameFr, id) {
         variants: (raw.product_variants || []).map(v => ({ label: v.label, price: v.price })) || local?.variants || [],
         bestseller: raw.is_bestseller || false, isNew: raw.is_new || false,
         stock:      typeof raw.stock === 'number' ? raw.stock : null,
+        // Box (migration 054) : ce qu'il y a dedans, fourni par l'API.
+        lotContenu: Array.isArray(raw.lot_contenu) ? raw.lot_contenu : [],
         trackStock: !!(raw.track_stock),
         pickup_only: !!(raw.pickup_only),
       };

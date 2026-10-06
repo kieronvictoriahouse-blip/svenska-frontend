@@ -67,6 +67,9 @@
 .pdp-per-kg { font-family:var(--font-ui); font-size:11px; color:var(--birch); letter-spacing:1px; }
 
 .pdp-desc { font-family:var(--font-body); font-size:17px; color:var(--slate); line-height:1.9; margin-bottom:26px; }
+.pdp-box-list { list-style:none; padding:0; margin:8px 0 26px; display:grid; gap:8px; }
+.pdp-box-list li { display:flex; align-items:center; gap:12px; font-family:var(--font-ui); font-size:14px; color:var(--midnight); }
+.pdp-box-list img { width:40px; height:40px; object-fit:contain; background:#F1EADC; border-radius:6px; padding:3px; flex:none; }
 
 .opt-label { font-family:var(--font-ui); font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--dust); margin-bottom:10px; }
 .variants { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:26px; }
@@ -185,6 +188,7 @@
     <div class="pdp-weight" id="pdp-weight">25g</div>
     <div id="pdp-pickup-note" style="display:none;background:var(--parchment);border-left:3px solid var(--heather);padding:10px 14px;margin-bottom:18px;font-family:var(--font-ui);font-size:13px;color:var(--midnight);line-height:1.45;"></div>
     <p class="pdp-desc" id="pdp-desc">Véritable institution suédoise depuis 1979, Gott &amp; Blandat incarne l'art du mélange sucré-salé à la scandinave. Ces bonbons aux textures variées associent des gommes aux fruits juteux à des notes de réglisse salée, créant un équilibre addictif typiquement nordique. Un incontournable du lördagsgodis, la tradition du samedi bonbon chère aux familles suédoises.</p>
+    <div id="pdp-box" style="display:none;"></div>
     <div id="variants-block" style="margin-bottom:26px;display:none;">
       <div class="opt-label" data-sv="Förpackning" data-fr="Conditionnement" data-en="Packaging">Conditionnement</div>
       <div class="variants" id="variants-list"></div>
@@ -217,9 +221,9 @@
     <h2 class="sect-title" data-sv="Liknande <em>produkter</em>" data-fr="Produits <em>similaires</em>" data-en="Similar <em>products</em>">Produits <em>similaires</em></h2>
     <div class="grid-4" id="related-grid" style="margin-top:32px;">
 <a href="/produit/fazer-tutti-frutti-rings-anneaux-de-bonbons-aux-fruits-180g-26bc35e6" style="display:block;text-decoration:none;color:inherit;"><img src="https://www.swedishcravings.fr/media/products/tuttifruttirings-1784906083620-576703.webp" alt="Fazer Tutti Frutti Rings - Anneaux de bonbons aux fruits 180g" loading="lazy" style="width:100%;aspect-ratio:1;object-fit:contain;background:var(--parchment);"><div style="font-family:var(--font-ui);font-size:13px;margin-top:8px;">Fazer Tutti Frutti Rings - Anneaux de bonbons aux fruits 180g</div><div style="font-family:var(--font-ui);font-size:13px;color:var(--dust);">2,65 €</div></a>
-<a href="/produit/ahlgrens-bilar-sodakombi-x-trocadero-6088879c" style="display:block;text-decoration:none;color:inherit;"><img src="https://www.swedishcravings.fr/media/products/07310350504954-c1n1-1789412096272-285026.jpg" alt="Ahlgrens Bilar Sodakombi x Trocadero" loading="lazy" style="width:100%;aspect-ratio:1;object-fit:contain;background:var(--parchment);"><div style="font-family:var(--font-ui);font-size:13px;margin-top:8px;">Ahlgrens Bilar Sodakombi x Trocadero</div><div style="font-family:var(--font-ui);font-size:13px;color:var(--dust);">3,10 €</div></a>
-<a href="/produit/pastilles-lakerol-framboise-reglisse-sans-sucre-lakerol-b346bbd3" style="display:block;text-decoration:none;color:inherit;"><img src="https://www.swedishcravings.fr/media/products/500x500-1784748746675-447931.jpg" alt="Pastilles Läkerol Framboise-Réglisse sans sucre Läkerol" loading="lazy" style="width:100%;aspect-ratio:1;object-fit:contain;background:var(--parchment);"><div style="font-family:var(--font-ui);font-size:13px;margin-top:8px;">Pastilles Läkerol Framboise-Réglisse sans sucre Läkerol</div><div style="font-family:var(--font-ui);font-size:13px;color:var(--dust);">3,49 €</div></a>
+<a href="/produit/pastilles-lakerol-original-sans-sucre-958a9acd" style="display:block;text-decoration:none;color:inherit;"><img src="https://www.swedishcravings.fr/media/products/500x500-1784748497134-270817.jpg" alt="Pastilles Läkerol Original Sans Sucre " loading="lazy" style="width:100%;aspect-ratio:1;object-fit:contain;background:var(--parchment);"><div style="font-family:var(--font-ui);font-size:13px;margin-top:8px;">Pastilles Läkerol Original Sans Sucre </div><div style="font-family:var(--font-ui);font-size:13px;color:var(--dust);">3,49 €</div></a>
 <a href="/produit/bonbons-pasteque-malaco-5abaf4c1" style="display:block;text-decoration:none;color:inherit;"><img src="https://www.swedishcravings.fr/media/products/07310350131488-c1n1-1789407209563-907501.jpg" alt="Bonbons Pastèque Malaco" loading="lazy" style="width:100%;aspect-ratio:1;object-fit:contain;background:var(--parchment);"><div style="font-family:var(--font-ui);font-size:13px;margin-top:8px;">Bonbons Pastèque Malaco</div><div style="font-family:var(--font-ui);font-size:13px;color:var(--dust);">2,19 €</div></a>
+<a href="/produit/petites-voitures-ahlgrens-acidulees-9ce88828" style="display:block;text-decoration:none;color:inherit;"><img src="https://www.swedishcravings.fr/media/products/07310350132898-c1n1-1783834374630-372487.jpg" alt="Petites Voitures Ahlgrens Acidulées" loading="lazy" style="width:100%;aspect-ratio:1;object-fit:contain;background:var(--parchment);"><div style="font-family:var(--font-ui);font-size:13px;margin-top:8px;">Petites Voitures Ahlgrens Acidulées</div><div style="font-family:var(--font-ui);font-size:13px;color:var(--dust);">3,26 €</div></a>
 </div>
   </div>
 </section>
@@ -304,6 +308,40 @@ function renderPDP(p) {
   document.getElementById('pdp-name').textContent = p.name[LANG];
   document.getElementById('pdp-sub').textContent = pick(p.subtitle);
   document.getElementById('pdp-desc').textContent = pick(p.desc);
+
+  /* Box : la liste de ce qu'il y a dedans. Construite en nœuds DOM (pas
+     d'innerHTML sur des noms venus de la base) ; les vignettes passent par
+     /media du site, jamais en direct par Supabase. */
+  (function () {
+    const el = document.getElementById('pdp-box');
+    if (!el) return;
+    el.textContent = '';
+    const items = p.lotContenu || [];
+    if (!items.length) { el.style.display = 'none'; return; }
+    const titre = document.createElement('div');
+    titre.className = 'opt-label';
+    titre.textContent = LANG === 'sv' ? 'I lådan' : LANG === 'en' ? 'In this box' : 'Dans cette box';
+    const ul = document.createElement('ul');
+    ul.className = 'pdp-box-list';
+    for (const it of items) {
+      const li = document.createElement('li');
+      if (it.image_url) {
+        const img = document.createElement('img');
+        img.src = String(it.image_url).replace(/^https://[a-z0-9]+.supabase.co/storage/v1/object/public/svenska-media//, '/media/');
+        img.alt = ''; img.loading = 'lazy';
+        li.appendChild(img);
+      }
+      const span = document.createElement('span');
+      const b = document.createElement('b');
+      b.textContent = (Number(it.qty) || 1) + ' × ';
+      span.appendChild(b);
+      span.appendChild(document.createTextNode((LANG === 'sv' ? it.name_sv : LANG === 'en' ? it.name_en : it.name_fr) || it.name_fr || ''));
+      li.appendChild(span);
+      ul.appendChild(li);
+    }
+    el.appendChild(titre); el.appendChild(ul);
+    el.style.display = '';
+  })();
 
   /* Avis verifies : la note et les temoignages viennent de l'API, pas du
      cache catalogue, pour qu'un avis depose a l'instant apparaisse tout de
@@ -648,6 +686,8 @@ function _sdProductSlug(nameFr, id) {
         variants: (raw.product_variants || []).map(v => ({ label: v.label, price: v.price })) || local?.variants || [],
         bestseller: raw.is_bestseller || false, isNew: raw.is_new || false,
         stock:      typeof raw.stock === 'number' ? raw.stock : null,
+        // Box (migration 054) : ce qu'il y a dedans, fourni par l'API.
+        lotContenu: Array.isArray(raw.lot_contenu) ? raw.lot_contenu : [],
         trackStock: !!(raw.track_stock),
         pickup_only: !!(raw.pickup_only),
       };

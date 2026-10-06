@@ -67,6 +67,9 @@
 .pdp-per-kg { font-family:var(--font-ui); font-size:11px; color:var(--birch); letter-spacing:1px; }
 
 .pdp-desc { font-family:var(--font-body); font-size:17px; color:var(--slate); line-height:1.9; margin-bottom:26px; }
+.pdp-box-list { list-style:none; padding:0; margin:8px 0 26px; display:grid; gap:8px; }
+.pdp-box-list li { display:flex; align-items:center; gap:12px; font-family:var(--font-ui); font-size:14px; color:var(--midnight); }
+.pdp-box-list img { width:40px; height:40px; object-fit:contain; background:#F1EADC; border-radius:6px; padding:3px; flex:none; }
 
 .opt-label { font-family:var(--font-ui); font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--dust); margin-bottom:10px; }
 .variants { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:26px; }
@@ -185,6 +188,7 @@
     <div class="pdp-weight" id="pdp-weight">26g</div>
     <div id="pdp-pickup-note" style="display:none;background:var(--parchment);border-left:3px solid var(--heather);padding:10px 14px;margin-bottom:18px;font-family:var(--font-ui);font-size:13px;color:var(--midnight);line-height:1.45;"></div>
     <p class="pdp-desc" id="pdp-desc">Un équilibre parfait entre douceur sucrée et chaleur pimentée, ce mélange pour dip suédois transforme instantanément vos apéritifs. Idéal pour accompagner des chips croustillants, il sublime également vos salades en vinaigrette ou vos légumes grillés en sauce froide. Une touche scandinave qui réveille vos soirées entre amis et vos repas du quotidien.</p>
+    <div id="pdp-box" style="display:none;"></div>
     <div id="variants-block" style="margin-bottom:26px;display:none;">
       <div class="opt-label" data-sv="Förpackning" data-fr="Conditionnement" data-en="Packaging">Conditionnement</div>
       <div class="variants" id="variants-list"></div>
@@ -217,8 +221,8 @@
     <h2 class="sect-title" data-sv="Liknande <em>produkter</em>" data-fr="Produits <em>similaires</em>" data-en="Similar <em>products</em>">Produits <em>similaires</em></h2>
     <div class="grid-4" id="related-grid" style="margin-top:32px;">
 <a href="/produit/melange-pour-dip-holiday-a03a72ea" style="display:block;text-decoration:none;color:inherit;"><img src="https://www.swedishcravings.fr/media/products/dippmix-holiday-1783834372186-694336.png" alt="Mélange pour Dip Holiday" loading="lazy" style="width:100%;aspect-ratio:1;object-fit:contain;background:var(--parchment);"><div style="font-family:var(--font-ui);font-size:13px;margin-top:8px;">Mélange pour Dip Holiday</div><div style="font-family:var(--font-ui);font-size:13px;color:var(--dust);">2,15 €</div></a>
-<a href="/produit/melange-pour-dip-ranch-olw-dff16445" style="display:block;text-decoration:none;color:inherit;"><img src="https://www.swedishcravings.fr/media/products/picture-28-1783855341152-255881.png" alt="Mélange pour Dip Ranch OLW" loading="lazy" style="width:100%;aspect-ratio:1;object-fit:contain;background:var(--parchment);"><div style="font-family:var(--font-ui);font-size:13px;margin-top:8px;">Mélange pour Dip Ranch OLW</div><div style="font-family:var(--font-ui);font-size:13px;color:var(--dust);">2,15 €</div></a>
 <a href="/produit/melange-pour-dip-creme-fraiche-oignon-cee624d6" style="display:block;text-decoration:none;color:inherit;"><img src="https://www.swedishcravings.fr/media/products/13051-dippmix-sourcream-onion-24g-1783834370572-41220.png" alt="Mélange pour Dip Crème Fraîche &amp; Oignon" loading="lazy" style="width:100%;aspect-ratio:1;object-fit:contain;background:var(--parchment);"><div style="font-family:var(--font-ui);font-size:13px;margin-top:8px;">Mélange pour Dip Crème Fraîche &amp; Oignon</div><div style="font-family:var(--font-ui);font-size:13px;color:var(--dust);">2,15 €</div></a>
+<a href="/produit/melange-pour-dip-ranch-olw-dff16445" style="display:block;text-decoration:none;color:inherit;"><img src="https://www.swedishcravings.fr/media/products/picture-28-1783855341152-255881.png" alt="Mélange pour Dip Ranch OLW" loading="lazy" style="width:100%;aspect-ratio:1;object-fit:contain;background:var(--parchment);"><div style="font-family:var(--font-ui);font-size:13px;margin-top:8px;">Mélange pour Dip Ranch OLW</div><div style="font-family:var(--font-ui);font-size:13px;color:var(--dust);">2,15 €</div></a>
 <a href="/produit/melange-pour-dip-aneth-ciboulette-olw-37328665" style="display:block;text-decoration:none;color:inherit;"><img src="https://www.swedishcravings.fr/media/products/picture-26-1784906239429-625685.png" alt="Mélange pour Dip Aneth &amp; Ciboulette OLW" loading="lazy" style="width:100%;aspect-ratio:1;object-fit:contain;background:var(--parchment);"><div style="font-family:var(--font-ui);font-size:13px;margin-top:8px;">Mélange pour Dip Aneth &amp; Ciboulette OLW</div><div style="font-family:var(--font-ui);font-size:13px;color:var(--dust);">2,15 €</div></a>
 </div>
   </div>
@@ -304,6 +308,40 @@ function renderPDP(p) {
   document.getElementById('pdp-name').textContent = p.name[LANG];
   document.getElementById('pdp-sub').textContent = pick(p.subtitle);
   document.getElementById('pdp-desc').textContent = pick(p.desc);
+
+  /* Box : la liste de ce qu'il y a dedans. Construite en nœuds DOM (pas
+     d'innerHTML sur des noms venus de la base) ; les vignettes passent par
+     /media du site, jamais en direct par Supabase. */
+  (function () {
+    const el = document.getElementById('pdp-box');
+    if (!el) return;
+    el.textContent = '';
+    const items = p.lotContenu || [];
+    if (!items.length) { el.style.display = 'none'; return; }
+    const titre = document.createElement('div');
+    titre.className = 'opt-label';
+    titre.textContent = LANG === 'sv' ? 'I lådan' : LANG === 'en' ? 'In this box' : 'Dans cette box';
+    const ul = document.createElement('ul');
+    ul.className = 'pdp-box-list';
+    for (const it of items) {
+      const li = document.createElement('li');
+      if (it.image_url) {
+        const img = document.createElement('img');
+        img.src = String(it.image_url).replace(/^https://[a-z0-9]+.supabase.co/storage/v1/object/public/svenska-media//, '/media/');
+        img.alt = ''; img.loading = 'lazy';
+        li.appendChild(img);
+      }
+      const span = document.createElement('span');
+      const b = document.createElement('b');
+      b.textContent = (Number(it.qty) || 1) + ' × ';
+      span.appendChild(b);
+      span.appendChild(document.createTextNode((LANG === 'sv' ? it.name_sv : LANG === 'en' ? it.name_en : it.name_fr) || it.name_fr || ''));
+      li.appendChild(span);
+      ul.appendChild(li);
+    }
+    el.appendChild(titre); el.appendChild(ul);
+    el.style.display = '';
+  })();
 
   /* Avis verifies : la note et les temoignages viennent de l'API, pas du
      cache catalogue, pour qu'un avis depose a l'instant apparaisse tout de
@@ -648,6 +686,8 @@ function _sdProductSlug(nameFr, id) {
         variants: (raw.product_variants || []).map(v => ({ label: v.label, price: v.price })) || local?.variants || [],
         bestseller: raw.is_bestseller || false, isNew: raw.is_new || false,
         stock:      typeof raw.stock === 'number' ? raw.stock : null,
+        // Box (migration 054) : ce qu'il y a dedans, fourni par l'API.
+        lotContenu: Array.isArray(raw.lot_contenu) ? raw.lot_contenu : [],
         trackStock: !!(raw.track_stock),
         pickup_only: !!(raw.pickup_only),
       };
