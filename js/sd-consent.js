@@ -76,7 +76,7 @@
     var btn = 'flex:1;min-width:120px;padding:11px 14px;border-radius:3px;font:600 13px var(--font-ui,system-ui,sans-serif);letter-spacing:.3px;cursor:pointer;';
     el.innerHTML =
       '<div style="font-weight:700;margin-bottom:6px;">' + T.t + '</div>' +
-      '<p style="margin:0 0 12px;">' + T.p + ' <a href="/mentions-legales#cookies" style="color:inherit;text-decoration:underline;">' + T.more + '</a></p>' +
+      '<p style="margin:0 0 12px;">' + T.p + ' <a href="/confidentialite#cookies"style="color:inherit;text-decoration:underline;">' + T.more + '</a></p>' +
       '<div style="display:flex;gap:10px;flex-wrap:wrap;">' +
         '<button type="button" data-c="denied" style="' + btn + 'background:#fff;color:#1f2a24;border:1px solid #1f2a24;">' + T.no + '</button>' +
         '<button type="button" data-c="granted" style="' + btn + 'background:#1f2a24;color:#fff;border:1px solid #1f2a24;">' + T.ok + '</button>' +
