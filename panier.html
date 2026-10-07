@@ -724,6 +724,7 @@ function renderCartPageFull() {
           <span>${LANG==='sv'?'Säker betalning via Stripe':LANG==='en'?'Secure payment via Stripe':'Paiement sécurisé via Stripe'}</span>
         </div>
         <div class="pay-methods" aria-label="Moyens de paiement acceptés">${sdPayLogos('pay-m')}</div>
+        <div style="text-align:center;font-family:var(--font-body);font-size:12px;color:var(--dust);margin-top:10px;">${LANG==='sv'?'Betala i 3 eller 4 delar med Klarna eller Scalapay (enligt villkor) vid betalningen.':LANG==='en'?'Pay in 3 or 4 instalments with Klarna or Scalapay (subject to eligibility) at checkout.':'Paiement en 3 ou 4 fois avec Klarna ou Scalapay (selon éligibilité), proposé à l’étape du paiement.'}</div>
       </div>
     </div>`;
 }
