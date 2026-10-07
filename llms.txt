@@ -27,7 +27,7 @@ prix TTC en euros et la disponibilité en stock réelle.
 ## Faits utiles
 
 - Livraison France métropolitaine : 4,90 €, offerte dès 50 € d'achat, 2 à 4 jours ouvrés (Mondial Relay ou domicile).
-- Livraison Europe (Espagne, Portugal, Italie, Allemagne, Pays-Bas, Belgique, Luxembourg, Suisse) : 9,90 €, offerte dès 70 €, 3 à 5 jours ouvrés.
+- Livraison Europe (Espagne, Portugal, Italie, Allemagne, Pays-Bas, Belgique, Luxembourg, Suède) : 9,90 €, offerte dès 50 €, 3 à 5 jours ouvrés.
 - Commandes passées avant 12 h (heure de Paris) en semaine : expédiées le jour même.
 - Paiement : carte bancaire via Stripe (certifié PCI-DSS). Prix TTC en euros.
 - Catalogue produit lisible en machine : https://www.swedishcravings.fr/google-shopping.xml (flux RSS/Google Shopping, prix et stocks quotidiens)
