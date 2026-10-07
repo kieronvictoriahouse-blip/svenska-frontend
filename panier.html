@@ -427,7 +427,7 @@ function renderCartPageFull() {
     const _ri = key.indexOf('_');
     const idStr = _ri === -1 ? key : key.slice(0, _ri);
     const variant = _ri === -1 ? undefined : key.slice(_ri + 1);
-    const _cpd = JSON.parse(localStorage.getItem('sd_cart_products') || '{}');
+    const _cpd = _sdCartProducts();
     const p = PRODUCTS.find(x => String(x.uuid || x.id) === idStr || x.id === parseInt(idStr)) || _cpd[idStr] || (window._SD_STATIC||[]).find(x => String(x.id) === idStr);
     if (!p) return '';
     const v = variant ? p.variants?.find(x => x.label === variant) : p.variants?.[0];
@@ -462,7 +462,7 @@ function renderCartPageFull() {
   const cartHasPickupOnly = entries.some(([key]) => {
     const _pi = key.indexOf('_');
     const idStr = _pi === -1 ? key : key.slice(0, _pi);
-    const _cpp = JSON.parse(localStorage.getItem('sd_cart_products') || '{}');
+    const _cpp = _sdCartProducts();
     const pp = PRODUCTS.find(x => String(x.uuid || x.id) === idStr || x.id === parseInt(idStr)) || _cpp[idStr] || (window._SD_STATIC||[]).find(x => String(x.id) === idStr);
     return !!(pp && pp.pickup_only);
   });
@@ -709,7 +709,7 @@ function renderCartPageFull() {
           <label for="checkout-email-input" style="display:block;font-family:var(--font-ui);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dust);margin-bottom:8px;">${LANG==='sv'?'Din e-postadress':LANG==='en'?'Your email':'Votre email'}</label>
           <input id="checkout-email-input" type="email" autocomplete="email" inputmode="email" required value="${(window._custEmail||'').replace(/"/g,'&quot;')}" oninput="window._custEmail=this.value.trim();try{localStorage.setItem('sd_checkout_email',window._custEmail)}catch(e){};this.style.borderColor='var(--linen)';var er=document.getElementById('checkout-email-err');if(er)er.textContent='';" placeholder="${LANG==='sv'?'namn@exempel.se':LANG==='en'?'name@example.com':'prenom@exemple.fr'}" style="width:100%;border:1px solid var(--linen);background:var(--cream);padding:12px 14px;font-family:var(--font-body);font-size:15px;color:var(--midnight);outline:none;box-sizing:border-box;">
           <div id="checkout-email-err" style="font-family:var(--font-body);font-size:13px;color:var(--lingon);min-height:0;margin-top:6px;"></div>
-          <p style="font-family:var(--font-body);font-size:12px;line-height:1.5;color:var(--dust);margin:6px 0 16px;">${LANG==='sv'?'För din orderbekräftelse.':LANG==='en'?'For your order confirmation.':'Pour votre confirmation de commande.'}</p>
+          <p style="font-family:var(--font-body);font-size:12px;line-height:1.5;color:var(--dust);margin:6px 0 16px;">${LANG==='sv'?'För din orderbekräftelse. Om betalningen inte slutförs kan vi påminna dig om din varukorg (högst 2 e-postmeddelanden, avregistrering med ett klick). <a href="/confidentialite#rappel-panier" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;">Läs mer</a>':LANG==='en'?'For your order confirmation. If payment isn’t completed, we may remind you of your basket (2 emails max, one-click unsubscribe). <a href="/confidentialite#rappel-panier" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;">Learn more</a>':'Pour votre confirmation de commande. Si le paiement n’aboutit pas, nous pourrons vous rappeler votre panier (2 emails maximum, désinscription en un clic). <a href="/confidentialite#rappel-panier" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;">En savoir plus</a>'}</p>
         </div>
         <button class="btn-pay" onclick="doCheckout()">
           ${LANG==='sv'?'Betala säkert →':LANG==='en'?'Pay securely →':'Payer en toute sécurité →'}
@@ -748,7 +748,7 @@ async function applyPromoCode() {
   let st = 0;
   entries.forEach(([key, qty]) => {
     const ri = key.indexOf('_'); const idStr = ri===-1?key:key.slice(0,ri);
-    const _cpd = JSON.parse(localStorage.getItem('sd_cart_products')||'{}');
+    const _cpd = _sdCartProducts();
     const p = PRODUCTS.find(x => String(x.uuid||x.id)===idStr||(/^d+$/.test(idStr)&&x.id===parseInt(idStr)))||_cpd[idStr]||(window._SD_STATIC||[]).find(x=>String(x.id)===idStr);
     if (!p) return;
     const variant = ri===-1?undefined:key.slice(ri+1);
@@ -862,7 +862,7 @@ async function doCheckout() {
       let _sub = 0;
       Object.entries(cart).filter(([, q]) => q > 0).forEach(([key, qty]) => {
         const ri = key.indexOf('_'); const idStr = ri === -1 ? key : key.slice(0, ri);
-        const _cpd = JSON.parse(localStorage.getItem('sd_cart_products') || '{}');
+        const _cpd = _sdCartProducts();
         const p = PRODUCTS.find(x => String(x.uuid || x.id) === idStr || x.id === parseInt(idStr)) || _cpd[idStr] || (window._SD_STATIC || []).find(x => String(x.id) === idStr);
         if (!p) return;
         const variant = ri === -1 ? undefined : key.slice(ri + 1);
