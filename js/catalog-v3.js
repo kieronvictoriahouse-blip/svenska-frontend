@@ -151,14 +151,22 @@
       sv: 'Fri frakt från €{X}.'
     },
     shipLeft: {
-      fr: 'Plus que {X} pour la livraison offerte.',
-      en: 'Only {X} to go for free delivery.',
-      sv: 'Bara {X} kvar till fri frakt.'
+      fr: 'Plus que {X} pour la livraison offerte 🚚',
+      en: 'Only {X} to go for free delivery 🚚',
+      sv: 'Bara {X} kvar till fri frakt 🚚'
     },
     shipDone: {
-      fr: 'Livraison offerte — colis expédié sous 48 h.',
-      en: 'Free delivery — parcel shipped within 48 h.',
-      sv: 'Fri frakt — paket skickas inom 48 h.'
+      fr: 'Livraison offerte ✓ — colis expédié sous 48 h.',
+      en: 'Free delivery ✓ — parcel shipped within 48 h.',
+      sv: 'Fri frakt ✓ — paket skickas inom 48 h.'
+    },
+    shipLine: { fr: 'Livraison (France)', en: 'Shipping (France)', sv: 'Frakt (Frankrike)' },
+    shipFree: { fr: 'Offerte', en: 'Free', sv: 'Gratis' },
+    grandTotal: { fr: 'Total', en: 'Total', sv: 'Totalt' },
+    shipEu: {
+      fr: 'Europe : {C}, offerte dès {T}',
+      en: 'Europe: {C}, free from {T}',
+      sv: 'Europa: {C}, fri frakt från {T}'
     }
   };
 
@@ -377,11 +385,16 @@
     var cartCount = ids.reduce(function (n, k) { return n + cartMap()[k]; }, 0);
     var cartTotal = lines.reduce(function (n, l) { return n + l.v.price * l.qty; }, 0);
     var threshold = (window.SD_SHIP && SD_SHIP.threshold) ? SD_SHIP.threshold(false) : 49;
+    /* Port affiché avant le panier : point relais France, même règle que
+       panier.html et /api/checkout. Le pays exact se choisit au panier. */
+    var shipCost = cartTotal >= threshold ? 0 : ((window.SD_SHIP && SD_SHIP.cost) ? SD_SHIP.cost(false) : 4.90);
+    var eu = (window.SD_SHIP && SD_SHIP.rules) ? SD_SHIP.rules(true) : { threshold: 50, cost: 9.90 };
     var suggestions = products.filter(function (p) { return p.tags.best && !qtyOf(p.id) && p.stock !== 'soon'; }).slice(0, 3);
 
     return {
       products: products, list: list, sections: sections, rail: rail,
       lines: lines, cartCount: cartCount, cartTotal: cartTotal, threshold: threshold,
+      shipCost: shipCost, grandTotal: cartTotal + shipCost, eu: eu,
       suggestions: suggestions, empty: cartCount === 0, dirty: !!q || on.length > 0
     };
   }
@@ -574,6 +587,18 @@
     _heroFilled = true;
   }
 
+  // Sous-total → livraison → total, + rappel du tarif Europe
+  function totalsHTML(d) {
+    var lbl = 'font-family:\'Jost\',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#6E6459;';
+    var row = 'display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;';
+    var ship = d.shipCost === 0 ? '<span style="color:#5F7052">' + esc(tr(T.shipFree)) + '</span>' : money(d.shipCost);
+    var euTxt = tr(T.shipEu).replace('{C}', money(d.eu.cost)).replace('{T}', money(d.eu.threshold));
+    return '<div style="' + row + '"><span style="' + lbl + '">' + esc(tr(T.subtotal)) + '</span><span style="font-size:16px">' + money(d.cartTotal) + '</span></div>' +
+      '<div style="' + row + '"><span style="' + lbl + '">' + esc(tr(T.shipLine)) + '</span><span style="font-size:16px">' + ship + '</span></div>' +
+      '<div class="c3-subtotal" style="border-top:1px solid #EADFCD;padding-top:8px;"><span>' + esc(tr(T.grandTotal)) + '</span><span class="c3-total">' + money(d.grandTotal) + '</span></div>' +
+      '<p style="font-size:12px;color:#6E6459;margin:-6px 0 12px;">' + esc(euTxt) + '</p>';
+  }
+
   function cartPanelHTML(d) {
     var head = '<div class="c3-cart-head"><span class="c3-cart-title">' + esc(tr(T.cartTitle)) + '</span>' +
       '<span class="c3-cart-count">' + (d.empty ? esc(tr(T.cartEmptyWord)) : d.cartCount + ' ' + esc(d.cartCount > 1 ? tr(T.articles) : tr(T.article))) + '</span></div>';
@@ -587,7 +612,9 @@
     var foot = '<div class="c3-cart-foot">' +
       '<div class="c3-bar"><div class="c3-bar-fill" style="width:' + pct + '%"></div></div>' +
       '<p class="c3-shipmsg">' + esc(shipMsg(d)) + '</p>' +
-      '<div class="c3-subtotal"><span>' + esc(tr(T.subtotal)) + '</span><span class="c3-total">' + money(d.cartTotal) + '</span></div>' +
+      (d.empty
+        ? '<div class="c3-subtotal"><span>' + esc(tr(T.subtotal)) + '</span><span class="c3-total">' + money(d.cartTotal) + '</span></div>'
+        : totalsHTML(d)) +
       '<button class="c3-order' + (d.empty ? ' off' : '') + '"' + (d.empty ? ' disabled' : ' data-checkout') + '>' + esc(tr(T.order)) + '</button>' +
       '<div class="c3-trust"><span>' + esc(tr(T.securePay)) + '</span><span>' + esc(tr(T.shipped48)) + '</span></div>' +
       '</div>';
@@ -602,9 +629,7 @@
         ? '<div class="c3-sheet-empty"><p>' + esc(tr(T.cartEmptyShort)) + '</p></div>'
         : '<div class="c3-sheet-lines">' + cartLinesHTML(d.lines) + '</div>' +
           '<div style="padding:14px 16px;border-top:1px solid #EADFCD;background:#FBF6EE;">' +
-            '<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;">' +
-              '<span style="font-family:\'Jost\',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#6E6459;">' + esc(tr(T.subtotal)) + '</span>' +
-              '<span class="c3-total">' + money(d.cartTotal) + '</span></div>' +
+            totalsHTML(d) +
             '<button class="c3-order" data-checkout style="width:100%;">' + esc(tr(T.order)) + '</button></div>';
       sheet = '<div class="c3-sheet"><div class="c3-sheet-head"><span>' + esc(tr(T.cartTitle)) + '</span>' +
         '<button class="c3-sheet-x" data-sheet-close>✕</button></div>' + inner + '</div>';

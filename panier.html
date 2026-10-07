@@ -494,10 +494,10 @@ function renderCartPageFull() {
         <button class="ship-upsell-btn" onclick="cartAddQuick('${uid}')">+ ${addTxt}</button>
       </div>`;
   })() : '';
-  const _freeShipInner = `<div class="summary-ship-text">${LANG==='sv'?`${fmtPrice(remaining)} kvar till fri frakt`:LANG==='en'?`${fmtPrice(remaining)} away from free delivery`:`Plus que ${fmtPrice(remaining)} pour la livraison gratuite`}</div>
+  const _freeShipInner = `<div class="summary-ship-text">${LANG==='sv'?`${fmtPrice(remaining)} kvar till fri frakt 🚚`:LANG==='en'?`${fmtPrice(remaining)} away from free delivery 🚚`:`Plus que ${fmtPrice(remaining)} pour la livraison offerte 🚚`}</div>
         <div class="summary-bar"><div class="summary-bar-fill" style="width:${pct}%"></div></div>
         ${_upHtml}`;
-  const _freeShipTxt = _shipPromoLabel || (LANG === 'sv' ? `Fri frakt från ${fmtPrice(freeThreshold)}` : LANG === 'en' ? `Free delivery from ${fmtPrice(freeThreshold)}` : `Livraison offerte dès ${fmtPrice(freeThreshold)}`);
+  const _freeShipTxt = _shipPromoLabel || (LANG === 'sv' ? 'Fri frakt' : LANG === 'en' ? 'Free delivery' : 'Livraison offerte');
   const _freeDoneInner = `<div class="summary-ship-text" style="color:var(--moss);">${_freeShipTxt} ✓</div>`;
   // Bandeau d'opération : rappelle l'offre tant que le seuil n'est pas atteint
   const _promoBanner = (_shipRules.promoActive && _shipPromoLabel && remaining > 0)

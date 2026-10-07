@@ -193,6 +193,10 @@ nav a:hover, nav a.active { color:var(--lingon); border-bottom-color:var(--lingo
 .cart-subtotal-row span:first-child { font-family:var(--font-ui); font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--dust); }
 .cart-subtotal-row span:last-child  { font-family:var(--font-display); font-size:26px; font-weight:600; color:var(--midnight); }
 .cart-free-ship { font-family:var(--font-body); font-size:14px; font-style:italic; color:var(--dust); margin-bottom:16px; }
+/* Tiroir : sous-total et livraison discrets, le total ressort */
+.drawer-foot .cart-subtotal-row:not(.cart-grand-row) span:last-child { font-size:17px; font-weight:500; }
+.cart-grand-row { border-top:1px solid var(--linen); padding-top:8px; margin-top:4px; }
+.cart-ship-eu { display:block; margin-top:4px; font-size:11px; opacity:.8; }
 .btn-checkout {
   width:100%; background:var(--heather); color:var(--snow); border:none;
   padding:16px; font-family:var(--font-ui); font-size:12px; letter-spacing:2.5px; text-transform:uppercase;
