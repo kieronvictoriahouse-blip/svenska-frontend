@@ -564,7 +564,11 @@ function renderCartPageFull() {
       + countries.map(c => '<option value="'+c.code+'"'+(window._relayCountry===c.code?' selected':'')+'>'+c.label+'</option>').join('')
       + '</select>';
     const carrierBadge = '';
+    const relayErrHtml = (window._relayErr && !window._selectedRelay)
+      ? '<div style="font-family:var(--font-body);font-size:13px;color:var(--lingon);margin:0 0 8px;">'+(L==='en'?'Choose a relay point to continue: enter your postal code.':L==='sv'?'Välj ett utlämningsställe för att fortsätta: ange ditt postnummer.':'Choisissez un point relais pour continuer : indiquez votre code postal.')+'</div>'
+      : '';
     return '<div class="relay-picker">'
+      + relayErrHtml
       +'<div class="relay-search-row" style="flex-wrap:wrap;gap:6px;">'
       + countrySelect
       +'<input id="relay-cp-input" class="relay-cp-input" type="text" placeholder="'+cpPlaceholder+'" value="'+(window._relaySearchCp||'')+'" oninput="window._relaySearchCp=this.value" onkeydown="if(event.key===\'Enter\')searchRelayPoints(this.value)">'
@@ -900,8 +904,14 @@ async function doCheckout() {
   const isMR = window._deliveryMode === 'mondial_relay';
   const BASE = window.SD_API_URL || 'https://admin.swedishcravings.fr';
 
+  /* Pas d'alert() : sur mobile, la fenêtre système cassait le parcours
+     et laissait le client chercher le sélecteur. On l'y amène. */
   if (isMR && !window._selectedRelay) {
-    alert(LANG === 'en' ? 'Please select a relay point.' : LANG === 'sv' ? 'Välj ett utlämningsställe.' : 'Veuillez sélectionner un point relais.');
+    window._relayErr = true;
+    renderCartPageFull();
+    const picker = document.querySelector('.relay-picker');
+    if (picker) picker.scrollIntoView({ block: 'center' });
+    document.getElementById('relay-cp-input')?.focus({ preventScroll: true });
     return;
   }
 

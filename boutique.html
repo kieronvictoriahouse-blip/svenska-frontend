@@ -234,6 +234,13 @@
   .c3-sheet-empty p{ font-family:'EB Garamond',serif; font-size:15.5px; line-height:1.45; color:#5B534B; margin:0 0 10px; }
   .c3-sheet-empty .c3-sugg{ border-radius:8px; min-height:44px; }
   .c3-sheet-empty .c3-sugg-tint{ width:30px; height:30px; border-radius:5px; }
+
+  /* Bulles flottantes (WhatsApp, « Suggérer un produit ») : elles
+     masquaient « Mon panier » et le bouton Commander. On les remonte
+     au-dessus de la barre panier, et on les cache quand la feuille
+     panier est ouverte. */
+  body #sd-wa-bubble, body #suggest-btn{ bottom:calc(118px + env(safe-area-inset-bottom)); }
+  body:has(.c3-sheet) #sd-wa-bubble, body:has(.c3-sheet) #suggest-btn{ display:none; }
 }
 
 @media(prefers-reduced-motion:reduce){
