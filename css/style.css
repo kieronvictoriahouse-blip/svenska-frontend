@@ -253,8 +253,9 @@ footer { background:var(--midnight); color:rgba(255,255,255,0.55); padding:64px 
   display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;
 }
 .footer-bottom p { font-family:var(--font-ui); font-size:11px; color:rgba(255,255,255,0.25); }
-.pay-badges { display:flex; gap:8px; }
-.pay-badge { background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.1); padding:4px 10px; border-radius:2px; font-family:var(--font-ui); font-size:10px; color:rgba(255,255,255,0.4); letter-spacing:1px; }
+.pay-badges { display:flex; gap:8px; flex-wrap:wrap; }
+.pay-badge { display:inline-flex; align-items:center; background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.1); padding:4px 8px; border-radius:2px; font-family:var(--font-ui); font-size:10px; color:rgba(255,255,255,0.55); letter-spacing:1px; }
+.pay-badge svg, .pay-m svg { display:block; height:12px; width:auto; overflow:visible; text-transform:none; letter-spacing:0; }
 
 /* ── SECTION COMMONS ── */
 .section { max-width:var(--max-width); margin:0 auto; padding:80px 40px; }

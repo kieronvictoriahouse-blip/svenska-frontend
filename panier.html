@@ -70,7 +70,7 @@
 .btn-continue{width:100%;background:none;border:1px solid var(--linen);color:var(--slate);padding:14px 24px;font-family:var(--font-ui);font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:border-color 0.2s,color 0.2s;}
 .btn-continue:hover{border-color:var(--heather);color:var(--heather);}
 .pay-methods{display:flex;gap:6px;justify-content:center;margin-top:20px;flex-wrap:wrap;}
-.pay-m{font-family:var(--font-ui);font-size:9px;letter-spacing:1px;text-transform:uppercase;border:1px solid var(--linen);padding:4px 8px;color:var(--dust);}
+.pay-m{display:inline-flex;align-items:center;font-family:var(--font-ui);font-size:9px;letter-spacing:1px;text-transform:uppercase;border:1px solid var(--linen);padding:4px 7px;color:var(--dust);}
 
 /* ── Upsell livraison gratuite (barre de progression) ── */
 .ship-upsell{display:flex;align-items:center;gap:10px;margin-top:12px;padding:10px;background:var(--lingon-pale);border:1px solid var(--lingon-mid);border-radius:6px;animation:upsellIn .35s ease;}
@@ -712,10 +712,7 @@ function renderCartPageFull() {
           <svg width="10" height="12" viewBox="0 0 10 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="5" width="8" height="6" rx="1"/><path d="M3 5V3.5a2 2 0 0 1 4 0V5"/></svg>
           <span>${LANG==='sv'?'Säker betalning via Stripe':LANG==='en'?'Secure payment via Stripe':'Paiement sécurisé via Stripe'}</span>
         </div>
-        <div class="pay-methods">
-          <span class="pay-m">VISA</span>
-          <span class="pay-m">MASTERCARD</span>
-        </div>
+        <div class="pay-methods" aria-label="Moyens de paiement acceptés">${sdPayLogos('pay-m')}</div>
       </div>
     </div>`;
 }
