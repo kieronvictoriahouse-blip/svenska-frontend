@@ -189,7 +189,7 @@
   </div>
 </div>
 <div id="footer-root"></div>
-<script src="js/app.js?v=29"></script>
+<script src="js/app.js?v=30"></script>
 <script>
 /* Mode de livraison par defaut : POINT RELAIS, pas le retrait.
    Le retrait etait presolectionne, si bien qu'un visiteur de Lille lisait
@@ -713,7 +713,7 @@ function renderCartPageFull() {
           <label for="checkout-email-input" style="display:block;font-family:var(--font-ui);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dust);margin-bottom:8px;">${LANG==='sv'?'Din e-postadress':LANG==='en'?'Your email':'Votre email'}</label>
           <input id="checkout-email-input" type="email" autocomplete="email" inputmode="email" required value="${(window._custEmail||'').replace(/"/g,'&quot;')}" oninput="window._custEmail=this.value.trim();try{localStorage.setItem('sd_checkout_email',window._custEmail)}catch(e){};this.style.borderColor='var(--linen)';var er=document.getElementById('checkout-email-err');if(er)er.textContent='';" placeholder="${LANG==='sv'?'namn@exempel.se':LANG==='en'?'name@example.com':'prenom@exemple.fr'}" style="width:100%;border:1px solid var(--linen);background:var(--cream);padding:12px 14px;font-family:var(--font-body);font-size:15px;color:var(--midnight);outline:none;box-sizing:border-box;">
           <div id="checkout-email-err" style="font-family:var(--font-body);font-size:13px;color:var(--lingon);min-height:0;margin-top:6px;"></div>
-          <p style="font-family:var(--font-body);font-size:12px;line-height:1.5;color:var(--dust);margin:6px 0 16px;">${LANG==='sv'?'För din orderbekräftelse. Om betalningen inte slutförs kan vi påminna dig om din varukorg (högst 2 e-postmeddelanden, avregistrering med ett klick). <a href="/confidentialite#rappel-panier" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;">Läs mer</a>':LANG==='en'?'For your order confirmation. If payment isn’t completed, we may remind you of your basket (2 emails max, one-click unsubscribe). <a href="/confidentialite#rappel-panier" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;">Learn more</a>':'Pour votre confirmation de commande. Si le paiement n’aboutit pas, nous pourrons vous rappeler votre panier (2 emails maximum, désinscription en un clic). <a href="/confidentialite#rappel-panier" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;">En savoir plus</a>'}</p>
+          <p style="font-family:var(--font-body);font-size:12px;line-height:1.5;color:var(--dust);margin:6px 0 16px;">${LANG==='sv'?'För din orderbekräftelse.':LANG==='en'?'For your order confirmation.':'Pour votre confirmation de commande.'}</p>
         </div>
         <button class="btn-pay" onclick="doCheckout()">
           ${LANG==='sv'?'Betala säkert →':LANG==='en'?'Pay securely →':'Payer en toute sécurité →'}
