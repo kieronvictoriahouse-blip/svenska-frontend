@@ -554,7 +554,11 @@ function renderCartPageFull() {
       {code:'NL', label:'Pays-Bas'},
       {code:'DE', label:'Allemagne'},
       {code:'IT', label:'Italie'},
-      {code:'CH', label:'Suisse'},
+      /* Suède et non Suisse : la Suisse était encore proposée et facturée
+         au tarif France (4,90 €) pour ~40 € de port réel, alors que la
+         Suède — zone internationale — manquait. Miroir de
+         INTERNATIONAL_COUNTRIES (lib/shipping.ts). */
+      {code:'SE', label:'Suède'},
     ];
     const countrySelect = '<select id="relay-country-select" style="border:1px solid var(--linen);background:var(--cream);padding:10px 12px;font-family:var(--font-ui);font-size:13px;color:var(--midnight);outline:none;cursor:pointer;" onchange="window._relayCountry=this.value;window._relayPoints=null;window._selectedRelay=null;window._relaySearchCp=\'\';renderCartPageFull();">'
       + countries.map(c => '<option value="'+c.code+'"'+(window._relayCountry===c.code?' selected':'')+'>'+c.label+'</option>').join('')
