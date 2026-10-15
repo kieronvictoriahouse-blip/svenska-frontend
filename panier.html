@@ -189,7 +189,7 @@
   </div>
 </div>
 <div id="footer-root"></div>
-<script src="js/app.js?v=30"></script>
+<script src="js/app.js?v=31"></script>
 <script>
 /* Mode de livraison par defaut : POINT RELAIS, pas le retrait.
    Le retrait etait presolectionne, si bien qu'un visiteur de Lille lisait
@@ -387,20 +387,12 @@ function renderCartPageFull() {
   if (!root) return;
 
   /* Le panier se recale sur le stock avant d'etre dessine : ce que le
-     client lit doit etre ce qu'il pourra payer. On ne le previent qu'une
-     fois par changement, sinon chaque rendu re-affiche la meme alerte. */
+     client lit doit etre ce qu'il pourra payer. Le changement s'affiche
+     dans la page (bandeau au-dessus du panier, pas d'alerte bloquante),
+     en precisant que les commandes deja passees ne sont pas touchees. */
   if (typeof sdRevaliderPanier === 'function') {
     const _chg = sdRevaliderPanier();
-    if (_chg.length) {
-      const _sig = JSON.stringify(_chg);
-      if (window._sdDernierRecalage !== _sig) {
-        window._sdDernierRecalage = _sig;
-        const _tete = LANG === 'en' ? 'Your cart was adjusted to what is left in stock:'
-                    : LANG === 'sv' ? 'Din korg justerades efter vad som finns kvar:'
-                    : 'Votre panier a ete ajuste au stock restant :';
-        alert(_tete + '\n\n' + sdMessageRevalidation(_chg));
-      }
-    }
+    if (_chg.length && typeof sdAfficherRecalage === 'function') sdAfficherRecalage(_chg);
   }
 
   const entries = Object.entries(cart).filter(([,q]) => q > 0);

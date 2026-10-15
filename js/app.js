@@ -69,6 +69,20 @@ function fmtPrice(eur){if(LANG==='sv'&&_sekRate>0)return Math.round((eur||0)*_se
 function _doSekRefresh(){renderCartDrawer();if(typeof renderCart==='function')renderCart();document.querySelectorAll('.prod-price,.prod-price-old').forEach(function(el){var m=el.textContent.match(/€([\d.]+)/);if(m)el.textContent=Math.round(parseFloat(m[1])*_sekRate)+' kr';});var pp=document.getElementById('pdp-price');if(pp){var m=pp.textContent.match(/€([\d.]+)/);if(m)pp.textContent=Math.round(parseFloat(m[1])*_sekRate)+' kr';}var ppo=document.getElementById('pdp-price-old');if(ppo){var mo=ppo.textContent.match(/€([\d.]+)/);if(mo)ppo.textContent=Math.round(parseFloat(mo[1])*_sekRate)+' kr';}var spo=document.getElementById('sticky-atc-price-old');if(spo){var ms=spo.textContent.match(/€([\d.]+)/);if(ms)spo.textContent=Math.round(parseFloat(ms[1])*_sekRate)+' kr';}var sp=document.getElementById('sticky-atc-price');if(sp){var m2=sp.textContent.match(/€([\d.]+)/);if(m2)sp.textContent=Math.round(parseFloat(m2[1])*_sekRate)+' kr';}}
 function loadSekRate(){if(_sekRate>0){if(LANG==='sv')_doSekRefresh();return;}fetch('https://api.frankfurter.app/latest?from=EUR&to=SEK').then(function(r){return r.json();}).then(function(d){var rate=d&&d.rates&&d.rates.SEK;if(rate>0){_sekRate=rate;try{sessionStorage.setItem('_sekRate',String(rate));}catch(e){}if(LANG==='sv')_doSekRefresh();}}).catch(function(){});}
 function saveCart(){try{localStorage.setItem('sd_cart',JSON.stringify(cart));}catch(e){}}
+/* Panier synchronisé entre onglets. La page de confirmation vide le panier
+   après paiement, mais seulement dans SON onglet : un autre onglet ouvert
+   gardait l'ancien panier en mémoire, le ré-écrivait, et le recalage sur le
+   stock (qui déduit déjà la commande payée) le « réduisait » à tort — une
+   cliente a cru que sa commande payée avait été amputée (14/10). */
+window.addEventListener('storage',function(e){
+  if(e.key!=='sd_cart'&&e.key!==null)return;
+  var neuf=_sdLSGet('sd_cart',{});
+  Object.keys(cart).forEach(function(k){delete cart[k];});
+  Object.keys(neuf).forEach(function(k){cart[k]=neuf[k];});
+  if(typeof updateCartBadge==='function')updateCartBadge();
+  if(typeof renderCartDrawer==='function')renderCartDrawer();
+  if(typeof renderCartPageFull==='function')renderCartPageFull();
+});
 function clearCart(){cart={};saveCart();try{Object.keys(localStorage).filter(function(k){return k.startsWith('sd_cart');}).forEach(function(k){localStorage.removeItem(k);});}catch(e){}updateCartBadge();renderCartDrawer();}
 function saveLang(l){try{localStorage.setItem('sd_lang',l);}catch(e){}}
 // ─── Tracking publicitaire : Meta Pixel + e-commerce GA4 (pour lancer des pubs mesurées) ───
@@ -123,20 +137,43 @@ function sdRevaliderPanier(){
       }
     });
   });
-  if(changes.length){saveCart();if(typeof updateCartBadge==='function')updateCartBadge();}
+  if(changes.length){saveCart();if(typeof updateCartBadge==='function')updateCartBadge();if(typeof renderCartDrawer==='function')renderCartDrawer();}
   return changes;
+}
+function sdLigneRecalage(c){
+  return c.apres<=0
+    ? (LANG==='en'?(c.nom+' is no longer available and was removed')
+      :LANG==='sv'?(c.nom+' finns inte längre och togs bort')
+      :(c.nom+" n'est plus disponible et a été retiré"))
+    : (LANG==='en'?(c.nom+': quantity reduced to '+c.apres)
+      :LANG==='sv'?(c.nom+': antal minskat till '+c.apres)
+      :(c.nom+' : quantité ramenée à '+c.apres));
 }
 function sdMessageRevalidation(changes){
   if(!changes||!changes.length)return'';
-  return changes.map(function(c){
-    return c.apres<=0
-      ? (LANG==='en'?(c.nom+' is no longer available and was removed')
-        :LANG==='sv'?(c.nom+' finns inte langre och togs bort')
-        :(c.nom+" n'est plus disponible et a ete retire"))
-      : (LANG==='en'?(c.nom+': quantity reduced to '+c.apres)
-        :LANG==='sv'?(c.nom+': antal minskat till '+c.apres)
-        :(c.nom+' : quantite ramenee a '+c.apres));
-  }).join('\n');
+  return changes.map(sdLigneRecalage).join('\n');
+}
+/* Affiche le recalage DANS la page panier (plus d'alerte bloquante du
+   navigateur), et dit clairement que les commandes déjà passées ne sont
+   pas touchées : seul le panier en cours est ajusté. */
+function sdAfficherRecalage(changes){
+  if(!changes||!changes.length)return;
+  var root=document.getElementById('cart-page-root');if(!root||!root.parentNode)return;
+  var esc=function(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');};
+  var T={
+    tete:{fr:'Votre panier a été ajusté au stock disponible :',en:'Your cart was adjusted to the stock available:',sv:'Din varukorg har anpassats efter lagret:'},
+    pied:{fr:'Vos commandes déjà passées ne sont pas concernées.',en:'Orders you have already placed are not affected.',sv:'Beställningar du redan har gjort påverkas inte.'},
+    fermer:{fr:'Fermer',en:'Close',sv:'Stäng'}
+  };
+  var t=function(o){return o[LANG]||o.fr;};
+  var n=document.getElementById('sd-recalage');
+  if(!n){n=document.createElement('div');n.id='sd-recalage';n.setAttribute('role','status');root.parentNode.insertBefore(n,root);}
+  n.style.cssText='position:relative;margin:0 0 20px;padding:14px 44px 14px 18px;background:#FBF1E4;border:1px solid #E8D2B0;border-radius:6px;font-family:var(--font-body,Georgia),serif;font-size:15px;line-height:1.5;color:#5B4A35;';
+  n.innerHTML='<strong style="font-weight:600;">'+t(T.tete)+'</strong>'
+    +'<ul style="margin:6px 0 6px 18px;padding:0;">'+changes.map(function(c){return '<li>'+esc(sdLigneRecalage(c))+'</li>';}).join('')+'</ul>'
+    +'<span style="font-size:13.5px;color:#7A6A55;">'+t(T.pied)+'</span>'
+    +'<button type="button" aria-label="'+t(T.fermer)+'" style="position:absolute;top:8px;right:10px;background:none;border:none;font-size:20px;line-height:1;color:#9A8F7F;cursor:pointer;">&times;</button>';
+  n.querySelector('button').onclick=function(){n.remove();};
 }
 function _sdCartQtyForProduct(cid){let n=0;Object.keys(cart).forEach(function(k){var ri=k.indexOf('_');var base=ri===-1?k:k.slice(0,ri);if(base===String(cid))n+=cart[k]||0;});return n;}
 function _sdStockMsg(kind,n){if(kind==='out')return LANG==='en'?'Out of stock':LANG==='sv'?'Slut i lager':'Produit épuisé';if(kind==='max')return LANG==='en'?'Maximum available quantity reached':LANG==='sv'?'Max antal i lager nått':'Quantité maximale en stock atteinte';return LANG==='en'?('Only '+n+' left in stock'):LANG==='sv'?(n+' kvar i lager'):('Il ne reste que '+n+' en stock');}
