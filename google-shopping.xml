@@ -5,22 +5,40 @@
   <link>https://www.swedishcravings.fr</link>
   <description>Produits suédois authentiques livrés en France.</description>
   <item>
-    <g:id>8e07ce26-744f-45f2-b516-17da476e9542</g:id>
-    <g:title>Sauce Hollandaise – importé de Suède</g:title>
-    <g:description>Une onctueuse sauce Hollandaise aux notes délicates de beurre et de citron, inspirée de la grande tradition culinaire française. Parfaite pour sublimer vos poissons, fruits de mer et légumes, elle apporte une touche d'élégance à vos gratins de poisson. Pour une note rafraîchissante, ajoutez un zeste d'orange râpé.</g:description>
-    <g:link>https://www.swedishcravings.fr/produit/sauce-hollandaise-8e07ce26</g:link>
-    <g:image_link>https://www.swedishcravings.fr/media/products/hollandaise-1784906618125-665700.jpg</g:image_link>
+    <g:id>68fabf2e-69f6-4fb5-83f0-d17daaf8a11c</g:id>
+    <g:title>O'boy Original - Chocolat en poudre suédois</g:title>
+    <g:description>Une icône des cuisines scandinaves depuis 1960, O'boy Original est le chocolat en poudre qui a conquis la Suède. Avec son goût chocolaté authentique et réconfortant, près de deux millions de verres sont savourés chaque jour. Parfait après l'école, pour une pause gourmande ou pour accompagner un petit-déjeuner nordique, c'est la boisson chocolatée par excellence.</g:description>
+    <g:link>https://www.swedishcravings.fr/produit/o-boy-original-chocolat-en-poudre-suedois-68fabf2e</g:link>
+    <g:image_link>https://www.swedishcravings.fr/media/products/o-boy-original-700g-200-1789376926769.webp</g:image_link>
     <g:availability>in_stock</g:availability>
-    <g:price>4.95 EUR</g:price>
+    <g:price>6.19 EUR</g:price>
+    <g:brand>O'boy</g:brand>
+    <g:condition>new</g:condition>
+    <g:identifier_exists>no</g:identifier_exists>
+    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
+    <g:product_type>Épicerie &gt; Boissons</g:product_type>
+    <g:custom_label_0>marge-moyenne</g:custom_label_0>
+    <g:custom_label_1>prix-6-15</g:custom_label_1>
+    <g:custom_label_2>bestseller</g:custom_label_2>
+    <g:custom_label_3>boissons</g:custom_label_3>
+  </item>
+  <item>
+    <g:id>c4b6e87e-0621-4fbe-847b-c2e01a44744f</g:id>
+    <g:title>Box Bonbons Suédois — Moyenne, 1320 g</g:title>
+    <g:description>Une box cadeau garnie de 9 sachets de bonbons suédois incontournables, sélectionnés par Victoria : Ahlgrens Bilar, Polly, Tutti Frutti, Malaco et bien d'autres. Livrée dans un carton kraft avec du papier de soie aux couleurs de la Suède — parfaite à offrir, ou pour découvrir le vrai godis suédois.</g:description>
+    <g:link>https://www.swedishcravings.fr/produit/box-bonbons-suedois-moyenne-c4b6e87e</g:link>
+    <g:image_link>https://www.swedishcravings.fr/media/products/coffret-de-bonbons-su-dois-color--1792615657239.jpg</g:image_link>
+    <g:availability>out_of_stock</g:availability>
+    <g:price>23.90 EUR</g:price>
     <g:brand>Swedish Cravings</g:brand>
     <g:condition>new</g:condition>
     <g:identifier_exists>no</g:identifier_exists>
     <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
-    <g:product_type>Épicerie &gt; Sauces</g:product_type>
-    <g:custom_label_0>marge-haute</g:custom_label_0>
-    <g:custom_label_1>prix-3-6</g:custom_label_1>
-    <g:custom_label_2>standard</g:custom_label_2>
-    <g:custom_label_3>sauces</g:custom_label_3>
+    <g:product_type>Épicerie &gt; Bonbons</g:product_type>
+    <g:custom_label_0>marge-moyenne</g:custom_label_0>
+    <g:custom_label_1>prix-15-plus</g:custom_label_1>
+    <g:custom_label_2>nouveaute</g:custom_label_2>
+    <g:custom_label_3>confiseries</g:custom_label_3>
   </item>
   <item>
     <g:id>ff144baf-11a7-4812-8d10-0c86bac4e27c</g:id>
@@ -41,29 +59,65 @@
     <g:custom_label_3>epices</g:custom_label_3>
   </item>
   <item>
-    <g:id>26bc35e6-ae50-4710-8808-bb32106c5f8e</g:id>
-    <g:title>Fazer Tutti Frutti Rings - Anneaux de bonbons aux fruits – importé de Suède, 180 g</g:title>
-    <g:description>Plongez dans un tourbillon de saveurs exotiques avec ces anneaux de bonbons finlandais. Kiwi, melon, pomme, fraise et réglisse se mêlent dans une texture moelleuse et fondante. Sans gélatine et entièrement vegan, ces confiseries Fazer sont élaborées avec des arômes naturels et des colorants issus de fruits et légumes. Un plaisir gourmand à partager en famille ou entre amis.</g:description>
-    <g:link>https://www.swedishcravings.fr/produit/fazer-tutti-frutti-rings-anneaux-de-bonbons-aux-fruits-180g-26bc35e6</g:link>
-    <g:image_link>https://www.swedishcravings.fr/media/products/tuttifruttirings-1784906083620-576703.webp</g:image_link>
+    <g:id>d75d28fc-2739-4708-9657-f186b2fe94e0</g:id>
+    <g:title>OLW Chips Crème Fraîche &amp; Oignon – snack suédois, 90 g</g:title>
+    <g:description>Un grand classique scandinave signé OLW, le maître suédois des chips depuis des décennies. Ces chips finement ondulées offrent un croquant incomparable, relevé par une délicieuse alliance de crème fraîche acidulée, d'oignon et de persil. Élaborées avec des pommes de terre soigneusement sélectionnées et des ingrédients naturels, elles incarnent le snack premium à la suédoise.</g:description>
+    <g:link>https://www.swedishcravings.fr/produit/chips-creme-fraiche-oignon-olw-d75d28fc</g:link>
+    <g:image_link>https://www.swedishcravings.fr/media/products/qiiviamzsizuj9bgdpck-1792613603849-13218.jpg</g:image_link>
     <g:availability>in_stock</g:availability>
-    <g:price>2.65 EUR</g:price>
-    <g:brand>Fazer</g:brand>
+    <g:price>3.90 EUR</g:price>
+    <g:brand>OLW</g:brand>
     <g:condition>new</g:condition>
     <g:identifier_exists>no</g:identifier_exists>
     <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
-    <g:product_type>Épicerie &gt; Bonbons</g:product_type>
-    <g:custom_label_0>marge-basse</g:custom_label_0>
-    <g:custom_label_1>prix-moins-3</g:custom_label_1>
-    <g:custom_label_2>bestseller</g:custom_label_2>
-    <g:custom_label_3>confiseries</g:custom_label_3>
+    <g:product_type>Épicerie &gt; Snacks &amp; Chips</g:product_type>
+    <g:custom_label_0>marge-haute</g:custom_label_0>
+    <g:custom_label_1>prix-3-6</g:custom_label_1>
+    <g:custom_label_2>nouveaute</g:custom_label_2>
+    <g:custom_label_3>snacks-chips</g:custom_label_3>
   </item>
   <item>
-    <g:id>958a9acd-dab8-4c7f-b956-068652fe82b2</g:id>
-    <g:title>Läkerol Pastilles Original Sans Sucre – pastilles suédoises, 75 g</g:title>
-    <g:description>Un classique suédois incontournable depuis 1909, Läkerol Original séduit par son alliance raffinée de réglisse et de menthol. Ces pastilles apaisent délicatement la gorge tout en offrant une haleine fraîche. Naturellement sucrées à la stevia et dotées d'une texture souple grâce à la gomme arabique, elles incarnent le savoir-faire scandinave. Format généreux équivalent à 3 boîtes classiques.</g:description>
-    <g:link>https://www.swedishcravings.fr/produit/pastilles-lakerol-original-sans-sucre-958a9acd</g:link>
-    <g:image_link>https://www.swedishcravings.fr/media/products/500x500-1784748497134-270817.jpg</g:image_link>
+    <g:id>597287e6-7895-42ba-9039-23a586f67bca</g:id>
+    <g:title>Wasa Crunchy Bites au Cheddar – snack suédois, 100 g</g:title>
+    <g:description>Irrésistiblement croustillantes, ces bouchées scandinaves au seigle complet et au cheddar fondant offrent une explosion de saveurs. Cuites au four, riches en fibres et source de protéines, elles accompagnent parfaitement l'apéritif ou comblent une petite faim gourmande. Un snack premium venu de Suède, alliant tradition boulangère nordique et gourmandise fromagère.</g:description>
+    <g:link>https://www.swedishcravings.fr/produit/crunchy-bites-au-cheddar-wasa-597287e6</g:link>
+    <g:image_link>https://www.swedishcravings.fr/media/products/i1d1iq40uh00jsh9wgh0-1792613744560-802825.jpg</g:image_link>
+    <g:availability>in_stock</g:availability>
+    <g:price>4.90 EUR</g:price>
+    <g:brand>Wasa</g:brand>
+    <g:condition>new</g:condition>
+    <g:identifier_exists>no</g:identifier_exists>
+    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
+    <g:product_type>Épicerie &gt; Snacks &amp; Chips</g:product_type>
+    <g:custom_label_0>marge-haute</g:custom_label_0>
+    <g:custom_label_1>prix-3-6</g:custom_label_1>
+    <g:custom_label_2>nouveaute</g:custom_label_2>
+    <g:custom_label_3>snacks-chips</g:custom_label_3>
+  </item>
+  <item>
+    <g:id>5adbabad-24f7-4731-adb0-65b3186b664c</g:id>
+    <g:title>Paprika – importé de Suède, 80 g</g:title>
+    <g:description>Issu de la même plante capsicum que le piment de Cayenne et le piri-piri, ce paprika péruvien offre une douceur remarquable et une teinte rouge profonde. Séché puis finement moulu, il libère des arômes subtils qui subliment vos plats. Idéal pour apporter chaleur et couleur à vos viandes grillées, volailles et ragoûts généreux.</g:description>
+    <g:link>https://www.swedishcravings.fr/produit/paprika-5adbabad</g:link>
+    <g:image_link>https://www.swedishcravings.fr/media/products/paprika-1783834374903-587782.jpg</g:image_link>
+    <g:availability>in_stock</g:availability>
+    <g:price>3.98 EUR</g:price>
+    <g:brand>Swedish Cravings</g:brand>
+    <g:condition>new</g:condition>
+    <g:identifier_exists>no</g:identifier_exists>
+    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
+    <g:product_type>Épicerie &gt; Épices &amp; Aromates</g:product_type>
+    <g:custom_label_0>marge-basse</g:custom_label_0>
+    <g:custom_label_1>prix-3-6</g:custom_label_1>
+    <g:custom_label_2>standard</g:custom_label_2>
+    <g:custom_label_3>epices</g:custom_label_3>
+  </item>
+  <item>
+    <g:id>d01f8b90-f428-4c28-adcd-f161e590482f</g:id>
+    <g:title>Läkerol Pastilles Réglisse &amp; Sel de Mer Sans Sucre – pastilles suédoises, 75 g</g:title>
+    <g:description>Une explosion de saveurs nordiques où la réglisse profonde rencontre la salinité cristalline du sel de mer scandinave. Ces pastilles Läkerol sont devenues le favori incontesté des amateurs de réglisse exigeants. Format généreux équivalent à 3 boîtes classiques, parfait pour garder à portée de main au bureau ou en voiture. Un classique moderne sans sucre, naturellement sucré à la stévia.</g:description>
+    <g:link>https://www.swedishcravings.fr/produit/pastilles-reglisse-sel-de-mer-sans-sucre-lakerol-d01f8b90</g:link>
+    <g:image_link>https://www.swedishcravings.fr/media/products/500x500-1784748688060-945390.jpg</g:image_link>
     <g:availability>in_stock</g:availability>
     <g:price>3.49 EUR</g:price>
     <g:brand>Läkerol</g:brand>
@@ -95,31 +149,13 @@
     <g:custom_label_3>confiseries</g:custom_label_3>
   </item>
   <item>
-    <g:id>9ce88828-2192-41d3-8dd6-b7c8c7b3b671</g:id>
-    <g:title>Ahlgrens Petites Voitures Acidulées – bonbons suédois, 100 g</g:title>
-    <g:description>Une icône suédoise revisitée pour les amateurs de saveurs acidulées ! Ces petites voitures en mousse fondante conservent le cœur tendre de l'original, enrobé d'une délicieuse couche de sucre pétillant. Déclinées dans les couleurs classiques rose, blanc et vert, elles offrent une expérience gustative unique entre douceur et acidité. Le secret de leurs saveurs reste jalousement gardé par Cloetta depuis des décennies.</g:description>
-    <g:link>https://www.swedishcravings.fr/produit/petites-voitures-ahlgrens-acidulees-9ce88828</g:link>
-    <g:image_link>https://www.swedishcravings.fr/media/products/07310350132898-c1n1-1783834374630-372487.jpg</g:image_link>
+    <g:id>958a9acd-dab8-4c7f-b956-068652fe82b2</g:id>
+    <g:title>Läkerol Pastilles Original Sans Sucre – pastilles suédoises, 75 g</g:title>
+    <g:description>Un classique suédois incontournable depuis 1909, Läkerol Original séduit par son alliance raffinée de réglisse et de menthol. Ces pastilles apaisent délicatement la gorge tout en offrant une haleine fraîche. Naturellement sucrées à la stevia et dotées d'une texture souple grâce à la gomme arabique, elles incarnent le savoir-faire scandinave. Format généreux équivalent à 3 boîtes classiques.</g:description>
+    <g:link>https://www.swedishcravings.fr/produit/pastilles-lakerol-original-sans-sucre-958a9acd</g:link>
+    <g:image_link>https://www.swedishcravings.fr/media/products/500x500-1784748497134-270817.jpg</g:image_link>
     <g:availability>in_stock</g:availability>
-    <g:price>3.26 EUR</g:price>
-    <g:brand>Ahlgrens</g:brand>
-    <g:condition>new</g:condition>
-    <g:identifier_exists>no</g:identifier_exists>
-    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
-    <g:product_type>Épicerie &gt; Bonbons</g:product_type>
-    <g:custom_label_0>marge-moyenne</g:custom_label_0>
-    <g:custom_label_1>prix-3-6</g:custom_label_1>
-    <g:custom_label_2>standard</g:custom_label_2>
-    <g:custom_label_3>confiseries</g:custom_label_3>
-  </item>
-  <item>
-    <g:id>d01f8b90-f428-4c28-adcd-f161e590482f</g:id>
-    <g:title>Läkerol Pastilles Réglisse &amp; Sel de Mer Sans Sucre – pastilles suédoises, 75 g</g:title>
-    <g:description>Une explosion de saveurs nordiques où la réglisse profonde rencontre la salinité cristalline du sel de mer scandinave. Ces pastilles Läkerol sont devenues le favori incontesté des amateurs de réglisse exigeants. Format généreux équivalent à 3 boîtes classiques, parfait pour garder à portée de main au bureau ou en voiture. Un classique moderne sans sucre, naturellement sucré à la stévia.</g:description>
-    <g:link>https://www.swedishcravings.fr/produit/pastilles-reglisse-sel-de-mer-sans-sucre-lakerol-d01f8b90</g:link>
-    <g:image_link>https://www.swedishcravings.fr/media/products/500x500-1784748688060-945390.jpg</g:image_link>
-    <g:availability>in_stock</g:availability>
-    <g:price>3.49 EUR</g:price>
+    <g:price>3.69 EUR</g:price>
     <g:brand>Läkerol</g:brand>
     <g:condition>new</g:condition>
     <g:identifier_exists>no</g:identifier_exists>
@@ -129,24 +165,6 @@
     <g:custom_label_1>prix-3-6</g:custom_label_1>
     <g:custom_label_2>standard</g:custom_label_2>
     <g:custom_label_3>confiseries</g:custom_label_3>
-  </item>
-  <item>
-    <g:id>fb205c21-410d-49e8-a37f-7d1ac3864b3e</g:id>
-    <g:title>Piffi Mélange d'Épices Original – épices suédoises, 175 g</g:title>
-    <g:description>Véritable icône des cuisines suédoises, Piffi Allkrydda est un mélange d'épices doux et harmonieux qui sublime tous vos plats. Sa combinaison subtile de paprika, poivre noir, ail et cardamome en fait un compagnon idéal tant à table que derrière les fourneaux. Parfait pour rehausser poissons, viandes, volailles, soupes et salades avec une touche scandinave authentique.</g:description>
-    <g:link>https://www.swedishcravings.fr/produit/piffi-melange-d-epices-original-175g-fb205c21</g:link>
-    <g:image_link>https://www.swedishcravings.fr/media/products/piffi-allkrydda-1783834370427-929628.jpg</g:image_link>
-    <g:availability>in_stock</g:availability>
-    <g:price>4.45 EUR</g:price>
-    <g:brand>Piffi</g:brand>
-    <g:condition>new</g:condition>
-    <g:identifier_exists>no</g:identifier_exists>
-    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
-    <g:product_type>Épicerie &gt; Épices &amp; Aromates</g:product_type>
-    <g:custom_label_0>marge-haute</g:custom_label_0>
-    <g:custom_label_1>prix-3-6</g:custom_label_1>
-    <g:custom_label_2>bestseller</g:custom_label_2>
-    <g:custom_label_3>epices</g:custom_label_3>
   </item>
   <item>
     <g:id>64ae52ac-464a-4af6-bb49-c696d0be1015</g:id>
@@ -165,6 +183,24 @@
     <g:custom_label_1>prix-3-6</g:custom_label_1>
     <g:custom_label_2>standard</g:custom_label_2>
     <g:custom_label_3>sauces</g:custom_label_3>
+  </item>
+  <item>
+    <g:id>fb205c21-410d-49e8-a37f-7d1ac3864b3e</g:id>
+    <g:title>Piffi Mélange d'Épices Original – épices suédoises, 175 g</g:title>
+    <g:description>Véritable icône des cuisines suédoises, Piffi Allkrydda est un mélange d'épices doux et harmonieux qui sublime tous vos plats. Sa combinaison subtile de paprika, poivre noir, ail et cardamome en fait un compagnon idéal tant à table que derrière les fourneaux. Parfait pour rehausser poissons, viandes, volailles, soupes et salades avec une touche scandinave authentique.</g:description>
+    <g:link>https://www.swedishcravings.fr/produit/piffi-melange-d-epices-original-175g-fb205c21</g:link>
+    <g:image_link>https://www.swedishcravings.fr/media/products/piffi-allkrydda-1783834370427-929628.jpg</g:image_link>
+    <g:availability>in_stock</g:availability>
+    <g:price>4.45 EUR</g:price>
+    <g:brand>Piffi</g:brand>
+    <g:condition>new</g:condition>
+    <g:identifier_exists>no</g:identifier_exists>
+    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
+    <g:product_type>Épicerie &gt; Épices &amp; Aromates</g:product_type>
+    <g:custom_label_0>marge-haute</g:custom_label_0>
+    <g:custom_label_1>prix-3-6</g:custom_label_1>
+    <g:custom_label_2>bestseller</g:custom_label_2>
+    <g:custom_label_3>epices</g:custom_label_3>
   </item>
   <item>
     <g:id>d3f4f38f-76ce-4515-adfc-650548fa3669</g:id>
@@ -203,22 +239,22 @@
     <g:custom_label_3>sauces</g:custom_label_3>
   </item>
   <item>
-    <g:id>68fabf2e-69f6-4fb5-83f0-d17daaf8a11c</g:id>
-    <g:title>O'boy Original - Chocolat en poudre suédois</g:title>
-    <g:description>Une icône des cuisines scandinaves depuis 1960, O'boy Original est le chocolat en poudre qui a conquis la Suède. Avec son goût chocolaté authentique et réconfortant, près de deux millions de verres sont savourés chaque jour. Parfait après l'école, pour une pause gourmande ou pour accompagner un petit-déjeuner nordique, c'est la boisson chocolatée par excellence.</g:description>
-    <g:link>https://www.swedishcravings.fr/produit/o-boy-original-chocolat-en-poudre-suedois-68fabf2e</g:link>
-    <g:image_link>https://www.swedishcravings.fr/media/products/o-boy-original-700g-200-1789376926769.webp</g:image_link>
+    <g:id>8e07ce26-744f-45f2-b516-17da476e9542</g:id>
+    <g:title>Sauce Hollandaise – importé de Suède</g:title>
+    <g:description>Une onctueuse sauce Hollandaise aux notes délicates de beurre et de citron, inspirée de la grande tradition culinaire française. Parfaite pour sublimer vos poissons, fruits de mer et légumes, elle apporte une touche d'élégance à vos gratins de poisson. Pour une note rafraîchissante, ajoutez un zeste d'orange râpé.</g:description>
+    <g:link>https://www.swedishcravings.fr/produit/sauce-hollandaise-8e07ce26</g:link>
+    <g:image_link>https://www.swedishcravings.fr/media/products/hollandaise-1784906618125-665700.jpg</g:image_link>
     <g:availability>in_stock</g:availability>
-    <g:price>6.19 EUR</g:price>
-    <g:brand>O'boy</g:brand>
+    <g:price>4.95 EUR</g:price>
+    <g:brand>Swedish Cravings</g:brand>
     <g:condition>new</g:condition>
     <g:identifier_exists>no</g:identifier_exists>
     <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
-    <g:product_type>Épicerie &gt; Boissons</g:product_type>
-    <g:custom_label_0>marge-moyenne</g:custom_label_0>
-    <g:custom_label_1>prix-6-15</g:custom_label_1>
-    <g:custom_label_2>bestseller</g:custom_label_2>
-    <g:custom_label_3>boissons</g:custom_label_3>
+    <g:product_type>Épicerie &gt; Sauces</g:product_type>
+    <g:custom_label_0>marge-haute</g:custom_label_0>
+    <g:custom_label_1>prix-3-6</g:custom_label_1>
+    <g:custom_label_2>standard</g:custom_label_2>
+    <g:custom_label_3>sauces</g:custom_label_3>
   </item>
   <item>
     <g:id>35fe6591-ef84-4e47-8e95-e2c0e7187fc9</g:id>
@@ -244,7 +280,7 @@
     <g:description>Une box cadeau garnie de 7 sachets de bonbons suédois incontournables, sélectionnés par Victoria : Ahlgrens Bilar, Polly, Tutti Frutti, Malaco et bien d'autres. Livrée dans un carton kraft avec du papier de soie aux couleurs de la Suède — parfaite à offrir, ou pour découvrir le vrai godis suédois.</g:description>
     <g:link>https://www.swedishcravings.fr/produit/box-bonbons-suedois-petite-aaf2444c</g:link>
     <g:image_link>https://www.swedishcravings.fr/media/products/box-bonbons-petite-1791310334680.jpg</g:image_link>
-    <g:availability>in_stock</g:availability>
+    <g:availability>out_of_stock</g:availability>
     <g:price>18.90 EUR</g:price>
     <g:brand>Swedish Cravings</g:brand>
     <g:condition>new</g:condition>
@@ -257,13 +293,13 @@
     <g:custom_label_3>confiseries</g:custom_label_3>
   </item>
   <item>
-    <g:id>c4b6e87e-0621-4fbe-847b-c2e01a44744f</g:id>
-    <g:title>Box Bonbons Suédois — Moyenne, 1320 g</g:title>
-    <g:description>Une box cadeau garnie de 9 sachets de bonbons suédois incontournables, sélectionnés par Victoria : Ahlgrens Bilar, Polly, Tutti Frutti, Malaco et bien d'autres. Livrée dans un carton kraft avec du papier de soie aux couleurs de la Suède — parfaite à offrir, ou pour découvrir le vrai godis suédois.</g:description>
-    <g:link>https://www.swedishcravings.fr/produit/box-bonbons-suedois-moyenne-c4b6e87e</g:link>
-    <g:image_link>https://www.swedishcravings.fr/media/products/box-bonbons-moyenne-1791310334680.jpg</g:image_link>
-    <g:availability>in_stock</g:availability>
-    <g:price>23.90 EUR</g:price>
+    <g:id>af5bd0a5-e8bf-411e-b20a-77c9edc2095d</g:id>
+    <g:title>Box Bonbons Suédois — Grande, 2010 g</g:title>
+    <g:description>Une box cadeau garnie de 15 sachets de bonbons suédois incontournables, sélectionnés par Victoria : Ahlgrens Bilar, Polly, Tutti Frutti, Malaco et bien d'autres. Livrée dans un carton kraft avec du papier de soie aux couleurs de la Suède — parfaite à offrir, ou pour découvrir le vrai godis suédois. Valeur des sachets au détail : 40,95 €.</g:description>
+    <g:link>https://www.swedishcravings.fr/produit/box-bonbons-suedois-grande-af5bd0a5</g:link>
+    <g:image_link>https://www.swedishcravings.fr/media/products/coffret-de-bonbons-su-dois-color-s-1792615565148.jpg</g:image_link>
+    <g:availability>out_of_stock</g:availability>
+    <g:price>39.95 EUR</g:price>
     <g:brand>Swedish Cravings</g:brand>
     <g:condition>new</g:condition>
     <g:identifier_exists>no</g:identifier_exists>
@@ -275,21 +311,453 @@
     <g:custom_label_3>confiseries</g:custom_label_3>
   </item>
   <item>
-    <g:id>af5bd0a5-e8bf-411e-b20a-77c9edc2095d</g:id>
-    <g:title>Box Bonbons Suédois — Grande, 2010 g</g:title>
-    <g:description>Une box cadeau garnie de 15 sachets de bonbons suédois incontournables, sélectionnés par Victoria : Ahlgrens Bilar, Polly, Tutti Frutti, Malaco et bien d'autres. Livrée dans un carton kraft avec du papier de soie aux couleurs de la Suède — parfaite à offrir, ou pour découvrir le vrai godis suédois. Valeur des sachets au détail : 40,95 €.</g:description>
-    <g:link>https://www.swedishcravings.fr/produit/box-bonbons-suedois-grande-af5bd0a5</g:link>
-    <g:image_link>https://www.swedishcravings.fr/media/products/box-bonbons-grande-1791310334680.jpg</g:image_link>
+    <g:id>2bf25f57-ece6-430b-9e44-513e7c8357e3</g:id>
+    <g:title>Boules au chocolat Delicato sans sucres ajoutés – importé de Suède, 240 g (6 x 40 g)</g:title>
+    <g:description>Une icône de la pâtisserie suédoise revisitée pour les gourmands soucieux de leur consommation de sucre. Ces délicieuses boules au chocolat enrobées de noix de coco offrent une saveur moka authentique et réconfortante. Entièrement végétales et sans lactose, elles se dégustent à tout moment de la journée avec un café ou un thé. Un classique scandinave à découvrir absolument.</g:description>
+    <g:link>https://www.swedishcravings.fr/produit/boules-au-chocolat-delicato-sans-sucres-ajoutes-2bf25f57</g:link>
+    <g:image_link>https://www.swedishcravings.fr/media/products/images-1792614217936.jpg</g:image_link>
     <g:availability>in_stock</g:availability>
-    <g:price>39.95 EUR</g:price>
+    <g:price>7.90 EUR</g:price>
     <g:brand>Swedish Cravings</g:brand>
+    <g:condition>new</g:condition>
+    <g:identifier_exists>no</g:identifier_exists>
+    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
+    <g:product_type>Épicerie &gt; Bake &amp; Fika</g:product_type>
+    <g:custom_label_0>marge-haute</g:custom_label_0>
+    <g:custom_label_1>prix-6-15</g:custom_label_1>
+    <g:custom_label_2>nouveaute</g:custom_label_2>
+    <g:custom_label_3>patisserie-basics</g:custom_label_3>
+  </item>
+  <item>
+    <g:id>cfaa5817-21f3-477f-8522-beae08268a7c</g:id>
+    <g:title>Marabou King Size Chocolat au Lait – chocolat suédois, 220 g</g:title>
+    <g:description>Une tablette généreuse au chocolat au lait onctueux, héritière d'un savoir-faire suédois depuis 1919. La recette secrète de Marabou offre une texture fondante et un goût crémeux incomparable, évoquant les souvenirs heureux des moments partagés. Fondée en 1916, la maison Marabou accompagne les célébrations familiales scandinaves depuis plus d'un siècle. À déguster en famille, entre amis, ou pour un instant de pur réconfort personnel.</g:description>
+    <g:link>https://www.swedishcravings.fr/produit/marabou-king-size-chocolat-au-lait-220g-cfaa5817</g:link>
+    <g:image_link>https://www.swedishcravings.fr/media/products/marabou-king-size-mjolkchoklad-220g-1787811636281-721244.webp</g:image_link>
+    <g:availability>in_stock</g:availability>
+    <g:price>4.89 EUR</g:price>
+    <g:brand>Marabou</g:brand>
+    <g:condition>new</g:condition>
+    <g:identifier_exists>no</g:identifier_exists>
+    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
+    <g:product_type>Épicerie &gt; Chocolat</g:product_type>
+    <g:custom_label_0>marge-moyenne</g:custom_label_0>
+    <g:custom_label_1>prix-3-6</g:custom_label_1>
+    <g:custom_label_2>bestseller</g:custom_label_2>
+    <g:custom_label_3>chocolat</g:custom_label_3>
+  </item>
+  <item>
+    <g:id>9ce88828-2192-41d3-8dd6-b7c8c7b3b671</g:id>
+    <g:title>Ahlgrens Petites Voitures Acidulées – bonbons suédois, 100 g</g:title>
+    <g:description>Une icône suédoise revisitée pour les amateurs de saveurs acidulées ! Ces petites voitures en mousse fondante conservent le cœur tendre de l'original, enrobé d'une délicieuse couche de sucre pétillant. Déclinées dans les couleurs classiques rose, blanc et vert, elles offrent une expérience gustative unique entre douceur et acidité. Le secret de leurs saveurs reste jalousement gardé par Cloetta depuis des décennies.</g:description>
+    <g:link>https://www.swedishcravings.fr/produit/petites-voitures-ahlgrens-acidulees-9ce88828</g:link>
+    <g:image_link>https://www.swedishcravings.fr/media/products/07310350132898-c1n1-1783834374630-372487.jpg</g:image_link>
+    <g:availability>in_stock</g:availability>
+    <g:price>3.26 EUR</g:price>
+    <g:brand>Ahlgrens</g:brand>
+    <g:condition>new</g:condition>
+    <g:identifier_exists>no</g:identifier_exists>
+    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
+    <g:product_type>Épicerie &gt; Bonbons</g:product_type>
+    <g:custom_label_0>marge-haute</g:custom_label_0>
+    <g:custom_label_1>prix-3-6</g:custom_label_1>
+    <g:custom_label_2>standard</g:custom_label_2>
+    <g:custom_label_3>confiseries</g:custom_label_3>
+  </item>
+  <item>
+    <g:id>5369c5fd-1a6a-45fc-8a58-4869d806bff9</g:id>
+    <g:title>Polly Original - Boules de guimauve enrobées de chocolat – bonbons suédois, 200 g</g:title>
+    <g:description>Un classique suédois incontournable depuis des générations ! Ces délicieuses boules de guimauve moelleuses sont enrobées d'une fine couche de chocolat au lait onctueux. Les boules claires révèlent des saveurs d'arrak et de caramel au beurre, tandis que les boules foncées offrent une délicate note de vanille. Une texture unique entre fondant et moelleux qui rend impossible de n'en prendre qu'une seule.</g:description>
+    <g:link>https://www.swedishcravings.fr/produit/polly-original-boules-de-guimauve-enrobees-de-chocolat-5369c5fd</g:link>
+    <g:image_link>https://www.swedishcravings.fr/media/products/07310040034525-1001325-1788364948028-937116.jpg</g:image_link>
+    <g:availability>in_stock</g:availability>
+    <g:price>3.90 EUR</g:price>
+    <g:brand>Polly</g:brand>
+    <g:condition>new</g:condition>
+    <g:identifier_exists>no</g:identifier_exists>
+    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
+    <g:product_type>Épicerie &gt; Bonbons</g:product_type>
+    <g:custom_label_0>marge-basse</g:custom_label_0>
+    <g:custom_label_1>prix-3-6</g:custom_label_1>
+    <g:custom_label_2>standard</g:custom_label_2>
+    <g:custom_label_3>confiseries</g:custom_label_3>
+  </item>
+  <item>
+    <g:id>65102af4-acd6-40f2-a350-20ce0db39f40</g:id>
+    <g:title>Malaco Gott &amp; Blandat Original - Assortiment Suédois, 600 g</g:title>
+    <g:description>Un voyage gustatif au cœur de la tradition confiserie scandinave. Ce mélange emblématique marie harmonieusement des bonbons fruités tendres à la réglisse salée et à l'iconique réglisse en forme de revolver. Une explosion de saveurs sucrées-salées qui fait de ce sachet généreux le compagnon idéal des soirées en famille ou entre amis.</g:description>
+    <g:link>https://www.swedishcravings.fr/produit/malaco-gott-blandat-original-assortiment-suedois-65102af4</g:link>
+    <g:image_link>https://www.swedishcravings.fr/media/products/07310350505319-c1n1-1789376144813-389909.jpg</g:image_link>
+    <g:availability>out_of_stock</g:availability>
+    <g:price>5.00 EUR</g:price>
+    <g:brand>Malaco</g:brand>
     <g:condition>new</g:condition>
     <g:identifier_exists>no</g:identifier_exists>
     <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
     <g:product_type>Épicerie &gt; Bonbons</g:product_type>
     <g:custom_label_0>marge-moyenne</g:custom_label_0>
-    <g:custom_label_1>prix-15-plus</g:custom_label_1>
+    <g:custom_label_1>prix-3-6</g:custom_label_1>
     <g:custom_label_2>nouveaute</g:custom_label_2>
+    <g:custom_label_3>confiseries</g:custom_label_3>
+  </item>
+  <item>
+    <g:id>4bda457a-91bc-47dc-bc67-c9a7c8e877bc</g:id>
+    <g:title>Marabou Tablette de chocolat aux noisettes Schweizernöt – chocolat suédois, 160 g</g:title>
+    <g:description>Un grand classique de la chocolaterie suédoise, cette tablette Marabou associe un chocolat au lait onctueux à des éclats de noisettes grossièrement concassées. Chaque bouchée offre un équilibre parfait entre la douceur crémeuse du cacao et le croquant des noisettes. Idéale pour une pause gourmande ou à partager, elle incarne le savoir-faire scandinave en matière de confiserie depuis des décennies.</g:description>
+    <g:link>https://www.swedishcravings.fr/produit/tablette-de-chocolat-aux-noisettes-schweizernot-marabou-4bda457a</g:link>
+    <g:image_link>https://www.swedishcravings.fr/media/products/xcgihysswb9mwyzxjvzb-1792614458979-987272.jpg</g:image_link>
+    <g:availability>in_stock</g:availability>
+    <g:price>5.90 EUR</g:price>
+    <g:brand>Marabou</g:brand>
+    <g:condition>new</g:condition>
+    <g:identifier_exists>no</g:identifier_exists>
+    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
+    <g:product_type>Épicerie &gt; Chocolat</g:product_type>
+    <g:custom_label_0>marge-haute</g:custom_label_0>
+    <g:custom_label_1>prix-3-6</g:custom_label_1>
+    <g:custom_label_2>bestseller</g:custom_label_2>
+    <g:custom_label_3>chocolat</g:custom_label_3>
+  </item>
+  <item>
+    <g:id>0c413263-711a-4ec0-bb50-ac03546f6687</g:id>
+    <g:title>Fazer Tutti Frutti Acidulés – importé de Suède, 120 g</g:title>
+    <g:description>Une explosion de saveurs acidulées venues tout droit de Finlande ! Ces bonbons fruités Tutti Frutti titillent les papilles avec leurs notes de framboise, poire et citron, rehaussées d'un enrobage délicieusement acide. Sans gélatine et confectionnés avec des colorants naturels, ils incarnent le savoir-faire confiseur de la maison Fazer. Parfaits pour une pause gourmande ou à partager entre amis.</g:description>
+    <g:link>https://www.swedishcravings.fr/produit/fazer-tutti-frutti-acidules-0c413263</g:link>
+    <g:image_link>https://www.swedishcravings.fr/media/products/fazer-tutti-frutti-sour-1788372506574-972894.jpg</g:image_link>
+    <g:availability>in_stock</g:availability>
+    <g:price>2.89 EUR</g:price>
+    <g:brand>Fazer</g:brand>
+    <g:condition>new</g:condition>
+    <g:identifier_exists>no</g:identifier_exists>
+    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
+    <g:product_type>Épicerie &gt; Bonbons</g:product_type>
+    <g:custom_label_0>marge-haute</g:custom_label_0>
+    <g:custom_label_1>prix-moins-3</g:custom_label_1>
+    <g:custom_label_2>nouveaute</g:custom_label_2>
+    <g:custom_label_3>confiseries</g:custom_label_3>
+  </item>
+  <item>
+    <g:id>cee624d6-1c2e-4b59-a0f2-735d88c08ba4</g:id>
+    <g:title>Mélange pour Dip Crème Fraîche &amp; Oignon – importé de Suède, 24 g</g:title>
+    <g:description>Un grand classique venu de Suède pour sublimer vos apéritifs. Cette préparation pour dip associe la douceur de la crème aigre à la saveur intense de l'oignon, dans la plus pure tradition américaine. Il suffit de mélanger avec de la crème fraîche pour obtenir en quelques instants un dip onctueux et irrésistible, parfait pour accompagner chips, crudités ou nachos.</g:description>
+    <g:link>https://www.swedishcravings.fr/produit/melange-pour-dip-creme-fraiche-oignon-cee624d6</g:link>
+    <g:image_link>https://www.swedishcravings.fr/media/products/13051-dippmix-sourcream-onion-24g-1783834370572-41220.png</g:image_link>
+    <g:availability>in_stock</g:availability>
+    <g:price>2.15 EUR</g:price>
+    <g:brand>Swedish Cravings</g:brand>
+    <g:condition>new</g:condition>
+    <g:identifier_exists>no</g:identifier_exists>
+    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
+    <g:product_type>Épicerie &gt; Dips</g:product_type>
+    <g:custom_label_0>marge-haute</g:custom_label_0>
+    <g:custom_label_1>prix-moins-3</g:custom_label_1>
+    <g:custom_label_2>bestseller</g:custom_label_2>
+    <g:custom_label_3>dips</g:custom_label_3>
+  </item>
+  <item>
+    <g:id>5027d113-44b7-42a0-a807-6470b7ca3e27</g:id>
+    <g:title>Marabou Tablette de chocolat au lait orange et croquant d'amandes – chocolat suédois, 160 g</g:title>
+    <g:description>Un classique suédois irrésistible qui marie la douceur du chocolat au lait Marabou à des notes d'orange parfumées et des éclats croustillants de croquant aux amandes. Avec ses 30% de cacao minimum, cette tablette offre une expérience gourmande parfaite pour accompagner une pause fika. Issue du programme Cocoa Life pour un cacao durable et éthique.</g:description>
+    <g:link>https://www.swedishcravings.fr/produit/tablette-de-chocolat-au-lait-orange-et-croquant-d-amandes-ma-5027d113</g:link>
+    <g:image_link>https://www.swedishcravings.fr/media/products/zeriur9bfdxaq0wixmxz-1792614519211-130618.jpg</g:image_link>
+    <g:availability>in_stock</g:availability>
+    <g:price>5.90 EUR</g:price>
+    <g:brand>Marabou</g:brand>
+    <g:condition>new</g:condition>
+    <g:identifier_exists>no</g:identifier_exists>
+    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
+    <g:product_type>Épicerie &gt; Chocolat</g:product_type>
+    <g:custom_label_0>marge-haute</g:custom_label_0>
+    <g:custom_label_1>prix-3-6</g:custom_label_1>
+    <g:custom_label_2>nouveaute</g:custom_label_2>
+    <g:custom_label_3>chocolat</g:custom_label_3>
+  </item>
+  <item>
+    <g:id>c2a62ac6-0d61-489b-88f1-43eefc76364c</g:id>
+    <g:title>Malaco Zoo Original - Bonbons fruités suédois, 95 g</g:title>
+    <g:description>Véritable icône des confiseries suédoises, Malaco Zoo enchante depuis des générations avec ses petits animaux aux saveurs fruitées. Singe, girafe et perroquet se partagent ce sachet mythique, reconnaissable entre mille. Sans huile de palme ni colorants artificiels, ces bonbons tendres sont parfaits pour accompagner un moment de gourmandise ou garnir un buffet festif. Un classique du samedi soir à la suédoise, à savourer toute la semaine.</g:description>
+    <g:link>https://www.swedishcravings.fr/produit/malaco-zoo-original-bonbons-fruites-suedois-c2a62ac6</g:link>
+    <g:image_link>https://www.swedishcravings.fr/media/products/image-12112-1788372320028-180898.webp</g:image_link>
+    <g:availability>in_stock</g:availability>
+    <g:price>2.19 EUR</g:price>
+    <g:brand>Malaco</g:brand>
+    <g:condition>new</g:condition>
+    <g:identifier_exists>no</g:identifier_exists>
+    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
+    <g:product_type>Épicerie &gt; Bonbons</g:product_type>
+    <g:custom_label_0>marge-moyenne</g:custom_label_0>
+    <g:custom_label_1>prix-moins-3</g:custom_label_1>
+    <g:custom_label_2>nouveaute</g:custom_label_2>
+    <g:custom_label_3>confiseries</g:custom_label_3>
+  </item>
+  <item>
+    <g:id>01a707e3-215e-4d8a-8d87-7828daa815e8</g:id>
+    <g:title>OLW Mélange pour Dip Fresh Island – dip suédois, 24 g</g:title>
+    <g:description>Un mélange onctueux et savoureux venu tout droit de Suède, signé OLW. Cette préparation best-seller associe des notes fraîches d'oignon, d'ail et de paprika pour un dip irrésistible. Idéal avec des chips croustillants, il sublime également vos salades ou accompagne à merveille des légumes grillés. Le compagnon parfait de vos apéritifs festifs ou de vos soirées cocooning.</g:description>
+    <g:link>https://www.swedishcravings.fr/produit/melange-pour-dip-fresh-island-olw-01a707e3</g:link>
+    <g:image_link>https://www.swedishcravings.fr/media/products/picture-29-1783834797725-123081.png</g:image_link>
+    <g:availability>in_stock</g:availability>
+    <g:price>2.15 EUR</g:price>
+    <g:brand>OLW</g:brand>
+    <g:condition>new</g:condition>
+    <g:identifier_exists>no</g:identifier_exists>
+    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
+    <g:product_type>Épicerie &gt; Dips</g:product_type>
+    <g:custom_label_0>marge-haute</g:custom_label_0>
+    <g:custom_label_1>prix-moins-3</g:custom_label_1>
+    <g:custom_label_2>bestseller</g:custom_label_2>
+    <g:custom_label_3>dips</g:custom_label_3>
+  </item>
+  <item>
+    <g:id>dff16445-3af9-42f8-a5ec-0e371f3f4d0a</g:id>
+    <g:title>OLW Mélange pour Dip Ranch – dip suédois, 24 g</g:title>
+    <g:description>Un classique suédois des soirées apéritives : cette préparation pour dip ranch séduit par sa texture crémeuse et ses notes fraîches de tomate et d'oignon. Best-seller incontesté de la marque OLW, elle transforme vos chips en expérience gourmande et sublime vos légumes grillés ou vos salades estivales. L'accompagnement parfait pour un vendredi soir cocooning ou une fête réussie.</g:description>
+    <g:link>https://www.swedishcravings.fr/produit/melange-pour-dip-ranch-olw-dff16445</g:link>
+    <g:image_link>https://www.swedishcravings.fr/media/products/picture-28-1783855341152-255881.png</g:image_link>
+    <g:availability>in_stock</g:availability>
+    <g:price>2.15 EUR</g:price>
+    <g:brand>OLW</g:brand>
+    <g:condition>new</g:condition>
+    <g:identifier_exists>no</g:identifier_exists>
+    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
+    <g:product_type>Épicerie &gt; Dips</g:product_type>
+    <g:custom_label_0>marge-haute</g:custom_label_0>
+    <g:custom_label_1>prix-moins-3</g:custom_label_1>
+    <g:custom_label_2>bestseller</g:custom_label_2>
+    <g:custom_label_3>dips</g:custom_label_3>
+  </item>
+  <item>
+    <g:id>e8dca0ac-4914-41dc-8ba9-c0e07b058842</g:id>
+    <g:title>Santa Maria Épices pour Frites – épices suédoises, 68 g</g:title>
+    <g:description>Un classique suédois incontournable pour sublimer vos frites maison. Ce mélange savoureux associe paprika doux, oignon grillé et céleri pour une explosion de saveurs nordiques. Saupoudrez généreusement sur vos frites croustillantes, potatoes ou légumes rôtis pour une expérience street-food à la scandinave.</g:description>
+    <g:link>https://www.swedishcravings.fr/produit/epices-pour-frites-santa-maria-e8dca0ac</g:link>
+    <g:image_link>https://www.swedishcravings.fr/media/products/unfye3ayw1wjwympc6tn-1792614597710-231166.jpg</g:image_link>
+    <g:availability>in_stock</g:availability>
+    <g:price>5.90 EUR</g:price>
+    <g:brand>Santa Maria</g:brand>
+    <g:condition>new</g:condition>
+    <g:identifier_exists>no</g:identifier_exists>
+    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
+    <g:product_type>Épicerie &gt; Épices &amp; Aromates</g:product_type>
+    <g:custom_label_0>marge-haute</g:custom_label_0>
+    <g:custom_label_1>prix-3-6</g:custom_label_1>
+    <g:custom_label_2>nouveaute</g:custom_label_2>
+    <g:custom_label_3>epices</g:custom_label_3>
+  </item>
+  <item>
+    <g:id>9787018d-526c-48b8-bbf7-a5a0a1e4b5b2</g:id>
+    <g:title>Marabou Rouleau à la Menthe – chocolat suédois, 78 g</g:title>
+    <g:description>Un classique suédois irrésistible : le rouleau Marabou associe le chocolat au lait onctueux emblématique de la marque à une note de menthe fraîche et vivifiante. La texture fondante de la garniture contraste délicieusement avec l'enrobage chocolaté. Idéal pour une pause gourmande ou en fin de repas, ce petit plaisir scandinave vous transportera directement en Suède.</g:description>
+    <g:link>https://www.swedishcravings.fr/produit/rouleau-marabou-a-la-menthe-9787018d</g:link>
+    <g:image_link>https://www.swedishcravings.fr/media/products/340x340-1787812135597-938325.jpg</g:image_link>
+    <g:availability>in_stock</g:availability>
+    <g:price>2.99 EUR</g:price>
+    <g:brand>Marabou</g:brand>
+    <g:condition>new</g:condition>
+    <g:identifier_exists>no</g:identifier_exists>
+    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
+    <g:product_type>Épicerie &gt; Chocolat</g:product_type>
+    <g:custom_label_0>marge-basse</g:custom_label_0>
+    <g:custom_label_1>prix-moins-3</g:custom_label_1>
+    <g:custom_label_2>standard</g:custom_label_2>
+    <g:custom_label_3>chocolat</g:custom_label_3>
+  </item>
+  <item>
+    <g:id>b8607457-b703-4c7d-a85f-5bfec6e98e76</g:id>
+    <g:title>Ahlgrens Bilar Lakrits Däck – bonbons suédois, 110 g</g:title>
+    <g:description>Une confiserie suédoise iconique qui ravira les amateurs de réglisse authentique. Ces petits pneus en mousse légère et fondante combinent la douceur du salmiak avec l'intensité de l'extrait de réglisse. Un classique incontournable de la tradition nordique, parfait pour découvrir les saveurs audacieuses de la Scandinavie.</g:description>
+    <g:link>https://www.swedishcravings.fr/produit/ahlgrens-bilar-lakrits-dack-110g-b8607457</g:link>
+    <g:image_link>https://www.swedishcravings.fr/media/products/ahlgrens-bilar-lakritsdack-110g-1789374436951.webp</g:image_link>
+    <g:availability>out_of_stock</g:availability>
+    <g:price>3.10 EUR</g:price>
+    <g:brand>Ahlgrens</g:brand>
+    <g:condition>new</g:condition>
+    <g:identifier_exists>no</g:identifier_exists>
+    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
+    <g:product_type>Épicerie &gt; Bonbons</g:product_type>
+    <g:custom_label_0>marge-haute</g:custom_label_0>
+    <g:custom_label_1>prix-3-6</g:custom_label_1>
+    <g:custom_label_2>nouveaute</g:custom_label_2>
+    <g:custom_label_3>confiseries</g:custom_label_3>
+  </item>
+  <item>
+    <g:id>8f02b557-4d47-499a-abb1-a9b16210cfde</g:id>
+    <g:title>Fazer Dumle Crunchy Caramel Salé - Bouchées Chocolatées – importé de Suède, 55 g</g:title>
+    <g:description>Un délice scandinave où le caramel mou et salé rencontre le croquant de puffies de blé salées, le tout généreusement enrobé de chocolat au lait onctueux. Fabriqué avec 100% de cacao issu de sources responsables par la maison finlandaise Fazer. Deux belles bouchées à savourer seul ou à partager pour un moment de gourmandise nordique authentique.</g:description>
+    <g:link>https://www.swedishcravings.fr/produit/dumle-crunchy-caramel-sale-bouchees-chocolatees-8f02b557</g:link>
+    <g:image_link>https://www.swedishcravings.fr/media/products/gjwyu9ry4iaa05szgeqp-1792614687085-51087.jpg</g:image_link>
+    <g:availability>in_stock</g:availability>
+    <g:price>2.99 EUR</g:price>
+    <g:brand>Fazer</g:brand>
+    <g:condition>new</g:condition>
+    <g:identifier_exists>no</g:identifier_exists>
+    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
+    <g:product_type>Épicerie &gt; Chocolat</g:product_type>
+    <g:custom_label_0>marge-haute</g:custom_label_0>
+    <g:custom_label_1>prix-moins-3</g:custom_label_1>
+    <g:custom_label_2>nouveaute</g:custom_label_2>
+    <g:custom_label_3>chocolat</g:custom_label_3>
+  </item>
+  <item>
+    <g:id>357c3f45-9a12-4c26-bc70-d8202ac8d8f8</g:id>
+    <g:title>Ahlgrens Bilar Original - Bonbons Voitures Suédois, 125 g</g:title>
+    <g:description>Icône incontestée de la confiserie suédoise depuis 1953, ces petites voitures en guimauve fondante sont un véritable phénomène national. Leur texture moelleuse et légère fond délicatement en bouche, révélant des saveurs fruitées subtiles dans leurs trois couleurs emblématiques : rose, blanc et vert. Parfaites pour accompagner une soirée cinéma, un road trip ou simplement pour redécouvrir ce classique scandinave adoré de toutes les générations.</g:description>
+    <g:link>https://www.swedishcravings.fr/produit/ahlgrens-bilar-original-bonbons-voitures-suedois-357c3f45</g:link>
+    <g:image_link>https://www.swedishcravings.fr/media/products/07310350132874-c1n1-1783834373633-666640.jpg</g:image_link>
+    <g:availability>out_of_stock</g:availability>
+    <g:price>2.98 EUR</g:price>
+    <g:brand>Ahlgrens</g:brand>
+    <g:condition>new</g:condition>
+    <g:identifier_exists>no</g:identifier_exists>
+    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
+    <g:product_type>Épicerie &gt; Bonbons</g:product_type>
+    <g:custom_label_0>marge-haute</g:custom_label_0>
+    <g:custom_label_1>prix-moins-3</g:custom_label_1>
+    <g:custom_label_2>bestseller</g:custom_label_2>
+    <g:custom_label_3>confiseries</g:custom_label_3>
+  </item>
+  <item>
+    <g:id>9532445d-2321-40ac-8e19-1e24ab7f3a4a</g:id>
+    <g:title>Wasa Crunchy Bites Crème Aigre &amp; Oignon – snack suédois, 100 g</g:title>
+    <g:description>Ces délicieuses bouchées croustillantes signées Wasa offrent une texture légère et aérienne rehaussée d'une savoureuse note de crème aigre. Idéales pour l'apéritif ou en snack raffiné, elles incarnent le savoir-faire suédois du pain croustillant revisité avec modernité. Un plaisir croquant à partager ou à savourer en solo.</g:description>
+    <g:link>https://www.swedishcravings.fr/produit/crunchy-bites-creme-aigre-oignon-wasa-9532445d</g:link>
+    <g:image_link>https://www.swedishcravings.fr/media/products/ir8sfsdqveh2ngrs74bf-1792613836288-799572.jpg</g:image_link>
+    <g:availability>in_stock</g:availability>
+    <g:price>4.90 EUR</g:price>
+    <g:brand>Wasa</g:brand>
+    <g:condition>new</g:condition>
+    <g:identifier_exists>no</g:identifier_exists>
+    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
+    <g:product_type>Épicerie &gt; Snacks &amp; Chips</g:product_type>
+    <g:custom_label_0>marge-haute</g:custom_label_0>
+    <g:custom_label_1>prix-3-6</g:custom_label_1>
+    <g:custom_label_2>nouveaute</g:custom_label_2>
+    <g:custom_label_3>snacks-chips</g:custom_label_3>
+  </item>
+  <item>
+    <g:id>bb75e9f2-40cb-48cb-ab04-8ec22ab3c1f5</g:id>
+    <g:title>Rouleaux au Punch 6 pièces – importé de Suède, 240g (6x40g)</g:title>
+    <g:description>Véritable icône de la pâtisserie suédoise, le punschrulle séduit par son enrobage de massepain vert tendre et son cœur moelleux parfumé à l'arrak. Cette gourmandise, surnommée affectueusement 'dammsugare' (aspirateur) en Suède pour sa forme caractéristique, offre une expérience unique mêlant douceur d'amande et notes subtilement épicées. Idéal pour accompagner un café ou découvrir l'art du fika scandinave.</g:description>
+    <g:link>https://www.swedishcravings.fr/produit/rouleaux-au-punch-6-pieces-bb75e9f2</g:link>
+    <g:image_link>https://www.swedishcravings.fr/media/products/images--1--1792614188692.jpg</g:image_link>
+    <g:availability>in_stock</g:availability>
+    <g:price>8.90 EUR</g:price>
+    <g:brand>Swedish Cravings</g:brand>
+    <g:condition>new</g:condition>
+    <g:identifier_exists>no</g:identifier_exists>
+    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
+    <g:product_type>Épicerie &gt; Bake &amp; Fika</g:product_type>
+    <g:custom_label_0>marge-haute</g:custom_label_0>
+    <g:custom_label_1>prix-6-15</g:custom_label_1>
+    <g:custom_label_2>nouveaute</g:custom_label_2>
+    <g:custom_label_3>patisserie-basics</g:custom_label_3>
+  </item>
+  <item>
+    <g:id>96209b4b-cd56-4c22-aa31-eca2e63e60ad</g:id>
+    <g:title>Malaco Gott &amp; Blandat Original - Assortiment Suédois, 25 g</g:title>
+    <g:description>Véritable institution suédoise depuis 1979, Gott &amp; Blandat incarne l'art du mélange sucré-salé à la scandinave. Ces bonbons aux textures variées associent des gommes aux fruits juteux à des notes de réglisse salée, créant un équilibre addictif typiquement nordique. Un incontournable du lördagsgodis, la tradition du samedi bonbon chère aux familles suédoises.</g:description>
+    <g:link>https://www.swedishcravings.fr/produit/gott-blandat-original-assortiment-suedois-96209b4b</g:link>
+    <g:image_link>https://www.swedishcravings.fr/media/products/malacogott-blandatoriginal-1787811822598-557378.webp</g:image_link>
+    <g:availability>in_stock</g:availability>
+    <g:price>0.99 EUR</g:price>
+    <g:brand>Malaco</g:brand>
+    <g:condition>new</g:condition>
+    <g:identifier_exists>no</g:identifier_exists>
+    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
+    <g:product_type>Épicerie &gt; Bonbons</g:product_type>
+    <g:custom_label_0>marge-basse</g:custom_label_0>
+    <g:custom_label_1>prix-moins-3</g:custom_label_1>
+    <g:custom_label_2>bestseller</g:custom_label_2>
+    <g:custom_label_3>confiseries</g:custom_label_3>
+  </item>
+  <item>
+    <g:id>d00caace-84a8-49c8-adc2-c9d6cdffdcef</g:id>
+    <g:title>Mélange de Noix Cajou Miel &amp; Sel – importé de Suède, 175 g</g:title>
+    <g:description>Un mélange gourmand de cacahuètes grillées et de noix de cajou caramélisées au miel, relevé d'une touche de sel parfaitement dosée. La douceur du miel enrobe délicatement chaque noix tandis que le sel vient sublimer l'ensemble en créant un équilibre addictif. Le snack préféré des Suédois pour les moments de partage.</g:description>
+    <g:link>https://www.swedishcravings.fr/produit/melange-de-noix-cajou-miel-sel-d00caace</g:link>
+    <g:image_link>https://www.swedishcravings.fr/media/products/7310532151662estrellanutmixhoneysalt-cas-1783834370945-417834.png</g:image_link>
+    <g:availability>in_stock</g:availability>
+    <g:price>4.99 EUR</g:price>
+    <g:brand>Swedish Cravings</g:brand>
+    <g:condition>new</g:condition>
+    <g:identifier_exists>no</g:identifier_exists>
+    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
+    <g:product_type>Épicerie &gt; Snacks &amp; Chips</g:product_type>
+    <g:custom_label_0>marge-moyenne</g:custom_label_0>
+    <g:custom_label_1>prix-3-6</g:custom_label_1>
+    <g:custom_label_2>bestseller</g:custom_label_2>
+    <g:custom_label_3>snacks-chips</g:custom_label_3>
+  </item>
+  <item>
+    <g:id>babd1c65-17df-4b47-ac5a-6a41ecf58242</g:id>
+    <g:title>OLW Mélange pour Dip Chili Fromage – dip suédois, 23 g</g:title>
+    <g:description>Une explosion de saveurs nordiques avec ce dip crémeux alliant le caractère du cheddar à la chaleur subtile du piment. Simplement mélangé à de la crème fraîche, il se transforme en une sauce onctueuse qui peut même être réchauffée pour plus de gourmandise. Parfait pour sublimer vos apéritifs, accompagner des frites croustillantes ou couronner un burger généreux.</g:description>
+    <g:link>https://www.swedishcravings.fr/produit/melange-pour-dip-chili-fromage-olw-babd1c65</g:link>
+    <g:image_link>https://www.swedishcravings.fr/media/products/picture-48-1783834796127-450146.png</g:image_link>
+    <g:availability>in_stock</g:availability>
+    <g:price>2.15 EUR</g:price>
+    <g:brand>OLW</g:brand>
+    <g:condition>new</g:condition>
+    <g:identifier_exists>no</g:identifier_exists>
+    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
+    <g:product_type>Épicerie &gt; Dips</g:product_type>
+    <g:custom_label_0>marge-moyenne</g:custom_label_0>
+    <g:custom_label_1>prix-moins-3</g:custom_label_1>
+    <g:custom_label_2>standard</g:custom_label_2>
+    <g:custom_label_3>dips</g:custom_label_3>
+  </item>
+  <item>
+    <g:id>b6ff736a-27ff-4cb1-98ca-283d60c101e3</g:id>
+    <g:title>Kavli Fromage à tartiner au Bacon – importé de Suède, 330 g</g:title>
+    <g:description>Un mariage gourmand entre fromages affinés suédois et bacon fumé authentique. Cette crème onctueuse révèle des notes fumées et fromagères qui subliment vos tartines du matin au soir. Idéale aussi en cuisine pour enrichir une sauce pasta ou garnir une quiche. Le favori des adolescents scandinaves, devenu un classique incontournable.</g:description>
+    <g:link>https://www.swedishcravings.fr/produit/fromage-a-tartiner-au-bacon-kavli-b6ff736a</g:link>
+    <g:image_link>https://www.swedishcravings.fr/media/products/capture-d--cran-2026-07-23-195640-1784829416123.png</g:image_link>
+    <g:availability>in_stock</g:availability>
+    <g:price>7.19 EUR</g:price>
+    <g:brand>Kavli</g:brand>
+    <g:condition>new</g:condition>
+    <g:identifier_exists>no</g:identifier_exists>
+    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
+    <g:product_type>Épicerie &gt; Fromages &amp; tartinables</g:product_type>
+    <g:custom_label_0>marge-moyenne</g:custom_label_0>
+    <g:custom_label_1>prix-6-15</g:custom_label_1>
+    <g:custom_label_2>standard</g:custom_label_2>
+    <g:custom_label_3>fromages-tartinables</g:custom_label_3>
+  </item>
+  <item>
+    <g:id>825754d5-b9d3-4e7d-adfa-c3ef8bf008fa</g:id>
+    <g:title>Mélange pour Dip Tortilla – importé de Suède, 22 g</g:title>
+    <g:description>Un mélange d'épices aux accents tex-mex qui transforme instantanément votre crème fraîche en dip irrésistible. Les saveurs chaleureuses du paprika, du piment et du cumin s'associent harmonieusement pour accompagner vos tortilla chips ou vos crudités. Idéal pour vos apéritifs entre amis ou vos soirées cinéma à la maison.</g:description>
+    <g:link>https://www.swedishcravings.fr/produit/melange-pour-dip-tortilla-825754d5</g:link>
+    <g:image_link>https://www.swedishcravings.fr/media/products/dippmix-tortilla-1783834374880-809927.png</g:image_link>
+    <g:availability>in_stock</g:availability>
+    <g:price>2.15 EUR</g:price>
+    <g:brand>Swedish Cravings</g:brand>
+    <g:condition>new</g:condition>
+    <g:identifier_exists>no</g:identifier_exists>
+    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
+    <g:product_type>Épicerie &gt; Dips</g:product_type>
+    <g:custom_label_0>marge-haute</g:custom_label_0>
+    <g:custom_label_1>prix-moins-3</g:custom_label_1>
+    <g:custom_label_2>standard</g:custom_label_2>
+    <g:custom_label_3>dips</g:custom_label_3>
+  </item>
+  <item>
+    <g:id>26bc35e6-ae50-4710-8808-bb32106c5f8e</g:id>
+    <g:title>Fazer Tutti Frutti Rings - Anneaux de bonbons aux fruits – importé de Suède, 180 g</g:title>
+    <g:description>Plongez dans un tourbillon de saveurs exotiques avec ces anneaux de bonbons finlandais. Kiwi, melon, pomme, fraise et réglisse se mêlent dans une texture moelleuse et fondante. Sans gélatine et entièrement vegan, ces confiseries Fazer sont élaborées avec des arômes naturels et des colorants issus de fruits et légumes. Un plaisir gourmand à partager en famille ou entre amis.</g:description>
+    <g:link>https://www.swedishcravings.fr/produit/fazer-tutti-frutti-rings-anneaux-de-bonbons-aux-fruits-180g-26bc35e6</g:link>
+    <g:image_link>https://www.swedishcravings.fr/media/products/tuttifruttirings-1784906083620-576703.webp</g:image_link>
+    <g:availability>in_stock</g:availability>
+    <g:price>2.89 EUR</g:price>
+    <g:brand>Fazer</g:brand>
+    <g:condition>new</g:condition>
+    <g:identifier_exists>no</g:identifier_exists>
+    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
+    <g:product_type>Épicerie &gt; Bonbons</g:product_type>
+    <g:custom_label_0>marge-moyenne</g:custom_label_0>
+    <g:custom_label_1>prix-moins-3</g:custom_label_1>
+    <g:custom_label_2>bestseller</g:custom_label_2>
     <g:custom_label_3>confiseries</g:custom_label_3>
   </item>
   <item>
@@ -327,24 +795,6 @@
     <g:custom_label_1>prix-3-6</g:custom_label_1>
     <g:custom_label_2>bestseller</g:custom_label_2>
     <g:custom_label_3>patisserie-basics</g:custom_label_3>
-  </item>
-  <item>
-    <g:id>9787018d-526c-48b8-bbf7-a5a0a1e4b5b2</g:id>
-    <g:title>Marabou Rouleau à la Menthe – chocolat suédois, 78 g</g:title>
-    <g:description>Un classique suédois irrésistible : le rouleau Marabou associe le chocolat au lait onctueux emblématique de la marque à une note de menthe fraîche et vivifiante. La texture fondante de la garniture contraste délicieusement avec l'enrobage chocolaté. Idéal pour une pause gourmande ou en fin de repas, ce petit plaisir scandinave vous transportera directement en Suède.</g:description>
-    <g:link>https://www.swedishcravings.fr/produit/rouleau-marabou-a-la-menthe-9787018d</g:link>
-    <g:image_link>https://www.swedishcravings.fr/media/products/340x340-1787812135597-938325.jpg</g:image_link>
-    <g:availability>in_stock</g:availability>
-    <g:price>2.99 EUR</g:price>
-    <g:brand>Marabou</g:brand>
-    <g:condition>new</g:condition>
-    <g:identifier_exists>no</g:identifier_exists>
-    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
-    <g:product_type>Épicerie &gt; Chocolat</g:product_type>
-    <g:custom_label_0>marge-basse</g:custom_label_0>
-    <g:custom_label_1>prix-moins-3</g:custom_label_1>
-    <g:custom_label_2>standard</g:custom_label_2>
-    <g:custom_label_3>chocolat</g:custom_label_3>
   </item>
   <item>
     <g:id>bfa49184-7075-46e3-b2c4-ae73a3a758cc</g:id>
@@ -419,24 +869,6 @@
     <g:custom_label_3>confiseries</g:custom_label_3>
   </item>
   <item>
-    <g:id>58907c8f-b61f-4e08-9b43-e2823c70d351</g:id>
-    <g:title>Poivre au Citron – importé de Suède, 53 g</g:title>
-    <g:description>Un mélange d'épices suédois au caractère vif et rafraîchissant, alliant poivre noir et zeste de citron. Idéal pour sublimer poissons, volailles et sauces, ce condiment polyvalent peut s'utiliser seul grâce à sa teneur en sel. Une touche nordique qui rehausse vos plats avec élégance, à table comme en cuisine.</g:description>
-    <g:link>https://www.swedishcravings.fr/produit/poivre-au-citron-58907c8f</g:link>
-    <g:image_link>https://www.swedishcravings.fr/media/products/citronpeppar-1784906914141-952645.jpg</g:image_link>
-    <g:availability>in_stock</g:availability>
-    <g:price>3.95 EUR</g:price>
-    <g:brand>Swedish Cravings</g:brand>
-    <g:condition>new</g:condition>
-    <g:identifier_exists>no</g:identifier_exists>
-    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
-    <g:product_type>Épicerie &gt; Épices &amp; Aromates</g:product_type>
-    <g:custom_label_0>marge-haute</g:custom_label_0>
-    <g:custom_label_1>prix-3-6</g:custom_label_1>
-    <g:custom_label_2>standard</g:custom_label_2>
-    <g:custom_label_3>epices</g:custom_label_3>
-  </item>
-  <item>
     <g:id>19130567-13ec-41b9-b9a8-b6baaa3ef9db</g:id>
     <g:title>Cloetta Center - Chocolat au lait fourré au caramel – chocolat suédois, 78 g</g:title>
     <g:description>Une douceur suédoise irrésistible où un cœur de toffee fondant au caramel rencontre un enrobage de chocolat au lait onctueux. Chaque bouchée offre ce contraste parfait entre la texture moelleuse du caramel et le croquant délicat du chocolat. Un classique scandinave à savourer lors d'une pause gourmande ou à partager entre amis.</g:description>
@@ -461,7 +893,7 @@
     <g:link>https://www.swedishcravings.fr/produit/pastilles-lakerol-framboise-reglisse-sans-sucre-lakerol-b346bbd3</g:link>
     <g:image_link>https://www.swedishcravings.fr/media/products/500x500-1784748746675-447931.jpg</g:image_link>
     <g:availability>in_stock</g:availability>
-    <g:price>3.49 EUR</g:price>
+    <g:price>3.69 EUR</g:price>
     <g:brand>Läkerol</g:brand>
     <g:condition>new</g:condition>
     <g:identifier_exists>no</g:identifier_exists>
@@ -473,22 +905,22 @@
     <g:custom_label_3>confiseries</g:custom_label_3>
   </item>
   <item>
-    <g:id>b8607457-b703-4c7d-a85f-5bfec6e98e76</g:id>
-    <g:title>Ahlgrens Bilar Lakrits Däck – bonbons suédois, 110 g</g:title>
-    <g:description>Une confiserie suédoise iconique qui ravira les amateurs de réglisse authentique. Ces petits pneus en mousse légère et fondante combinent la douceur du salmiak avec l'intensité de l'extrait de réglisse. Un classique incontournable de la tradition nordique, parfait pour découvrir les saveurs audacieuses de la Scandinavie.</g:description>
-    <g:link>https://www.swedishcravings.fr/produit/ahlgrens-bilar-lakrits-dack-110g-b8607457</g:link>
-    <g:image_link>https://www.swedishcravings.fr/media/products/ahlgrens-bilar-lakritsdack-110g-1789374436951.webp</g:image_link>
+    <g:id>58907c8f-b61f-4e08-9b43-e2823c70d351</g:id>
+    <g:title>Poivre au Citron – importé de Suède, 53 g</g:title>
+    <g:description>Un mélange d'épices suédois au caractère vif et rafraîchissant, alliant poivre noir et zeste de citron. Idéal pour sublimer poissons, volailles et sauces, ce condiment polyvalent peut s'utiliser seul grâce à sa teneur en sel. Une touche nordique qui rehausse vos plats avec élégance, à table comme en cuisine.</g:description>
+    <g:link>https://www.swedishcravings.fr/produit/poivre-au-citron-58907c8f</g:link>
+    <g:image_link>https://www.swedishcravings.fr/media/products/citronpeppar-1784906914141-952645.jpg</g:image_link>
     <g:availability>in_stock</g:availability>
-    <g:price>3.10 EUR</g:price>
-    <g:brand>Ahlgrens</g:brand>
+    <g:price>3.95 EUR</g:price>
+    <g:brand>Swedish Cravings</g:brand>
     <g:condition>new</g:condition>
     <g:identifier_exists>no</g:identifier_exists>
     <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
-    <g:product_type>Épicerie &gt; Bonbons</g:product_type>
+    <g:product_type>Épicerie &gt; Épices &amp; Aromates</g:product_type>
     <g:custom_label_0>marge-haute</g:custom_label_0>
     <g:custom_label_1>prix-3-6</g:custom_label_1>
-    <g:custom_label_2>nouveaute</g:custom_label_2>
-    <g:custom_label_3>confiseries</g:custom_label_3>
+    <g:custom_label_2>standard</g:custom_label_2>
+    <g:custom_label_3>epices</g:custom_label_3>
   </item>
   <item>
     <g:id>a03a72ea-d58d-44cc-bf6b-d46f3d286b28</g:id>
@@ -499,42 +931,6 @@
     <g:availability>in_stock</g:availability>
     <g:price>2.15 EUR</g:price>
     <g:brand>Swedish Cravings</g:brand>
-    <g:condition>new</g:condition>
-    <g:identifier_exists>no</g:identifier_exists>
-    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
-    <g:product_type>Épicerie &gt; Dips</g:product_type>
-    <g:custom_label_0>marge-haute</g:custom_label_0>
-    <g:custom_label_1>prix-moins-3</g:custom_label_1>
-    <g:custom_label_2>bestseller</g:custom_label_2>
-    <g:custom_label_3>dips</g:custom_label_3>
-  </item>
-  <item>
-    <g:id>cee624d6-1c2e-4b59-a0f2-735d88c08ba4</g:id>
-    <g:title>Mélange pour Dip Crème Fraîche &amp; Oignon – importé de Suède, 24 g</g:title>
-    <g:description>Un grand classique venu de Suède pour sublimer vos apéritifs. Cette préparation pour dip associe la douceur de la crème aigre à la saveur intense de l'oignon, dans la plus pure tradition américaine. Il suffit de mélanger avec de la crème fraîche pour obtenir en quelques instants un dip onctueux et irrésistible, parfait pour accompagner chips, crudités ou nachos.</g:description>
-    <g:link>https://www.swedishcravings.fr/produit/melange-pour-dip-creme-fraiche-oignon-cee624d6</g:link>
-    <g:image_link>https://www.swedishcravings.fr/media/products/13051-dippmix-sourcream-onion-24g-1783834370572-41220.png</g:image_link>
-    <g:availability>in_stock</g:availability>
-    <g:price>2.15 EUR</g:price>
-    <g:brand>Swedish Cravings</g:brand>
-    <g:condition>new</g:condition>
-    <g:identifier_exists>no</g:identifier_exists>
-    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
-    <g:product_type>Épicerie &gt; Dips</g:product_type>
-    <g:custom_label_0>marge-haute</g:custom_label_0>
-    <g:custom_label_1>prix-moins-3</g:custom_label_1>
-    <g:custom_label_2>bestseller</g:custom_label_2>
-    <g:custom_label_3>dips</g:custom_label_3>
-  </item>
-  <item>
-    <g:id>dff16445-3af9-42f8-a5ec-0e371f3f4d0a</g:id>
-    <g:title>OLW Mélange pour Dip Ranch – dip suédois, 24 g</g:title>
-    <g:description>Un classique suédois des soirées apéritives : cette préparation pour dip ranch séduit par sa texture crémeuse et ses notes fraîches de tomate et d'oignon. Best-seller incontesté de la marque OLW, elle transforme vos chips en expérience gourmande et sublime vos légumes grillés ou vos salades estivales. L'accompagnement parfait pour un vendredi soir cocooning ou une fête réussie.</g:description>
-    <g:link>https://www.swedishcravings.fr/produit/melange-pour-dip-ranch-olw-dff16445</g:link>
-    <g:image_link>https://www.swedishcravings.fr/media/products/picture-28-1783855341152-255881.png</g:image_link>
-    <g:availability>in_stock</g:availability>
-    <g:price>2.15 EUR</g:price>
-    <g:brand>OLW</g:brand>
     <g:condition>new</g:condition>
     <g:identifier_exists>no</g:identifier_exists>
     <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
@@ -599,24 +995,6 @@
     <g:custom_label_3>patisserie-basics</g:custom_label_3>
   </item>
   <item>
-    <g:id>d00caace-84a8-49c8-adc2-c9d6cdffdcef</g:id>
-    <g:title>Mélange de Noix Cajou Miel &amp; Sel – importé de Suède, 175 g</g:title>
-    <g:description>Un mélange gourmand de cacahuètes grillées et de noix de cajou caramélisées au miel, relevé d'une touche de sel parfaitement dosée. La douceur du miel enrobe délicatement chaque noix tandis que le sel vient sublimer l'ensemble en créant un équilibre addictif. Le snack préféré des Suédois pour les moments de partage.</g:description>
-    <g:link>https://www.swedishcravings.fr/produit/melange-de-noix-cajou-miel-sel-d00caace</g:link>
-    <g:image_link>https://www.swedishcravings.fr/media/products/7310532151662estrellanutmixhoneysalt-cas-1783834370945-417834.png</g:image_link>
-    <g:availability>in_stock</g:availability>
-    <g:price>4.49 EUR</g:price>
-    <g:brand>Swedish Cravings</g:brand>
-    <g:condition>new</g:condition>
-    <g:identifier_exists>no</g:identifier_exists>
-    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
-    <g:product_type>Épicerie &gt; Snacks &amp; Chips</g:product_type>
-    <g:custom_label_0>marge-moyenne</g:custom_label_0>
-    <g:custom_label_1>prix-3-6</g:custom_label_1>
-    <g:custom_label_2>bestseller</g:custom_label_2>
-    <g:custom_label_3>snacks-chips</g:custom_label_3>
-  </item>
-  <item>
     <g:id>15a581ea-1dc1-4e1a-9db9-aaaa590560cc</g:id>
     <g:title>Fazer Tyrkisk Peber Super Sour - Bonbons acidulés au poivre – importé de Suède, 80 g</g:title>
     <g:description>Véritable icône de la confiserie finlandaise, Tyrkisk Peber Super Sour repousse les limites du goût avec son enrobage ultra-acidulé. Sous sa coque dure se cache un cœur de réglisse épicée au poivre qui explose en bouche. Une expérience gustative intense et addictive, réservée aux amateurs de sensations fortes. Le bonbon culte de Scandinavie dans sa version la plus audacieuse.</g:description>
@@ -650,24 +1028,6 @@
     <g:custom_label_0>marge-moyenne</g:custom_label_0>
     <g:custom_label_1>prix-3-6</g:custom_label_1>
     <g:custom_label_2>standard</g:custom_label_2>
-    <g:custom_label_3>confiseries</g:custom_label_3>
-  </item>
-  <item>
-    <g:id>0c413263-711a-4ec0-bb50-ac03546f6687</g:id>
-    <g:title>Fazer Tutti Frutti Acidulés – importé de Suède, 120 g</g:title>
-    <g:description>Une explosion de saveurs acidulées venues tout droit de Finlande ! Ces bonbons fruités Tutti Frutti titillent les papilles avec leurs notes de framboise, poire et citron, rehaussées d'un enrobage délicieusement acide. Sans gélatine et confectionnés avec des colorants naturels, ils incarnent le savoir-faire confiseur de la maison Fazer. Parfaits pour une pause gourmande ou à partager entre amis.</g:description>
-    <g:link>https://www.swedishcravings.fr/produit/fazer-tutti-frutti-acidules-0c413263</g:link>
-    <g:image_link>https://www.swedishcravings.fr/media/products/fazer-tutti-frutti-sour-1788372506574-972894.jpg</g:image_link>
-    <g:availability>in_stock</g:availability>
-    <g:price>2.89 EUR</g:price>
-    <g:brand>Fazer</g:brand>
-    <g:condition>new</g:condition>
-    <g:identifier_exists>no</g:identifier_exists>
-    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
-    <g:product_type>Épicerie &gt; Bonbons</g:product_type>
-    <g:custom_label_0>marge-haute</g:custom_label_0>
-    <g:custom_label_1>prix-moins-3</g:custom_label_1>
-    <g:custom_label_2>nouveaute</g:custom_label_2>
     <g:custom_label_3>confiseries</g:custom_label_3>
   </item>
   <item>
@@ -743,24 +1103,6 @@
     <g:custom_label_3>chocolat</g:custom_label_3>
   </item>
   <item>
-    <g:id>01a707e3-215e-4d8a-8d87-7828daa815e8</g:id>
-    <g:title>OLW Mélange pour Dip Fresh Island – dip suédois, 24 g</g:title>
-    <g:description>Un mélange onctueux et savoureux venu tout droit de Suède, signé OLW. Cette préparation best-seller associe des notes fraîches d'oignon, d'ail et de paprika pour un dip irrésistible. Idéal avec des chips croustillants, il sublime également vos salades ou accompagne à merveille des légumes grillés. Le compagnon parfait de vos apéritifs festifs ou de vos soirées cocooning.</g:description>
-    <g:link>https://www.swedishcravings.fr/produit/melange-pour-dip-fresh-island-olw-01a707e3</g:link>
-    <g:image_link>https://www.swedishcravings.fr/media/products/picture-29-1783834797725-123081.png</g:image_link>
-    <g:availability>in_stock</g:availability>
-    <g:price>2.15 EUR</g:price>
-    <g:brand>OLW</g:brand>
-    <g:condition>new</g:condition>
-    <g:identifier_exists>no</g:identifier_exists>
-    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
-    <g:product_type>Épicerie &gt; Dips</g:product_type>
-    <g:custom_label_0>marge-haute</g:custom_label_0>
-    <g:custom_label_1>prix-moins-3</g:custom_label_1>
-    <g:custom_label_2>bestseller</g:custom_label_2>
-    <g:custom_label_3>dips</g:custom_label_3>
-  </item>
-  <item>
     <g:id>5c2cdc38-1205-4950-a1ea-8777c3bdc499</g:id>
     <g:title>Fazer Dumle Snacks Original - Bouchées Caramel Chocolat – importé de Suède, 160 g</g:title>
     <g:description>Une irrésistible gourmandise finlandaise signée Fazer, maison légendaire depuis 1891. Le cœur fondant de caramel crémeux rencontre le croquant délicat des céréales de riz soufflé, le tout enrobé d'un chocolat au lait onctueux à 30% de cacao minimum. Parfait pour partager un moment de bonheur ou s'offrir une pause sucrée d'exception. Fabriqué avec du cacao 100% responsable.</g:description>
@@ -821,49 +1163,13 @@
     <g:link>https://www.swedishcravings.fr/produit/pastilles-lakerol-triple-treat-grand-format-75g-e60314db</g:link>
     <g:image_link>https://www.swedishcravings.fr/media/products/500x500-1784748615983-799131.jpg</g:image_link>
     <g:availability>in_stock</g:availability>
-    <g:price>3.49 EUR</g:price>
+    <g:price>3.69 EUR</g:price>
     <g:brand>Läkerol</g:brand>
     <g:condition>new</g:condition>
     <g:identifier_exists>no</g:identifier_exists>
     <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
     <g:product_type>Épicerie &gt; Bonbons</g:product_type>
     <g:custom_label_0>marge-moyenne</g:custom_label_0>
-    <g:custom_label_1>prix-3-6</g:custom_label_1>
-    <g:custom_label_2>standard</g:custom_label_2>
-    <g:custom_label_3>confiseries</g:custom_label_3>
-  </item>
-  <item>
-    <g:id>c2a62ac6-0d61-489b-88f1-43eefc76364c</g:id>
-    <g:title>Malaco Zoo Original - Bonbons fruités suédois, 95 g</g:title>
-    <g:description>Véritable icône des confiseries suédoises, Malaco Zoo enchante depuis des générations avec ses petits animaux aux saveurs fruitées. Singe, girafe et perroquet se partagent ce sachet mythique, reconnaissable entre mille. Sans huile de palme ni colorants artificiels, ces bonbons tendres sont parfaits pour accompagner un moment de gourmandise ou garnir un buffet festif. Un classique du samedi soir à la suédoise, à savourer toute la semaine.</g:description>
-    <g:link>https://www.swedishcravings.fr/produit/malaco-zoo-original-bonbons-fruites-suedois-c2a62ac6</g:link>
-    <g:image_link>https://www.swedishcravings.fr/media/products/image-12112-1788372320028-180898.webp</g:image_link>
-    <g:availability>in_stock</g:availability>
-    <g:price>2.19 EUR</g:price>
-    <g:brand>Malaco</g:brand>
-    <g:condition>new</g:condition>
-    <g:identifier_exists>no</g:identifier_exists>
-    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
-    <g:product_type>Épicerie &gt; Bonbons</g:product_type>
-    <g:custom_label_0>marge-moyenne</g:custom_label_0>
-    <g:custom_label_1>prix-moins-3</g:custom_label_1>
-    <g:custom_label_2>nouveaute</g:custom_label_2>
-    <g:custom_label_3>confiseries</g:custom_label_3>
-  </item>
-  <item>
-    <g:id>d81a0268-2fb9-4794-ab6a-70f2e7d598a5</g:id>
-    <g:title>Polly Milkchoco - Guimauves enrobées de chocolat – bonbons suédois, 200 g</g:title>
-    <g:description>Irrésistibles guimauves suédoises enrobées d'un délicieux chocolat au lait. Polly Milkchoco révèle des notes subtiles d'arrak et de caramel au beurre qui se marient parfaitement avec la texture moelleuse de la mousse. Une confiserie iconique de Cloetta dont le cœur fondant et l'enrobage chocolaté créent une expérience gustative si addictive qu'il est impossible de n'en prendre qu'une seule.</g:description>
-    <g:link>https://www.swedishcravings.fr/produit/polly-milkchoco-guimauves-enrobees-de-chocolat-d81a0268</g:link>
-    <g:image_link>https://www.swedishcravings.fr/media/products/07310040034532-1001326-1788364898080-34992.jpg</g:image_link>
-    <g:availability>in_stock</g:availability>
-    <g:price>3.90 EUR</g:price>
-    <g:brand>Polly</g:brand>
-    <g:condition>new</g:condition>
-    <g:identifier_exists>no</g:identifier_exists>
-    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
-    <g:product_type>Épicerie &gt; Bonbons</g:product_type>
-    <g:custom_label_0>marge-basse</g:custom_label_0>
     <g:custom_label_1>prix-3-6</g:custom_label_1>
     <g:custom_label_2>standard</g:custom_label_2>
     <g:custom_label_3>confiseries</g:custom_label_3>
@@ -887,24 +1193,6 @@
     <g:custom_label_3>epices</g:custom_label_3>
   </item>
   <item>
-    <g:id>cfaa5817-21f3-477f-8522-beae08268a7c</g:id>
-    <g:title>Marabou King Size Chocolat au Lait – chocolat suédois, 220 g</g:title>
-    <g:description>Une tablette généreuse au chocolat au lait onctueux, héritière d'un savoir-faire suédois depuis 1919. La recette secrète de Marabou offre une texture fondante et un goût crémeux incomparable, évoquant les souvenirs heureux des moments partagés. Fondée en 1916, la maison Marabou accompagne les célébrations familiales scandinaves depuis plus d'un siècle. À déguster en famille, entre amis, ou pour un instant de pur réconfort personnel.</g:description>
-    <g:link>https://www.swedishcravings.fr/produit/marabou-king-size-chocolat-au-lait-220g-cfaa5817</g:link>
-    <g:image_link>https://www.swedishcravings.fr/media/products/marabou-king-size-mjolkchoklad-220g-1787811636281-721244.webp</g:image_link>
-    <g:availability>in_stock</g:availability>
-    <g:price>4.89 EUR</g:price>
-    <g:brand>Marabou</g:brand>
-    <g:condition>new</g:condition>
-    <g:identifier_exists>no</g:identifier_exists>
-    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
-    <g:product_type>Épicerie &gt; Chocolat</g:product_type>
-    <g:custom_label_0>marge-basse</g:custom_label_0>
-    <g:custom_label_1>prix-3-6</g:custom_label_1>
-    <g:custom_label_2>bestseller</g:custom_label_2>
-    <g:custom_label_3>chocolat</g:custom_label_3>
-  </item>
-  <item>
     <g:id>dd341752-df67-4895-b511-cdb5840d7292</g:id>
     <g:title>Fazer Biscuits Dumle Original au caramel et chocolat – importé de Suède, 120 g</g:title>
     <g:description>Inspirés des célèbres bonbons Dumle finlandais, ces biscuits croustillants au cacao renferment un cœur fondant au caramel toffee, le tout enrobé de chocolat au lait onctueux. Une gourmandise nordique qui marie à merveille le croquant du biscuit et la douceur du caramel. Parfaits pour accompagner un café ou une pause sucrée entre amis.</g:description>
@@ -923,29 +1211,11 @@
     <g:custom_label_3>patisserie-basics</g:custom_label_3>
   </item>
   <item>
-    <g:id>96209b4b-cd56-4c22-aa31-eca2e63e60ad</g:id>
-    <g:title>Malaco Gott &amp; Blandat Original - Assortiment Suédois, 25 g</g:title>
-    <g:description>Véritable institution suédoise depuis 1979, Gott &amp; Blandat incarne l'art du mélange sucré-salé à la scandinave. Ces bonbons aux textures variées associent des gommes aux fruits juteux à des notes de réglisse salée, créant un équilibre addictif typiquement nordique. Un incontournable du lördagsgodis, la tradition du samedi bonbon chère aux familles suédoises.</g:description>
-    <g:link>https://www.swedishcravings.fr/produit/gott-blandat-original-assortiment-suedois-96209b4b</g:link>
-    <g:image_link>https://www.swedishcravings.fr/media/products/malacogott-blandatoriginal-1787811822598-557378.webp</g:image_link>
-    <g:availability>in_stock</g:availability>
-    <g:price>0.99 EUR</g:price>
-    <g:brand>Malaco</g:brand>
-    <g:condition>new</g:condition>
-    <g:identifier_exists>no</g:identifier_exists>
-    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
-    <g:product_type>Épicerie &gt; Bonbons</g:product_type>
-    <g:custom_label_0>marge-basse</g:custom_label_0>
-    <g:custom_label_1>prix-moins-3</g:custom_label_1>
-    <g:custom_label_2>bestseller</g:custom_label_2>
-    <g:custom_label_3>confiseries</g:custom_label_3>
-  </item>
-  <item>
-    <g:id>5369c5fd-1a6a-45fc-8a58-4869d806bff9</g:id>
-    <g:title>Polly Original - Boules de guimauve enrobées de chocolat – bonbons suédois, 200 g</g:title>
-    <g:description>Un classique suédois incontournable depuis des générations ! Ces délicieuses boules de guimauve moelleuses sont enrobées d'une fine couche de chocolat au lait onctueux. Les boules claires révèlent des saveurs d'arrak et de caramel au beurre, tandis que les boules foncées offrent une délicate note de vanille. Une texture unique entre fondant et moelleux qui rend impossible de n'en prendre qu'une seule.</g:description>
-    <g:link>https://www.swedishcravings.fr/produit/polly-original-boules-de-guimauve-enrobees-de-chocolat-5369c5fd</g:link>
-    <g:image_link>https://www.swedishcravings.fr/media/products/07310040034525-1001325-1788364948028-937116.jpg</g:image_link>
+    <g:id>d81a0268-2fb9-4794-ab6a-70f2e7d598a5</g:id>
+    <g:title>Polly Milkchoco - Guimauves enrobées de chocolat – bonbons suédois, 200 g</g:title>
+    <g:description>Irrésistibles guimauves suédoises enrobées d'un délicieux chocolat au lait. Polly Milkchoco révèle des notes subtiles d'arrak et de caramel au beurre qui se marient parfaitement avec la texture moelleuse de la mousse. Une confiserie iconique de Cloetta dont le cœur fondant et l'enrobage chocolaté créent une expérience gustative si addictive qu'il est impossible de n'en prendre qu'une seule.</g:description>
+    <g:link>https://www.swedishcravings.fr/produit/polly-milkchoco-guimauves-enrobees-de-chocolat-d81a0268</g:link>
+    <g:image_link>https://www.swedishcravings.fr/media/products/07310040034532-1001326-1788364898080-34992.jpg</g:image_link>
     <g:availability>in_stock</g:availability>
     <g:price>3.90 EUR</g:price>
     <g:brand>Polly</g:brand>
@@ -957,24 +1227,6 @@
     <g:custom_label_1>prix-3-6</g:custom_label_1>
     <g:custom_label_2>standard</g:custom_label_2>
     <g:custom_label_3>confiseries</g:custom_label_3>
-  </item>
-  <item>
-    <g:id>8b5187a5-a155-4f47-b0a2-66e7788b1086</g:id>
-    <g:title>Marabou Smil Caramel - Rouleaux de chocolat au caramel – chocolat suédois, 78 g</g:title>
-    <g:description>Un mariage irrésistible de chocolat au lait onctueux et de caramel fondant, présenté en délicieux boutons à déguster un par un. Née en Suède en 1916, la maison Marabou perpétue un savoir-faire chocolatier qui accompagne les moments de bonheur depuis plus d'un siècle. Idéal pour une pause gourmande ou à partager, ce format pratique en rouleau vous suit partout. Chocolat certifié Cocoa Life, gage d'un cacao responsable.</g:description>
-    <g:link>https://www.swedishcravings.fr/produit/marabou-smil-caramel-rouleaux-de-chocolat-au-caramel-8b5187a5</g:link>
-    <g:image_link>https://www.swedishcravings.fr/media/products/marabou-smil-caramel-78-g-nappirulla-1787812012460-702239.png</g:image_link>
-    <g:availability>in_stock</g:availability>
-    <g:price>2.99 EUR</g:price>
-    <g:brand>Marabou</g:brand>
-    <g:condition>new</g:condition>
-    <g:identifier_exists>no</g:identifier_exists>
-    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
-    <g:product_type>Épicerie &gt; Chocolat</g:product_type>
-    <g:custom_label_0>marge-basse</g:custom_label_0>
-    <g:custom_label_1>prix-moins-3</g:custom_label_1>
-    <g:custom_label_2>standard</g:custom_label_2>
-    <g:custom_label_3>chocolat</g:custom_label_3>
   </item>
   <item>
     <g:id>0a1bbb60-4764-4189-94dc-a6b73cf01c4f</g:id>
@@ -995,22 +1247,22 @@
     <g:custom_label_3>art-de-la-table</g:custom_label_3>
   </item>
   <item>
-    <g:id>65102af4-acd6-40f2-a350-20ce0db39f40</g:id>
-    <g:title>Malaco Gott &amp; Blandat Original - Assortiment Suédois, 600 g</g:title>
-    <g:description>Un voyage gustatif au cœur de la tradition confiserie scandinave. Ce mélange emblématique marie harmonieusement des bonbons fruités tendres à la réglisse salée et à l'iconique réglisse en forme de revolver. Une explosion de saveurs sucrées-salées qui fait de ce sachet généreux le compagnon idéal des soirées en famille ou entre amis.</g:description>
-    <g:link>https://www.swedishcravings.fr/produit/malaco-gott-blandat-original-assortiment-suedois-65102af4</g:link>
-    <g:image_link>https://www.swedishcravings.fr/media/products/07310350505319-c1n1-1789376144813-389909.jpg</g:image_link>
+    <g:id>8b5187a5-a155-4f47-b0a2-66e7788b1086</g:id>
+    <g:title>Marabou Smil Caramel - Rouleaux de chocolat au caramel – chocolat suédois, 78 g</g:title>
+    <g:description>Un mariage irrésistible de chocolat au lait onctueux et de caramel fondant, présenté en délicieux boutons à déguster un par un. Née en Suède en 1916, la maison Marabou perpétue un savoir-faire chocolatier qui accompagne les moments de bonheur depuis plus d'un siècle. Idéal pour une pause gourmande ou à partager, ce format pratique en rouleau vous suit partout. Chocolat certifié Cocoa Life, gage d'un cacao responsable.</g:description>
+    <g:link>https://www.swedishcravings.fr/produit/marabou-smil-caramel-rouleaux-de-chocolat-au-caramel-8b5187a5</g:link>
+    <g:image_link>https://www.swedishcravings.fr/media/products/marabou-smil-caramel-78-g-nappirulla-1787812012460-702239.png</g:image_link>
     <g:availability>in_stock</g:availability>
-    <g:price>5.00 EUR</g:price>
-    <g:brand>Malaco</g:brand>
+    <g:price>2.99 EUR</g:price>
+    <g:brand>Marabou</g:brand>
     <g:condition>new</g:condition>
     <g:identifier_exists>no</g:identifier_exists>
     <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
-    <g:product_type>Épicerie &gt; Bonbons</g:product_type>
-    <g:custom_label_0>marge-moyenne</g:custom_label_0>
-    <g:custom_label_1>prix-3-6</g:custom_label_1>
-    <g:custom_label_2>nouveaute</g:custom_label_2>
-    <g:custom_label_3>confiseries</g:custom_label_3>
+    <g:product_type>Épicerie &gt; Chocolat</g:product_type>
+    <g:custom_label_0>marge-basse</g:custom_label_0>
+    <g:custom_label_1>prix-moins-3</g:custom_label_1>
+    <g:custom_label_2>standard</g:custom_label_2>
+    <g:custom_label_3>chocolat</g:custom_label_3>
   </item>
   <item>
     <g:id>2e241e25-3f10-4ca3-b083-0eabd7980955</g:id>
@@ -1031,24 +1283,6 @@
     <g:custom_label_3>snacks-chips</g:custom_label_3>
   </item>
   <item>
-    <g:id>357c3f45-9a12-4c26-bc70-d8202ac8d8f8</g:id>
-    <g:title>Ahlgrens Bilar Original - Bonbons Voitures Suédois, 125 g</g:title>
-    <g:description>Icône incontestée de la confiserie suédoise depuis 1953, ces petites voitures en guimauve fondante sont un véritable phénomène national. Leur texture moelleuse et légère fond délicatement en bouche, révélant des saveurs fruitées subtiles dans leurs trois couleurs emblématiques : rose, blanc et vert. Parfaites pour accompagner une soirée cinéma, un road trip ou simplement pour redécouvrir ce classique scandinave adoré de toutes les générations.</g:description>
-    <g:link>https://www.swedishcravings.fr/produit/ahlgrens-bilar-original-bonbons-voitures-suedois-357c3f45</g:link>
-    <g:image_link>https://www.swedishcravings.fr/media/products/07310350132874-c1n1-1783834373633-666640.jpg</g:image_link>
-    <g:availability>in_stock</g:availability>
-    <g:price>2.98 EUR</g:price>
-    <g:brand>Ahlgrens</g:brand>
-    <g:condition>new</g:condition>
-    <g:identifier_exists>no</g:identifier_exists>
-    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
-    <g:product_type>Épicerie &gt; Bonbons</g:product_type>
-    <g:custom_label_0>marge-haute</g:custom_label_0>
-    <g:custom_label_1>prix-moins-3</g:custom_label_1>
-    <g:custom_label_2>bestseller</g:custom_label_2>
-    <g:custom_label_3>confiseries</g:custom_label_3>
-  </item>
-  <item>
     <g:id>79a40902-8f2b-4c5a-97c0-91ccfb30cbcc</g:id>
     <g:title>Malaco Djungelvrål - Réglisse salée intense – bonbons suédois, 90 g</g:title>
     <g:description>Un classique culte de la confiserie suédoise depuis 1982 ! Ces petits animaux de la jungle en réglisse noire offrent une explosion de salmiak intensément salé qui fait frissonner les papilles. Appréciés des amateurs de sensations fortes, les Djungelvrål sont vegans, sans huile de palme et sans colorants artificiels. Une expérience gustative audacieuse, typiquement nordique.</g:description>
@@ -1065,24 +1299,6 @@
     <g:custom_label_1>prix-moins-3</g:custom_label_1>
     <g:custom_label_2>standard</g:custom_label_2>
     <g:custom_label_3>confiseries</g:custom_label_3>
-  </item>
-  <item>
-    <g:id>b6ff736a-27ff-4cb1-98ca-283d60c101e3</g:id>
-    <g:title>Kavli Fromage à tartiner au Bacon – importé de Suède, 330 g</g:title>
-    <g:description>Un mariage gourmand entre fromages affinés suédois et bacon fumé authentique. Cette crème onctueuse révèle des notes fumées et fromagères qui subliment vos tartines du matin au soir. Idéale aussi en cuisine pour enrichir une sauce pasta ou garnir une quiche. Le favori des adolescents scandinaves, devenu un classique incontournable.</g:description>
-    <g:link>https://www.swedishcravings.fr/produit/fromage-a-tartiner-au-bacon-kavli-b6ff736a</g:link>
-    <g:image_link>https://www.swedishcravings.fr/media/products/capture-d--cran-2026-07-23-195640-1784829416123.png</g:image_link>
-    <g:availability>in_stock</g:availability>
-    <g:price>7.19 EUR</g:price>
-    <g:brand>Kavli</g:brand>
-    <g:condition>new</g:condition>
-    <g:identifier_exists>no</g:identifier_exists>
-    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
-    <g:product_type>Épicerie &gt; Fromages &amp; tartinables</g:product_type>
-    <g:custom_label_0>marge-moyenne</g:custom_label_0>
-    <g:custom_label_1>prix-6-15</g:custom_label_1>
-    <g:custom_label_2>standard</g:custom_label_2>
-    <g:custom_label_3>fromages-tartinables</g:custom_label_3>
   </item>
   <item>
     <g:id>a9035f9d-c26f-45f3-a531-1c78d8bf289f</g:id>
@@ -1162,7 +1378,7 @@
     <g:description>Découvrez l'intensité légendaire du salmiak finlandais avec ces bonbons cultes Tyrkisk Peber. Une coque dure extra-salée renferme un cœur de poudre poivrée qui explose en bouche, créant une expérience gustative unique et addictive. Véritable icône scandinave, ce bonbon divise autant qu'il passionne les amateurs de sensations fortes.</g:description>
     <g:link>https://www.swedishcravings.fr/produit/tyrkisk-peber-super-salty-bonbons-au-salmiak-intense-d7af1abc</g:link>
     <g:image_link>https://www.swedishcravings.fr/media/products/tyrkisk-peber-super-salty-1200x1200-5f52-1789377257317-676570.png</g:image_link>
-    <g:availability>in_stock</g:availability>
+    <g:availability>out_of_stock</g:availability>
     <g:price>2.10 EUR</g:price>
     <g:brand>Fazer</g:brand>
     <g:condition>new</g:condition>
@@ -1173,24 +1389,6 @@
     <g:custom_label_1>prix-moins-3</g:custom_label_1>
     <g:custom_label_2>nouveaute</g:custom_label_2>
     <g:custom_label_3>confiseries</g:custom_label_3>
-  </item>
-  <item>
-    <g:id>babd1c65-17df-4b47-ac5a-6a41ecf58242</g:id>
-    <g:title>OLW Mélange pour Dip Chili Fromage – dip suédois, 23 g</g:title>
-    <g:description>Une explosion de saveurs nordiques avec ce dip crémeux alliant le caractère du cheddar à la chaleur subtile du piment. Simplement mélangé à de la crème fraîche, il se transforme en une sauce onctueuse qui peut même être réchauffée pour plus de gourmandise. Parfait pour sublimer vos apéritifs, accompagner des frites croustillantes ou couronner un burger généreux.</g:description>
-    <g:link>https://www.swedishcravings.fr/produit/melange-pour-dip-chili-fromage-olw-babd1c65</g:link>
-    <g:image_link>https://www.swedishcravings.fr/media/products/picture-48-1783834796127-450146.png</g:image_link>
-    <g:availability>in_stock</g:availability>
-    <g:price>2.15 EUR</g:price>
-    <g:brand>OLW</g:brand>
-    <g:condition>new</g:condition>
-    <g:identifier_exists>no</g:identifier_exists>
-    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
-    <g:product_type>Épicerie &gt; Dips</g:product_type>
-    <g:custom_label_0>marge-moyenne</g:custom_label_0>
-    <g:custom_label_1>prix-moins-3</g:custom_label_1>
-    <g:custom_label_2>standard</g:custom_label_2>
-    <g:custom_label_3>dips</g:custom_label_3>
   </item>
   <item>
     <g:id>96eff74d-b52c-42a6-b88f-40f2244a5407</g:id>
@@ -1281,42 +1479,6 @@
     <g:custom_label_1>prix-moins-3</g:custom_label_1>
     <g:custom_label_2>standard</g:custom_label_2>
     <g:custom_label_3>dips</g:custom_label_3>
-  </item>
-  <item>
-    <g:id>825754d5-b9d3-4e7d-adfa-c3ef8bf008fa</g:id>
-    <g:title>Mélange pour Dip Tortilla – importé de Suède, 22 g</g:title>
-    <g:description>Un mélange d'épices aux accents tex-mex qui transforme instantanément votre crème fraîche en dip irrésistible. Les saveurs chaleureuses du paprika, du piment et du cumin s'associent harmonieusement pour accompagner vos tortilla chips ou vos crudités. Idéal pour vos apéritifs entre amis ou vos soirées cinéma à la maison.</g:description>
-    <g:link>https://www.swedishcravings.fr/produit/melange-pour-dip-tortilla-825754d5</g:link>
-    <g:image_link>https://www.swedishcravings.fr/media/products/dippmix-tortilla-1783834374880-809927.png</g:image_link>
-    <g:availability>in_stock</g:availability>
-    <g:price>2.15 EUR</g:price>
-    <g:brand>Swedish Cravings</g:brand>
-    <g:condition>new</g:condition>
-    <g:identifier_exists>no</g:identifier_exists>
-    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
-    <g:product_type>Épicerie &gt; Dips</g:product_type>
-    <g:custom_label_0>marge-haute</g:custom_label_0>
-    <g:custom_label_1>prix-moins-3</g:custom_label_1>
-    <g:custom_label_2>standard</g:custom_label_2>
-    <g:custom_label_3>dips</g:custom_label_3>
-  </item>
-  <item>
-    <g:id>5adbabad-24f7-4731-adb0-65b3186b664c</g:id>
-    <g:title>Paprika – importé de Suède, 80 g</g:title>
-    <g:description>Issu de la même plante capsicum que le piment de Cayenne et le piri-piri, ce paprika péruvien offre une douceur remarquable et une teinte rouge profonde. Séché puis finement moulu, il libère des arômes subtils qui subliment vos plats. Idéal pour apporter chaleur et couleur à vos viandes grillées, volailles et ragoûts généreux.</g:description>
-    <g:link>https://www.swedishcravings.fr/produit/paprika-5adbabad</g:link>
-    <g:image_link>https://www.swedishcravings.fr/media/products/paprika-1783834374903-587782.jpg</g:image_link>
-    <g:availability>in_stock</g:availability>
-    <g:price>3.98 EUR</g:price>
-    <g:brand>Swedish Cravings</g:brand>
-    <g:condition>new</g:condition>
-    <g:identifier_exists>no</g:identifier_exists>
-    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
-    <g:product_type>Épicerie &gt; Épices &amp; Aromates</g:product_type>
-    <g:custom_label_0>marge-basse</g:custom_label_0>
-    <g:custom_label_1>prix-3-6</g:custom_label_1>
-    <g:custom_label_2>standard</g:custom_label_2>
-    <g:custom_label_3>epices</g:custom_label_3>
   </item>
   <item>
     <g:id>19ce3ec4-2ec9-4427-951e-8555ab4f6a59</g:id>
