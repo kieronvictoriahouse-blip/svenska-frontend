@@ -725,6 +725,24 @@
     <g:custom_label_3>fromages-tartinables</g:custom_label_3>
   </item>
   <item>
+    <g:id>9fdcd606-a6ae-4b20-aff9-d840a7558a1d</g:id>
+    <g:title>Box Fredagsmys — Apéro suédois, 1300 g</g:title>
+    <g:description>Le fredagsmys, c'est le rituel suédois du vendredi soir : on se pose en famille ou entre amis, avec chips, dips et chocolat sur la table. Cette box réunit 9 incontournables sélectionnés par Victoria : chips OLW Sourcream &amp; Onion, Wasa Crunchy Bites Cheddar, Finn Crisp Sourcream &amp; Onion, deux mélanges pour dip (OLW Fresh Island et Estrella Sourcream &amp; Onion), noix de cajou miel &amp; sel Estrella, Marabou chocolat au lait 220 g, Dumle Snacks et Korkat de Red Head. Livrée dans un carton kraft avec du </g:description>
+    <g:link>https://www.swedishcravings.fr/produit/box-fredagsmys-apero-suedois-9fdcd606</g:link>
+    <g:image_link>https://www.swedishcravings.fr/media/products/box-fredagsmys-1792617653518.jpg</g:image_link>
+    <g:availability>in_stock</g:availability>
+    <g:price>34.90 EUR</g:price>
+    <g:brand>Swedish Cravings</g:brand>
+    <g:condition>new</g:condition>
+    <g:identifier_exists>no</g:identifier_exists>
+    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
+    <g:product_type>Épicerie &gt; Snacks &amp; Chips</g:product_type>
+    <g:custom_label_0>marge-moyenne</g:custom_label_0>
+    <g:custom_label_1>prix-15-plus</g:custom_label_1>
+    <g:custom_label_2>nouveaute</g:custom_label_2>
+    <g:custom_label_3>snacks-chips</g:custom_label_3>
+  </item>
+  <item>
     <g:id>825754d5-b9d3-4e7d-adfa-c3ef8bf008fa</g:id>
     <g:title>Mélange pour Dip Tortilla – importé de Suède, 22 g</g:title>
     <g:description>Un mélange d'épices aux accents tex-mex qui transforme instantanément votre crème fraîche en dip irrésistible. Les saveurs chaleureuses du paprika, du piment et du cumin s'associent harmonieusement pour accompagner vos tortilla chips ou vos crudités. Idéal pour vos apéritifs entre amis ou vos soirées cinéma à la maison.</g:description>
@@ -815,24 +833,6 @@
     <g:custom_label_3>snacks-chips</g:custom_label_3>
   </item>
   <item>
-    <g:id>c8709b25-0872-4e90-9175-e97d9ef088d2</g:id>
-    <g:title>Chips de Seigle Complet au Cheddar – importé de Suède, 150 g</g:title>
-    <g:description>Irrésistiblement croustillantes, ces chips scandinaves sont élaborées à partir de 100% de farine de seigle complet et généreusement relevées de vrai cheddar. Avec 60% de matières grasses en moins que les chips de pomme de terre classiques, elles offrent un plaisir gourmand sans compromis. Parfaites pour un apéritif nordique, une soirée TexMex ou simplement à grignoter avec une touche de dip crémeux.</g:description>
-    <g:link>https://www.swedishcravings.fr/produit/chips-de-seigle-complet-au-cheddar-c8709b25</g:link>
-    <g:image_link>https://www.swedishcravings.fr/media/products/finn-crisp-cheddar-cheese-snacks-2023-1789408105874-739874.png</g:image_link>
-    <g:availability>in_stock</g:availability>
-    <g:price>4.32 EUR</g:price>
-    <g:brand>Swedish Cravings</g:brand>
-    <g:condition>new</g:condition>
-    <g:identifier_exists>no</g:identifier_exists>
-    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
-    <g:product_type>Épicerie &gt; Snacks &amp; Chips</g:product_type>
-    <g:custom_label_0>marge-haute</g:custom_label_0>
-    <g:custom_label_1>prix-3-6</g:custom_label_1>
-    <g:custom_label_2>nouveaute</g:custom_label_2>
-    <g:custom_label_3>snacks-chips</g:custom_label_3>
-  </item>
-  <item>
     <g:id>b094cb1c-a9cc-45a3-a4ae-db018124050f</g:id>
     <g:title>Cloetta Center Caramel au Sel de Mer – chocolat suédois, 78 g</g:title>
     <g:description>Un cœur fondant de toffee au caramel rehaussé de cristaux de sel de mer, délicatement enveloppé d'un chocolat au lait onctueux. Cette confiserie suédoise iconique offre un équilibre parfait entre douceur et salinité. Déroulez simplement un tour et laissez-vous emporter par cette gourmandise irrésistible, idéale pour une pause sucrée raffinée.</g:description>
@@ -867,6 +867,24 @@
     <g:custom_label_1>prix-3-6</g:custom_label_1>
     <g:custom_label_2>nouveaute</g:custom_label_2>
     <g:custom_label_3>confiseries</g:custom_label_3>
+  </item>
+  <item>
+    <g:id>c8709b25-0872-4e90-9175-e97d9ef088d2</g:id>
+    <g:title>Chips de Seigle Complet au Cheddar – importé de Suède, 150 g</g:title>
+    <g:description>Irrésistiblement croustillantes, ces chips scandinaves sont élaborées à partir de 100% de farine de seigle complet et généreusement relevées de vrai cheddar. Avec 60% de matières grasses en moins que les chips de pomme de terre classiques, elles offrent un plaisir gourmand sans compromis. Parfaites pour un apéritif nordique, une soirée TexMex ou simplement à grignoter avec une touche de dip crémeux.</g:description>
+    <g:link>https://www.swedishcravings.fr/produit/chips-de-seigle-complet-au-cheddar-c8709b25</g:link>
+    <g:image_link>https://www.swedishcravings.fr/media/products/finn-crisp-cheddar-cheese-snacks-2023-1789408105874-739874.png</g:image_link>
+    <g:availability>in_stock</g:availability>
+    <g:price>4.32 EUR</g:price>
+    <g:brand>Swedish Cravings</g:brand>
+    <g:condition>new</g:condition>
+    <g:identifier_exists>no</g:identifier_exists>
+    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
+    <g:product_type>Épicerie &gt; Snacks &amp; Chips</g:product_type>
+    <g:custom_label_0>marge-haute</g:custom_label_0>
+    <g:custom_label_1>prix-3-6</g:custom_label_1>
+    <g:custom_label_2>standard</g:custom_label_2>
+    <g:custom_label_3>snacks-chips</g:custom_label_3>
   </item>
   <item>
     <g:id>19130567-13ec-41b9-b9a8-b6baaa3ef9db</g:id>
@@ -1279,7 +1297,7 @@
     <g:product_type>Épicerie &gt; Snacks &amp; Chips</g:product_type>
     <g:custom_label_0>marge-haute</g:custom_label_0>
     <g:custom_label_1>prix-3-6</g:custom_label_1>
-    <g:custom_label_2>nouveaute</g:custom_label_2>
+    <g:custom_label_2>standard</g:custom_label_2>
     <g:custom_label_3>snacks-chips</g:custom_label_3>
   </item>
   <item>
