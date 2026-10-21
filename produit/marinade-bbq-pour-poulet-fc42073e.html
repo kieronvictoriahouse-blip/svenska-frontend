@@ -74,6 +74,8 @@
 .opt-label { font-family:var(--font-ui); font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--dust); margin-bottom:10px; }
 .variants { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:26px; }
 .var-btn { padding:9px 18px; border:1px solid var(--linen); background:none; font-family:var(--font-body); font-size:15px; color:var(--slate); border-radius:1px; transition:all 0.2s; }
+a.var-btn, span.var-btn { display:inline-block; text-decoration:none; }
+span.var-btn.active { cursor:default; }
 .var-btn:hover, .var-btn.active { background:var(--heather); border-color:var(--heather); color:var(--snow); }
 
 .add-row { display:flex; gap:10px; align-items:center; margin-bottom:26px; }
@@ -193,6 +195,10 @@
       <div class="opt-label" data-sv="Förpackning" data-fr="Conditionnement" data-en="Packaging">Conditionnement</div>
       <div class="variants" id="variants-list"></div>
     </div>
+    <div id="formats-block" style="margin-bottom:26px;display:none;">
+      <div class="opt-label" data-sv="Storlek" data-fr="Format" data-en="Size">Format</div>
+      <div class="variants" id="formats-list"></div>
+    </div>
     <div class="pdp-pills" id="pdp-pills"></div>
     <div class="add-row">
       <div class="qty-ctrl">
@@ -220,10 +226,10 @@
     <p class="sect-eyebrow" data-sv="Du kanske också gillar" data-fr="Vous aimerez aussi" data-en="You may also like">Vous aimerez aussi</p>
     <h2 class="sect-title" data-sv="Liknande <em>produkter</em>" data-fr="Produits <em>similaires</em>" data-en="Similar <em>products</em>">Produits <em>similaires</em></h2>
     <div class="grid-4" id="related-grid" style="margin-top:32px;">
-<a href="/produit/marinade-bbq-universelle-ff144baf" style="display:block;text-decoration:none;color:inherit;"><img src="https://www.swedishcravings.fr/media/products/2950-1783834372168-611296.png" alt="Marinade BBQ Universelle" loading="lazy" style="width:100%;aspect-ratio:1;object-fit:contain;background:var(--parchment);"><div style="font-family:var(--font-ui);font-size:13px;margin-top:8px;">Marinade BBQ Universelle</div><div style="font-family:var(--font-ui);font-size:13px;color:var(--dust);">2,15 €</div></a>
 <a href="/produit/paprika-5adbabad" style="display:block;text-decoration:none;color:inherit;"><img src="https://www.swedishcravings.fr/media/products/paprika-1783834374903-587782.jpg" alt="Paprika" loading="lazy" style="width:100%;aspect-ratio:1;object-fit:contain;background:var(--parchment);"><div style="font-family:var(--font-ui);font-size:13px;margin-top:8px;">Paprika</div><div style="font-family:var(--font-ui);font-size:13px;color:var(--dust);">3,98 €</div></a>
 <a href="/produit/piffi-melange-d-epices-original-175g-fb205c21" style="display:block;text-decoration:none;color:inherit;"><img src="https://www.swedishcravings.fr/media/products/piffi-allkrydda-1783834370427-929628.jpg" alt="Piffi Mélange d'Épices Original 175g" loading="lazy" style="width:100%;aspect-ratio:1;object-fit:contain;background:var(--parchment);"><div style="font-family:var(--font-ui);font-size:13px;margin-top:8px;">Piffi Mélange d'Épices Original 175g</div><div style="font-family:var(--font-ui);font-size:13px;color:var(--dust);">4,45 €</div></a>
 <a href="/produit/epices-pour-frites-santa-maria-e8dca0ac" style="display:block;text-decoration:none;color:inherit;"><img src="https://www.swedishcravings.fr/media/products/unfye3ayw1wjwympc6tn-1792614597710-231166.jpg" alt="Épices pour Frites Santa Maria" loading="lazy" style="width:100%;aspect-ratio:1;object-fit:contain;background:var(--parchment);"><div style="font-family:var(--font-ui);font-size:13px;margin-top:8px;">Épices pour Frites Santa Maria</div><div style="font-family:var(--font-ui);font-size:13px;color:var(--dust);">5,90 €</div></a>
+<a href="/produit/poivre-au-citron-58907c8f" style="display:block;text-decoration:none;color:inherit;"><img src="https://www.swedishcravings.fr/media/products/citronpeppar-1784906914141-952645.jpg" alt="Poivre au Citron" loading="lazy" style="width:100%;aspect-ratio:1;object-fit:contain;background:var(--parchment);"><div style="font-family:var(--font-ui);font-size:13px;margin-top:8px;">Poivre au Citron</div><div style="font-family:var(--font-ui);font-size:13px;color:var(--dust);">3,95 €</div></a>
 </div>
   </div>
 </section>
@@ -415,6 +421,7 @@ function renderPDP(p) {
   } else {
     vb.style.display = 'none';
   }
+  _sdRenderFormats(p);
 
   // Pills
   const _pdpSale = !!(window.SDPrice && SDPrice.active(p));
@@ -423,7 +430,7 @@ function renderPDP(p) {
     : '';
   document.getElementById('pdp-pills').innerHTML =
     (_pdpSale ? `<span class="pdp-pill promo-pill">${LANG==='en'?'Special offer':LANG==='sv'?'Erbjudande':'Offre spéciale'} ${_pdpSaleLabel}</span>` : '') +
-    p.tags.map(t=>`<span class="pdp-pill">${t}</span>`).join('') +
+    p.tags.filter(t=>!/^format:/.test(t)).map(t=>`<span class="pdp-pill">${t}</span>`).join('') +
     (p.badge ? `<span class="pdp-pill copper-pill">${getBadgeLabel(p.badge)}</span>` : '');
 
   // Thumbs — only real images, hide section if only 1 image total
@@ -603,6 +610,34 @@ function toggleAcc(trigger) {
   trigger.classList.toggle('open');
   trigger.nextElementSibling.classList.toggle('open');
 }
+
+/* Formats d'un même produit (100 g / 130 g…) : des fiches DISTINCTES,
+   chacune avec son stock, son coût et son prix, reliées par une étiquette
+   « format:<groupe> » posée dans le back-office. Ce ne sont pas des
+   product_variants : ceux-là partagent un seul stock. On propose ici de
+   passer d'une fiche à l'autre. */
+function _sdRenderFormats(p) {
+  const box = document.getElementById('formats-block');
+  if (!box) return;
+  const grp = (p.tags || []).find(t => /^format:/.test(t));
+  const all = window.PRODUCTS || [];
+  const freres = grp ? all.filter(x => (x.tags || []).indexOf(grp) > -1) : [];
+  if (freres.length < 2) { box.style.display = 'none'; return; }
+  const self = String(p.uuid || p.id);
+  const poids = w => parseFloat(String(w || '').replace(',', '.')) || 0;
+  freres.sort((a, b) => poids(a.weight) - poids(b.weight));
+  const out = { fr: 'épuisé', en: 'sold out', sv: 'slut' };
+  document.getElementById('formats-list').innerHTML = freres.map(x => {
+    const prix = window.SDPrice ? SDPrice.effective(x.price, x) : x.price;
+    const label = `${String(x.weight).replace(/(\d)\s*(g|kg|ml|cl|l)$/i, '$1 $2')} — ${fmtPrice(prix)}`;
+    const epuise = x.trackStock && typeof x.stock === 'number' && x.stock <= 0;
+    const suffixe = epuise ? ` · ${out[LANG] || out.fr}` : '';
+    if (String(x.uuid) === self) return `<span class="var-btn active" aria-current="true">${label}${suffixe}</span>`;
+    return `<a class="var-btn" href="produit.html?id=${x.uuid}">${label}${suffixe}</a>`;
+  }).join('');
+  box.style.display = 'block';
+}
+window.addEventListener('sdapi:ready', () => { if (pdpProduct) _sdRenderFormats(pdpProduct); });
 
 // Slug SEO d'un produit — DOIT rester identique à scripts/prerender-products.js
 function _sdProductSlug(nameFr, id) {
