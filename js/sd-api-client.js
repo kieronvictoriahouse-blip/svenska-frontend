@@ -177,6 +177,7 @@
       stock:       typeof p.stock === 'number' ? p.stock : null,
       trackStock:  !!(p.track_stock),
       pickup_only: !!(p.pickup_only),
+      createdAt:   p.created_at || null,
     };
   }
 
@@ -464,14 +465,9 @@
           if (img) img.src = cms.about_image.value_fr;
         }
       }
-      if (cms.feat_title) {
-        const el = document.querySelector('.feat-band-text .sect-title');
-        if (el && cms.feat_title[l]) el.innerHTML = cms.feat_title[l];
-      }
-      if (cms.feat_subtitle) {
-        const el = document.querySelector('.feat-band-text .sect-body');
-        if (el && cms.feat_subtitle[l]) el.textContent = cms.feat_subtitle[l];
-      }
+      /* Le bandeau de saison ne lit plus que les clés season_* (appliquées par
+         index.html) : les anciennes clés feat_* le réécrivaient selon l'ordre
+         de chargement, d'où un titre qui changeait d'une visite à l'autre. */
     } catch (e) { /* CMS apply silently fails */ }
   }
 

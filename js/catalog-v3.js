@@ -779,10 +779,21 @@
     window.addEventListener('scroll', function () { updateScrollSpy(); }, { passive: true });
     window.addEventListener('resize', function () { setOffsets(); updateScrollSpy(); });
 
-    var fallback = setTimeout(function () { _ready = true; renderDynamic(); }, 4000);
+    var fallback = setTimeout(function () { _ready = true; renderDynamic(); goToRayonFromUrl(); }, 4000);
     window.addEventListener('sdapi:ready', function () {
-      clearTimeout(fallback); _ready = true; renderDynamic();
+      clearTimeout(fallback); _ready = true; renderDynamic(); goToRayonFromUrl();
     });
+  }
+
+  // Lien direct vers un rayon (accueil, pied de page) : boutique.html?rayon=<slug de catégorie>
+  var _rayonDone = false;
+  function goToRayonFromUrl() {
+    if (_rayonDone) return;
+    var r = '';
+    try { r = new URLSearchParams(location.search).get('rayon') || ''; } catch (e) {}
+    if (!r || !document.querySelector('[data-sec="' + (window.CSS && CSS.escape ? CSS.escape(r) : r) + '"]')) return;
+    _rayonDone = true;
+    setTimeout(function () { goTo(r); }, 150);
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
