@@ -23,7 +23,7 @@
 <meta name="twitter:description" content="Le meilleur de la Scandinavie et de Suède, livré en France.">
 <meta name="twitter:image" content="https://images.unsplash.com/photo-1481931098730-318b6f776db0?w=1200&q=80">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"OnlineStore","name":"Swedish Cravings","url":"https://www.swedishcravings.fr/","email":"","description":"Épicerie suédoise en ligne : bonbons (Ahlgrens Bilar, OLW), dips, épices et spécialités de Suède, livrés en France.","areaServed":{"@type":"Country","name":"France"},"sameAs":[]}</script>
-<link rel="stylesheet" href="css/style.css?v=18">
+<link rel="stylesheet" href="css/style.css?v=19">
 <script>const SD_API_URL = 'https://admin.swedishcravings.fr';</script>
 <script>(function(){try{var w=JSON.parse(localStorage.getItem('sd_wl_v1'));if(w&&w.id){var r=document.documentElement.style;if(w.color_primary){r.setProperty('--heather',w.color_primary);r.setProperty('--heather-mid',w.color_primary+'CC');}if(w.color_secondary){r.setProperty('--lingon',w.color_secondary);r.setProperty('--lingon-mid',w.color_secondary+'CC');}if(w.color_bg)r.setProperty('--cream',w.color_bg);if(w.color_text)r.setProperty('--midnight',w.color_text);if(w.font_display)r.setProperty('--font-display',"'"+w.font_display+"',Georgia,serif");if(w.font_body)r.setProperty('--font-body',"'"+w.font_body+"',Georgia,serif");if(w.font_ui)r.setProperty('--font-ui',"'"+w.font_ui+"',sans-serif");}}catch(e){}}());</script>
 <script>(function(){try{var w=JSON.parse(localStorage.getItem('sd_wl_v1'));var n=w&&w.site_name;if(n){var qm=function(s){return document.querySelector(s);};var el;var _t=document.title;document.title=(_t&&_t.toLowerCase().indexOf((n||'').toLowerCase())>=0)?_t:(n+(_t?' — '+_t:''));el=qm('meta[property="og:title"]');if(el)el.setAttribute('content',document.title);el=qm('meta[property="og:site_name"]');if(el)el.setAttribute('content',n);el=qm('meta[name="twitter:title"]');if(el)el.setAttribute('content',document.title);var jld=qm('script[type="application/ld+json"]');if(jld){try{var d=JSON.parse(jld.textContent);if(d.name!==undefined)d.name=n;if(w.email&&d.email!==undefined)d.email=w.email;if(d.url!==undefined)d.url=location.origin;jld.textContent=JSON.stringify(d);}catch(e){}}}var u=document.querySelector('meta[property="og:url"]');if(u)u.setAttribute('content',location.href);}catch(e){}}());</script>
@@ -39,8 +39,11 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  background: #16091a;
+  background: var(--midnight);
 }
+/* L'en-tête est au-dessus (152 px sur ordinateur, 96 px sur mobile) : le hero tient dans l'écran */
+.hero { height: calc(100svh - 152px); min-height: 560px; }
+@media (max-width: 768px) { .hero { height: calc(100svh - 96px); min-height: 520px; } }
 .hero-media {
   position: absolute; inset: 0;
 }
@@ -48,14 +51,12 @@
   width: 100%; height: 100%;
   object-fit: cover; object-position: center 35%;
 }
+/* Voile : plus dense derrière le texte (centre) et en bas, la photo respire ailleurs */
 .hero-overlay {
   position: absolute; inset: 0;
-  background: linear-gradient(
-    155deg,
-    rgba(18,8,22,0.62) 0%,
-    rgba(18,8,22,0.20) 48%,
-    rgba(18,8,22,0.78) 100%
-  );
+  background:
+    radial-gradient(ellipse 62% 58% at 50% 50%, rgba(27,33,24,0.62) 0%, rgba(27,33,24,0.3) 62%, rgba(27,33,24,0) 100%),
+    linear-gradient(155deg, rgba(27,33,24,0.55) 0%, rgba(27,33,24,0.18) 48%, rgba(27,33,24,0.72) 100%);
 }
 .hero-content {
   position: relative; z-index: 2;
@@ -65,14 +66,14 @@
 }
 .hero-eyebrow, .hero-slide-eyebrow {
   font-family: var(--font-ui);
-  font-size: 9px; letter-spacing: 6px; text-transform: uppercase;
-  color: rgba(255,255,255,0.48);
+  font-size: 11px; letter-spacing: 5px; text-transform: uppercase;
+  color: rgba(255,255,255,0.86);
   margin-bottom: 28px;
   display: flex; align-items: center; justify-content: center; gap: 18px;
 }
 .hero-eyebrow::before, .hero-eyebrow::after,
 .hero-slide-eyebrow::before, .hero-slide-eyebrow::after {
-  content: ''; width: 40px; height: 1px; background: rgba(255,255,255,0.22);
+  content: ''; width: 40px; height: 1px; background: rgba(255,255,255,0.5);
 }
 .hero h1 {
   font-family: var(--font-display);
@@ -88,7 +89,7 @@
 .hero h1 em, .hero-slide-title em { font-style: italic; color: var(--lingon-mid); color: var(--hero-accent); }
 .hero-sub, .hero-slide-sub {
   font-family: var(--font-body);
-  font-size: 17px; color: rgba(255,255,255,0.58);
+  font-size: 17px; color: rgba(255,255,255,0.9);
   line-height: 1.95; max-width: 480px;
   margin: 0 auto 48px;
 }
@@ -104,15 +105,15 @@
   animation: scrollReveal 1s 1.2s ease forwards;
 }
 @keyframes scrollReveal {
-  to { opacity: 0.45; }
+  to { opacity: 0.85; }
 }
 .hero-scroll:hover { opacity: 0.8 !important; transition: opacity 0.2s; }
 .hero-scroll-label {
-  font-family: var(--font-ui); font-size: 8px; letter-spacing: 4px;
+  font-family: var(--font-ui); font-size: 11px; letter-spacing: 3px;
   text-transform: uppercase; color: #fff;
 }
 .hero-scroll-line {
-  width: 1px; height: 52px;
+  display: block; width: 1px; height: 52px;
   background: linear-gradient(to bottom, rgba(255,255,255,0.55), transparent);
   animation: scrollPulse 2.4s ease-in-out infinite;
 }
@@ -181,11 +182,11 @@
    le voile se renforce derrière le texte. */
 .hero-slide--custom .hero-overlay {
   background:
-    radial-gradient(ellipse 62% 58% at 50% 52%, rgba(18,8,22,0.58) 0%, rgba(18,8,22,0.28) 62%, rgba(18,8,22,0) 100%),
-    linear-gradient(155deg, rgba(18,8,22,0.62) 0%, rgba(18,8,22,0.20) 48%, rgba(18,8,22,0.78) 100%);
+    radial-gradient(ellipse 62% 58% at 50% 52%, rgba(27,33,24,0.58) 0%, rgba(27,33,24,0.28) 62%, rgba(27,33,24,0) 100%),
+    linear-gradient(155deg, rgba(27,33,24,0.62) 0%, rgba(27,33,24,0.20) 48%, rgba(27,33,24,0.78) 100%);
 }
-.hero-slide-title, .hero-slide-sub { text-shadow: 0 2px 28px rgba(18,8,22,0.35); }
-.hero-slide-sub { color: rgba(255,255,255,0.78); }
+.hero-slide-title, .hero-slide-sub { text-shadow: 0 2px 28px rgba(27,33,24,0.35); }
+.hero-slide-sub { color: rgba(255,255,255,0.9); }
 
 .hero-slide-link { position: absolute; inset: 0; z-index: 1; }
 .hero-slide-link:focus-visible { outline: 2px solid #fff; outline-offset: -8px; }
@@ -243,6 +244,7 @@
 
 /* ── TICKER ── */
 .ticker-bar {
+  position: relative;
   background: var(--heather);
   overflow: hidden; height: 38px;
   display: flex; align-items: center;
@@ -253,16 +255,28 @@
   animation: tickerScroll 32s linear infinite;
   will-change: transform;
 }
-.ticker-track:hover { animation-play-state: paused; }
+.ticker-track:hover, .ticker-bar.is-paused .ticker-track { animation-play-state: paused; }
 .ticker-item {
   display: inline-flex; align-items: center; gap: 20px;
   padding: 0 52px;
-  font-family: var(--font-ui); font-size: 9px;
-  letter-spacing: 3px; text-transform: uppercase;
-  color: rgba(255,255,255,0.62); white-space: nowrap;
+  font-family: var(--font-ui); font-size: 11px;
+  letter-spacing: 2.5px; text-transform: uppercase;
+  color: var(--on-heather); white-space: nowrap;
   flex-shrink: 0;
 }
-.ticker-sep { width: 3px; height: 3px; border-radius: 50%; background: var(--lingon-mid); flex-shrink: 0; }
+.ticker-sep { width: 3px; height: 3px; border-radius: 50%; background: currentColor; opacity: 0.5; flex-shrink: 0; }
+/* Pause : un bandeau qui défile sans fin doit pouvoir s'arrêter (WCAG 2.2.2) */
+.ticker-toggle {
+  position: absolute; right: 0; top: 0; bottom: 0; z-index: 1;
+  width: 44px; border: 0; cursor: pointer;
+  background: var(--heather); color: var(--on-heather);
+  box-shadow: -14px 0 12px var(--heather);
+  display: flex; align-items: center; justify-content: center;
+}
+.ticker-toggle svg { width: 12px; height: 12px; fill: currentColor; }
+.ticker-toggle .i-play, .ticker-bar.is-paused .ticker-toggle .i-pause { display: none; }
+.ticker-bar.is-paused .ticker-toggle .i-play { display: block; }
+@media (prefers-reduced-motion: reduce) { .ticker-toggle { display: none; } }
 @keyframes tickerScroll {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
@@ -271,20 +285,44 @@
 /* ── PROMISE BAR (overrides style.css if needed) ── */
 .promise-bar { background: var(--warm-white); }
 
-/* ── EDITORIAL INTRO ── */
-.editorial-intro {
-  display: grid; grid-template-columns: 1fr 1fr;
-  background: var(--cream);
-  border-bottom: 1px solid var(--linen);
-  overflow: hidden;
+/* ── RITUELS : un petit dictionnaire suédois ── */
+.rituals { background: var(--cream); border-bottom: 1px solid var(--linen); }
+.rit-head { max-width: 640px; margin-bottom: 52px; }
+.rit-list { list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px; }
+.rit { display: flex; flex-direction: column; }
+.rit-media { display: block; aspect-ratio: 4 / 3; background: var(--parchment); overflow: hidden; margin-bottom: 26px; }
+/* Le blanc des photos produit se fond dans le parchemin */
+.rit-media img { mix-blend-mode: multiply; width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s cubic-bezier(0.2, 0.6, 0.3, 1); }
+.rit:hover .rit-media img { transform: scale(1.03); }
+.rit-word {
+  font-family: var(--font-display); font-size: clamp(34px, 3.4vw, 46px);
+  font-weight: 300; font-style: italic; line-height: 1; letter-spacing: -0.02em;
+  color: var(--midnight);
 }
-.ei-text {
-  padding: 100px 80px 100px 80px;
-  display: flex; flex-direction: column; justify-content: center;
+.rit-gram {
+  font-family: var(--font-ui); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--dust); margin: 12px 0 16px; padding-bottom: 16px; border-bottom: 1px solid var(--linen);
 }
+.rit-def { font-family: var(--font-body); font-size: 17px; line-height: 1.75; color: var(--slate); margin-bottom: 20px; text-wrap: pretty; }
+.rit-links { margin-top: auto; display: flex; flex-direction: column; align-items: flex-start; }
+.rit-cta {
+  display: inline-flex; flex-wrap: wrap; align-items: flex-end; gap: 4px 10px; min-height: 44px; padding: 0 0 3px;
+  font-family: var(--font-ui); font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--lingon); border-bottom: 1px solid currentColor; transition: color 0.2s;
+}
+.rit-cta:hover { color: var(--lingon-hover); }
+.rit-price { color: var(--midnight); letter-spacing: 0.5px; font-variant-numeric: lining-nums; }
+.rit-more {
+  padding: 10px 0; font-family: var(--font-body); font-size: 16px; font-style: italic;
+  color: var(--heather-text); text-decoration: underline; text-underline-offset: 4px;
+  text-decoration-color: var(--linen); transition: text-decoration-color 0.2s;
+}
+.rit-more:hover { text-decoration-color: currentColor; }
+
+/* Titres repris dans « Notre histoire » */
 .ei-label {
-  font-family: var(--font-ui); font-size: 9px; letter-spacing: 5px;
-  text-transform: uppercase; color: var(--lingon-mid);
+  font-family: var(--font-ui); font-size: 11px; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--lingon);
   margin-bottom: 22px;
   display: flex; align-items: center; gap: 12px;
 }
@@ -292,54 +330,22 @@
 .ei-h2 {
   font-family: var(--font-display); font-size: clamp(38px, 4vw, 60px);
   font-weight: 300; line-height: 1.05; color: var(--midnight);
-  margin-bottom: 26px;
+  margin-bottom: 26px; text-wrap: balance;
 }
-.ei-h2 em { font-style: italic; color: var(--heather); }
-.ei-body {
-  font-family: var(--font-body); font-size: 17px; color: var(--slate);
-  line-height: 2.0; margin-bottom: 16px;
-}
-.ei-image {
-  position: relative; overflow: hidden; min-height: 560px;
-  background: var(--heather-mid);
-}
-.ei-image img {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%; object-fit: cover;
-  transition: transform 0.9s ease;
-}
-.ei-image:hover img { transform: scale(1.04); }
-.ei-badge {
-  position: absolute; bottom: 36px; left: -24px;
-  background: var(--heather); color: #fff;
-  width: 110px; height: 110px; border-radius: 50%;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  text-align: center; box-shadow: 0 10px 32px rgba(123,79,123,0.4);
-}
-.ei-badge-num {
-  font-family: var(--font-display); font-size: 34px; font-weight: 300; line-height: 1;
-  color: #fff;
-}
-.ei-badge-sub {
-  font-family: var(--font-ui); font-size: 7px; letter-spacing: 1.5px;
-  text-transform: uppercase; color: rgba(255,255,255,0.65); margin-top: 4px;
-}
+.ei-h2 em { font-style: italic; color: var(--lingon); }
 
-/* ── CATEGORIES ── */
-.cats-section {
-  background: var(--cream);
-  border-bottom: 1px solid var(--linen);
-}
+/* ── RAYONS (catégories réelles de la boutique) ── */
+.cats-section { background: var(--warm-white); border-top: 1px solid var(--linen); border-bottom: 1px solid var(--linen); }
 .cats-head {
-  display: flex; justify-content: space-between; align-items: flex-end;
-  padding: 72px 80px 40px;
+  display: flex; justify-content: space-between; align-items: flex-end; gap: 16px;
+  padding: 64px 40px 32px;
   max-width: var(--max-width); margin: 0 auto;
 }
 .cats-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 16px;
+  display: grid; grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
   max-width: var(--max-width); margin: 0 auto;
-  padding: 0 80px 72px;
+  padding: 0 40px 64px;
 }
 
 /* ── BESTSELLERS ── */
@@ -348,13 +354,14 @@
   margin-bottom: 52px; flex-wrap: wrap; gap: 16px;
 }
 .see-all {
-  font-family: var(--font-ui); font-size: 10px; letter-spacing: 2.5px;
+  display: inline-flex; align-items: flex-end; min-height: 44px; padding: 0 0 3px;
+  font-family: var(--font-ui); font-size: 11px; letter-spacing: 2.5px;
   text-transform: uppercase; color: var(--lingon);
   text-decoration: none;
-  border-bottom: 1px solid currentColor; padding-bottom: 2px;
+  border-bottom: 1px solid currentColor;
   transition: color 0.2s;
 }
-.see-all:hover { color: var(--heather); }
+.see-all:hover { color: var(--lingon-hover); }
 
 /* ── FEATURE BAND: dark editorial ── */
 .feat-band {
@@ -379,24 +386,11 @@
   padding: 80px 72px;
   display: flex; flex-direction: column; justify-content: center;
 }
-.feat-band-text .sect-eyebrow { color: var(--lingon-mid); }
-.feat-band-text .sect-eyebrow::after { background: var(--lingon-mid); }
+.feat-band-text .sect-eyebrow { color: var(--lingon-light); }
+.feat-band-text .sect-eyebrow::after { background: var(--lingon-light); }
 .feat-band-text .sect-title { color: var(--snow); }
-.feat-band-text .sect-title em { color: var(--lingon-mid); }
-.feat-band-text .sect-body { color: rgba(255,255,255,0.52); }
-.feat-stats {
-  display: grid; grid-template-columns: repeat(3,1fr); gap: 0;
-  margin-top: 44px; padding-top: 36px;
-  border-top: 1px solid rgba(255,255,255,0.07);
-}
-.feat-stat-num {
-  font-family: var(--font-display); font-size: 38px; font-weight: 300;
-  color: var(--snow); line-height: 1;
-}
-.feat-stat-label {
-  font-family: var(--font-body); font-size: 13px; font-style: italic;
-  color: rgba(255,255,255,0.38); margin-top: 4px;
-}
+.feat-band-text .sect-title em { color: var(--lingon-light); }
+.feat-band-text .sect-body { color: rgba(255,255,255,0.8); }
 
 /* ── ABOUT: editorial split ── */
 .about-split {
@@ -421,28 +415,18 @@
   color: var(--slate); line-height: 2.0; margin-bottom: 18px;
 }
 .about-split-text p em { font-style: italic; color: var(--lingon); }
-.about-blockquote {
-  margin: 28px 0;
-  padding: 22px 28px;
-  border-left: 3px solid var(--heather);
-  background: var(--heather-pale);
+.about-quote { margin: 28px 0; padding: 0; border: 0; }
+.about-quote p {
+  font-family: var(--font-display); font-size: 26px !important;
+  font-style: italic; color: var(--heather-text) !important;
+  margin: 0 !important; line-height: 1.4 !important; text-wrap: balance;
 }
-.about-blockquote p {
-  font-family: var(--font-display); font-size: 21px !important;
-  font-style: italic; color: var(--heather) !important;
-  margin: 0 !important; line-height: 1.55 !important;
-}
-.about-nums {
-  display: flex; gap: 44px; margin-top: 36px; flex-wrap: wrap;
-}
-.about-num-val {
-  font-family: var(--font-display); font-size: 44px; font-weight: 300;
-  color: var(--midnight); line-height: 1;
-}
-.about-num-label {
-  font-family: var(--font-body); font-size: 13px; font-style: italic;
-  color: var(--dust); margin-top: 4px;
-}
+/* La fondatrice signe son histoire */
+.founder { display: flex; align-items: center; gap: 18px; margin: 30px 0 0; padding-top: 24px; border-top: 1px solid var(--linen); }
+.founder-photo { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; flex-shrink: 0; background: var(--parchment); }
+.founder figcaption { display: flex; flex-direction: column; gap: 4px; }
+.founder-name { font-family: var(--font-display); font-size: 30px; font-style: italic; font-weight: 400; line-height: 1; color: var(--midnight); }
+.founder-role { font-family: var(--font-ui); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--dust); }
 
 /* ── TESTIMONIALS ── */
 .testi-grid {
@@ -451,21 +435,21 @@
   border: 1px solid var(--linen); margin-top: 52px;
 }
 .testi-card { background: var(--warm-white); padding: 44px 36px; }
-.testi-stars { font-family: var(--font-ui); font-size: 12px; font-weight: 600; letter-spacing: 2px; color: var(--lingon-mid); margin-bottom: 20px; }
+.testi-rate { font-family: var(--font-ui); font-size: 12px; font-weight: 600; letter-spacing: 1px; color: var(--lingon); margin-bottom: 20px; }
 .testi-q {
   font-family: var(--font-display); font-size: 18px; font-style: italic;
   color: var(--midnight); line-height: 1.75; margin-bottom: 24px;
 }
 .testi-q::before {
   content: '"';
-  font-size: 56px; color: var(--lingon-mid); line-height: 0;
+  font-size: 56px; color: var(--lingon); line-height: 0;
   vertical-align: -20px; margin-right: 2px; font-style: normal;
 }
 .testi-author {
-  font-family: var(--font-ui); font-size: 10px; letter-spacing: 2.5px;
-  text-transform: uppercase; color: var(--lingon-mid);
+  font-family: var(--font-ui); font-size: 11px; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--lingon);
 }
-.testi-loc { font-family: var(--font-ui); font-size: 10px; color: var(--birch); margin-top: 3px; }
+.testi-loc { font-family: var(--font-ui); font-size: 11px; color: var(--dust); margin-top: 3px; }
 
 /* ── NEWSLETTER ── */
 .nl-band { background: var(--lingon); padding: 80px 40px; text-align: center; }
@@ -476,43 +460,59 @@
 .nl-band h2 em { font-style: italic; }
 .nl-band p {
   font-family: var(--font-body); font-size: 17px;
-  color: rgba(255,255,255,0.65); margin-bottom: 36px;
+  color: rgba(255,255,255,0.92); margin: 0 auto 36px; max-width: 560px;
 }
 .nl-form {
   display: flex; max-width: 480px; margin: 0 auto;
   box-shadow: 0 10px 36px rgba(0,0,0,0.22);
 }
+/* Champ assombri : le texte saisi et l'exemple restent lisibles sur la mousse */
 .nl-form input {
-  flex: 1; padding: 17px 22px; border: none;
-  background: rgba(255,255,255,0.14); color: var(--snow);
-  font-family: var(--font-body); font-size: 16px; outline: none;
+  flex: 1; min-width: 0; padding: 17px 22px;
+  border: 1px solid rgba(255,255,255,0.35); border-right: 0;
+  background: rgba(27,33,24,0.25); color: var(--snow);
+  font-family: var(--font-body); font-size: 16px;
   border-radius: 1px 0 0 1px;
 }
-.nl-form input::placeholder { color: rgba(255,255,255,0.42); }
+.nl-form input::placeholder { color: rgba(255,255,255,0.8); }
+.nl-form input:focus-visible { outline: 2px solid var(--snow); outline-offset: -2px; }
 .nl-form button {
-  background: var(--heather); color: var(--snow); border: none;
-  padding: 17px 28px; font-family: var(--font-ui); font-size: 10px;
+  background: var(--heather); color: var(--on-heather); border: none;
+  padding: 17px 28px; font-family: var(--font-ui); font-size: 11px; font-weight: 600;
   letter-spacing: 2.5px; text-transform: uppercase;
   border-radius: 0 1px 1px 0; cursor: pointer; transition: background 0.2s;
   white-space: nowrap;
 }
 .nl-form button:hover { background: var(--heather-mid); }
+.nl-band .nl-msg { font-size: 16px; min-height: 26px; margin: 16px auto 0; color: var(--snow); }
+.nl-band .nl-msg.is-error { font-weight: 600; }
+.nl-band .nl-legal { font-family: var(--font-body); font-size: 15px; margin: 6px auto 0; color: rgba(255,255,255,0.88); }
+.nl-band .nl-legal a { color: var(--snow); text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 480px) {
+  .nl-band { padding: 56px 20px; }
+  .nl-form { flex-direction: column; gap: 8px; box-shadow: none; }
+  .nl-form input { border-right: 1px solid rgba(255,255,255,0.35); }
+  .nl-form input, .nl-form button { width: 100%; border-radius: 1px; }
+}
 
 /* ── RESPONSIVE ── */
 @media(max-width: 1024px) {
-  .editorial-intro { grid-template-columns: 1fr; }
-  .ei-image { display: none; }
-  .ei-text { padding: 64px 32px; }
-  .cats-head { padding: 48px 24px 28px; flex-direction: column; align-items: flex-start; gap: 14px; }
+  .rit-list { gap: 32px; }
+  .cats-head { padding: 48px 24px 24px; }
   .cats-grid { padding: 0 24px 56px; grid-template-columns: repeat(3,1fr); }
   .feat-band { grid-template-columns: 1fr; }
-  .feat-band-img { display: none; }
-  .feat-band-text { padding: 56px 32px; }
-  .feat-stats { grid-template-columns: repeat(3,1fr); }
+  /* La photo de saison reste visible, en bandeau au-dessus du texte */
+  .feat-band-img { min-height: 260px; }
+  .feat-band-img-shade { background: linear-gradient(to bottom, transparent 45%, var(--midnight) 100%); }
+  .feat-band-text { padding: 48px 32px 56px; }
   .about-split { grid-template-columns: 1fr; }
   .about-split-img { min-height: 320px; }
   .about-split-text { padding: 56px 32px; }
   .testi-grid { grid-template-columns: 1fr; }
+}
+@media(max-width: 600px) {
+  .rit-list { grid-template-columns: 1fr; gap: 48px; }
+  .rit-media { aspect-ratio: 16 / 10; }
 }
 @media(max-width: 767px) {
   /* Sur téléphone, les traits prennent la place du « Découvrir » centré. */
@@ -522,9 +522,30 @@
   .hero h1, .hero-slide-title { font-size: 46px; letter-spacing: -1px; }
   .hero-slide-copy { padding: 0 24px; }
   .hero-sub, .hero-slide-sub { font-size: 15px; }
-  .cats-grid { padding: 0 16px 48px; grid-template-columns: repeat(2,1fr); }
-  .feat-stats { grid-template-columns: 1fr; gap: 16px; }
-  .about-nums { gap: 28px; }
+}
+/* ── Accueil : en-tête collant ──
+   #header-root s'efface de la mise en page (display: contents) : le <header>
+   colle alors à la page entière au lieu de rester enfermé dans son conteneur.
+   Limité à l'accueil : la boutique mesure #header-root pour placer ses barres. */
+#header-root { display: contents; }
+#header-root > * { transition: opacity 0.18s ease; }
+#header-root:not(.wl-ready) > * { opacity: 0; pointer-events: none; }
+/* Une seule inscription à la newsletter sur l'accueil : celle du bandeau */
+.footer-nl { display: none !important; }
+/* Grilles produit : 8 sur ordinateur, 6 sur tablette, 4 sur téléphone */
+@media (min-width: 601px) and (max-width: 1024px) {
+  #bestsellers > :nth-child(n+7), #new-arrivals > :nth-child(n+7) { display: none; }
+}
+@media (max-width: 600px) {
+  #bestsellers > :nth-child(n+5), #new-arrivals > :nth-child(n+5) { display: none; }
+  /* Rayons : un rail qui défile au pouce */
+  .cats-grid {
+    display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
+    gap: 10px; padding: 0 20px 40px; scrollbar-width: none;
+  }
+  .cats-grid::-webkit-scrollbar { display: none; }
+  .cats-grid .cat-card { flex: 0 0 62%; scroll-snap-align: start; }
+  .cats-head { padding: 40px 20px 20px; }
 }
 /* ── Skeleton loader ── */
 .sk-card { background:var(--snow); border:1px solid var(--linen); overflow:hidden; animation:sk-pulse 1.4s ease-in-out infinite; }
@@ -552,10 +573,10 @@
       <a id="hero-cta2" href="a-propos" class="btn-secondary">Notre histoire</a>
     </div>
   </div>
-  <div class="hero-scroll" onclick="document.querySelector('.ticker-bar').scrollIntoView({behavior:'smooth'})">
+  <a class="hero-scroll" href="#rituels">
     <span class="hero-scroll-label" data-sv="Utforska" data-fr="Découvrir" data-en="Discover">Découvrir</span>
-    <div class="hero-scroll-line"></div>
-  </div>
+    <span class="hero-scroll-line" aria-hidden="true"></span>
+  </a>
 </section>
 <script>(function(){try{var sf=JSON.parse(sessionStorage.getItem('sd_full_v1'));if(sf&&sf.cms){var sc=sf.cms;var himg=document.querySelector('.hero-media img');if(himg&&sc.hero_image&&sc.hero_image.value_fr)himg.src=sc.hero_image.value_fr;var eimg=document.querySelector('.ei-image img');if(eimg&&sc.editorial_image&&sc.editorial_image.value_fr)eimg.src=sc.editorial_image.value_fr;var fimg=document.querySelector('.feat-band-img img');if(fimg&&sc.feature_image&&sc.feature_image.value_fr)fimg.src=sc.feature_image.value_fr;var aimg=document.querySelector('.about-split-img img');if(aimg&&sc.about_image&&sc.about_image.value_fr)aimg.src=sc.about_image.value_fr;}}catch(e){}try{var c=JSON.parse(localStorage.getItem('sd_cms_v1'));if(!c)return;var lg=localStorage.getItem('sd_lang')||'fr';var lk=lg==='sv'?'value_sv':lg==='en'?'value_en':'value_fr';var h=document.querySelector('.hero h1');if(h&&c.hero_title&&c.hero_title[lk])h.innerHTML=c.hero_title[lk];var s=document.querySelector('.hero-sub');if(s&&c.hero_subtitle&&c.hero_subtitle[lk])s.textContent=c.hero_subtitle[lk];var ey=document.querySelector('.hero-eyebrow');if(ey&&c.hero_eyebrow&&c.hero_eyebrow[lk])ey.textContent=c.hero_eyebrow[lk];var eb1=document.getElementById('ei-body1');if(eb1&&c.editorial_body1&&c.editorial_body1[lk])eb1.textContent=c.editorial_body1[lk];var eb2=document.getElementById('ei-body2');if(eb2&&c.editorial_body2&&c.editorial_body2[lk])eb2.textContent=c.editorial_body2[lk];var ab1=document.getElementById('about-body1');if(ab1&&c.about_body1&&c.about_body1[lk])ab1.textContent=c.about_body1[lk];var aq=document.getElementById('about-quote-text');if(aq&&c.about_quote&&c.about_quote[lk])aq.textContent=c.about_quote[lk];var ab2=document.getElementById('about-body2');if(ab2&&c.about_body2&&c.about_body2[lk])ab2.textContent=c.about_body2[lk];}catch(e){}}());</script>
 <!-- Image fixe ou carrousel (back-office → Bannière d'accueil). Chargé ici, avant
@@ -563,28 +584,30 @@
 <script src="js/hero-carousel.js?v=1"></script>
 
 <!-- ═══ TICKER ═══ -->
+<!-- Les textes de livraison sont recalculés depuis les réglages du back-office
+     (_applyCmsTicker). Le second passage ne sert qu'à la boucle : masqué aux
+     lecteurs d'écran. -->
 <div class="ticker-bar">
   <div id="ticker-track" class="ticker-track">
-    <span class="ticker-item">Livraison offerte dès 29€ en France<span class="ticker-sep"></span></span>
+    <span class="ticker-item">Livraison offerte dès 29 € en France<span class="ticker-sep"></span></span>
+    <span class="ticker-item">Europe : offerte dès 50 €<span class="ticker-sep"></span></span>
     <span class="ticker-item">Saveurs suédoises authentiques<span class="ticker-sep"></span></span>
-    <span class="ticker-item">Livraison internationale — 9,90€, offerte dès 50€<span class="ticker-sep"></span></span>
-    <span class="ticker-item">Sans conservateurs<span class="ticker-sep"></span></span>
     <span class="ticker-item">Fondée par une Suédoise en France<span class="ticker-sep"></span></span>
     <span class="ticker-item">Paiement sécurisé<span class="ticker-sep"></span></span>
-    <span class="ticker-item">Livraison offerte dès 29€ en France<span class="ticker-sep"></span></span>
-    <span class="ticker-item">Saveurs suédoises authentiques<span class="ticker-sep"></span></span>
-    <span class="ticker-item">Livraison internationale — 9,90€, offerte dès 50€<span class="ticker-sep"></span></span>
-    <span class="ticker-item">Sans conservateurs<span class="ticker-sep"></span></span>
-    <span class="ticker-item">Fondée par une Suédoise en France<span class="ticker-sep"></span></span>
-    <span class="ticker-item">Paiement sécurisé<span class="ticker-sep"></span></span>
+    <span class="ticker-item" aria-hidden="true">Livraison offerte dès 29 € en France<span class="ticker-sep"></span></span>
+    <span class="ticker-item" aria-hidden="true">Europe : offerte dès 50 €<span class="ticker-sep"></span></span>
+    <span class="ticker-item" aria-hidden="true">Saveurs suédoises authentiques<span class="ticker-sep"></span></span>
+    <span class="ticker-item" aria-hidden="true">Fondée par une Suédoise en France<span class="ticker-sep"></span></span>
+    <span class="ticker-item" aria-hidden="true">Paiement sécurisé<span class="ticker-sep"></span></span>
   </div>
+  <button class="ticker-toggle" type="button" aria-pressed="false" aria-label="Mettre le bandeau en pause" onclick="_tickerToggle(this)"><svg class="i-pause" viewBox="0 0 12 12" aria-hidden="true"><rect x="2" y="1" width="3" height="10"/><rect x="7" y="1" width="3" height="10"/></svg><svg class="i-play" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 1l8 5-8 5z"/></svg></button>
 </div>
 
 <!-- ═══ PROMISE BAR ═══ -->
 <div class="promise-bar">
   <div class="promise-cell">
     <div id="promise-1-title" class="promise-title">Livraison offerte</div>
-    <div id="promise-1-desc" class="promise-desc">Dès 29€ France · 50€ Europe</div>
+    <div id="promise-1-desc" class="promise-desc">Dès 29 € en France · 50 € en Europe</div>
   </div>
   <div class="promise-cell">
     <div id="promise-2-title" class="promise-title">Saveurs authentiques</div>
@@ -600,36 +623,49 @@
   </div>
 </div>
 
-<!-- ═══ EDITORIAL INTRO ═══ -->
-<section class="editorial-intro reveal">
-  <div class="ei-text">
-    <p id="editorial-eyebrow" class="ei-label">Notre sélection</p>
-    <h2 id="editorial-title" class="ei-h2">L'épicerie que<br>vous <em>cherchiez</em></h2>
-    <p id="ei-body1" class="ei-body">Mélanges pour dips, épices, marinades et spécialités sèches — le meilleur de l'épicerie suédoise, soigneusement sélectionné.</p>
-    <p id="ei-body2" class="ei-body" style="font-size:15px;color:var(--dust);">Des saveurs authentiques, directement de Suède, livrées en France.</p>
-    <div style="margin-top:38px;">
-      <a id="editorial-cta-btn" href="a-propos" class="btn-outline-dark">Lire notre histoire →</a>
+<!-- ═══ RITUELS ═══
+     Trois moments suédois, chacun avec son mot. Les box et leurs prix sont
+     relus dans le catalogue (_renderRituals) ; les liens visent les fiches
+     pré-générées. -->
+<section class="rituals" id="rituels" aria-labelledby="rituals-title">
+  <div class="section">
+    <div class="rit-head">
+      <h2 id="rituals-title" class="sect-title" data-sv="Tre svenska <em>traditioner</em>" data-fr="Trois rituels <em>suédois</em>" data-en="Three Swedish <em>rituals</em>">Trois rituels <em>suédois</em></h2>
+      <p class="sect-body" data-sv="I Sverige har varje godsak sitt ögonblick, och ett ord för det." data-fr="En Suède, chaque gourmandise a son moment, et un mot pour le dire." data-en="In Sweden, every treat has its moment, and a word for it.">En Suède, chaque gourmandise a son moment, et un mot pour le dire.</p>
     </div>
+    <ol class="rit-list">
+      <li class="rit" data-box-tag="fredagsmys">
+        <a class="rit-media" href="/produit/box-fredagsmys-apero-suedois-9fdcd606" tabindex="-1" aria-hidden="true"><img src="/media/products/box-fredagsmys-1792617653518.jpg" alt="" width="600" height="450" loading="lazy"></a>
+        <h3 class="rit-word" lang="sv">Fredagsmys</h3>
+        <p class="rit-gram" data-sv="substantiv · fredagskväll" data-fr="nom commun · le vendredi soir" data-en="noun · Friday night">nom commun · le vendredi soir</p>
+        <p class="rit-def" data-sv="På fredagskvällen stannar man hemma: chips och dipp på soffbordet, tacos och en film med hela familjen." data-fr="Le vendredi soir, on reste chez soi : chips et dip sur la table basse, des tacos, un film en famille. « Mys », c'est l'art suédois d'être bien ensemble." data-en="On Friday night, you stay in: crisps and a dip on the coffee table, tacos, a film with the family. 'Mys' is the Swedish art of feeling good together.">Le vendredi soir, on reste chez soi : chips et dip sur la table basse, des tacos, un film en famille. « Mys », c'est l'art suédois d'être bien ensemble.</p>
+        <div class="rit-links">
+          <a class="rit-cta" href="/produit/box-fredagsmys-apero-suedois-9fdcd606"><span data-sv="Fredagsmys-boxen" data-fr="La box Fredagsmys" data-en="The Fredagsmys box">La box Fredagsmys</span><span class="rit-price"></span></a>
+          <a class="rit-more" href="recette-fredagsmys-tacos.html" data-sv="Receptet på fredagstacos" data-fr="La recette des tacos du vendredi" data-en="The Friday taco recipe">La recette des tacos du vendredi</a>
+        </div>
+      </li>
+      <li class="rit" data-box-tag="fika">
+        <a class="rit-media" href="/produit/box-swedish-fika-gouter-suedois-df7bcd15" tabindex="-1" aria-hidden="true"><img src="/media/products/box-swedish-fika-1792665771351.jpg" alt="" width="600" height="450" loading="lazy"></a>
+        <h3 class="rit-word" lang="sv">Fika</h3>
+        <p class="rit-gram" data-sv="substantiv och verb · när som helst" data-fr="nom et verbe · à toute heure" data-en="noun and verb · any time of day">nom et verbe · à toute heure</p>
+        <p class="rit-def" data-sv="Kaffepausen, gärna två gånger om dagen: svart kaffe, en kanelbulle eller några kakor, och tid att njuta. På jobbet är den nästan helig." data-fr="La pause café, deux fois par jour s'il le faut : un café noir, une kanelbulle ou quelques biscuits, et le temps de les savourer. Au bureau, c'est presque sacré." data-en="The coffee break, twice a day if need be: black coffee, a cinnamon bun or a few biscuits, and time to enjoy them. At work, it is almost sacred.">La pause café, deux fois par jour s'il le faut : un café noir, une kanelbulle ou quelques biscuits, et le temps de les savourer. Au bureau, c'est presque sacré.</p>
+        <div class="rit-links">
+          <a class="rit-cta" href="/produit/box-swedish-fika-gouter-suedois-df7bcd15"><span data-sv="Fika-boxen" data-fr="La box Swedish Fika" data-en="The Swedish Fika box">La box Swedish Fika</span><span class="rit-price"></span></a>
+          <a class="rit-more" href="recette-kanelbullar.html" data-sv="Receptet på kanelbullar" data-fr="La recette des kanelbullar" data-en="The kanelbullar recipe">La recette des kanelbullar</a>
+        </div>
+      </li>
+      <li class="rit" data-rayon="confiseries">
+        <a class="rit-media" href="bonbons-suedois.html" tabindex="-1" aria-hidden="true"><img src="/media/products/coffret-de-bonbons-su-dois-color--1792615657239.jpg" alt="" width="600" height="450" loading="lazy"></a>
+        <h3 class="rit-word" lang="sv">Lördagsgodis</h3>
+        <p class="rit-gram" data-sv="substantiv · lördag" data-fr="nom commun · le samedi" data-en="noun · Saturday">nom commun · le samedi</p>
+        <p class="rit-def" data-sv="Sedan slutet av 1950-talet är lördagen godisdagen: en påse lösgodis, vägd i butiken och njuten framför tv:n." data-fr="Depuis la fin des années 1950, les bonbons, c'est le samedi : un sachet de lösgodis rempli au poids, savouré devant la télé." data-en="Since the late 1950s, Saturday has been sweets day: a bag of pick-and-mix, weighed out in the shop and enjoyed in front of the TV.">Depuis la fin des années 1950, les bonbons, c'est le samedi : un sachet de lösgodis rempli au poids, savouré devant la télé.</p>
+        <div class="rit-links">
+          <a class="rit-cta" href="boutique.html?rayon=confiseries"><span data-sv="Godiset i butiken" data-fr="Les bonbons en boutique" data-en="Sweets in the shop">Les bonbons en boutique</span><span class="rit-price"></span></a>
+          <a class="rit-more" href="bonbons-suedois.html" data-sv="Guiden till svenskt godis" data-fr="Le guide des bonbons suédois" data-en="Our guide to Swedish sweets">Le guide des bonbons suédois</a>
+        </div>
+      </li>
+    </ol>
   </div>
-  <div class="ei-image">
-    <img src="/media/cms/soiree-chips-cosy.jpg" alt="Soirée cosy suédoise : chips OLW et Estrella, bonbons et dip" width="1586" height="992" loading="lazy">
-    <div class="ei-badge">
-      <span id="editorial-badge-num" class="ei-badge-num">20+</span>
-      <span id="editorial-badge-label" class="ei-badge-sub">Produits<br>sélectionnés</span>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ CATEGORIES ═══ -->
-<section class="cats-section reveal" style="display:none">
-  <div class="cats-head">
-    <div>
-      <p id="cats-eyebrow" class="sect-eyebrow">Notre gamme</p>
-      <h2 id="cats-title" class="sect-title">Épicerie <em>suédoise</em></h2>
-    </div>
-    <a href="boutique.html" class="see-all" data-sv="Visa allt →" data-fr="Voir tout →" data-en="See all →">Voir tout →</a>
-  </div>
-  <div class="cats-grid" id="cats-row"></div>
 </section>
 
 <!-- ═══ BESTSELLERS ═══ -->
@@ -642,8 +678,20 @@
       </div>
       <a href="boutique.html" class="see-all" data-sv="Visa allt →" data-fr="Voir tout →" data-en="See all →">Voir tout →</a>
     </div>
-    <div class="grid-3" id="bestsellers"></div>
+    <div class="grid-4" id="bestsellers"></div>
   </div>
+</section>
+
+<!-- ═══ RAYONS (catégories réelles, voir _renderRayons) ═══ -->
+<section class="cats-section" id="rayons" hidden aria-labelledby="cats-title">
+  <div class="cats-head">
+    <div>
+      <p id="cats-eyebrow" class="sect-eyebrow">Notre gamme</p>
+      <h2 id="cats-title" class="sect-title">Nos <em>rayons</em></h2>
+    </div>
+    <a href="boutique.html" class="see-all" data-sv="Visa allt →" data-fr="Voir tout →" data-en="See all →">Voir tout →</a>
+  </div>
+  <div class="cats-grid" id="cats-row"></div>
 </section>
 
 <!-- ═══ FEATURE BAND ═══ -->
@@ -659,20 +707,6 @@
     <div style="margin-top:36px;">
       <a id="season-cta" href="boutique.html" class="btn-primary">Explorer la sélection →</a>
     </div>
-    <div class="feat-stats">
-      <div>
-        <div id="season-stat1-num" class="feat-stat-num">20+</div>
-        <div id="season-stat1-label" class="feat-stat-label">références de saison</div>
-      </div>
-      <div>
-        <div id="season-stat2-num" class="feat-stat-num">100%</div>
-        <div id="season-stat2-label" class="feat-stat-label">origine certifiée</div>
-      </div>
-      <div>
-        <div id="season-stat3-num" class="feat-stat-num">France</div>
-        <div id="season-stat3-label" class="feat-stat-label">livraison disponible</div>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -684,7 +718,7 @@
         <p id="na-eyebrow" class="sect-eyebrow">Tout juste arrivé</p>
         <h2 id="na-title" class="sect-title">Nouvelles <em>arrivées</em></h2>
       </div>
-      <a href="boutique.html?filter=new" class="see-all" data-sv="Visa allt →" data-fr="Voir tout →" data-en="See all →">Voir tout →</a>
+      <a href="boutique.html" class="see-all" data-sv="Visa allt →" data-fr="Voir tout →" data-en="See all →">Voir tout →</a>
     </div>
     <div class="grid-4" id="new-arrivals"></div>
   </div>
@@ -697,27 +731,23 @@
   </div>
   <div class="about-split-text">
     <p id="about-eyebrow" class="ei-label">Notre histoire</p>
-    <h2 id="about-title" class="ei-h2">Svenska Cravings,<br><em>notre histoire</em></h2>
+    <h2 id="about-title" class="ei-h2">Swedish Cravings,<br><em>notre histoire</em></h2>
     <div class="divider-line"></div>
     <p id="about-body1">Depuis que je vis en France, les saveurs de la Suède me manquent — ces goûts simples du quotidien qui rendent même un repas ordinaire un peu spécial.</p>
-    <div class="about-blockquote">
-      <p id="about-quote-text">"C'est comme ça qu'est née Swedish Cravings."</p>
-    </div>
+    <blockquote class="about-quote">
+      <p id="about-quote-text">« C'est comme ça qu'est née Swedish Cravings. »</p>
+    </blockquote>
     <p id="about-body2">Des mélanges pour dips, des marinades, des spécialités sèches — tout ce qu'on ne trouve pas facilement en France, sélectionné pour vous apporter un vrai goût de Suède.</p>
-    <div class="about-nums">
-      <div>
-        <div id="about-stat1-num" class="about-num-val">20+</div>
-        <div id="about-stat1-label" class="about-num-label">produits sélectionnés</div>
-      </div>
-      <div>
-        <div id="about-stat2-num" class="about-num-val">100%</div>
-        <div id="about-stat2-label" class="about-num-label">origine certifiée</div>
-      </div>
-      <div>
-        <div id="about-stat3-num" class="about-num-val">France</div>
-        <div id="about-stat3-label" class="about-num-label">livraison disponible</div>
-      </div>
-    </div>
+    <!-- Portrait de Victoria : renseigner la clé CMS « founder_photo » (URL d'une
+         photo carrée, 400 px), ou décommenter la ligne ci-dessous après avoir
+         déposé img/victoria.jpg. Sans photo, la signature seule s'affiche. -->
+    <figure class="founder" id="founder">
+      <!-- <img class="founder-photo" src="/img/victoria.jpg" alt="Victoria" width="72" height="72" loading="lazy"> -->
+      <figcaption>
+        <span class="founder-name">Victoria</span>
+        <span class="founder-role" data-sv="Grundare, svensk och bosatt i Frankrike" data-fr="Fondatrice, Suédoise installée en France" data-en="Founder, a Swede living in France">Fondatrice, Suédoise installée en France</span>
+      </figcaption>
+    </figure>
     <div style="margin-top:40px;">
       <a id="about-cta-btn" href="a-propos" class="btn-outline-dark">Lire notre histoire →</a>
     </div>
@@ -742,11 +772,10 @@
       var grid = document.getElementById('testi-grid');
       var section = document.getElementById('testi-section');
       if (!grid || !section) return;
-      var stars = function(n){ var s=''; for(var i=0;i<5;i++) s+='<span style="color:'+(i<n?'var(--lingon-mid)':'#ccc')+'">★</span>'; return s; };
       grid.innerHTML = d.reviews.slice(0,6).map(function(r){
         var txt = r.text ? r.text.slice(0,200)+(r.text.length>200?'…':'') : '';
         return '<div class="testi-card">'
-          + '<div class="testi-stars">'+stars(r.rating)+'</div>'
+          + '<div class="testi-rate">'+(r.rating||5)+'/5</div>'
           + (txt ? '<p class="testi-q">'+txt.replace(/</g,'&lt;')+'</p>' : '')
           + '<div class="testi-author">— '+r.author.replace(/</g,'&lt;')+'</div>'
           + '<div class="testi-loc">'+r.date+'</div>'
@@ -766,18 +795,81 @@
 <div class="nl-band reveal">
   <h2 id="nl-title">Recevez nos <em>nouveautés</em></h2>
   <p id="nl-subtitle">Recettes suédoises, nouveaux produits, offres exclusives — directement dans votre boîte mail.</p>
-  <div class="nl-form">
-    <input type="email" id="nl-email" placeholder="Votre adresse e-mail">
-    <button id="nl-btn" onclick="nlSubscribe()">S'inscrire</button>
-  </div>
+  <form class="nl-form" onsubmit="nlSubscribe();return false;" novalidate>
+    <label for="nl-email" class="sr-only" data-sv="Din e-postadress" data-fr="Votre adresse e-mail" data-en="Your email address">Votre adresse e-mail</label>
+    <input type="email" id="nl-email" name="email" autocomplete="email" placeholder="Votre adresse e-mail" data-sv-ph="Din e-postadress" data-fr-ph="Votre adresse e-mail" data-en-ph="Your email address">
+    <button id="nl-btn" type="submit">S'inscrire</button>
+  </form>
+  <p class="nl-msg" id="nl-msg" role="status"></p>
+  <p class="nl-legal"><span data-sv="Du kan avregistrera dig när som helst." data-fr="Désinscription possible à tout moment." data-en="You can unsubscribe at any time.">Désinscription possible à tout moment.</span> <a href="/confidentialite" data-sv="Integritet" data-fr="Confidentialité" data-en="Privacy">Confidentialité</a></p>
 </div>
 
 <div id="footer-root"></div>
-<script src="js/app.js?v=31"></script>
+<script src="js/app.js?v=32"></script>
 <script>
 initPage('home');
 
 var _homeReady = true;
+
+/* Textes de livraison calculés depuis les réglages (SD_SHIP ↔ back-office),
+   jamais repris d'un texte libre du CMS, qui se périme quand le seuil change. */
+function _shipTexts(l) {
+  const fr = window.SD_SHIP ? SD_SHIP.rules(false) : { threshold: 29 };
+  const eu = window.SD_SHIP ? SD_SHIP.rules(true) : { threshold: 50 };
+  const f = (n) => fmtPrice(n).replace(/[.,]00(?!\d)/, '');
+  if (l === 'en') return { ticker: [`Free delivery in France from ${f(fr.threshold)}`, `Europe: free from ${f(eu.threshold)}`], promise: `From ${f(fr.threshold)} in France · ${f(eu.threshold)} in Europe` };
+  if (l === 'sv') return { ticker: [`Fri frakt i Frankrike från ${f(fr.threshold)}`, `Europa: fri frakt från ${f(eu.threshold)}`], promise: `Från ${f(fr.threshold)} i Frankrike · ${f(eu.threshold)} i Europa` };
+  return { ticker: [`Livraison offerte dès ${f(fr.threshold)} en France`, `Europe : offerte dès ${f(eu.threshold)}`], promise: `Dès ${f(fr.threshold)} en France · ${f(eu.threshold)} en Europe` };
+}
+
+/* Citation : guillemets typographiques de la langue (le CMS saisit des "…") */
+function _sdQuote(node, l) {
+  if (!node) return;
+  const t = node.textContent.trim().replace(/^["«“”\s ]+|["»“”\s ]+$/g, '');
+  if (!t) return;
+  node.textContent = l === 'fr' ? '« ' + t + ' »' : l === 'sv' ? '”' + t + '”' : '“' + t + '”';
+}
+
+/* Bouton pause du bandeau défilant */
+function _tickerToggle(btn) {
+  const bar = btn.closest('.ticker-bar');
+  const paused = !bar.classList.contains('is-paused');
+  bar.classList.toggle('is-paused', paused);
+  btn.setAttribute('aria-pressed', paused);
+  btn.setAttribute('aria-label', paused
+    ? (LANG === 'en' ? 'Play the banner' : LANG === 'sv' ? 'Starta bandet' : 'Relancer le bandeau')
+    : (LANG === 'en' ? 'Pause the banner' : LANG === 'sv' ? 'Pausa bandet' : 'Mettre le bandeau en pause'));
+}
+
+/* Rayons : les vraies catégories de la boutique, du plus fourni au moins fourni */
+function _renderRayons() {
+  const sec = document.getElementById('rayons'), row = document.getElementById('cats-row');
+  if (!sec || !row) return;
+  const rs = (typeof _sdShopRayons === 'function' ? _sdShopRayons() : []).slice(0, 6);
+  if (rs.length < 3) { sec.hidden = true; return; }
+  const unit = (n) => n > 1 ? (LANG === 'sv' ? 'produkter' : LANG === 'en' ? 'products' : 'produits') : (LANG === 'sv' ? 'produkt' : LANG === 'en' ? 'product' : 'produit');
+  row.innerHTML = rs.map(r => `<a href="${_sdRayonUrl(r.slug)}" class="cat-card"><span class="cat-name">${_sdAttr(r.label[LANG] || r.label.fr)}</span><span class="cat-count">${r.count} ${unit(r.count)}</span></a>`).join('');
+  sec.hidden = false;
+}
+
+/* Rituels : prix et disponibilité des box, nombre de bonbons en boutique */
+function _renderRituals() {
+  document.querySelectorAll('.rit[data-box-tag]').forEach(li => {
+    const tag = li.getAttribute('data-box-tag');
+    const p = (PRODUCTS || []).find(x => (x.tags || []).includes('box') && (x.tags || []).includes(tag));
+    const price = li.querySelector('.rit-price');
+    if (!p || !price) return;
+    const out = p.trackStock && p.stock != null && p.stock <= 0;
+    price.textContent = out
+      ? (LANG === 'en' ? 'Coming soon' : LANG === 'sv' ? 'Kommer snart' : 'Bientôt disponible')
+      : fmtPrice(window.SDPrice ? SDPrice.effective(p.price, p) : p.price);
+  });
+  document.querySelectorAll('.rit[data-rayon]').forEach(li => {
+    const r = (typeof _sdShopRayons === 'function' ? _sdShopRayons() : []).find(x => x.slug === li.getAttribute('data-rayon'));
+    const price = li.querySelector('.rit-price');
+    if (r && price) price.textContent = r.count + ' ' + (LANG === 'sv' ? 'sorter' : LANG === 'en' ? 'to choose from' : 'au choix');
+  });
+}
 
 function _applyCmsAbout(cms, l) {
   if (!cms) return;
@@ -809,6 +901,10 @@ function _applyCmsAbout(cms, l) {
   set('nl-title',    'nl_title',    true);
   set('nl-subtitle', 'nl_subtitle', false);
   set('nl-btn',      'nl_btn',      false);
+  _sdQuote(el('about-quote-text'), l);
+  // Portrait de la fondatrice, dès qu'une photo est renseignée dans le CMS (clé founder_photo)
+  const fp = cms.founder_photo?.value_fr, fig = el('founder');
+  if (fp && fig && !fig.querySelector('.founder-photo')) fig.insertAdjacentHTML('afterbegin', `<img class="founder-photo" src="${_sdAttr(fp)}" alt="Victoria" width="72" height="72" loading="lazy">`);
 }
 
 function _applyCmsSections(cms, l) {
@@ -827,27 +923,33 @@ function _applyCmsSections(cms, l) {
 }
 
 function _applyCmsPromise(cms, l) {
-  if (!cms) return;
   const lk = l === 'sv' ? 'value_sv' : l === 'en' ? 'value_en' : 'value_fr';
   const el = (id) => document.getElementById(id);
-  const set = (id, key) => { const v = cms[key]?.[lk]; if (v && el(id)) el(id).textContent = v; };
-  set('promise-1-title', 'promise_1_title'); set('promise-1-desc', 'promise_1_desc');
+  const set = (id, key) => { const v = cms?.[key]?.[lk]; if (v && el(id)) el(id).textContent = v; };
+  set('promise-1-title', 'promise_1_title');
   set('promise-2-title', 'promise_2_title'); set('promise-2-desc', 'promise_2_desc');
   set('promise-3-title', 'promise_3_title'); set('promise-3-desc', 'promise_3_desc');
   set('promise-4-title', 'promise_4_title'); set('promise-4-desc', 'promise_4_desc');
+  // Seuils de livraison : toujours ceux des réglages
+  if (el('promise-1-desc')) el('promise-1-desc').textContent = _shipTexts(l).promise;
 }
 
 function _applyCmsTicker(cms, l) {
-  if (!cms) return;
   const lk = l === 'sv' ? 'value_sv' : l === 'en' ? 'value_en' : 'value_fr';
   const track = document.getElementById('ticker-track');
   if (!track) return;
-  const msgs = [cms.ticker_1, cms.ticker_2, cms.ticker_3, cms.ticker_4, cms.ticker_5]
-    .map(k => k?.[lk]).filter(Boolean);
-  if (!msgs.length) return;
-  // Duplicate for seamless loop
-  const items = [...msgs, ...msgs].map(m => `<span class="ticker-item">${m}<span class="ticker-sep"></span></span>`).join('');
-  track.innerHTML = items;
+  // Les messages de livraison du CMS cèdent la place à ceux calculés depuis les réglages
+  const SHIP = /livraison|delivery|shipping|frakt|leverans/i;
+  const DEF = {
+    fr: ['Saveurs suédoises authentiques', 'Fondée par une Suédoise en France', 'Paiement sécurisé'],
+    en: ['Authentic Swedish flavours', 'Founded by a Swede in France', 'Secure payment'],
+    sv: ['Äkta svenska smaker', 'Grundat av en svensk i Frankrike', 'Säker betalning']
+  };
+  const fromCms = cms ? [cms.ticker_1, cms.ticker_2, cms.ticker_3, cms.ticker_4, cms.ticker_5].map(k => k?.[lk]).filter(Boolean).filter(m => !SHIP.test(m)) : [];
+  const msgs = [..._shipTexts(l).ticker, ...(fromCms.length ? fromCms : (DEF[l] || DEF.fr))];
+  // Second passage pour la boucle seulement : masqué aux lecteurs d'écran
+  const item = (m, dup) => `<span class="ticker-item"${dup ? ' aria-hidden="true"' : ''}>${m}<span class="ticker-sep"></span></span>`;
+  track.innerHTML = msgs.map(m => item(m)).join('') + msgs.map(m => item(m, true)).join('');
 }
 
 function _applyCmsSeason(cms, l) {
@@ -905,36 +1007,30 @@ function onLangChange(l) {
 }
 
 function renderHome() {
-  const cr = document.getElementById('cats-row');
-  if (cr) {
-    const populated = CATS.filter(c => PRODUCTS.some(p => p.cat === c.id));
-    const catsToShow = (populated.length >= 4 ? populated : CATS).slice(0, 11);
-    cr.innerHTML = catsToShow.map(c => {
-      const count = PRODUCTS.filter(p => p.cat === c.id).length;
-      const _pLabel = count<=1?(LANG==='sv'?'produkt':LANG==='en'?'product':'produit'):(LANG==='sv'?'produkter':LANG==='en'?'products':'produits');
-      return `<a href="boutique.html?cat=${encodeURIComponent(c.id)}" class="cat-card">
-        <div class="cat-name">${CAT_LABELS[c.id]?.[LANG]||c.id}</div>
-        ${count ? `<div class="cat-count">${count} ${_pLabel}</div>` : ''}
-      </a>`;
-    }).join('');
-  }
+  _renderRayons();
+  _renderRituals();
   if (!_homeReady) return;
 
-  // Bestsellers : flaggés d'abord, puis meilleurs ratings pour compléter jusqu'à 6
-  let bs_list = PRODUCTS.filter(p => p.bestseller);
-  if (bs_list.length < 6) {
-    const bsIds = new Set(bs_list.map(p => p.uuid||p.id));
-    const extra = [...PRODUCTS].filter(p => !bsIds.has(p.uuid||p.id)).sort((a,b) => b.rating - a.rating);
-    bs_list = [...bs_list, ...extra].slice(0, 6);
-  }
+  const key = p => p.uuid || p.id;
+  const inStock = p => !(p.trackStock && p.stock != null && p.stock <= 0);
+  const born = p => Date.parse(p.createdAt || '') || 0;
 
-  // Nouvelles arrivées : flaggées d'abord, puis les autres pour compléter jusqu'à 4
-  let na_list = PRODUCTS.filter(p => p.isNew);
-  if (na_list.length < 4) {
-    const naIds = new Set(na_list.map(p => p.uuid||p.id));
-    const extra = PRODUCTS.filter(p => !naIds.has(p.uuid||p.id));
-    na_list = [...na_list, ...extra].slice(0, 4);
+  // Best-sellers : 8 produits disponibles, complétés par les mieux notés
+  let bs_list = PRODUCTS.filter(p => p.bestseller && inStock(p));
+  if (bs_list.length < 8) {
+    const ids = new Set(bs_list.map(key));
+    bs_list = bs_list.concat(PRODUCTS.filter(p => !ids.has(key(p)) && inStock(p)).sort((a, b) => b.rating - a.rating));
   }
+  bs_list = bs_list.slice(0, 8);
+
+  // Nouvelles arrivées : les plus récentes, sans doublon avec les best-sellers
+  const used = new Set(bs_list.map(key));
+  let na_list = PRODUCTS.filter(p => p.isNew && inStock(p) && !used.has(key(p))).sort((a, b) => born(b) - born(a));
+  if (na_list.length < 4) {
+    const ids = new Set(na_list.map(key));
+    na_list = na_list.concat(PRODUCTS.filter(p => !used.has(key(p)) && !ids.has(key(p)) && inStock(p)).sort((a, b) => born(b) - born(a)));
+  }
+  na_list = na_list.slice(0, 8);
 
   const bs = document.getElementById('bestsellers');
   if (bs) { bs.innerHTML = bs_list.map(p => productCardHTML(p)).join(''); revealNew(bs); }
@@ -942,29 +1038,35 @@ function renderHome() {
   if (na) { na.innerHTML = na_list.map(p => productCardHTML(p)).join(''); revealNew(na); }
 }
 
+/* Newsletter : le message s'affiche sous le champ (et non dans un toast qui
+   s'efface), et on n'annonce jamais une inscription qui n'a pas eu lieu. */
 function nlSubscribe() {
   const el = document.getElementById('nl-email');
+  const msg = document.getElementById('nl-msg');
   const v = (el.value || '').trim();
+  const say = (t, ok) => { if (msg) { msg.textContent = t; msg.classList.toggle('is-error', !ok); } };
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) {
-    showToast(LANG === 'sv' ? 'Ogiltig e-post' : LANG === 'en' ? 'Invalid email' : 'E-mail invalide');
+    say(LANG === 'sv' ? 'Ange en giltig e-postadress, till exempel namn@exempel.se.' : LANG === 'en' ? 'Please enter a valid email address, for example name@example.com.' : 'Indiquez une adresse e-mail valide, par exemple nom@exemple.fr.', false);
+    el.focus();
     return;
   }
-  const done = (ok) => {
-    showToast(ok ? UI[LANG].subscribe : (LANG === 'sv' ? 'Försök igen' : LANG === 'en' ? 'Please try again' : 'Réessayez'));
-    if (ok) el.value = '';
-  };
-  if (typeof sdNewsletterSubscribe === 'function') sdNewsletterSubscribe(v).then(done);
-  else done(true);
+  say('…', true);
+  sdNewsletterSubscribe(v).then(ok => {
+    if (ok) { say(LANG === 'sv' ? 'Tack! Du är anmäld.' : LANG === 'en' ? 'Thank you, you are subscribed.' : 'Merci, votre inscription est enregistrée.', true); el.value = ''; }
+    else say(LANG === 'sv' ? 'Anmälan gick inte igenom. Försök igen om en stund.' : LANG === 'en' ? 'We could not sign you up. Please try again in a moment.' : "L'inscription n'a pas abouti. Réessayez dans un instant.", false);
+  });
 }
 
 // Show skeleton in product sections while waiting for API
 const _SKL_H = '<div class="sk-card"><div class="sk-img"></div><div class="sk-line sk-lg"></div><div class="sk-line sk-md"></div><div class="sk-line sk-sm"></div></div>';
 const _bs0 = document.getElementById('bestsellers');
-if (_bs0) _bs0.innerHTML = Array(6).fill(_SKL_H).join('');
+if (_bs0) _bs0.innerHTML = Array(8).fill(_SKL_H).join('');
 const _na0 = document.getElementById('new-arrivals');
-if (_na0) _na0.innerHTML = Array(4).fill(_SKL_H).join('');
+if (_na0) _na0.innerHTML = Array(8).fill(_SKL_H).join('');
 
-renderHome(); // renders cats-row only (product gate is closed)
+renderHome(); // rayons et rituels ; les produits attendent l'API
+_applyCmsTicker(null, LANG);
+_applyCmsPromise(null, LANG);
 
 const _fallbackHome = setTimeout(() => { _homeReady = true; renderHome(); }, 4000);
 window.addEventListener('sdapi:ready', (e) => {
@@ -992,6 +1094,6 @@ window.addEventListener('sdapi:ready', (e) => {
 });
 </script>
 <script>(function(){var _hr=document.getElementById("header-root");if(_hr&&typeof MutationObserver!=="undefined")new MutationObserver(function(){if(typeof updateCartBadge==="function")updateCartBadge();}).observe(_hr,{childList:true});})();</script>
-<script src="js/sd-api-client.js?v=8"></script>
+<script src="js/sd-api-client.js?v=9"></script>
 </body>
 </html>
