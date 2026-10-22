@@ -63,14 +63,15 @@
   max-width: 820px;
   padding: 0 40px;
 }
-.hero-eyebrow {
+.hero-eyebrow, .hero-slide-eyebrow {
   font-family: var(--font-ui);
   font-size: 9px; letter-spacing: 6px; text-transform: uppercase;
   color: rgba(255,255,255,0.48);
   margin-bottom: 28px;
   display: flex; align-items: center; justify-content: center; gap: 18px;
 }
-.hero-eyebrow::before, .hero-eyebrow::after {
+.hero-eyebrow::before, .hero-eyebrow::after,
+.hero-slide-eyebrow::before, .hero-slide-eyebrow::after {
   content: ''; width: 40px; height: 1px; background: rgba(255,255,255,0.22);
 }
 .hero h1 {
@@ -81,8 +82,11 @@
   margin-bottom: 26px;
   letter-spacing: -2px;
 }
-.hero h1 em { font-style: italic; color: var(--lingon-mid); }
-.hero-sub {
+/* Sur photo, la couleur de marque pure tombe sous 2:1 : on l'éclaircit
+   (dérivée de --lingon, donc toujours pilotée par le back-office). */
+.hero { --hero-accent: color-mix(in srgb, var(--lingon) 50%, #fff); }
+.hero h1 em, .hero-slide-title em { font-style: italic; color: var(--lingon-mid); color: var(--hero-accent); }
+.hero-sub, .hero-slide-sub {
   font-family: var(--font-body);
   font-size: 17px; color: rgba(255,255,255,0.58);
   line-height: 1.95; max-width: 480px;
@@ -115,6 +119,126 @@
 @keyframes scrollPulse {
   0%, 100% { transform: scaleY(1); opacity: 0.6; }
   55% { transform: scaleY(0.6); opacity: 1; }
+}
+
+/* ── HERO : carrousel (js/hero-carousel.js, réglé dans le back-office) ──
+   La diapositive entrante se fond par-dessus la précédente, restée
+   opaque dessous : jamais de creux sombre entre deux images. */
+.hero { isolation: isolate; }
+.hero-slides { position: absolute; inset: 0; }
+.hero-slide {
+  position: absolute; inset: 0;
+  opacity: 0; visibility: hidden;
+  transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), visibility 0s linear 1.2s;
+}
+.hero-slide.is-active { opacity: 1; visibility: visible; z-index: 2; transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), visibility 0s; }
+.hero-slide.is-prev { opacity: 1; visibility: visible; z-index: 1; transition: none; }
+.hero-slide.is-instant { transition: none; }
+.hero-slide picture, .hero-slide img {
+  position: absolute; inset: 0; display: block;
+  width: 100%; height: 100%;
+}
+/* Le moment signé : la photo se pose lentement pendant qu'elle est à l'écran. */
+.hero-slide img {
+  object-fit: cover; object-position: center 35%;
+  transform: scale(1.06);
+  transition: transform var(--hero-zoom, 6200ms) cubic-bezier(0.2, 0.6, 0.3, 1);
+}
+.hero-slide.is-active img, .hero-slide.is-prev img { transform: scale(1); }
+.hero-slide.is-prev img, .hero-slide:not(.is-active):not(.is-prev) img { transition: none; }
+/* Visuel avec texte intégré : ni zoom ni recadrage vers le haut. */
+.hero-slide--image img, .hero-slide--image.is-active img { object-position: center; transform: none; transition: none; }
+
+.hero-slide-copy {
+  position: absolute; inset: 0; z-index: 1;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; padding: 0 40px;
+}
+.hero-slide-copy > * { max-width: 820px; }
+.hero-slide-copy [hidden] { display: none; }
+/* Même échelle que le titre de l'accueil : d'une diapositive à l'autre,
+   le titre ne change pas de taille. */
+.hero-slide-title {
+  font-family: var(--font-display);
+  font-size: clamp(56px, 9vw, 112px);
+  font-weight: 300; line-height: 0.97;
+  color: #fff;
+  margin-bottom: 26px;
+  letter-spacing: -2px;
+  text-wrap: balance;
+}
+.hero-slide-copy > * {
+  opacity: 0; transform: translateY(14px);
+  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.hero-slide.is-active .hero-slide-copy > * { opacity: 1; transform: none; transition-delay: 0.35s; }
+.hero-slide.is-active .hero-slide-copy > :nth-child(2) { transition-delay: 0.45s; }
+.hero-slide.is-active .hero-slide-copy > :nth-child(3) { transition-delay: 0.55s; }
+.hero-slide.is-active .hero-slide-copy > :nth-child(4) { transition-delay: 0.65s; }
+.hero-slide.is-instant .hero-slide-copy > * { transition: none; }
+
+/* Une promo arrive sur n'importe quelle photo, souvent claire au centre :
+   le voile se renforce derrière le texte. */
+.hero-slide--custom .hero-overlay {
+  background:
+    radial-gradient(ellipse 62% 58% at 50% 52%, rgba(18,8,22,0.58) 0%, rgba(18,8,22,0.28) 62%, rgba(18,8,22,0) 100%),
+    linear-gradient(155deg, rgba(18,8,22,0.62) 0%, rgba(18,8,22,0.20) 48%, rgba(18,8,22,0.78) 100%);
+}
+.hero-slide-title, .hero-slide-sub { text-shadow: 0 2px 28px rgba(18,8,22,0.35); }
+.hero-slide-sub { color: rgba(255,255,255,0.78); }
+
+.hero-slide-link { position: absolute; inset: 0; z-index: 1; }
+.hero-slide-link:focus-visible { outline: 2px solid #fff; outline-offset: -8px; }
+
+/* Texte de l'accueil : s'efface quand la diapositive porte le sien. */
+.hero-content { transition: opacity 0.6s ease, transform 0.6s ease, visibility 0s; }
+.hero--own .hero-content {
+  opacity: 0; visibility: hidden; transform: translateY(-8px);
+  transition: opacity 0.45s ease, transform 0.45s ease, visibility 0s linear 0.45s;
+}
+
+/* Traits de progression : le trait actif se remplit pendant le délai,
+   sa fin fait avancer le carrousel. Centrés : les deux coins bas sont
+   pris par les boutons flottants (Suggérer un produit, WhatsApp). */
+.hero-controls {
+  position: absolute; z-index: 3; left: 50%; transform: translateX(-50%);
+  bottom: calc(28px + var(--hero-fold, 0px));
+  display: flex; align-items: center;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.35));
+}
+.hero-dots { display: flex; }
+.hero-dot, .hero-pause {
+  width: 44px; height: 44px; padding: 0;
+  border: 0; background: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.hero-dot-bar {
+  position: relative; display: block; overflow: hidden;
+  width: 30px; height: 2px;
+  background: rgba(255,255,255,0.32);
+  transition: background 0.2s;
+}
+.hero-dot:hover .hero-dot-bar { background: rgba(255,255,255,0.6); }
+.hero-dot-fill {
+  position: absolute; inset: 0;
+  background: #fff;
+  transform: scaleX(0); transform-origin: left center;
+}
+.hero-dot.is-active .hero-dot-fill { animation: heroFill var(--hero-interval, 5s) linear forwards; }
+.hero.is-paused .hero-dot-fill, .hero.is-held .hero-dot-fill { animation-play-state: paused; }
+.hero--manual .hero-dot.is-active .hero-dot-fill { animation: none; transform: none; }
+@keyframes heroFill { to { transform: scaleX(1); } }
+.hero-pause { color: rgba(255,255,255,0.72); transition: color 0.2s; }
+.hero-pause:hover { color: #fff; }
+.hero-pause svg { width: 12px; height: 12px; fill: currentColor; }
+.hero-pause .i-play, .hero.is-paused .hero-pause .i-pause { display: none; }
+.hero.is-paused .hero-pause .i-play { display: block; }
+.hero-dot:focus-visible, .hero-pause:focus-visible { outline: 1px solid rgba(255,255,255,0.9); outline-offset: -8px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-slide, .hero-slide.is-active { transition-duration: 0.4s, 0s; }
+  .hero-slide img, .hero-slide.is-active img { transform: none; transition: none; }
+  .hero-slide-copy > * { transform: none; }
 }
 
 /* ── TICKER ── */
@@ -390,9 +514,14 @@
   .about-split-text { padding: 56px 32px; }
   .testi-grid { grid-template-columns: 1fr; }
 }
+@media(max-width: 767px) {
+  /* Sur téléphone, les traits prennent la place du « Découvrir » centré. */
+  .hero--carousel .hero-scroll { display: none; }
+}
 @media(max-width: 600px) {
-  .hero h1 { font-size: 46px; letter-spacing: -1px; }
-  .hero-sub { font-size: 15px; }
+  .hero h1, .hero-slide-title { font-size: 46px; letter-spacing: -1px; }
+  .hero-slide-copy { padding: 0 24px; }
+  .hero-sub, .hero-slide-sub { font-size: 15px; }
   .cats-grid { padding: 0 16px 48px; grid-template-columns: repeat(2,1fr); }
   .feat-stats { grid-template-columns: 1fr; gap: 16px; }
   .about-nums { gap: 28px; }
@@ -429,6 +558,9 @@
   </div>
 </section>
 <script>(function(){try{var sf=JSON.parse(sessionStorage.getItem('sd_full_v1'));if(sf&&sf.cms){var sc=sf.cms;var himg=document.querySelector('.hero-media img');if(himg&&sc.hero_image&&sc.hero_image.value_fr)himg.src=sc.hero_image.value_fr;var eimg=document.querySelector('.ei-image img');if(eimg&&sc.editorial_image&&sc.editorial_image.value_fr)eimg.src=sc.editorial_image.value_fr;var fimg=document.querySelector('.feat-band-img img');if(fimg&&sc.feature_image&&sc.feature_image.value_fr)fimg.src=sc.feature_image.value_fr;var aimg=document.querySelector('.about-split-img img');if(aimg&&sc.about_image&&sc.about_image.value_fr)aimg.src=sc.about_image.value_fr;}}catch(e){}try{var c=JSON.parse(localStorage.getItem('sd_cms_v1'));if(!c)return;var lg=localStorage.getItem('sd_lang')||'fr';var lk=lg==='sv'?'value_sv':lg==='en'?'value_en':'value_fr';var h=document.querySelector('.hero h1');if(h&&c.hero_title&&c.hero_title[lk])h.innerHTML=c.hero_title[lk];var s=document.querySelector('.hero-sub');if(s&&c.hero_subtitle&&c.hero_subtitle[lk])s.textContent=c.hero_subtitle[lk];var ey=document.querySelector('.hero-eyebrow');if(ey&&c.hero_eyebrow&&c.hero_eyebrow[lk])ey.textContent=c.hero_eyebrow[lk];var eb1=document.getElementById('ei-body1');if(eb1&&c.editorial_body1&&c.editorial_body1[lk])eb1.textContent=c.editorial_body1[lk];var eb2=document.getElementById('ei-body2');if(eb2&&c.editorial_body2&&c.editorial_body2[lk])eb2.textContent=c.editorial_body2[lk];var ab1=document.getElementById('about-body1');if(ab1&&c.about_body1&&c.about_body1[lk])ab1.textContent=c.about_body1[lk];var aq=document.getElementById('about-quote-text');if(aq&&c.about_quote&&c.about_quote[lk])aq.textContent=c.about_quote[lk];var ab2=document.getElementById('about-body2');if(ab2&&c.about_body2&&c.about_body2[lk])ab2.textContent=c.about_body2[lk];}catch(e){}}());</script>
+<!-- Image fixe ou carrousel (back-office → Bannière d'accueil). Chargé ici, avant
+     la suite de la page, pour poser le carrousel mémorisé dès le premier rendu. -->
+<script src="js/hero-carousel.js?v=1"></script>
 
 <!-- ═══ TICKER ═══ -->
 <div class="ticker-bar">
@@ -767,6 +899,7 @@ function onLangChange(l) {
       const ey = document.querySelector('.hero-eyebrow');
       if (ey && cms.hero_eyebrow?.[lk]) ey.textContent = cms.hero_eyebrow[lk];
     }
+    if (window.SDHero) SDHero.setLang(l);
   } catch(e) {}
   renderHome();
 }
