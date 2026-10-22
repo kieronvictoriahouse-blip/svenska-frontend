@@ -391,8 +391,9 @@ function initPage(activePage){window._activePage=activePage;document.body.classL
 function _sdAnn(txt){return String(txt||'').split(/\s+·\s+/).filter(Boolean).map(function(s,i){return(i?"<span class='ann-sep'> · </span>":'')+"<span class='ann-seg'>"+_sdAttr(s)+'</span>';}).join('');}
 
 /* Rayons réels de la boutique (catégories de l'admin, hors maison), du plus
-   fourni au moins fourni. Même règle d'exclusion que js/catalog-v3.js. */
-function _sdShopRayons(){var excl={'art-de-la-table':1,'maison-deco':1};var m={};(window.PRODUCTS||[]).forEach(function(p){var c=p&&p.category;if(!c||!c.slug||excl[c.slug])return;if(!m[c.slug])m[c.slug]={slug:c.slug,label:c,count:0};m[c.slug].count++;});return Object.keys(m).map(function(k){return m[k];}).sort(function(a,b){return b.count-a.count;});}
+   fourni au moins fourni. Mêmes règles que js/catalog-v3.js : les box ont
+   leur propre section en tête de la boutique et ne comptent pas dans leur rayon. */
+function _sdShopRayons(){var excl={'art-de-la-table':1,'maison-deco':1};var m={};(window.PRODUCTS||[]).forEach(function(p){var c=p&&p.category;if(!c||!c.slug||excl[c.slug])return;if((p.tags||[]).indexOf('box')>-1||/^box\b/i.test((p.name&&p.name.fr)||''))return;if(!m[c.slug])m[c.slug]={slug:c.slug,label:c,count:0};m[c.slug].count++;});return Object.keys(m).map(function(k){return m[k];}).sort(function(a,b){return b.count-a.count;});}
 function _sdRayonUrl(slug){return 'boutique.html?rayon='+encodeURIComponent(slug);}
 function _sdFillMobRayons(){var box=document.getElementById('mob-rayons');if(!box)return;box.innerHTML=_sdShopRayons().slice(0,6).map(function(r){return'<a href="'+_sdRayonUrl(r.slug)+'" onclick="closeMob()">'+_sdAttr(r.label[LANG]||r.label.fr)+'</a>';}).join('');}
 
