@@ -83,6 +83,11 @@
 .c3-seccount{ font-family:'Jost',sans-serif; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:#8C8276; }
 .c3-secfam{ margin-left:auto; font-family:'EB Garamond',serif; font-size:14.5px; font-style:italic; color:#6E6459; }
 .c3-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(178px,1fr)); gap:14px; }
+/* Section « Nos box » en tête : bandeau parchemin, cartes plus grandes */
+.c3-section--box{ background:#F4EADB; border:1px solid #EADFCD; padding:22px 20px 30px; margin-top:20px; }
+.c3-section--box .c3-sechead{ border-bottom-color:#DFD0BA; }
+.c3-grid--box{ grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); }
+.c3-grid--box .c3-meta{ font-size:14px; line-height:1.35; }
 
 /* CARTE PRODUIT */
 .c3-card{ background:#fff; border:1px solid #EADFCD; border-radius:3px; display:flex; flex-direction:column; cursor:pointer; animation:c3-in .2s ease both; transition:box-shadow .16s, transform .16s; }
@@ -187,6 +192,9 @@
   .c3-seccount{ font-size:9.5px; letter-spacing:1.8px; }
   .c3-secfam{ display:none; }
   .c3-grid{ grid-template-columns:1fr 1fr; gap:11px; }
+  .c3-section--box{ margin:16px -14px 0; padding:16px 14px 26px; border-left:none; border-right:none; }
+  .c3-grid--box{ grid-template-columns:1fr 1fr; }
+  .c3-grid--box .c3-meta{ font-size:13px; }
 
   /* Carte mobile */
   .c3-card{ border-radius:10px; }
@@ -266,7 +274,7 @@
 <div id="footer-root"></div>
 
 <script src="js/app.js?v=31"></script>
-<script src="js/catalog-v3.js?v=11"></script>
+<script src="js/catalog-v3.js?v=12"></script>
 <script>(function(){var _hr=document.getElementById("header-root");if(_hr&&typeof MutationObserver!=="undefined")new MutationObserver(function(){if(typeof updateCartBadge==="function")updateCartBadge();}).observe(_hr,{childList:true});})();</script>
 <script src="js/sd-api-client.js?v=8"></script>
 </body>

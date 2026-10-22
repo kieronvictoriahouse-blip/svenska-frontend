@@ -116,6 +116,10 @@
     product: { fr: 'produit', en: 'product', sv: 'produkt' },
     ref: { fr: 'réf.', en: 'items', sv: 'varor' },
     catalogTitle: { fr: 'Le catalogue', en: 'The catalogue', sv: 'Sortimentet' },
+    boxTitle: { fr: 'Nos box', en: 'Our boxes', sv: 'Våra lådor' },
+    boxShort: { fr: 'Box', en: 'Boxes', sv: 'Lådor' },
+    boxNote: { fr: 'Composées par Victoria, prêtes à offrir', en: 'Put together by Victoria, ready to gift', sv: 'Utvalda av Victoria, redo att ge bort' },
+    box: { fr: 'box', en: 'boxes', sv: 'lådor' },
     railFoot: {
       fr: 'Une envie précise&nbsp;? <a href="contact.html">Demandez-nous un produit</a> — on l\'ajoute au prochain conteneur.',
       en: 'Something specific in mind? <a href="contact.html">Ask us for a product</a> — we\'ll add it to the next container.',
@@ -280,7 +284,12 @@
     if (price > 0 && price < 3) tags.petit = true;
     if (p.bestseller) tags.best = true;
     if (p.isNew) tags.new = true;
+    // Box = produit composé. La liste ne transmet pas la composition : on se
+    // fie à l'étiquette « box » posée sur chaque box en admin.
+    var isBox = realTags.indexOf('box') > -1 || /^box\b/.test(nn);
     return {
+      isBox: isBox,
+      subtitle: (p.subtitle && (p.subtitle[L()] || p.subtitle.fr)) || '',
       id: cid, uuid: p.uuid, rawId: p.id, ref: p,
       name: (p.name && p.name[L()]) || (p.name && p.name.fr) || '',
       sub: catKey, parent: catKey, catLabel: catLabel, catSort: catSort, slug: slug,
@@ -354,8 +363,10 @@
 
     // ── Rayons = CATÉGORIES DE L'ADMIN (source de vérité), ordonnées par
     //    sort_order de l'admin puis par nom. Plus de familles/sous-rayons devinés. ──
-    var catsMap = {};
+    var catsMap = {}, boxes = [];
     list.forEach(function (p) {
+      // Les box ont leur propre section en tête, hors de leur rayon.
+      if (p.isBox) { boxes.push(p); return; }
       if (!catsMap[p.sub]) catsMap[p.sub] = { key: p.sub, label: p.catLabel, sort: p.catSort, items: [] };
       catsMap[p.sub].items.push(p);
     });
@@ -368,6 +379,13 @@
       .sort(function (a, b) { return (oi(a) - oi(b)) || String(a.label).localeCompare(String(b.label)); });
 
     var sections = [], rail = [];
+    if (boxes.length) {
+      // Disponibles d'abord, puis du moins cher au plus cher.
+      boxes.sort(function (a, b) { return ((a.stock === 'soon') - (b.stock === 'soon')) || (a.price - b.price); });
+      var boxLabel = tr(T.boxTitle);
+      sections.push({ key: 'box', title: boxLabel, note: tr(T.boxNote), count: boxes.length, items: boxes, featured: true });
+      rail.push({ lvl: 1, key: 'box', label: boxLabel, short: tr(T.boxShort), count: boxes.length });
+    }
     cats.forEach(function (c) {
       sections.push({ key: c.key, title: c.label, parent: '', count: c.items.length, items: c.items });
       rail.push({ lvl: 1, key: c.key, label: c.label, short: c.label, count: c.items.length });
@@ -443,7 +461,9 @@
       '</div>' +
       '<div class="c3-cbody">' +
       '<div class="c3-name">' + esc(v.name) + '</div>' +
-      '<div class="c3-meta"><span class="c3-meta-w">' + esc(v.weight) + '</span>' + (v.origin ? '<span class="c3-meta-o"> · ' + esc(v.origin) + '</span>' : '') + '</div>' +
+      (v.isBox && v.subtitle
+        ? '<div class="c3-meta">' + esc(v.subtitle) + '</div>'
+        : '<div class="c3-meta"><span class="c3-meta-w">' + esc(v.weight) + '</span>' + (v.origin ? '<span class="c3-meta-o"> · ' + esc(v.origin) + '</span>' : '') + '</div>') +
       '<div class="c3-prices">' + price + '</div>' +
       '</div></article>';
   }
@@ -456,10 +476,12 @@
         '<button class="c3-empty-btn" data-clear>' + esc(tr(T.seeAll)) + ' ' + totalCount + ' ' + esc(tr(T.products)) + '</button></div>';
     }
     return sections.map(function (s) {
+      var unit = s.featured ? tr(T.box) : (s.count > 1 ? tr(T.products) : tr(T.product));
       var head = '<div class="c3-sechead"><h2>' + esc(s.title) + '</h2>' +
-        '<span class="c3-seccount">' + s.count + ' ' + esc(s.count > 1 ? tr(T.products) : tr(T.product)) + '</span></div>';
-      var grid = '<div class="c3-grid">' + s.items.map(cardHTML).join('') + '</div>';
-      return '<section class="c3-section" data-sec="' + esc(s.key) + '">' + head + grid + '</section>';
+        '<span class="c3-seccount">' + s.count + ' ' + esc(unit) + '</span>' +
+        (s.note ? '<span class="c3-secfam">' + esc(s.note) + '</span>' : '') + '</div>';
+      var grid = '<div class="c3-grid' + (s.featured ? ' c3-grid--box' : '') + '">' + s.items.map(cardHTML).join('') + '</div>';
+      return '<section class="c3-section' + (s.featured ? ' c3-section--box' : '') + '" data-sec="' + esc(s.key) + '">' + head + grid + '</section>';
     }).join('');
   }
 
