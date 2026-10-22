@@ -12,21 +12,30 @@
 <meta name="robots" content="noindex">
 <meta property="og:site_name" content="Swedish Cravings">
 <meta name="twitter:card" content="summary">
-<link rel="stylesheet" href="css/style.css?v=19">
+<link rel="stylesheet" href="css/style.css?v=20">
 <script>const SD_API_URL = 'https://admin.swedishcravings.fr';</script>
 <script>(function(){try{var w=JSON.parse(localStorage.getItem('sd_wl_v1'));if(w&&w.id){var r=document.documentElement.style;if(w.color_primary){r.setProperty('--heather',w.color_primary);r.setProperty('--heather-mid',w.color_primary+'CC');}if(w.color_secondary){r.setProperty('--lingon',w.color_secondary);r.setProperty('--lingon-mid',w.color_secondary+'CC');}if(w.color_bg)r.setProperty('--cream',w.color_bg);if(w.color_text)r.setProperty('--midnight',w.color_text);if(w.font_display)r.setProperty('--font-display',"'"+w.font_display+"',Georgia,serif");if(w.font_body)r.setProperty('--font-body',"'"+w.font_body+"',Georgia,serif");if(w.font_ui)r.setProperty('--font-ui',"'"+w.font_ui+"',sans-serif");}}catch(e){}}());</script>
 <style>
-.page-hero{background:var(--heather);padding:64px 40px;text-align:center;}
-.page-hero h1{font-family:var(--font-display);font-size:clamp(32px,5vw,64px);font-weight:300;color:var(--snow);}
-.page-hero h1 em{font-style:italic;color:var(--lingon-mid);}
-.page-hero .hero-crumb{font-family:var(--font-ui);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:18px;}
-.page-hero .hero-crumb a{color:rgba(255,255,255,0.55);text-decoration:none;}
-.page-hero .hero-crumb a:hover{color:#fff;}
+/* En-tête compact : sur le panier, la place va au contenu et au paiement */
+.page-hero{max-width:var(--max-width);margin:0 auto;padding:32px 40px 0;}
+.page-hero h1{font-family:var(--font-display);font-size:clamp(30px,4vw,44px);font-weight:300;color:var(--midnight);line-height:1.1;}
+.page-hero h1 em{font-style:italic;color:var(--lingon);}
+.page-hero .hero-crumb{font-family:var(--font-ui);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--dust);margin-bottom:10px;}
+.page-hero .hero-crumb a{color:var(--dust);text-decoration:none;}
+.page-hero .hero-crumb a:hover{color:var(--lingon);}
+.page-hero + .section{padding-top:28px;}
 
 /* Cart layout */
-.cart-page-layout{display:grid;grid-template-columns:1fr 360px;gap:48px;align-items:start;}
+/* Articles, puis récapitulatif ; les suggestions viennent après le
+   récapitulatif (sur mobile, elles ne repoussent plus le paiement). */
+.cart-page-layout{display:grid;grid-template-columns:1fr 360px;grid-template-rows:auto 1fr;grid-template-areas:"items summary" "more summary";column-gap:48px;align-items:start;}
+.cart-page-items{grid-area:items;}
+.cart-page-summary{grid-area:summary;}
+.cart-page-more{grid-area:more;}
 /* Empêche le contenu large (carrousel, champ relais) de forcer la grille à déborder l'écran */
-.cart-page-items,.cart-page-summary{min-width:0;}
+.cart-page-items,.cart-page-summary,.cart-page-more{min-width:0;}
+.cart-continue{font-family:var(--font-ui);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--dust);text-decoration:none;display:inline-flex;align-items:center;gap:8px;padding:8px 0;transition:color 0.15s;}
+.cart-continue:hover{color:var(--heather-text);}
 
 /* Items list */
 .cart-page-items{}
@@ -54,25 +63,31 @@
 .cart-page-summary{background:var(--snow);border:1px solid var(--linen);padding:32px 28px;position:sticky;top:120px;}
 /* Delivery toggle */
 .delivery-toggle{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--linen);border-radius:4px;overflow:hidden;margin-bottom:20px;}
-.dt-btn{background:var(--snow);border:none;padding:10px 6px;font-family:var(--font-ui);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--slate);cursor:pointer;transition:background 0.15s,color 0.15s;text-align:center;line-height:1.4;}
-.dt-btn.active{background:var(--heather);color:var(--snow);}
+.dt-btn{background:var(--snow);border:none;padding:12px 8px;min-height:48px;font-family:var(--font-ui);font-size:11px;letter-spacing:1.2px;text-transform:uppercase;color:var(--slate);cursor:pointer;transition:background 0.15s,color 0.15s;text-align:center;line-height:1.35;}
+.dt-btn small{display:block;font-size:11px;letter-spacing:0.5px;text-transform:none;margin-top:3px;opacity:.85;}
+.dt-btn.active{background:var(--heather);color:var(--on-heather);}
+.dt-btn:disabled{opacity:.45;cursor:not-allowed;}
 .dt-btn:not(:last-child){border-right:1px solid var(--linen);}
-.summary-title{font-family:var(--font-display);font-size:20px;font-weight:500;color:var(--midnight);margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid var(--linen);}
+.summary-title{font-family:var(--font-display);font-size:20px;font-weight:500;color:var(--midnight);margin:0 0 24px;padding-bottom:16px;border-bottom:1px solid var(--linen);}
 .summary-line{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;font-family:var(--font-body);font-size:15px;color:var(--slate);}
 .summary-line.total{font-family:var(--font-display);font-size:20px;font-weight:600;color:var(--midnight);margin-top:16px;padding-top:16px;border-top:1px solid var(--linen);margin-bottom:24px;}
 .summary-ship-bar{margin-bottom:20px;}
-.summary-ship-text{font-family:var(--font-ui);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--dust);margin-bottom:8px;}
+.summary-ship-text{font-family:var(--font-ui);font-size:11px;letter-spacing:1.2px;text-transform:uppercase;color:var(--dust);margin-bottom:8px;line-height:1.45;}
 .summary-bar{height:3px;background:var(--linen);border-radius:2px;overflow:hidden;}
 .summary-bar-fill{height:100%;background:var(--moss);border-radius:2px;transition:width 0.4s ease;}
-.btn-pay{width:100%;background:var(--heather);color:var(--snow);border:none;padding:18px 24px;font-family:var(--font-ui);font-size:12px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;transition:background 0.2s;margin-bottom:12px;}
-.btn-pay:hover{background:var(--midnight);}
-.btn-pay-sec{display:flex;align-items:center;justify-content:center;gap:8px;font-family:var(--font-ui);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--dust);margin-bottom:20px;}
+/* Le bouton qui compte le plus : couleur d'action franche, jamais l'air désactivé */
+.btn-pay{width:100%;background:var(--lingon);color:var(--snow);border:none;padding:18px 24px;font-family:var(--font-ui);font-size:13px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;cursor:pointer;transition:background 0.2s;margin-bottom:12px;}
+.btn-pay:hover{background:var(--lingon-hover);}
+.btn-pay:disabled{cursor:progress;opacity:.8;}
+.pay-error{display:none;border:1px solid var(--promo-red,#C0392B);background:#FDF3F2;color:#8E2A20;padding:12px 14px;margin-bottom:12px;font-family:var(--font-body);font-size:15px;line-height:1.5;white-space:pre-line;}
+.pay-error.show{display:block;}
+.btn-pay-sec{display:flex;align-items:center;justify-content:center;gap:8px;font-family:var(--font-ui);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--dust);margin-bottom:20px;}
 .btn-continue{width:100%;background:none;border:1px solid var(--linen);color:var(--slate);padding:14px 24px;font-family:var(--font-ui);font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:border-color 0.2s,color 0.2s;}
 .btn-continue:hover{border-color:var(--heather);color:var(--heather);}
 .pay-methods{display:flex;gap:6px;justify-content:center;margin-top:20px;flex-wrap:wrap;}
 .pay-cgv{font-family:var(--font-body);font-size:12px;color:var(--dust);text-align:center;margin:8px 0 0;}
 .pay-cgv a{color:inherit;text-decoration:underline;}
-.pay-m{display:inline-flex;align-items:center;font-family:var(--font-ui);font-size:9px;letter-spacing:1px;text-transform:uppercase;border:1px solid var(--linen);padding:4px 7px;color:var(--dust);}
+.pay-m{display:inline-flex;align-items:center;font-family:var(--font-ui);font-size:11px;letter-spacing:1px;text-transform:uppercase;border:1px solid var(--linen);padding:4px 7px;color:var(--dust);}
 
 /* ── Upsell livraison gratuite (barre de progression) ── */
 .ship-upsell{display:flex;align-items:center;gap:10px;margin-top:12px;padding:10px;background:var(--lingon-pale);border:1px solid var(--lingon-mid);border-radius:6px;animation:upsellIn .35s ease;}
@@ -120,47 +135,73 @@
 .trust-list li svg{flex-shrink:0;color:var(--heather);}
 
 @media(max-width:1024px){
-  .cart-page-layout{grid-template-columns:1fr;gap:32px;}
+  .cart-page-layout{grid-template-columns:1fr;grid-template-rows:auto;grid-template-areas:"items" "summary" "more";row-gap:32px;}
   .cart-page-summary{position:static;}
-  .page-hero{padding:48px 20px;}
+  .page-hero{padding:20px 20px 0;}
 }
 @media(max-width:600px){
   .cart-page-heading{display:none;}
   .cart-page-row{grid-template-columns:68px 1fr;gap:12px 14px;align-items:start;}
   .cpr-qty{grid-column:2;grid-row:2;justify-self:start;}
-  .cpr-price{grid-column:2;grid-row:2;justify-self:end;align-self:center;}
+  .cpr-qty button{width:40px;height:40px;}
+  /* Le prix est enveloppé (prix barré des promos) : c'est l'enveloppe qui se place */
+  .cpr-price-wrap{grid-column:2;grid-row:2;justify-self:end;align-self:center;}
   .cpr-name{font-size:16px;}
+  .cart-page-summary{padding:24px 18px;}
 }
-/* Profile gate modal */
-.pg-field{margin-bottom:18px;}
-.pg-field label{display:block;font-family:var(--font-ui);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dust);margin-bottom:7px;}
-.pg-field input,.pg-field select{width:100%;border:1px solid var(--linen);background:var(--cream);padding:12px 14px;font-family:var(--font-body);font-size:15px;color:var(--midnight);outline:none;transition:border-color 0.2s;box-sizing:border-box;}
-.pg-field input:focus,.pg-field select:focus{border-color:var(--heather);}
-.pg-2col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-@media(max-width:480px){.pg-2col{grid-template-columns:1fr;}}
+/* Champs du panier : 16 px minimum, sinon l'iPhone zoome à la saisie */
+.ck-input{width:100%;border:1px solid var(--linen);background:var(--cream);padding:12px 14px;font-family:var(--font-body);font-size:16px;color:var(--midnight);outline:none;box-sizing:border-box;transition:border-color 0.2s;}
+.ck-input:focus{border-color:var(--heather-text);}
+.ck-label{display:block;font-family:var(--font-ui);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--dust);margin-bottom:8px;}
 .promo-section{margin-bottom:20px;}
+.promo-toggle{background:none;border:none;padding:10px 0;font-family:var(--font-body);font-size:15px;font-style:italic;color:var(--heather-text);text-decoration:underline;text-underline-offset:4px;cursor:pointer;}
 .promo-row{display:flex;gap:8px;margin-bottom:8px;}
-.promo-input{flex:1;border:1px solid var(--linen);background:var(--cream);padding:10px 12px;font-family:var(--font-body);font-size:14px;color:var(--midnight);outline:none;box-sizing:border-box;transition:border-color 0.2s;}
-.promo-input:focus{border-color:var(--heather);}
-.promo-btn{background:none;border:1px solid var(--heather);color:var(--heather);padding:10px 14px;font-family:var(--font-ui);font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:background 0.2s,color 0.2s;}
-.promo-btn:hover{background:var(--heather);color:var(--snow);}
-.promo-msg{font-family:var(--font-ui);font-size:11px;letter-spacing:0.5px;min-height:16px;}
-.promo-msg.ok{color:var(--moss);}
-.promo-msg.err{color:var(--lingon);}
+.promo-input{flex:1;min-width:0;}
+.promo-btn{background:none;border:1px solid var(--heather-text);color:var(--heather-text);padding:10px 14px;min-height:46px;font-family:var(--font-ui);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:background 0.2s,color 0.2s;}
+.promo-btn:hover{background:var(--heather-text);color:var(--snow);}
+.promo-msg{font-family:var(--font-body);font-size:14px;min-height:16px;}
+.promo-msg.ok{color:var(--lingon);}
+.promo-msg.err{color:#8E2A20;}
+.promo-msg.info{color:var(--dust);}
 .relay-picker{margin-bottom:20px;}
-.relay-search-row{display:flex;gap:8px;margin-bottom:10px;}
-.relay-cp-input{flex:1;border:1px solid var(--linen);background:var(--cream);padding:10px 12px;font-family:var(--font-body);font-size:14px;color:var(--midnight);outline:none;box-sizing:border-box;transition:border-color 0.2s;}
-.relay-cp-input:focus{border-color:var(--heather);}
-.relay-search-btn{background:none;border:1px solid var(--heather);color:var(--heather);padding:10px 14px;font-family:var(--font-ui);font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:background 0.2s,color 0.2s;}
-.relay-search-btn:hover{background:var(--heather);color:var(--snow);}
-.relay-list{max-height:200px;overflow-y:auto;border:1px solid var(--linen);margin-bottom:8px;}
-.relay-item{padding:10px 12px;border-bottom:1px solid var(--linen);cursor:pointer;transition:background 0.15s;}
-.relay-item:last-child{border-bottom:none;}
-.relay-item:hover,.relay-item.selected{background:var(--linen);}
-.relay-item.selected{border-left:3px solid var(--heather);padding-left:9px;}
-.relay-item-name{font-family:var(--font-ui);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--midnight);margin-bottom:2px;}
-.relay-item-addr{font-family:var(--font-body);font-size:12px;color:var(--dust);}
-.relay-selected-info{font-family:var(--font-ui);font-size:11px;color:var(--midnight);background:var(--linen);padding:8px 12px;margin-bottom:8px;}
+.relay-search-row{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+.relay-country{flex:0 0 auto;width:auto;cursor:pointer;}
+.relay-cp-input{flex:1 1 120px;}
+.relay-search-btn{background:none;border:1px solid var(--heather-text);color:var(--heather-text);padding:10px 14px;min-height:46px;font-family:var(--font-ui);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:background 0.2s,color 0.2s;}
+.relay-search-btn:hover{background:var(--heather-text);color:var(--snow);}
+.relay-status{font-family:var(--font-body);font-size:14px;color:var(--dust);padding:8px 0;}
+.relay-status.err{color:#8E2A20;}
+.relay-retry{background:none;border:none;padding:6px 0;font:inherit;color:var(--heather-text);text-decoration:underline;cursor:pointer;}
+.relay-list{list-style:none;margin:0 0 8px;padding:0;max-height:320px;overflow-y:auto;border:1px solid var(--linen);}
+.relay-item{display:block;width:100%;text-align:left;background:var(--snow);border:none;border-bottom:1px solid var(--linen);padding:12px;cursor:pointer;transition:background 0.15s;font:inherit;}
+.relay-list li:last-child .relay-item{border-bottom:none;}
+.relay-item:hover,.relay-item.selected{background:var(--parchment);}
+.relay-item.selected{box-shadow:inset 3px 0 0 var(--heather-text);}
+.relay-item-name{font-family:var(--font-ui);font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--midnight);margin-bottom:2px;}
+.relay-item-addr{font-family:var(--font-body);font-size:14px;color:var(--dust);}
+.relay-selected-info{font-family:var(--font-body);font-size:15px;color:var(--midnight);background:var(--parchment);padding:12px 14px;margin-bottom:8px;line-height:1.45;}
+.relay-selected-info strong{font-family:var(--font-ui);font-size:12px;letter-spacing:1px;text-transform:uppercase;font-weight:600;}
+.relay-hours{display:block;margin-top:6px;font-size:13px;color:var(--dust);}
+.relay-change{background:none;border:none;padding:6px 0 0;font:inherit;font-size:14px;color:var(--heather-text);text-decoration:underline;cursor:pointer;}
+.pickup-info{font-family:var(--font-body);font-size:15px;line-height:1.5;color:var(--slate);background:var(--parchment);padding:12px 14px;margin:-8px 0 20px;}
+.pickup-only-note{font-family:var(--font-body);font-size:14px;line-height:1.5;color:var(--midnight);background:var(--parchment);padding:12px 14px;margin:-8px 0 20px;}
+.pickup-only-note button{display:block;margin-top:6px;background:none;border:none;padding:4px 0;font:inherit;color:var(--heather-text);text-decoration:underline;cursor:pointer;text-align:left;}
+.order-note{margin:0 0 18px;}
+.order-note summary{cursor:pointer;font-family:var(--font-body);font-size:15px;font-style:italic;color:var(--heather-text);padding:6px 0;}
+.order-note textarea{margin-top:8px;resize:vertical;}
+.eur-note{font-family:var(--font-body);font-size:13px;color:var(--dust);margin:-16px 0 20px;text-align:right;}
+/* Barre de paiement collante (mobile) : le total et le bouton restent à portée de pouce */
+.pay-bar{display:none;}
+@media(max-width:1024px){
+  .pay-bar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:250;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:var(--warm-white);border-top:1px solid var(--linen);box-shadow:0 -6px 20px rgba(27,33,24,0.08);transform:translateY(0);transition:transform .2s ease;}
+  .pay-bar.is-hidden{transform:translateY(110%);}
+  .pay-bar-total{font-family:var(--font-ui);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--dust);line-height:1.2;}
+  .pay-bar-total strong{display:block;font-family:var(--font-display);font-size:22px;font-weight:600;letter-spacing:0;text-transform:none;color:var(--midnight);}
+  .pay-bar .btn-pay{width:auto;margin:0;padding:15px 22px;font-size:12px;letter-spacing:2px;}
+  body.page-panier{padding-bottom:84px;}
+  /* Sur le panier mobile, la bulle WhatsApp masquait le bouton de paiement */
+  body.page-panier #sd-wa-bubble{display:none !important;}
+}
 </style>
 </head>
 <body>
@@ -175,21 +216,14 @@
   <div id="cart-page-root"></div>
 </div>
 
-<!-- Profile completion gate — shown when user has no name/address before checkout -->
-<div id="profile-gate" style="display:none;position:fixed;inset:0;background:rgba(27,33,24,0.65);z-index:2000;align-items:center;justify-content:center;padding:20px;">
-  <div style="background:var(--snow);max-width:460px;width:100%;padding:40px 36px;position:relative;max-height:90vh;overflow-y:auto;">
-    <button onclick="document.getElementById('profile-gate').style.display='none'" style="position:absolute;top:16px;right:16px;background:none;border:none;font-size:22px;cursor:pointer;color:var(--dust);line-height:1;" aria-label="Fermer">×</button>
-    <h2 id="profile-gate-title" style="font-family:var(--font-display);font-size:22px;font-weight:500;color:var(--midnight);margin-bottom:8px;">Avant de commander</h2>
-    <p style="font-family:var(--font-body);font-size:15px;color:var(--dust);margin-bottom:28px;line-height:1.6;" id="profile-gate-subtitle"></p>
-    <div id="profile-gate-fields"></div>
-    <button id="profile-gate-btn" onclick="submitProfileGate()" style="width:100%;background:var(--heather);color:var(--snow);border:none;padding:16px 24px;font-family:var(--font-ui);font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;margin-top:4px;transition:background 0.2s;" onmouseover="this.style.background='var(--midnight)'" onmouseout="this.style.background='var(--heather)'">
-      CONTINUER →
-    </button>
-    <div id="profile-gate-error" style="color:var(--lingon);font-family:var(--font-ui);font-size:12px;margin-top:10px;min-height:18px;"></div>
-  </div>
+<!-- Barre de paiement collante (mobile) : total + bouton, masquée quand le
+     vrai bouton « Payer » est à l'écran ou que le panier est vide. -->
+<div class="pay-bar is-hidden" id="pay-bar" aria-hidden="true">
+  <div class="pay-bar-total"><span data-sv="Totalt" data-fr="Total" data-en="Total">Total</span><strong id="pay-bar-amount"></strong></div>
+  <button type="button" class="btn-pay" id="pay-bar-btn" onclick="doCheckout()" tabindex="-1"></button>
 </div>
 <div id="footer-root"></div>
-<script src="js/app.js?v=32"></script>
+<script src="js/app.js?v=33"></script>
 <script>
 /* Mode de livraison par defaut : POINT RELAIS, pas le retrait.
    Le retrait etait presolectionne, si bien qu'un visiteur de Lille lisait
@@ -200,16 +234,61 @@
    meme prix — c'est le mode qui doit s'afficher en premier.
    Le Click & Collect reste disponible d'un clic, et redevient
    automatiquement obligatoire si le panier contient un produit frais. */
-window._deliveryMode = window._deliveryMode || 'mondial_relay';
-window._selectedRelay = window._selectedRelay || null;
+/* Choix du client gardés le temps de la visite (sessionStorage) : un retour
+   depuis Stripe, un rechargement ou un aller-retour en boutique ne lui fait
+   plus rechoisir son point relais, ni ressaisir son code ou sa note. */
+const _CK_KEY = 'sd_checkout_state_v1';
+const _ckSaved = (function () { try { return JSON.parse(sessionStorage.getItem(_CK_KEY) || 'null') || {}; } catch (e) { return {}; } })();
+function _saveCheckoutState() {
+  try {
+    sessionStorage.setItem(_CK_KEY, JSON.stringify({
+      mode: window._deliveryMode, relay: window._selectedRelay, country: window._relayCountry,
+      cp: window._relaySearchCp, carrier: window._relayCarrierName,
+      promo: (window._appliedPromo && window._appliedPromo.code) || window._promoInput || '',
+      note: window._orderNote || '',
+    }));
+  } catch (e) {}
+}
+window._deliveryMode = window._deliveryMode || _ckSaved.mode || 'mondial_relay';
+window._selectedRelay = window._selectedRelay || _ckSaved.relay || null;
 window._relayPoints = window._relayPoints || null;
-window._relaySearchCp = window._relaySearchCp || '';
-window._relayCountry = window._relayCountry || 'FR';
-window._relayCarrierName = window._relayCarrierName || '';
+window._relaySearchCp = window._relaySearchCp || _ckSaved.cp || '';
+window._relayCountry = window._relayCountry || _ckSaved.country || 'FR';
+window._relayCarrierName = window._relayCarrierName || _ckSaved.carrier || '';
 window._relayPriceTE = window._relayPriceTE ?? null;
+window._orderNote = window._orderNote || _ckSaved.note || '';
+if (!window._promoInput && _ckSaved.promo) window._promoInput = _ckSaved.promo;
 function setDeliveryMode(mode) {
   window._deliveryMode = mode;
   if (mode !== 'mondial_relay') { window._selectedRelay = null; window._relayPoints = null; window._relaySearchCp = ''; window._relayCountry = 'FR'; window._relayCarrierName = ''; window._relayPriceTE = null; }
+  window._relayErr = false;
+  _saveCheckoutState();
+  if (mode === 'pickup' && typeof sdTrackShippingInfo === 'function') sdTrackShippingInfo('pickup');
+}
+
+/* Horaires d'un point relais ({jour:'lun', plages:['09:00-12:00',…]}),
+   regroupés : « Lun–ven 09:00-12:00, 14:00-19:00 · Sam 09:00-12:00 ». */
+function _relayHoursText(p) {
+  const h = p && Array.isArray(p.horaires) ? p.horaires : [];
+  if (!h.length) return '';
+  const ORDRE = ['lun','mar','mer','jeu','ven','sam','dim'];
+  const NOMS = { fr: ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'], en: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'], sv: ['Mån','Tis','Ons','Tor','Fre','Lör','Sön'] };
+  const noms = NOMS[LANG] || NOMS.fr;
+  const jours = ORDRE.map(j => { const e = h.find(x => String(x.jour || '').toLowerCase().slice(0, 3) === j); return e && e.plages && e.plages.length ? [].concat(e.plages).join(', ') : ''; });
+  const groupes = [];
+  jours.forEach((pl, i) => {
+    const g = groupes[groupes.length - 1];
+    if (pl && g && g.pl === pl && g.fin === i - 1) g.fin = i;
+    else if (pl) groupes.push({ deb: i, fin: i, pl });
+  });
+  return groupes.map(g => noms[g.deb] + (g.fin > g.deb ? '–' + noms[g.fin] : '') + ' ' + g.pl).join(' · ');
+}
+
+/* Code postal : en France, la recherche part seule au 5e chiffre */
+function _relayCpInput(v) {
+  window._relaySearchCp = v;
+  const cp = (v || '').trim();
+  if ((window._relayCountry || 'FR') === 'FR' && /^\d{5}$/.test(cp) && cp !== window._relayLastSearch) searchRelayPoints(cp);
 }
 
 const _TRUST_CHK = '<svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13.5 4.5 6.5 11.5 3 8"/></svg>';
@@ -223,7 +302,9 @@ function _upsellPick(remaining, cartIds) {
     if (p.trackStock && p.stock !== null && p.stock <= 0) return false;
     return (p.price || 0) > 0;
   });
-  const crossers = avail.filter(function(p) { return p.price >= remaining; })
+  /* On ne propose qu'un ajout raisonnable : dépenser 30 € de plus pour
+     économiser 4,90 € de port ne convainc personne. */
+  const crossers = avail.filter(function(p) { return p.price >= remaining && p.price <= remaining + 6; })
                         .sort(function(a, b) { return a.price - b.price; });
   return crossers.length ? crossers[0] : null;
 }
@@ -266,6 +347,7 @@ function _crossSellHtml(cartIds) {
 }
 
 initPage('');
+document.body.classList.add('page-panier');
 
 /* Email du panier : pré-rempli avec la dernière saisie, sinon le compte. */
 window._custEmail = window._custEmail || (function () {
@@ -298,6 +380,13 @@ window._reprise = (function () { try { return sessionStorage.getItem('sd_reprise
         saveCart(); updateCartBadge();
       }
       if (d.delivery_mode === 'pickup' || d.delivery_mode === 'mondial_relay') setDeliveryMode(d.delivery_mode);
+      /* Le point relais de la commande abandonnée revient avec le panier :
+         le client n'a plus qu'à payer. */
+      if (d.delivery_mode === 'mondial_relay' && d.relay_point && d.relay_point.id) {
+        window._selectedRelay = d.relay_point;
+        window._relayCountry = d.relay_point.pays || window._relayCountry || 'FR';
+        _saveCheckoutState();
+      }
       renderCartPageFull();
       if (code) {
         window._promoInput = code;
@@ -324,6 +413,11 @@ window._reprise = (function () { try { return sessionStorage.getItem('sd_reprise
 })();
 
 renderCartPageFull();
+/* Un code gardé de la visite (retour de Stripe) est revalidé, jamais supposé valable */
+if (window._promoInput && !window._appliedPromo && _ckSaved.promo) {
+  if (typeof PRODUCTS !== 'undefined' && PRODUCTS.length) applyPromoCode();
+  else window.addEventListener('sdapi:ready', function () { if (!window._appliedPromo) applyPromoCode(); }, { once: true });
+}
 
 // ── Offre "cadeau offert" : chargée une fois, re-render au retour ──
 /* Reprise de l'ancien choix unique : un client qui avait deja un cadeau
@@ -350,6 +444,7 @@ function selectGift(id){
     l.push(id);
   }
   window._giftChoices = l;
+  window._giftTouched = true;
   try { localStorage.setItem('sd_gift_choices', JSON.stringify(l)); } catch(e){}
   renderCartPageFull();
 }
@@ -396,7 +491,50 @@ function giftEarned(offer, cart, subtotal){
   renderCartPageFull();
 })();
 
+/* La page est redessinée d'un bloc (chargement des produits, cadeau, code…).
+   On garde le champ actif et la position du curseur : sans cela, chaque
+   redessin fermait le clavier mobile au milieu de la saisie. */
 function renderCartPageFull() {
+  const a = document.activeElement;
+  const keep = a && a.id && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)
+    ? { id: a.id, s: a.selectionStart, e: a.selectionEnd } : null;
+  _renderCartPage();
+  if (keep) {
+    const n = document.getElementById(keep.id);
+    if (n && n !== document.activeElement) {
+      n.focus({ preventScroll: true });
+      try { if (keep.s != null) n.setSelectionRange(keep.s, keep.e); } catch (e) {}
+    }
+  }
+  _updatePayBar();
+}
+
+function _payLabel() { return LANG === 'sv' ? 'Betala säkert →' : LANG === 'en' ? 'Pay securely →' : 'Payer en toute sécurité →'; }
+function _payBarLabel() { return LANG === 'sv' ? 'Betala →' : LANG === 'en' ? 'Pay →' : 'Payer →'; }
+
+/* Barre collante : total à jour, cachée quand le vrai bouton est visible */
+function _updatePayBar() {
+  const bar = document.getElementById('pay-bar');
+  if (!bar) return;
+  const hasItems = Object.values(cart).some(q => q > 0);
+  const amt = document.getElementById('pay-bar-amount');
+  if (amt) amt.textContent = window._lastTotal != null ? fmtPrice(window._lastTotal) : '';
+  const btn = document.getElementById('pay-bar-btn');
+  if (btn) { btn.textContent = window._payInFlight ? '…' : _payBarLabel(); btn.disabled = !!window._payInFlight; }
+  const realBtn = document.querySelector('.cart-page-summary .btn-pay');
+  if (window._payObs) window._payObs.disconnect();
+  window._payBtnVisible = false;
+  if (realBtn && 'IntersectionObserver' in window) {
+    window._payObs = new IntersectionObserver(function (es) {
+      window._payBtnVisible = es[0].isIntersecting;
+      bar.classList.toggle('is-hidden', !hasItems || window._payBtnVisible);
+    }, { threshold: 0.4 });
+    window._payObs.observe(realBtn);
+  }
+  bar.classList.toggle('is-hidden', !hasItems || window._payBtnVisible);
+}
+
+function _renderCartPage() {
   const root = document.getElementById('cart-page-root');
   if (!root) return;
 
@@ -412,6 +550,7 @@ function renderCartPageFull() {
   const entries = Object.entries(cart).filter(([,q]) => q > 0);
 
   if (entries.length === 0) {
+    window._lastTotal = null;
     root.innerHTML = `
       <div class="cart-page-empty">
         <div class="empty-icon">
@@ -501,18 +640,18 @@ function renderCartPageFull() {
     const tail = LANG==='sv'?'→ fri frakt':LANG==='en'?'→ free delivery':'→ livraison offerte';
     return `<div class="ship-upsell">
         <img src="${_upProd.photo||''}" onerror="this.style.display='none'" alt="">
-        <div class="ship-upsell-txt">${lead} <strong>${unm}</strong> (${fmtPrice(_upProd.price)}) ${tail} 🎉</div>
+        <div class="ship-upsell-txt">${lead} <strong>${unm}</strong> (${fmtPrice(_upProd.price)}) ${tail}</div>
         <button class="ship-upsell-btn" onclick="cartAddQuick('${uid}')">+ ${addTxt}</button>
       </div>`;
   })() : '';
-  const _freeShipInner = `<div class="summary-ship-text">${LANG==='sv'?`${fmtPrice(remaining)} kvar till fri frakt 🚚`:LANG==='en'?`${fmtPrice(remaining)} away from free delivery 🚚`:`Plus que ${fmtPrice(remaining)} pour la livraison offerte 🚚`}</div>
+  const _freeShipInner = `<div class="summary-ship-text">${LANG==='sv'?`${fmtPrice(remaining)} kvar till fri frakt`:LANG==='en'?`${fmtPrice(remaining)} away from free delivery`:`Plus que ${fmtPrice(remaining)} pour la livraison offerte`}</div>
         <div class="summary-bar"><div class="summary-bar-fill" style="width:${pct}%"></div></div>
         ${_upHtml}`;
   const _freeShipTxt = _shipPromoLabel || (LANG === 'sv' ? 'Fri frakt' : LANG === 'en' ? 'Free delivery' : 'Livraison offerte');
   const _freeDoneInner = `<div class="summary-ship-text" style="color:var(--moss);">${_freeShipTxt} ✓</div>`;
   // Bandeau d'opération : rappelle l'offre tant que le seuil n'est pas atteint
   const _promoBanner = (_shipRules.promoActive && _shipPromoLabel && remaining > 0)
-    ? `<div class="summary-ship-text" style="color:var(--lingon);font-weight:600;margin-bottom:6px;">🚚 ${_shipPromoLabel}</div>`
+    ? `<div class="summary-ship-text" style="color:var(--lingon);font-weight:600;margin-bottom:6px;">${_shipPromoLabel}</div>`
     : '';
   const shipHtml = `<div class="summary-ship-bar">${_promoBanner}${remaining > 0 ? _freeShipInner : _freeDoneInner}</div>`;
 
@@ -529,63 +668,61 @@ function renderCartPageFull() {
   const _promoInputVal = window._appliedPromo?.code || window._promoInput || '';
   const _promoMinFail = !!(window._appliedPromo && !_promoValid);
   const _promoMsgToShow = _promoMinFail ? { ok: false, text: `${LANG==='en'?'Minimum order':LANG==='sv'?'Minsta order':'Commande minimum'} ${fmtPrice(window._appliedPromo.min_order)} ${LANG==='en'?'required':'requise'}` } : window._promoMsg;
-  const _promoMsgHtml = _promoMsgToShow ? `<div class="promo-msg ${_promoMsgToShow.ok?'ok':'err'}">${_promoMsgToShow.text}</div>` : '';
+  const _promoMsgHtml = _promoMsgToShow ? `<div class="promo-msg ${_promoMsgToShow.ok?'ok':(_promoMsgToShow.info?'info':'err')}" role="status">${_promoMsgToShow.text}</div>` : '';
   const _promoDiscHtml = (_promoValid && _discountAmt > 0) ? `<div class="summary-line" style="color:var(--moss)"><span>${LANG==='sv'?'Rabatt':LANG==='en'?'Discount':'Réduction'} (${window._appliedPromo.code})</span><span>−${fmtPrice(_discountAmt)}</span></div>` : ((_promoValid && _isFreeShip) ? `<div class="summary-line" style="color:var(--moss)"><span>Code ${window._appliedPromo.code}</span><span>${LANG==='sv'?'Fri frakt':LANG==='en'?'Free shipping':'Livraison offerte'}</span></div>` : '');
 
   const relayPickerHtml = window._deliveryMode === 'mondial_relay' ? (function() {
     const L = LANG || 'fr';
+    const esc = (s) => _sdAttr(s == null ? '' : s);
+    const sel = window._selectedRelay;
+    /* Point déjà choisi (dans la visite, ou repris d'un email de relance) :
+       on l'affiche seul, avec ses horaires, et « Changer » rouvre la liste. */
+    if (sel && !window._relayChanging) {
+      const hrs = _relayHoursText(sel);
+      return '<div class="relay-picker"><div class="relay-selected-info" role="status">'
+        + '<strong>' + esc(sel.name) + '</strong><br>' + esc(sel.adresse) + ', ' + esc(sel.cp) + ' ' + esc(sel.ville)
+        + (hrs ? '<span class="relay-hours">' + esc(hrs) + '</span>' : '')
+        + '</div><button type="button" class="relay-change" onclick="window._relayChanging=true;renderCartPageFull();document.getElementById(\'relay-cp-input\')?.focus()">'
+        + (L==='en'?'Change pickup point':L==='sv'?'Byt utlämningsställe':'Changer de point relais') + '</button></div>';
+    }
     let listHtml = '';
     if (window._relayPoints === 'loading') {
-      listHtml = '<div style="font-family:var(--font-ui);font-size:11px;color:var(--dust);padding:8px 0;">...</div>';
+      listHtml = '<div class="relay-status" role="status">'+(L==='en'?'Searching for pickup points…':L==='sv'?'Söker utlämningsställen…':'Recherche des points relais…')+'</div>';
+    } else if (window._relayErrMsg) {
+      listHtml = '<div class="relay-status err" role="alert">'+esc(window._relayErrMsg)+' <button type="button" class="relay-retry" onclick="searchRelayPoints(window._relaySearchCp)">'+(L==='en'?'Try again':L==='sv'?'Försök igen':'Réessayer')+'</button></div>';
     } else if (Array.isArray(window._relayPoints)) {
       if (window._relayPoints.length === 0) {
-        listHtml = '<div style="font-family:var(--font-ui);font-size:11px;color:var(--dust);padding:8px 0;">'+(L==='en'?'No relay points found':L==='sv'?'Inga utlämningsställen hittades':'Aucun point relais trouvé')+'</div>';
+        listHtml = '<div class="relay-status">'+(L==='en'?'No pickup point found for this postal code. Check it, or choose Click & Collect.':L==='sv'?'Inget utlämningsställe hittades för detta postnummer. Kontrollera det eller välj Click & Collect.':'Aucun point relais trouvé pour ce code postal. Vérifiez-le, ou choisissez le Click & Collect.')+'</div>';
       } else {
-        listHtml = '<div class="relay-list">' + window._relayPoints.map(function(p,i){
-          return '<div class="relay-item'+(window._selectedRelay&&window._selectedRelay.id===p.id?' selected':'')+'" onclick="selectRelay('+i+')">'
-            +'<div class="relay-item-name">'+p.name+'</div>'
-            +'<div class="relay-item-addr">'+p.adresse+', '+p.cp+' '+p.ville+(p.distance?' — '+p.distance+' km':'')+'</div>'
-            +'</div>';
-        }).join('') + '</div>';
+        listHtml = '<ul class="relay-list">' + window._relayPoints.map(function(p,i){
+          return '<li><button type="button" class="relay-item'+(sel&&sel.id===p.id?' selected':'')+'" onclick="selectRelay('+i+')">'
+            +'<span class="relay-item-name" style="display:block">'+esc(p.name)+'</span>'
+            +'<span class="relay-item-addr" style="display:block">'+esc(p.adresse)+', '+esc(p.cp)+' '+esc(p.ville)+(p.distance?' — '+esc(L==='en'?p.distance:String(p.distance).replace('.',','))+' km':'')+'</span>'
+            +'</button></li>';
+        }).join('') + '</ul>';
       }
     }
-    const selectedHtml = window._selectedRelay
-      ? '<div class="relay-selected-info">✓ '+window._selectedRelay.name+' — '+window._selectedRelay.adresse+', '+window._selectedRelay.cp+' '+window._selectedRelay.ville+(window._selectedRelay.carrier_name?' ('+window._selectedRelay.carrier_name+')':'')+'</div>'
-      : '';
     const cpPlaceholder = L==='sv'?'Postnummer':L==='en'?'Postal code':'Code postal';
     const searchTxt = L==='sv'?'Sök':L==='en'?'Search':'Chercher';
-    const countries = [
-      {code:'FR', label:'France'},
-      {code:'ES', label:'Espagne'},
-      {code:'PT', label:'Portugal'},
-      {code:'BE', label:'Belgique'},
-      {code:'LU', label:'Luxembourg'},
-      {code:'NL', label:'Pays-Bas'},
-      {code:'DE', label:'Allemagne'},
-      {code:'IT', label:'Italie'},
-      /* Suède et non Suisse : la Suisse était encore proposée et facturée
-         au tarif France (4,90 €) pour ~40 € de port réel, alors que la
-         Suède — zone internationale — manquait. Miroir de
-         INTERNATIONAL_COUNTRIES (lib/shipping.ts). */
-      {code:'SE', label:'Suède'},
-    ];
-    const countrySelect = '<select id="relay-country-select" style="border:1px solid var(--linen);background:var(--cream);padding:10px 12px;font-family:var(--font-ui);font-size:13px;color:var(--midnight);outline:none;cursor:pointer;" onchange="window._relayCountry=this.value;window._relayPoints=null;window._selectedRelay=null;window._relaySearchCp=\'\';renderCartPageFull();">'
-      + countries.map(c => '<option value="'+c.code+'"'+(window._relayCountry===c.code?' selected':'')+'>'+c.label+'</option>').join('')
+    /* Suède et non Suisse : la Suisse était encore proposée et facturée au
+       tarif France pour ~40 € de port réel. Miroir de INTERNATIONAL_COUNTRIES
+       (lib/shipping.ts). Libellés dans la langue du visiteur. */
+    const PAYS = { FR:['France','France','Frankrike'], ES:['Espagne','Spain','Spanien'], PT:['Portugal','Portugal','Portugal'], BE:['Belgique','Belgium','Belgien'], LU:['Luxembourg','Luxembourg','Luxemburg'], NL:['Pays-Bas','Netherlands','Nederländerna'], DE:['Allemagne','Germany','Tyskland'], IT:['Italie','Italy','Italien'], SE:['Suède','Sweden','Sverige'] };
+    const li = L==='en' ? 1 : L==='sv' ? 2 : 0;
+    const countrySelect = '<select id="relay-country-select" class="ck-input relay-country" aria-label="'+(L==='en'?'Country':L==='sv'?'Land':'Pays')+'" onchange="window._relayCountry=this.value;window._relayPoints=null;window._selectedRelay=null;window._relaySearchCp=\'\';window._relayErrMsg=\'\';window._relayLastSearch=\'\';_saveCheckoutState();renderCartPageFull();">'
+      + Object.keys(PAYS).map(c => '<option value="'+c+'"'+(window._relayCountry===c?' selected':'')+'>'+PAYS[c][li]+'</option>').join('')
       + '</select>';
-    const carrierBadge = '';
-    const relayErrHtml = (window._relayErr && !window._selectedRelay)
-      ? '<div style="font-family:var(--font-body);font-size:13px;color:var(--lingon);margin:0 0 8px;">'+(L==='en'?'Choose a relay point to continue: enter your postal code.':L==='sv'?'Välj ett utlämningsställe för att fortsätta: ange ditt postnummer.':'Choisissez un point relais pour continuer : indiquez votre code postal.')+'</div>'
+    const relayErrHtml = (window._relayErr && !sel)
+      ? '<div class="relay-status err" role="alert">'+(L==='en'?'Choose a pickup point to continue: enter your postal code.':L==='sv'?'Välj ett utlämningsställe för att fortsätta: ange ditt postnummer.':'Choisissez un point relais pour continuer : indiquez votre code postal.')+'</div>'
       : '';
     return '<div class="relay-picker">'
       + relayErrHtml
-      +'<div class="relay-search-row" style="flex-wrap:wrap;gap:6px;">'
+      +'<div class="relay-search-row">'
       + countrySelect
-      +'<input id="relay-cp-input" class="relay-cp-input" type="text" placeholder="'+cpPlaceholder+'" value="'+(window._relaySearchCp||'')+'" oninput="window._relaySearchCp=this.value" onkeydown="if(event.key===\'Enter\')searchRelayPoints(this.value)">'
-      +'<button class="relay-search-btn" onclick="searchRelayPoints(document.getElementById(\'relay-cp-input\')?.value||\'\')">'+ searchTxt+'</button>'
+      +'<input id="relay-cp-input" class="ck-input relay-cp-input" type="text" inputmode="numeric" autocomplete="postal-code" maxlength="10" aria-label="'+cpPlaceholder+'" placeholder="'+cpPlaceholder+'" value="'+esc(window._relaySearchCp||'')+'" oninput="_relayCpInput(this.value)" onkeydown="if(event.key===\'Enter\')searchRelayPoints(this.value)">'
+      +'<button type="button" class="relay-search-btn" onclick="searchRelayPoints(document.getElementById(\'relay-cp-input\')?.value||\'\')">'+ searchTxt+'</button>'
       +'</div>'
-      + carrierBadge
       +listHtml
-      +selectedHtml
       +'</div>';
   })() : '';
 
@@ -627,7 +764,7 @@ function renderCartPageFull() {
             : LANG==='en' ? `Only ${fmtPrice(left)} away from your free gift`
             : `Plus que ${fmtPrice(left)} pour votre cadeau offert`;
       }
-      _giftBlockHtml = `<div class="gift-nudge">🎁 ${msg}</div>`;
+      _giftBlockHtml = `<div class="gift-nudge">${msg}</div>`;
       return;
     }
 
@@ -638,6 +775,10 @@ function renderCartPageFull() {
     /* Un seul cadeau possible et un seul produit proposé : on le pose,
        il n'y a rien à choisir. */
     if (earned === 1 && offer.products.length === 1) window._giftChoices = [offer.products[0].id];
+    /* Cadeau mérité mais pas encore choisi : on en pose un d'office, que le
+       client peut changer. Sans cela, qui ne voyait pas le bloc payait sans
+       son cadeau. Un client qui en retire un exprès n'est pas contredit. */
+    else if (!window._giftChoices.length && !window._giftTouched) window._giftChoices = ids.slice(0, earned);
 
     const choisis = window._giftChoices;
     const choices = offer.products.map(p => {
@@ -655,8 +796,34 @@ function renderCartPageFull() {
     const title = earned > 1
       ? `${titleBase} — ${choisis.length}/${earned}`
       : titleBase;
-    _giftBlockHtml = `<div class="gift-block"><div class="gift-title"><span>🎁 ${title}</span><span class="gift-free">${LANG==='en'?'Free':LANG==='sv'?'Gratis':'Offert'} · 0 €</span></div><div class="gift-choices">${choices}</div></div>`;
+    _giftBlockHtml = `<div class="gift-block"><div class="gift-title"><span>${title}</span><span class="gift-free">${LANG==='en'?'Free':LANG==='sv'?'Gratis':'Offert'} · 0 €</span></div><div class="gift-choices">${choices}</div></div>`;
   })();
+
+  /* Produits « retrait uniquement » : le client peut les retirer pour
+     retrouver la livraison, au lieu de buter sur un bouton grisé. */
+  const _pickupOnlyKeys = entries.filter(([key]) => {
+    const _pi = key.indexOf('_');
+    const idStr = _pi === -1 ? key : key.slice(0, _pi);
+    const _cpp = _sdCartProducts();
+    const pp = PRODUCTS.find(x => String(x.uuid || x.id) === idStr || x.id === parseInt(idStr)) || _cpp[idStr] || (window._SD_STATIC||[]).find(x => String(x.id) === idStr);
+    return !!(pp && pp.pickup_only);
+  }).map(([key]) => key);
+  const _pickupOnlyHtml = cartHasPickupOnly ? `<div class="pickup-only-note">${LANG==='sv'?'Din korg innehåller en färskvara som bara kan hämtas på plats: hela beställningen blir Click &amp; Collect.':LANG==='en'?'Your cart contains a fresh item available for pickup only, so the whole order is Click &amp; Collect.':'Votre panier contient un produit frais à retirer sur place : toute la commande passe en Click &amp; Collect.'}<button type="button" onclick="_retirerProduitsRetrait()">${LANG==='sv'?(_pickupOnlyKeys.length>1?'Ta bort dessa varor för leverans':'Ta bort varan för leverans'):LANG==='en'?(_pickupOnlyKeys.length>1?'Remove these items to get delivery':'Remove this item to get delivery'):(_pickupOnlyKeys.length>1?'Retirer ces produits pour être livré':'Retirer ce produit pour être livré')}</button></div>` : '';
+  window._pickupOnlyKeys = _pickupOnlyKeys;
+
+  /* Click & Collect : où et comment, dès le choix (CGV art. livraison) */
+  const _pickupInfoHtml = window._deliveryMode === 'pickup' ? `<div class="pickup-info">${LANG==='sv'?'Gratis upphämtning i vår ateljé i Étoile-sur-Rhône (Drôme). Vi kontaktar dig efter beställningen för att boka en tid.':LANG==='en'?'Free pickup at our workshop in Étoile-sur-Rhône (Drôme). We contact you after your order to book a time.':'Retrait gratuit à notre atelier d’Étoile-sur-Rhône (Drôme), sur rendez-vous : nous vous contactons après la commande pour fixer le créneau.'}</div>` : '';
+
+  const _relayShipLabel = (_isFreeShip || subtotal >= freeThreshold) ? (LANG==='sv'?'Gratis':LANG==='en'?'Free':'Offerte') : fmtPrice(baseShipping);
+  const _payBtnLabel = window._payInFlight ? '…' : _payLabel();
+  window._lastTotal = _totalToPay;
+  const _noteOpen = !!(window._noteOpen || (window._orderNote || '').trim());
+  const _promoOpen = !!(window._promoOpen || _promoInputVal || _promoMsgToShow);
+  const _shipLineVal = window._deliveryMode === 'pickup'
+    ? `<span style="color:var(--moss)">${LANG==='sv'?'Gratis':LANG==='en'?'Free':'Gratuit'}</span>`
+    : _effectiveShipping === 0 ? `<span style="color:var(--moss)">${LANG==='sv'?'Gratis':LANG==='en'?'Free':'Offerte'}</span>` : fmtPrice(_effectiveShipping);
+  const _shipLineLbl = (LANG==='sv'?'Leverans':LANG==='en'?'Shipping':'Livraison')
+    + (window._deliveryMode === 'mondial_relay' && window._relayCarrierName ? ` <small style="color:var(--dust)">(${_sdAttr(window._relayCarrierName)})</small>` : '');
 
   root.innerHTML = `
     <div class="cart-page-layout">
@@ -668,74 +835,86 @@ function renderCartPageFull() {
         </div>
         ${itemRows}
         ${_giftBlockHtml}
-        ${_crossSellHtml(cartIdSet)}
-        <div style="margin-top:32px;border-top:1px solid var(--linen);padding-top:24px;">
-          <label style="display:block;font-family:var(--font-ui);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dust);margin-bottom:10px;">${LANG==='sv'?'Kommentar till din beställning (valfritt)':LANG==='en'?'Order note (optional)':'Note pour votre commande (optionnel)'}</label>
-          <textarea id="order-note-input" rows="3" oninput="window._orderNote=this.value" style="width:100%;border:1px solid var(--linen);background:var(--cream);padding:12px 14px;font-family:var(--font-body);font-size:15px;color:var(--midnight);outline:none;resize:vertical;box-sizing:border-box;transition:border-color 0.2s;" onfocus="this.style.borderColor='var(--heather)'" onblur="this.style.borderColor='var(--linen)'" placeholder="${LANG==='sv'?'Ex: Cadeau, allergie non signalée, instructions spéciales...':LANG==='en'?'E.g. gift, special instructions...':'Ex : cadeau, instruction particulière...'}">${window._orderNote||''}</textarea>
-        </div>
-        <div style="margin-top:16px;">
-          <a href="boutique.html" style="font-family:var(--font-ui);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dust);text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:color 0.15s;" onmouseover="this.style.color='var(--heather)'" onmouseout="this.style.color='var(--dust)'">
-            ← ${LANG==='sv'?'Fortsätt handla':LANG==='en'?'Continue shopping':'Continuer mes achats'}
-          </a>
-        </div>
       </div>
 
       <div class="cart-page-summary">
-        <div class="summary-title" data-sv="Orderöversikt" data-fr="Récapitulatif" data-en="Order summary">${LANG==='sv'?'Orderöversikt':LANG==='en'?'Order summary':'Récapitulatif'}</div>
-        <div class="delivery-toggle">
-          <button class="dt-btn${window._deliveryMode==='mondial_relay'?' active':''}"${cartHasPickupOnly?' disabled style="opacity:.4;cursor:not-allowed;"':''} onclick="${cartHasPickupOnly?'':`setDeliveryMode('mondial_relay');renderCartPageFull()`}">
-            📦 ${LANG==='sv'?'Utlämning':LANG==='en'?'Relay point':'Point Relais'}
+        <h2 class="summary-title" data-sv="Orderöversikt" data-fr="Récapitulatif" data-en="Order summary">${LANG==='sv'?'Orderöversikt':LANG==='en'?'Order summary':'Récapitulatif'}</h2>
+        <div class="delivery-toggle" role="group" aria-label="${LANG==='sv'?'Leveranssätt':LANG==='en'?'Delivery method':'Mode de livraison'}">
+          <button type="button" class="dt-btn${window._deliveryMode==='mondial_relay'?' active':''}" aria-pressed="${window._deliveryMode==='mondial_relay'}"${cartHasPickupOnly?' disabled':''} onclick="setDeliveryMode('mondial_relay');renderCartPageFull()">
+            ${LANG==='sv'?'Utlämningsställe':LANG==='en'?'Pickup point':'Point relais'}<small>${_relayShipLabel}</small>
           </button>
-          <button class="dt-btn${window._deliveryMode==='pickup'?' active':''}" onclick="setDeliveryMode('pickup');renderCartPageFull()">
-            🏪 Click &amp; Collect
+          <button type="button" class="dt-btn${window._deliveryMode==='pickup'?' active':''}" aria-pressed="${window._deliveryMode==='pickup'}" onclick="setDeliveryMode('pickup');renderCartPageFull()">
+            Click &amp; Collect<small>${LANG==='sv'?'Gratis · Drôme':LANG==='en'?'Free · Drôme':'Gratuit · Drôme'}</small>
           </button>
         </div>
-        ${cartHasPickupOnly?`<div class="summary-ship-bar"><div class="summary-ship-text" style="color:var(--heather);line-height:1.4;">❄️ ${LANG==='sv'?'Din korg innehåller en färskvara som endast kan hämtas i butiken. Hela beställningen sker som Click & Collect.':LANG==='en'?'Your cart contains a fresh item available for in-store pickup only. The whole order will be Click & Collect.':'Votre panier contient un produit frais disponible en retrait uniquement. Toute la commande passe en Click & Collect.'}</div></div>`:''}
+        ${_pickupOnlyHtml}
+        ${_pickupInfoHtml}
         ${relayPickerHtml}
-        <div class="promo-section">
-          <div class="promo-row">
-            <input id="promo-input" class="promo-input" type="text" placeholder="${_promoLabel}" value="${_promoInputVal}" oninput="window._promoInput=this.value.toUpperCase();this.value=this.value.toUpperCase();" onkeydown="if(event.key==='Enter')applyPromoCode();">
-            <button class="promo-btn" onclick="applyPromoCode();">${_promoApplyLabel}</button>
-          </div>
-          ${_promoMsgHtml}
-        </div>
         <div class="summary-line">
           <span data-sv="Delsumma" data-fr="Sous-total" data-en="Subtotal">${UI[LANG].subtotal}</span>
           <span>${fmtPrice(subtotal)}</span>
         </div>
         ${_promoDiscHtml}
         <div class="summary-line">
-          <span data-sv="Leverans" data-fr="Livraison" data-en="Shipping">${LANG==='sv'?'Leverans':LANG==='en'?'Shipping':'Livraison'}</span>
-          <span>${window._deliveryMode==='pickup'?`<span style="color:var(--moss)">${LANG==='sv'?'Gratis':LANG==='en'?'Free':'Gratuit'}</span>`:_effectiveShipping===0?`<span style="color:var(--moss)">${LANG==='sv'?'Gratis':LANG==='en'?'Free':'Gratuite'}</span>`:`${fmtPrice(_effectiveShipping)}`}</span>
+          <span>${_shipLineLbl}</span>
+          <span>${_shipLineVal}</span>
         </div>
-        ${window._deliveryMode==='pickup'?`<div class="summary-ship-bar"><div class="summary-ship-text" style="color:var(--moss);">${LANG==='sv'?'Hämtas i butiken':'🏪 '+(LANG==='en'?'In-store pickup':'Retrait en magasin')}</div></div>`:window._deliveryMode==='mondial_relay'?`<div class="summary-ship-bar"><div class="summary-ship-text" style="color:var(--heather);">📦 ${(function(){var t=window._relayCarrierName||'';return LANG==='sv'?('Leverans till utlämningsställe'+(t?' — '+t:'')):LANG==='en'?('Pickup point delivery'+(t?' — '+t:'')):('Livraison en point relais'+(t?' — '+t:''));})()}</div></div>${freeShipNudge}`:_isFreeShip?`<div class="summary-ship-bar"><div class="summary-ship-text" style="color:var(--moss);">🎟 ${LANG==='sv'?'Fri frakt via kampanjkod':LANG==='en'?'Free shipping via promo code':'Livraison offerte via code promo'}</div></div>`:shipHtml}
+        ${window._deliveryMode==='mondial_relay' ? freeShipNudge : ''}
+        <div class="promo-section">
+          ${_promoOpen ? `
+          <label class="ck-label" for="promo-input">${_promoLabel}</label>
+          <div class="promo-row">
+            <input id="promo-input" class="ck-input promo-input" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" value="${_sdAttr(_promoInputVal)}" oninput="window._promoInput=this.value.toUpperCase();this.value=this.value.toUpperCase();" onkeydown="if(event.key==='Enter')applyPromoCode();">
+            <button type="button" class="promo-btn" onclick="applyPromoCode();">${_promoApplyLabel}</button>
+          </div>
+          ${_promoMsgHtml}` : `<button type="button" class="promo-toggle" onclick="window._promoOpen=true;renderCartPageFull();document.getElementById('promo-input')?.focus()">${LANG==='sv'?'Har du en kampanjkod?':LANG==='en'?'Have a promo code?':'Vous avez un code ?'}</button>`}
+        </div>
         <div class="summary-line total">
           <span>Total</span>
           <span>${fmtPrice(_totalToPay)}</span>
         </div>
+        ${LANG==='sv' ? '<p class="eur-note">Priser i euro (EUR). Din bank räknar om till kronor.</p>' : ''}
+        <div class="checkout-email">
+          <label class="ck-label" for="checkout-email-input">${LANG==='sv'?'Din e-postadress':LANG==='en'?'Your email':'Votre email'}</label>
+          <input id="checkout-email-input" class="ck-input" type="email" autocomplete="email" inputmode="email" required aria-describedby="checkout-email-help checkout-email-err" value="${_sdAttr(window._custEmail||'')}" oninput="window._custEmail=this.value.trim();try{localStorage.setItem('sd_checkout_email',window._custEmail)}catch(e){};this.style.borderColor='';this.removeAttribute('aria-invalid');var er=document.getElementById('checkout-email-err');if(er)er.textContent='';" onchange="_revaliderCodePromo()" placeholder="${LANG==='sv'?'namn@exempel.se':LANG==='en'?'name@example.com':'prenom@exemple.fr'}">
+          <div id="checkout-email-err" role="alert" style="font-family:var(--font-body);font-size:14px;color:#8E2A20;margin-top:6px;"></div>
+          <p id="checkout-email-help" style="font-family:var(--font-body);font-size:13px;line-height:1.5;color:var(--dust);margin:6px 0 16px;">${LANG==='sv'?'För din orderbekräftelse.':LANG==='en'?'For your order confirmation.':'Pour votre confirmation de commande.'}</p>
+        </div>
+        <details class="order-note"${_noteOpen?' open':''} ontoggle="window._noteOpen=this.open">
+          <summary>${LANG==='sv'?'Lägg till en kommentar':LANG==='en'?'Add a note to your order':'Ajouter une note à la commande'}</summary>
+          <label class="ck-label" for="order-note-input" style="margin-top:10px;">${LANG==='sv'?'Kommentar (valfritt)':LANG==='en'?'Note (optional)':'Note (facultatif)'}</label>
+          <textarea id="order-note-input" class="ck-input" rows="3" maxlength="500" oninput="window._orderNote=this.value;_saveCheckoutState()" placeholder="${LANG==='sv'?'T.ex. present, särskilda instruktioner…':LANG==='en'?'E.g. gift, special instructions…':'Ex : cadeau, instruction particulière…'}">${_sdAttr(window._orderNote||'')}</textarea>
+        </details>
+        <div class="pay-error${window._payErr?' show':''}" id="pay-error" role="alert">${_sdAttr(window._payErr||'')}</div>
+        <button type="button" class="btn-pay" onclick="doCheckout()"${window._payInFlight?' disabled':''}>${_payBtnLabel}</button>
+        <p class="pay-cgv">${LANG==='sv'?'Genom att bekräfta godkänner du våra <a href="/cgv" target="_blank" rel="noopener">villkor</a>.':LANG==='en'?'By confirming, you accept our <a href="/cgv" target="_blank" rel="noopener">terms of sale</a>.':'En validant, vous acceptez les <a href="/cgv" target="_blank" rel="noopener">CGV</a>.'}</p>
+        <div class="btn-pay-sec">
+          <svg width="10" height="12" viewBox="0 0 10 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="5" width="8" height="6" rx="1"/><path d="M3 5V3.5a2 2 0 0 1 4 0V5"/></svg>
+          <span>${LANG==='sv'?'Säker betalning via Stripe':LANG==='en'?'Secure payment via Stripe':'Paiement sécurisé via Stripe'}</span>
+        </div>
+        <div class="pay-methods" aria-label="${LANG==='sv'?'Godkända betalsätt':LANG==='en'?'Accepted payment methods':'Moyens de paiement acceptés'}">${sdPayLogos('pay-m')}</div>
+        <div style="text-align:center;font-family:var(--font-body);font-size:13px;color:var(--dust);margin-top:10px;">${LANG==='sv'?'Betala i 3 eller 4 delar med Klarna eller Scalapay (enligt villkor) vid betalningen.':LANG==='en'?'Pay in 3 or 4 instalments with Klarna or Scalapay (subject to eligibility) at checkout.':'Paiement en 3 ou 4 fois avec Klarna ou Scalapay (selon éligibilité), proposé à l’étape du paiement.'}</div>
         <ul class="trust-list">
-          <li>${_TRUST_CHK}${LANG==='sv'?'Skickas inom 24-48h':LANG==='en'?'Shipped within 24-48h':'Expédié sous 24-48h'}</li>
+          <li>${_TRUST_CHK}${window._deliveryMode==='pickup'?(LANG==='sv'?'Upphämtning efter överenskommelse':LANG==='en'?'Pickup by appointment':'Retrait sur rendez-vous'):(LANG==='sv'?'Skickas inom 24-48h':LANG==='en'?'Shipped within 24-48h':'Expédié sous 24-48h')}</li>
           <li>${_TRUST_CHK}${LANG==='sv'?'Äkta svenska produkter':LANG==='en'?'Authentic Swedish products':'Produits suédois authentiques'}</li>
           <li>${_TRUST_CHK}${LANG==='sv'?'Kundservice som hjälper dig':LANG==='en'?'Responsive customer service':'Service client à votre écoute'}</li>
         </ul>
-        <div class="checkout-email">
-          <label for="checkout-email-input" style="display:block;font-family:var(--font-ui);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dust);margin-bottom:8px;">${LANG==='sv'?'Din e-postadress':LANG==='en'?'Your email':'Votre email'}</label>
-          <input id="checkout-email-input" type="email" autocomplete="email" inputmode="email" required value="${(window._custEmail||'').replace(/"/g,'&quot;')}" oninput="window._custEmail=this.value.trim();try{localStorage.setItem('sd_checkout_email',window._custEmail)}catch(e){};this.style.borderColor='var(--linen)';var er=document.getElementById('checkout-email-err');if(er)er.textContent='';" onchange="_revaliderCodePromo()" placeholder="${LANG==='sv'?'namn@exempel.se':LANG==='en'?'name@example.com':'prenom@exemple.fr'}" style="width:100%;border:1px solid var(--linen);background:var(--cream);padding:12px 14px;font-family:var(--font-body);font-size:15px;color:var(--midnight);outline:none;box-sizing:border-box;">
-          <div id="checkout-email-err" style="font-family:var(--font-body);font-size:13px;color:var(--lingon);min-height:0;margin-top:6px;"></div>
-          <p style="font-family:var(--font-body);font-size:12px;line-height:1.5;color:var(--dust);margin:6px 0 16px;">${LANG==='sv'?'För din orderbekräftelse.':LANG==='en'?'For your order confirmation.':'Pour votre confirmation de commande.'}</p>
+      </div>
+
+      <div class="cart-page-more">
+        ${_crossSellHtml(cartIdSet)}
+        <div style="margin-top:24px;">
+          <a href="boutique.html" class="cart-continue">← ${LANG==='sv'?'Fortsätt handla':LANG==='en'?'Continue shopping':'Continuer mes achats'}</a>
         </div>
-        <button class="btn-pay" onclick="doCheckout()">
-          ${LANG==='sv'?'Betala säkert →':LANG==='en'?'Pay securely →':'Payer en toute sécurité →'}
-        </button>
-        <p class="pay-cgv">${LANG==='sv'?'Genom att bekräfta godkänner du våra <a href="/cgv" target="_blank" rel="noopener">villkor</a>.':LANG==='en'?'By confirming, you accept our <a href="/cgv" target="_blank" rel="noopener">terms of sale</a>.':'En validant, vous acceptez les <a href="/cgv" target="_blank" rel="noopener">CGV</a>.'}</p>
-        <div class="btn-pay-sec">
-          <svg width="10" height="12" viewBox="0 0 10 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="5" width="8" height="6" rx="1"/><path d="M3 5V3.5a2 2 0 0 1 4 0V5"/></svg>
-          <span>${LANG==='sv'?'Säker betalning via Stripe':LANG==='en'?'Secure payment via Stripe':'Paiement sécurisé via Stripe'}</span>
-        </div>
-        <div class="pay-methods" aria-label="Moyens de paiement acceptés">${sdPayLogos('pay-m')}</div>
-        <div style="text-align:center;font-family:var(--font-body);font-size:12px;color:var(--dust);margin-top:10px;">${LANG==='sv'?'Betala i 3 eller 4 delar med Klarna eller Scalapay (enligt villkor) vid betalningen.':LANG==='en'?'Pay in 3 or 4 instalments with Klarna or Scalapay (subject to eligibility) at checkout.':'Paiement en 3 ou 4 fois avec Klarna ou Scalapay (selon éligibilité), proposé à l’étape du paiement.'}</div>
       </div>
     </div>`;
+}
+
+/* Retire les produits « retrait uniquement » et rend la livraison possible */
+function _retirerProduitsRetrait() {
+  (window._pickupOnlyKeys || []).forEach(k => removeItem(k));
+  setDeliveryMode('mondial_relay');
+  renderCartPageFull();
 }
 
 function _calcPromoDiscount(promo, sub, remisable) {
@@ -771,7 +950,7 @@ function _promoRefus(reason, minOrder) {
 function _revaliderCodePromo() {
   const p = window._appliedPromo;
   const refuse = !p && window._promoInput && window._promoMsg && !window._promoMsg.ok;
-  if ((p && p.kind) || refuse) applyPromoCode();
+  if (p || refuse) applyPromoCode();
 }
 
 /* Email du client connecté, pour le contrôle « 1 usage par client » */
@@ -805,9 +984,10 @@ async function applyPromoCode() {
   // L'email du panier : un code fidélité ou un code ami ne vaut que pour un email.
   const email = ((document.getElementById('checkout-email-input')?.value) || window._custEmail || _sessionEmail() || '').trim();
 
-  const fail = (text) => {
+  const fail = (text, info) => {
     window._appliedPromo = null; window._promoInput = code;
-    window._promoMsg = { ok: false, text };
+    window._promoMsg = { ok: false, info: !!info, text };
+    _saveCheckoutState();
     renderCartPageFull();
   };
 
@@ -830,7 +1010,8 @@ async function applyPromoCode() {
           if (p && p.code === code) localStorage.removeItem('sd_parrain');
         } catch (e) {}
       }
-      fail(_promoRefus(r.reason, r.min_order));
+      /* Email pas encore saisi : ce n'est pas un refus, juste l'étape suivante */
+      fail(_promoRefus(r.reason, r.min_order), r.reason === 'email_required');
       return;
     }
 
@@ -845,6 +1026,7 @@ async function applyPromoCode() {
       ? (L==='en'?'Free shipping applied!':L==='sv'?'Fri frakt aktiverad!':'Livraison offerte appliquée !')
       : `${L==='en'?'Discount':L==='sv'?'Rabatt':'Réduction'} −${fmtPrice(discAmt)} ${L==='en'?'applied!':L==='sv'?'tillämpas!':'appliquée !'}${horsPromo}`;
     window._promoMsg = { ok: true, text: discLabel };
+    _saveCheckoutState();
     renderCartPageFull();
   } catch(e) {
     fail(L==='en'?'Error. Try again.':L==='sv'?'Fel. Försök igen.':'Erreur. Réessayez.');
@@ -854,9 +1036,13 @@ async function applyPromoCode() {
 async function searchRelayPoints(cp) {
   if (!cp || cp.trim().length < 4) return;
   window._relaySearchCp = cp.trim();
+  window._relayLastSearch = cp.trim();
   window._relayPoints = 'loading';
-  window._selectedRelay = null;
+  window._relayErrMsg = '';
+  window._relayChanging = true;   // l'ancien point reste valable tant qu'aucun autre n'est choisi
+  _saveCheckoutState();
   renderCartPageFull();
+  const L = LANG || 'fr';
   const BASE = window.SD_API_URL || 'https://admin.swedishcravings.fr';
   const pays = window._relayCountry || 'FR';
   try {
@@ -867,21 +1053,34 @@ async function searchRelayPoints(cp) {
        demande a UGO le transporteur le moins cher du pays, puis ne
        renvoie que SES points : un point relais appartient a un
        transporteur, le choix du point est donc celui du transporteur. */
-    var res = await fetch(BASE + '/api/logspher/relay-points?cp=' + encodeURIComponent(cp.trim()) + '&country=' + encodeURIComponent(pays));
+    var res = await fetch(BASE + '/api/logspher/relay-points?cp=' + encodeURIComponent(cp.trim()) + '&country=' + encodeURIComponent(pays) + '&lang=' + encodeURIComponent(L));
     var data = res.ok ? await res.json() : null;
-    var pts = data ? (Array.isArray(data) ? data : (data.points || [])) : [];
+    if (!data) throw new Error('HTTP ' + res.status);
+    var pts = Array.isArray(data) ? data : (data.points || []);
     window._relayPoints = pts;
-    window._relayCarrierName = (data && data.carrier_name) || '';
-    window._relayPriceTE = (data && data.price_te) != null ? data.price_te : null;
+    /* Service du transporteur indisponible : on le dit, avec « Réessayer »,
+       au lieu de laisser croire qu'il n'y a aucun point près de chez lui. */
+    window._relayErrMsg = (!pts.length && data.erreur) ? String(data.erreur) : '';
+    window._relayCarrierName = data.carrier_name || '';
+    window._relayPriceTE = data.price_te != null ? data.price_te : null;
   } catch(e) {
     window._relayPoints = [];
+    window._relayErrMsg = L==='en' ? 'Pickup points could not be loaded.' : L==='sv' ? 'Utlämningsställena kunde inte laddas.' : 'Les points relais n’ont pas pu être chargés.';
   }
+  _saveCheckoutState();
   renderCartPageFull();
 }
 
 function selectRelay(i) {
-  window._selectedRelay = (window._relayPoints || [])[i] || null;
+  const p = (window._relayPoints || [])[i];
+  if (!p) return;
+  window._selectedRelay = p;
+  window._relayChanging = false;
+  window._relayErr = false;
+  _saveCheckoutState();
+  if (typeof sdTrackShippingInfo === 'function') sdTrackShippingInfo('mondial_relay');
   renderCartPageFull();
+  document.querySelector('.relay-change')?.focus({ preventScroll: true });
 }
 
 async function doCheckout() {
@@ -889,6 +1088,10 @@ async function doCheckout() {
   // lui-même l'email, le nom, le téléphone (et l'adresse si besoin) de façon
   // fiable + Apple/Google Pay. On passe juste le token si le client est déjà
   // connecté (pour rattacher la commande à son compte) — jamais obligatoire.
+  if (window._payInFlight) return;
+  window._payErr = '';
+  const _pe = document.getElementById('pay-error');
+  if (_pe) { _pe.textContent = ''; _pe.classList.remove('show'); }
   let session = null;
   try { session = JSON.parse(localStorage.getItem('sd_customer_v1') || 'null'); } catch(e) {}
 
@@ -942,7 +1145,7 @@ async function doCheckout() {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(_email)) {
     const _err = document.getElementById('checkout-email-err');
     if (_err) _err.textContent = LANG === 'en' ? 'Please enter a valid email address.' : LANG === 'sv' ? 'Ange en giltig e-postadress.' : 'Merci d’indiquer une adresse email valide.';
-    if (_emailEl) { _emailEl.style.borderColor = 'var(--lingon)'; _emailEl.focus(); _emailEl.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+    if (_emailEl) { _emailEl.style.borderColor = '#8E2A20'; _emailEl.setAttribute('aria-invalid', 'true'); _emailEl.focus(); _emailEl.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
     return;
   }
   window._custEmail = _email;
@@ -966,8 +1169,7 @@ async function doCheckout() {
   if (typeof sdTrackBeginCheckout === 'function') sdTrackBeginCheckout();
 
   // Proceed to Stripe checkout — Stripe collecte email/nom/téléphone/adresse
-  const btn = document.querySelector('.btn-pay');
-  if (btn) { btn.disabled = true; btn.textContent = '…'; }
+  _setPayBusy(true);
   try {
     const res = await fetch(BASE + '/api/checkout', {
       method: 'POST',
@@ -991,15 +1193,17 @@ async function doCheckout() {
         } : {}),
       }),
     });
-    const data = await res.json();
-    const _restoreBtn = () => { if (btn) { btn.disabled = false; btn.textContent = LANG === 'sv' ? 'Betala säkert →' : LANG === 'en' ? 'Pay securely →' : 'Payer en toute sécurité →'; } };
+    const data = await res.json().catch(() => ({}));
     if (data.url) {
       // Repère : on part vers Stripe. Si le client revient ici sans avoir
       // payé (cancel_url = panier), app.js proposera l'aide WhatsApp Victoria.
       try { sessionStorage.setItem('sd_from_stripe', '1'); } catch (e) {}
       window.location.href = data.url;
-    } else if (data.code === 'OUT_OF_STOCK') {
-      // Stock insuffisant refusé par le serveur → message clair + on rafraîchit le panier.
+      return;                              // le bouton reste « … » jusqu'au départ
+    }
+    _setPayBusy(false);
+    if (data.code === 'OUT_OF_STOCK') {
+      // Stock insuffisant refusé par le serveur : la liste s'affiche au-dessus du bouton.
       const lines = (data.items || []).map(function(it){
         const s = it.available > 0
           ? (LANG === 'en' ? ('only ' + it.available + ' left') : LANG === 'sv' ? ('endast ' + it.available + ' kvar') : ('plus que ' + it.available + ' en stock'))
@@ -1008,147 +1212,57 @@ async function doCheckout() {
       }).join('\n');
       const head = LANG === 'en' ? 'Some items are no longer available in the requested quantity:' : LANG === 'sv' ? 'Vissa varor finns inte i önskat antal:' : 'Certains articles ne sont plus disponibles dans la quantité demandée :';
       const foot = LANG === 'en' ? 'Please adjust your cart.' : LANG === 'sv' ? 'Justera din varukorg.' : 'Ajustez votre panier.';
-      alert(head + '\n\n' + lines + '\n\n' + foot);
-      renderCartPageFull();
-      _restoreBtn();
+      _showPayError(head + '\n' + lines + '\n' + foot);
     } else if (data.code === 'PROMO_REFUSED') {
-      /* Code fidélité ou code ami refusé au dernier moment (email changé,
-         ami déjà client…) : on le dit sous le champ du code plutôt que de
-         faire payer plein tarif. */
+      /* Code refusé au dernier moment (email changé, ami déjà client, code
+         épuisé…) : on le dit sous le champ du code plutôt que de faire
+         payer plein tarif sans prévenir. */
       window._appliedPromo = null;
-      window._promoMsg = { ok: false, text: _promoRefus(data.reason) };
+      window._promoOpen = true;
+      window._promoMsg = { ok: false, text: _promoRefus(data.reason, data.min_order) };
+      _saveCheckoutState();
       renderCartPageFull();
       document.getElementById('promo-input')?.scrollIntoView({ block: 'center', behavior: 'smooth' });
     } else {
-      alert(data.error || (LANG === 'en' ? 'Payment error. Please try again.' : LANG === 'sv' ? 'Betalningsfel. Försök igen.' : 'Erreur lors du paiement. Veuillez réessayer.'));
-      _restoreBtn();
+      // ORDER_CREATE_FAILED, SERVER_ERROR ou réponse inattendue : rien n'a été débité.
+      _showPayError(LANG === 'en' ? 'Payment could not start. Nothing was charged; please try again in a moment.' : LANG === 'sv' ? 'Betalningen kunde inte starta. Inget har debiterats, försök igen om en stund.' : 'Le paiement n’a pas pu démarrer. Rien n’a été débité : réessayez dans un instant.');
     }
   } catch(e) {
     console.error('[checkout]', e);
-    alert('Erreur de connexion. Veuillez réessayer.');
-    if (btn) { btn.disabled = false; btn.textContent = LANG === 'sv' ? 'Betala säkert →' : LANG === 'en' ? 'Pay securely →' : 'Payer en toute sécurité →'; }
+    _setPayBusy(false);
+    _showPayError(LANG === 'en' ? 'Connection problem. Check your network and try again.' : LANG === 'sv' ? 'Anslutningsproblem. Kontrollera nätverket och försök igen.' : 'Problème de connexion. Vérifiez votre réseau et réessayez.');
   }
 }
 
-function showEmailGate() {
-  const gate = document.getElementById('profile-gate');
-  if (!gate) return;
-  const L = LANG || 'fr';
-  const titleEl = document.getElementById('profile-gate-title');
-  if (titleEl) titleEl.textContent = L==='en'?'Your order':L==='sv'?'Din beställning':'Votre commande';
-  document.getElementById('profile-gate-subtitle').textContent =
-    L==='en' ? 'Enter your email address to continue to payment. No account needed.' :
-    L==='sv' ? 'Ange din e-postadress för att fortsätta till betalning. Inget konto behövs.' :
-    'Entrez votre email pour continuer vers le paiement. Aucun compte nécessaire.';
-  document.getElementById('profile-gate-fields').innerHTML = `
-    <div class="pg-field">
-      <label>${L==='en'?'Email address':L==='sv'?'E-postadress':'Adresse email'} *</label>
-      <input id="pg-email-guest" type="email" autocomplete="email" placeholder="vous@exemple.fr">
-    </div>`;
-  document.getElementById('profile-gate-error').textContent = '';
-  document.getElementById('profile-gate-btn').onclick = submitEmailGate;
-  gate.style.display = 'flex';
-  setTimeout(() => document.getElementById('pg-email-guest')?.focus(), 50);
+/* Un seul envoi à la fois : les doubles clics créaient des commandes
+   brouillon en double, puis autant de relances. */
+function _setPayBusy(on) {
+  window._payInFlight = !!on;
+  document.querySelectorAll('.btn-pay').forEach(function (b) {
+    b.disabled = !!on;
+    b.textContent = on ? '…' : (b.id === 'pay-bar-btn' ? _payBarLabel() : _payLabel());
+  });
 }
 
-async function submitEmailGate() {
-  const errEl = document.getElementById('profile-gate-error');
-  const btn = document.getElementById('profile-gate-btn');
-  const L = LANG || 'fr';
-  const email = (document.getElementById('pg-email-guest')?.value || '').trim().toLowerCase();
-  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    errEl.textContent = L==='en'?'Please enter a valid email address.':L==='sv'?'Ange en giltig e-postadress.':'Veuillez saisir une adresse email valide.';
-    return;
-  }
-  errEl.textContent = '';
-  if (btn) { btn.disabled = true; btn.textContent = '…'; }
-  const BASE = window.SD_API_URL || 'https://admin.swedishcravings.fr';
-  try {
-    const res = await fetch(BASE + '/api/customer/auth', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, name: '' }),
-    });
-    if (!res.ok) { errEl.textContent = L==='en'?'Error, please retry.':'Erreur, réessayez.'; if(btn){btn.disabled=false;btn.textContent='CONTINUER →';} return; }
-    const data = await res.json();
-    try { localStorage.setItem('sd_customer_v1', JSON.stringify({ token: data.token, customer_email: data.customer_email, customer_name: data.customer_name, orders: [] })); } catch(e) {}
-    document.getElementById('profile-gate').style.display = 'none';
-    await doCheckout();
-  } catch(e) {
-    errEl.textContent = L==='en'?'Connection error. Please retry.':'Erreur de connexion. Réessayez.';
-    if (btn) { btn.disabled = false; btn.textContent = 'CONTINUER →'; }
-  }
+/* Erreur de paiement affichée au-dessus du bouton (plus d'alert()) */
+function _showPayError(msg) {
+  window._payErr = msg || '';
+  renderCartPageFull();
+  const el = document.getElementById('pay-error');
+  if (el && msg) el.scrollIntoView({ block: 'center', behavior: 'smooth' });
 }
 
-function showProfileGate(token, isPickup, onSaved) {
-  const gate = document.getElementById('profile-gate');
-  if (!gate) return;
-  const L = LANG || 'fr';
-  const titleEl = document.getElementById('profile-gate-title');
-  if (titleEl) titleEl.textContent = L==='en'?'Before ordering':L==='sv'?'Innan du beställer':'Avant de commander';
-  document.getElementById('profile-gate-btn').onclick = submitProfileGate;
-  const _isMRMode = window._deliveryMode === 'mondial_relay';
-  const subtitles = {
-    fr: isPickup ? (_isMRMode ? 'Indiquez votre nom pour commander en point relais.' : 'Indiquez votre nom pour finaliser la commande (click & collect).') : 'Renseignez vos coordonnées de livraison pour continuer.',
-    en: isPickup ? (_isMRMode ? 'Enter your name to order to a pickup point.' : 'Enter your name to complete your order (click & collect).') : 'Enter your delivery address to continue.',
-    sv: isPickup ? (_isMRMode ? 'Ange ditt namn för att beställa till ett utlämningsställe.' : 'Ange ditt namn för att slutföra beställningen.') : 'Ange din leveransadress för att fortsätta.',
-  };
-  document.getElementById('profile-gate-subtitle').textContent = subtitles[L] || subtitles.fr;
-  const addrFields = isPickup ? '' : `
-    <div class="pg-field"><label>${L==='sv'?'Adresse':L==='en'?'Address':'Adresse'}</label><input id="pg-addr1" type="text" autocomplete="street-address" placeholder="15 rue de la Paix"></div>
-    <div class="pg-field pg-2col">
-      <div class="pg-field" style="margin-bottom:0"><label>${L==='sv'?'Stad':L==='en'?'City':'Ville'}</label><input id="pg-city" type="text" autocomplete="address-level2" placeholder="Paris"></div>
-      <div class="pg-field" style="margin-bottom:0"><label>${L==='sv'?'Code postal':L==='en'?'Postal code':'Code postal'}</label><input id="pg-postal" type="text" autocomplete="postal-code" placeholder="75001"></div>
-    </div>
-    <div class="pg-field"><label>${L==='sv'?'Land':L==='en'?'Country':'Pays'}</label><select id="pg-country" autocomplete="country">
-      <option value="FR">France</option><option value="BE">Belgique</option>
-      <option value="LU">Luxembourg</option><option value="DE">Allemagne</option><option value="ES">Espagne</option>
-      <option value="IT">Italie</option><option value="NL">Pays-Bas</option><option value="PT">Portugal</option>
-      <option value="SE">Suède</option>
-    </select></div>`;
-  document.getElementById('profile-gate-fields').innerHTML = `
-    <div class="pg-field"><label>${L==='sv'?'Nom complet':L==='en'?'Full name':'Nom complet'} *</label><input id="pg-name" type="text" autocomplete="name" placeholder="${L==='sv'?'Prénom Nom':L==='en'?'First Last':'Prénom Nom'}"></div>
-    <div class="pg-field"><label>${L==='sv'?'Telefon':L==='en'?'Phone':'Téléphone'}</label><input id="pg-phone" type="tel" autocomplete="tel" placeholder="+33 6 12 34 56 78"></div>
-    ${addrFields}`;
-  gate._token = token; gate._isPickup = isPickup; gate._onSaved = onSaved;
-  gate.style.display = 'flex';
-  setTimeout(() => document.getElementById('pg-name')?.focus(), 50);
-}
-
-async function submitProfileGate() {
-  const gate = document.getElementById('profile-gate');
-  const { _token, _isPickup, _onSaved } = gate;
-  const btn = document.getElementById('profile-gate-btn');
-  const errEl = document.getElementById('profile-gate-error');
-  const L = LANG || 'fr';
-  const name    = (document.getElementById('pg-name')?.value || '').trim();
-  const phone   = (document.getElementById('pg-phone')?.value || '').trim();
-  const address1 = _isPickup ? '' : (document.getElementById('pg-addr1')?.value || '').trim();
-  const city     = _isPickup ? '' : (document.getElementById('pg-city')?.value || '').trim();
-  const postal_code = _isPickup ? '' : (document.getElementById('pg-postal')?.value || '').trim();
-  const country  = _isPickup ? 'FR' : (document.getElementById('pg-country')?.value || 'FR');
-  if (!name) { errEl.textContent = L==='en'?'Name is required.':L==='sv'?'Namn krävs.':'Le nom est obligatoire.'; return; }
-  if (!_isPickup && (!address1 || !city || !postal_code)) { errEl.textContent = L==='en'?'Please fill in all address fields.':L==='sv'?'Fyll i alla adressfält.':"Veuillez remplir tous les champs d'adresse."; return; }
-  errEl.textContent = '';
-  if (btn) { btn.disabled = true; btn.textContent = '…'; }
-  const BASE = window.SD_API_URL || 'https://admin.swedishcravings.fr';
-  try {
-    const res = await fetch(BASE + '/api/customer/profile', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + _token },
-      body: JSON.stringify({ name, phone, address1, address2: '', city, postal_code, country }),
-    });
-    if (!res.ok) { errEl.textContent = L==='en'?'Error, please retry.':'Erreur, réessayez.'; if(btn){btn.disabled=false;btn.textContent='CONTINUER →';} return; }
-    gate.style.display = 'none';
-    if (_onSaved) _onSaved();
-  } catch(e) {
-    errEl.textContent = L==='en'?'Connection error.':'Erreur de connexion.';
-    if (btn) { btn.disabled = false; btn.textContent = 'CONTINUER →'; }
-  }
-}
+/* Retour depuis Stripe par « Précédent » : la page sort du cache avec le
+   bouton bloqué sur « … ». On la remet en état. */
+window.addEventListener('pageshow', function (e) {
+  if (!e.persisted) return;
+  window._payInFlight = false;
+  renderCartPageFull();
+});
 
 // Re-render when API products load (handles timing with PRODUCTS array)
-window.addEventListener('sdapi:ready', () => { renderCartPageFull(); });
+window.addEventListener('sdapi:ready', () => { renderCartPageFull(); if (typeof sdTrackViewCart === 'function') sdTrackViewCart(); });
+if (typeof PRODUCTS !== 'undefined' && PRODUCTS.length && typeof sdTrackViewCart === 'function') sdTrackViewCart();
 </script>
 <script>(function(){var _hr=document.getElementById("header-root");if(_hr&&typeof MutationObserver!=="undefined")new MutationObserver(function(){if(typeof updateCartBadge==="function")updateCartBadge();}).observe(_hr,{childList:true});})();</script>
 <script src="js/sd-api-client.js?v=9"></script>

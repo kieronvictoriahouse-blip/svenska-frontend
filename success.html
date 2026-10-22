@@ -9,7 +9,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Commande confirmée</title>
 <meta name="robots" content="noindex">
-<link rel="stylesheet" href="css/style.css?v=19">
+<link rel="stylesheet" href="css/style.css?v=20">
 <script>const SD_API_URL = 'https://admin.swedishcravings.fr';</script>
 <script>try{localStorage.removeItem('sd_cart');localStorage.removeItem('sd_cart_products');localStorage.removeItem('sd_parrain');}catch(e){}</script>
 <script>(function(){try{var w=JSON.parse(localStorage.getItem('sd_wl_v1'));if(w&&w.id){var r=document.documentElement.style;if(w.color_primary){r.setProperty('--heather',w.color_primary);r.setProperty('--heather-mid',w.color_primary+'CC');}if(w.color_secondary){r.setProperty('--lingon',w.color_secondary);r.setProperty('--lingon-mid',w.color_secondary+'CC');}if(w.color_bg)r.setProperty('--cream',w.color_bg);if(w.color_text)r.setProperty('--midnight',w.color_text);}}catch(e){}}());</script>
@@ -58,7 +58,7 @@
 </div>
 
 <div id="footer-root"></div>
-<script src="js/app.js?v=32"></script>
+<script src="js/app.js?v=33"></script>
 <script>
 /* LANG vient d'app.js (let global, chargé juste au-dessus). Le redéclarer
    ici jetait « Identifier 'LANG' has already been declared » : tout ce bloc
@@ -68,8 +68,10 @@
 const T_SUCCESS = {
   title:    { fr: 'Commande <em style="font-style:italic;color:var(--lingon-mid);">confirmée</em>', en: 'Order <em style="font-style:italic;color:var(--lingon-mid);">confirmed</em>', sv: 'Beställning <em style="font-style:italic;color:var(--lingon-mid);">bekräftad</em>' },
   sub:      { fr: 'Merci pour votre commande ! Vous recevrez un email de confirmation dans quelques minutes.', en: 'Thank you for your order! You will receive a confirmation email shortly.', sv: 'Tack för din beställning! Du får ett bekräftelsemail inom några minuter.' },
-  subPickup:{ fr: 'Merci pour votre commande ! Elle est prête à être retirée en magasin. Vous recevrez un email de confirmation.', en: 'Thank you! Your order is ready for in-store pickup. You will receive a confirmation email.', sv: 'Tack! Din beställning är redo att hämtas i butiken. Du får ett bekräftelsemail.' },
-  pickup:   { fr: 'Retrait en magasin', en: 'In-store pickup', sv: 'Hämtas i butiken' },
+  /* Rien ne prévient le client quand la commande est prête : on ne promet
+     donc pas qu'elle l'est déjà, on dit comment le retrait se fixe (CGV). */
+  subPickup:{ fr: 'Merci pour votre commande ! Nous la préparons et vous contactons pour convenir d’un créneau de retrait à notre atelier d’Étoile-sur-Rhône. Un email de confirmation arrive dans quelques minutes.', en: 'Thank you! We are preparing your order and will contact you to arrange a pickup time at our workshop in Étoile-sur-Rhône. A confirmation email is on its way.', sv: 'Tack! Vi förbereder din beställning och kontaktar dig för att boka en upphämtningstid i vår ateljé i Étoile-sur-Rhône. Ett bekräftelsemail är på väg.' },
+  pickup:   { fr: 'Retrait à l’atelier (sur rendez-vous)', en: 'Workshop pickup (by appointment)', sv: 'Upphämtning i ateljén (efter överenskommelse)' },
   items:    { fr: 'Articles', en: 'Items', sv: 'Artiklar' },
   subtotal: { fr: 'Sous-total', en: 'Subtotal', sv: 'Delsumma' },
   shipping: { fr: 'Livraison', en: 'Shipping', sv: 'Frakt' },

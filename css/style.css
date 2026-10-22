@@ -255,7 +255,9 @@ nav a:hover, nav a.active { color:var(--lingon); border-bottom-color:var(--lingo
   position:fixed; bottom:32px; left:50%; transform:translateX(-50%) translateY(100px);
   background:var(--heather); color:var(--on-heather);
   padding:14px 28px; font-family:var(--font-ui); font-size:12px; letter-spacing:1.5px; text-transform:uppercase;
-  border-radius:1px; box-shadow:var(--shadow-lg); z-index:500; white-space:nowrap;
+  border-radius:1px; box-shadow:var(--shadow-lg); z-index:500;
+  /* Un nom de produit long ne sort plus de l'écran sur mobile */
+  max-width:calc(100vw - 32px); width:max-content; text-align:center; overflow-wrap:anywhere; line-height:1.4;
   transition:transform 0.3s ease;
 }
 .toast.show { transform:translateX(-50%) translateY(0); }
