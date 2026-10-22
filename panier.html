@@ -1223,6 +1223,14 @@ async function doCheckout() {
       _saveCheckoutState();
       renderCartPageFull();
       document.getElementById('promo-input')?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    } else if (data.code === 'RELAY_POINT_REQUIRED') {
+      window._relayErr = true;
+      window._selectedRelay = null;
+      renderCartPageFull();
+      document.querySelector('.relay-picker')?.scrollIntoView({ block: 'center' });
+    } else if (data.error && /^(BAD_EMAIL|PICKUP_ONLY|COUNTRY_NOT_SERVED|BAD_QUANTITY)$/.test(data.code || '')) {
+      // Refus métier : le serveur envoie déjà le message dans la langue du client.
+      _showPayError(String(data.error));
     } else {
       // ORDER_CREATE_FAILED, SERVER_ERROR ou réponse inattendue : rien n'a été débité.
       _showPayError(LANG === 'en' ? 'Payment could not start. Nothing was charged; please try again in a moment.' : LANG === 'sv' ? 'Betalningen kunde inte starta. Inget har debiterats, försök igen om en stund.' : 'Le paiement n’a pas pu démarrer. Rien n’a été débité : réessayez dans un instant.');
