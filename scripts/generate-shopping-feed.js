@@ -124,6 +124,8 @@ function discountOf(p) {
    custom_label_2 = mise en avant (bestseller / nouveauté)
    custom_label_3 = catégorie (slug) */
 function marginLabel(p) {
+  // L'API publique ne donne plus le coût d'achat : elle calcule le palier elle-même.
+  if (p.margin_label) return p.margin_label;
   const price = parseFloat(p.price) || 0, cost = parseFloat(p.cost_price) || 0;
   if (!price || !cost) return 'marge-inconnue';
   const m = 1 - cost / (price / 1.055); // TVA alimentaire 5,5 % — approximation suffisante pour un palier
