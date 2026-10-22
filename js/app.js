@@ -6,6 +6,21 @@ var CATS=[{id:'Épices',emoji:'🌶️'},{id:'Flocons & Céréales',emoji:'🌾'
 const CAT_LABELS={'Épices':{sv:'Épices & Aromates',fr:'Épices & Aromates',en:'Spices & Herbs'},'Flocons & Céréales':{sv:'Flocons & Céréales',fr:'Flocons & Céréales',en:'Oats & Cereals'},'Baies séchées':{sv:'Baies séchées',fr:'Baies séchées',en:'Dried berries'},'Sucres & Sirops':{sv:'Sucres & Sirops',fr:'Sucres & Sirops',en:'Sugars & Syrups'},'Thés & Tisanes':{sv:'Thés & Tisanes',fr:'Thés & Tisanes',en:'Teas & Infusions'},'Farines & Graines':{sv:'Farines & Graines',fr:'Farines & Graines',en:'Flours & Seeds'},'Mélanges':{sv:'Blandningar',fr:'Mélanges suédois',en:'Swedish blends'},'Chips & Snacks':{sv:'Chips & Snacks',fr:'Chips & Snacks',en:'Chips & Snacks'},'Basics suédois':{sv:'Svenska baser',fr:'Basics suédois',en:'Swedish basics'},'Confiseries':{sv:'Konfektyr',fr:'Confiseries',en:'Confectionery'},'Fika & Boulangerie':{sv:'Fika & Bakning',fr:'Fika & Boulangerie',en:'Fika & Baking'},'Art de la table':{sv:'Dukning',fr:'Art de la table',en:'Tableware'},'Maison & Déco':{sv:'Hem & Inredning',fr:'Maison & Déco',en:'Home & Decor'}};
 const UI={sv:{addedCart:'Tillagd i korgen!',emptyCart:'Din korg är tom',subtotal:'Delsumma',checkout:'Beställ →',keepShopping:'Fortsätt handla',freeShip:'Fri frakt från 29€',searchPlaceholder:'Sök en krydda, ett produkt...',noResults:'Inga resultat',cartTitle:'Din korg',products:'produkter',product:'produkt',filterAll:'Alla',sortDefault:'Standard',sortPriceAsc:'Pris stigande',sortPriceDesc:'Pris fallande',sortName:'Namn A→Ö',subscribe:'Tack!'},fr:{addedCart:'Ajouté au panier !',emptyCart:'Votre panier est vide',subtotal:'Sous-total',checkout:'Commander →',keepShopping:'Continuer mes achats',freeShip:'Livraison offerte dès 29€',searchPlaceholder:'Rechercher une épice, un produit...',noResults:'Aucun résultat',cartTitle:'Votre panier',products:'produits',product:'produit',filterAll:'Tous',sortDefault:'Par défaut',sortPriceAsc:'Prix croissant',sortPriceDesc:'Prix décroissant',sortName:'Nom A→Z',subscribe:'Merci !'},en:{addedCart:'Added to cart!',emptyCart:'Your cart is empty',subtotal:'Subtotal',checkout:'Checkout →',keepShopping:'Continue shopping',freeShip:'Free delivery from €29',searchPlaceholder:'Search for a spice, product...',noResults:'No results',cartTitle:'Your cart',products:'products',product:'product',filterAll:'All',sortDefault:'Default',sortPriceAsc:'Price: low to high',sortPriceDesc:'Price: high to low',sortName:'Name A→Z',subscribe:'Thanks!'}};
 
+/* Lien de parrainage : /?parrain=CODE, sur n'importe quelle page. Le code
+   ami est gardé 30 jours et proposé au panier ; c'est le serveur qui
+   décide s'il s'applique (nouveau client, articles hors promotion). */
+(function(){
+  try{
+    var q=new URLSearchParams(location.search);
+    var c=(q.get('parrain')||'').trim().toUpperCase();
+    if(!/^[A-Z0-9-]{3,40}$/.test(c))return;
+    localStorage.setItem('sd_parrain',JSON.stringify({code:c,t:Date.now()}));
+    q.delete('parrain');
+    var s=q.toString();
+    history.replaceState(null,'',location.pathname+(s?'?'+s:'')+location.hash);
+  }catch(e){}
+})();
+
 /* Règles de frais de port — miroir de `src/lib/shipping.ts` du back-office.
    Le serveur reste l'autorité (c'est /api/checkout qui facture) ; ici on
    n'affiche qu'une estimation. La fenêtre de dates est recalculée à chaque

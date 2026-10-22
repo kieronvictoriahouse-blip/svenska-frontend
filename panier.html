@@ -309,6 +309,20 @@ window._reprise = (function () { try { return sessionStorage.getItem('sd_reprise
     .catch(function () {});
 })();
 
+/* Arrivée par un lien de parrainage (js/app.js) : le code ami est proposé
+   tant qu'aucun autre code n'est saisi. Une reprise de panier, plus
+   récente, garde la main. */
+(function () {
+  if (window._promoInput || window._appliedPromo) return;
+  var p = null;
+  try { p = JSON.parse(localStorage.getItem('sd_parrain') || 'null'); } catch (e) {}
+  if (!p || !p.code || Date.now() - (p.t || 0) > 30 * 86400000) return;
+  window._promoInput = p.code;
+  var appliquer = function () { if (!window._appliedPromo) applyPromoCode(); };
+  if (typeof PRODUCTS !== 'undefined' && PRODUCTS.length) appliquer();
+  else window.addEventListener('sdapi:ready', appliquer, { once: true });
+})();
+
 renderCartPageFull();
 
 // ── Offre "cadeau offert" : chargée une fois, re-render au retour ──
@@ -415,6 +429,8 @@ function renderCartPageFull() {
   const cartIdSet = new Set(entries.map(([key]) => { const i = key.indexOf('_'); return i === -1 ? key : key.slice(0, i); }));
 
   let subtotal = 0;
+  // Hors articles déjà en promotion : l'assiette des codes fidélité et ami.
+  let _remisable = 0;
   const itemRows = entries.map(([key, qty]) => {
     const _ri = key.indexOf('_');
     const idStr = _ri === -1 ? key : key.slice(0, _ri);
@@ -428,6 +444,7 @@ function renderCartPageFull() {
     const price = window.SDPrice ? SDPrice.effective(_base, p) : _base;
     const line = price * qty;
     subtotal += line;
+    if (!_onSale) _remisable += line;
     const _priceCell = _onSale
       ? `<span class="cart-row-price-old">${fmtPrice(_base * qty)}</span><span class="cpr-price cart-row-price--sale">${fmtPrice(line)}</span>`
       : `<span class="cpr-price">${fmtPrice(line)}</span>`;
@@ -501,7 +518,7 @@ function renderCartPageFull() {
 
   const shipping = subtotal >= freeThreshold ? 0 : baseShipping;
   const _promoValid = !!(window._appliedPromo && subtotal >= (window._appliedPromo.min_order || 0));
-  const _discountAmt = _promoValid ? _calcPromoDiscount(window._appliedPromo, subtotal) : 0;
+  const _discountAmt = _promoValid ? _calcPromoDiscount(window._appliedPromo, subtotal, _remisable) : 0;
   const _isFreeShip = _promoValid && window._appliedPromo.type === 'free_shipping';
   // Nudge "livraison gratuite" (barre + upsell), affiché en point relais où des frais s'appliquent
   const freeShipNudge = _isFreeShip ? '' : shipHtml;
@@ -703,7 +720,7 @@ function renderCartPageFull() {
         </ul>
         <div class="checkout-email">
           <label for="checkout-email-input" style="display:block;font-family:var(--font-ui);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dust);margin-bottom:8px;">${LANG==='sv'?'Din e-postadress':LANG==='en'?'Your email':'Votre email'}</label>
-          <input id="checkout-email-input" type="email" autocomplete="email" inputmode="email" required value="${(window._custEmail||'').replace(/"/g,'&quot;')}" oninput="window._custEmail=this.value.trim();try{localStorage.setItem('sd_checkout_email',window._custEmail)}catch(e){};this.style.borderColor='var(--linen)';var er=document.getElementById('checkout-email-err');if(er)er.textContent='';" placeholder="${LANG==='sv'?'namn@exempel.se':LANG==='en'?'name@example.com':'prenom@exemple.fr'}" style="width:100%;border:1px solid var(--linen);background:var(--cream);padding:12px 14px;font-family:var(--font-body);font-size:15px;color:var(--midnight);outline:none;box-sizing:border-box;">
+          <input id="checkout-email-input" type="email" autocomplete="email" inputmode="email" required value="${(window._custEmail||'').replace(/"/g,'&quot;')}" oninput="window._custEmail=this.value.trim();try{localStorage.setItem('sd_checkout_email',window._custEmail)}catch(e){};this.style.borderColor='var(--linen)';var er=document.getElementById('checkout-email-err');if(er)er.textContent='';" onchange="_revaliderCodePromo()" placeholder="${LANG==='sv'?'namn@exempel.se':LANG==='en'?'name@example.com':'prenom@exemple.fr'}" style="width:100%;border:1px solid var(--linen);background:var(--cream);padding:12px 14px;font-family:var(--font-body);font-size:15px;color:var(--midnight);outline:none;box-sizing:border-box;">
           <div id="checkout-email-err" style="font-family:var(--font-body);font-size:13px;color:var(--lingon);min-height:0;margin-top:6px;"></div>
           <p style="font-family:var(--font-body);font-size:12px;line-height:1.5;color:var(--dust);margin:6px 0 16px;">${LANG==='sv'?'För din orderbekräftelse.':LANG==='en'?'For your order confirmation.':'Pour votre confirmation de commande.'}</p>
         </div>
@@ -721,11 +738,40 @@ function renderCartPageFull() {
     </div>`;
 }
 
-function _calcPromoDiscount(promo, sub) {
+function _calcPromoDiscount(promo, sub, remisable) {
   if (!promo) return 0;
-  if (promo.type === 'percent') return Math.min(sub, (sub * promo.value) / 100);
+  // Code fidélité, code ami : pas sur les articles déjà en promotion.
+  if (promo.hors_promo && remisable != null) sub = remisable;
+  if (promo.type === 'percent') return Math.round(Math.min(sub, (sub * promo.value) / 100) * 100) / 100;
   if (promo.type === 'fixed') return Math.min(sub, promo.value);
   return 0;
+}
+
+/* Motif d'un code refusé — par /api/promo/validate ou par le checkout. */
+function _promoRefus(reason, minOrder) {
+  const L = LANG || 'fr';
+  const MSG = {
+    not_yet:      L==='en'?'Code not yet valid':L==='sv'?'Koden är inte giltig ännu':'Code pas encore valide',
+    expired:      L==='en'?'Code expired':L==='sv'?'Koden har gått ut':'Code expiré',
+    exhausted:    L==='en'?'Code no longer available':L==='sv'?'Koden är inte längre tillgänglig':'Code plus disponible',
+    already_used: L==='en'?'Code already used':L==='sv'?'Koden är redan använd':'Code déjà utilisé',
+    min_order:    `${L==='en'?'Minimum order':L==='sv'?'Minsta order':'Commande minimum'} ${fmtPrice(minOrder || 0)} ${L==='en'?'required':L==='sv'?'krävs':'requise'}`,
+    invalid:      L==='en'?'Invalid or inactive code':L==='sv'?'Ogiltig kod':'Code invalide ou inactif',
+    email_required:   L==='en'?'Enter your email below to use this code':L==='sv'?'Ange din e-postadress nedan för att använda koden':'Indiquez votre email ci-dessous pour utiliser ce code',
+    not_owner:        L==='en'?'This loyalty code belongs to another email address':L==='sv'?'Stamkundskoden hör till en annan e-postadress':'Ce code fidélité est lié à une autre adresse email',
+    own_code:         L==='en'?'That’s your friend code — share it with your friends!':L==='sv'?'Det är din vänkod – dela den med dina vänner!':'C’est votre code ami : partagez-le à vos proches !',
+    not_new_customer: L==='en'?'This friend code is for a first order only':L==='sv'?'Vänkoden gäller bara en första beställning':'Ce code ami est réservé à une première commande',
+    only_promo_items: L==='en'?'This code does not apply to items already on sale':L==='sv'?'Koden gäller inte varor som redan är rabatterade':'Ce code ne s’applique pas aux articles déjà en promotion',
+  };
+  return MSG[reason] || MSG.invalid;
+}
+
+/* Code fidélité ou code ami : sa validité dépend de l'email du panier.
+   On le revérifie quand l'email change, et on retente un code refusé. */
+function _revaliderCodePromo() {
+  const p = window._appliedPromo;
+  const refuse = !p && window._promoInput && window._promoMsg && !window._promoMsg.ok;
+  if ((p && p.kind) || refuse) applyPromoCode();
 }
 
 /* Email du client connecté, pour le contrôle « 1 usage par client » */
@@ -743,6 +789,7 @@ async function applyPromoCode() {
   // Sous-total courant : sert au contrôle du minimum de commande côté serveur
   const entries = Object.entries(cart).filter(([,q]) => q > 0);
   let st = 0;
+  let base = 0; // hors articles déjà en promotion (codes fidélité et ami)
   entries.forEach(([key, qty]) => {
     const ri = key.indexOf('_'); const idStr = ri===-1?key:key.slice(0,ri);
     const _cpd = _sdCartProducts();
@@ -751,8 +798,12 @@ async function applyPromoCode() {
     const variant = ri===-1?undefined:key.slice(ri+1);
     const v = variant?p.variants?.find(x=>x.label===variant):p.variants?.[0];
     const _base = v?v.price:p.price;
-    st += (window.SDPrice?SDPrice.effective(_base,p):_base) * qty;
+    const ligne = (window.SDPrice?SDPrice.effective(_base,p):_base) * qty;
+    st += ligne;
+    if (!(window.SDPrice && SDPrice.active(p))) base += ligne;
   });
+  // L'email du panier : un code fidélité ou un code ami ne vaut que pour un email.
+  const email = ((document.getElementById('checkout-email-input')?.value) || window._custEmail || _sessionEmail() || '').trim();
 
   const fail = (text) => {
     window._appliedPromo = null; window._promoInput = code;
@@ -765,30 +816,34 @@ async function applyPromoCode() {
     const res = await fetch(BASE + '/api/promo/validate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ code, subtotal: st, email: _sessionEmail() }),
+      body: JSON.stringify({ code, subtotal: st, base, email }),
     });
     if (!res.ok) throw new Error('validate failed');
     const r = await res.json();
 
     if (!r.valid) {
-      const MSG = {
-        not_yet:      L==='en'?'Code not yet valid':L==='sv'?'Koden är inte giltig ännu':'Code pas encore valide',
-        expired:      L==='en'?'Code expired':L==='sv'?'Koden har gått ut':'Code expiré',
-        exhausted:    L==='en'?'Code no longer available':L==='sv'?'Koden är inte längre tillgänglig':'Code plus disponible',
-        already_used: L==='en'?'Code already used':L==='sv'?'Koden är redan använd':'Code déjà utilisé',
-        min_order:    `${L==='en'?'Minimum order':L==='sv'?'Minsta order':'Commande minimum'} ${fmtPrice(r.min_order || 0)} ${L==='en'?'required':L==='sv'?'krävs':'requise'}`,
-        invalid:      L==='en'?'Invalid or inactive code':L==='sv'?'Ogiltig kod':'Code invalide ou inactif',
-      };
-      fail(MSG[r.reason] || MSG.invalid);
+      /* Code ami d'un lien de parrainage qui ne servira plus : on cesse
+         de le proposer à chaque visite. */
+      if (['invalid', 'own_code', 'not_new_customer'].includes(r.reason)) {
+        try {
+          const p = JSON.parse(localStorage.getItem('sd_parrain') || 'null');
+          if (p && p.code === code) localStorage.removeItem('sd_parrain');
+        } catch (e) {}
+      }
+      fail(_promoRefus(r.reason, r.min_order));
       return;
     }
 
-    window._appliedPromo = { code: r.code, type: r.type, value: r.value, min_order: r.min_order };
+    window._appliedPromo = { code: r.code, type: r.type, value: r.value, min_order: r.min_order, kind: r.kind || null, hors_promo: !!r.hors_promo };
     window._promoInput = code;
     const discAmt = r.discount || 0;
+    // Une partie du panier est déjà en promotion : on dit pourquoi la remise est plus petite.
+    const horsPromo = r.hors_promo && base < st
+      ? (L==='en'?' (items on sale excluded)':L==='sv'?' (rabatterade varor undantagna)':' (hors articles en promotion)')
+      : '';
     const discLabel = r.type==='free_shipping'
       ? (L==='en'?'Free shipping applied!':L==='sv'?'Fri frakt aktiverad!':'Livraison offerte appliquée !')
-      : `${L==='en'?'Discount':L==='sv'?'Rabatt':'Réduction'} −${fmtPrice(discAmt)} ${L==='en'?'applied!':L==='sv'?'tillämpas!':'appliquée !'}`;
+      : `${L==='en'?'Discount':L==='sv'?'Rabatt':'Réduction'} −${fmtPrice(discAmt)} ${L==='en'?'applied!':L==='sv'?'tillämpas!':'appliquée !'}${horsPromo}`;
     window._promoMsg = { ok: true, text: discLabel };
     renderCartPageFull();
   } catch(e) {
@@ -956,6 +1011,14 @@ async function doCheckout() {
       alert(head + '\n\n' + lines + '\n\n' + foot);
       renderCartPageFull();
       _restoreBtn();
+    } else if (data.code === 'PROMO_REFUSED') {
+      /* Code fidélité ou code ami refusé au dernier moment (email changé,
+         ami déjà client…) : on le dit sous le champ du code plutôt que de
+         faire payer plein tarif. */
+      window._appliedPromo = null;
+      window._promoMsg = { ok: false, text: _promoRefus(data.reason) };
+      renderCartPageFull();
+      document.getElementById('promo-input')?.scrollIntoView({ block: 'center', behavior: 'smooth' });
     } else {
       alert(data.error || (LANG === 'en' ? 'Payment error. Please try again.' : LANG === 'sv' ? 'Betalningsfel. Försök igen.' : 'Erreur lors du paiement. Veuillez réessayer.'));
       _restoreBtn();
