@@ -5,9 +5,11 @@
  *
  * - « image » : rien à faire, le hero statique (et son image CMS) reste.
  * - « carousel » : les diapositives se superposent dans .hero-media ; la
- *   nouvelle se fond par-dessus l'ancienne. Trois types : « default »
- *   (le texte de l'accueil reste), « custom » (texte propre), « image »
- *   (visuel seul, cliquable en entier).
+ *   nouvelle se fond par-dessus l'ancienne. Quatre types : « default »
+ *   (le texte de l'accueil reste), « custom » (texte propre, centré),
+ *   « split » (bannière promo : texte et deux vrais boutons à gauche sur
+ *   un fond de la marque, photo à droite) et « image » (visuel seul,
+ *   cliquable en entier).
  *
  * Le dernier état reçu est gardé en localStorage : au retour, le carrousel
  * est posé avant le premier rendu, sans flash de l'image fixe. Les noms de
@@ -25,6 +27,10 @@
   var FADE_MS = 1200;
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var SUPA_MEDIA = /^https?:\/\/[a-z0-9]+\.supabase\.co\/storage\/v1\/object\/public\/svenska-media\//i;
+  var THEMES = ['moss', 'ink', 'sand'];
+  // Même requête que la mise en page empilée du CSS (index.html) : téléphone et
+  // tablette en portrait reçoivent l'image prévue pour la hauteur.
+  var STACKED = '(max-width: 767px), (orientation: portrait) and (max-width: 1024px)';
 
   var L10N = {
     fr: { region: 'À la une', carousel: 'carrousel', slide: 'diapositive', of: '{n} sur {t}', goTo: 'Afficher la diapositive {n}', pause: 'Mettre le défilement en pause', play: 'Relancer le défilement', cta: 'Découvrir' },
@@ -78,22 +84,24 @@
     if (controls) controls.remove();
     track = controls = pauseBtn = null;
     els = []; dots = []; slides = [];
-    hero.classList.remove('hero--carousel', 'hero--own', 'hero--manual', 'is-paused', 'is-held');
+    hero.classList.remove('hero--carousel', 'hero--own', 'hero--light', 'hero--manual', 'is-paused', 'is-held');
     hero.removeAttribute('aria-roledescription');
     hero.removeAttribute('aria-label');
   }
 
   function buildSlide(s, i) {
-    var link = safeLink(s.link_url);
+    var link = safeLink(s.link_url), link2 = safeLink(s.link2_url);
+    var split = s.kind === 'split';
     var root = document.createElement('div');
     root.className = 'hero-slide hero-slide--' + (s.kind || 'default');
+    if (split) root.classList.add('hero-theme--' + (THEMES.indexOf(s.theme) >= 0 ? s.theme : 'moss'));
     root.setAttribute('role', 'group');
     root.setAttribute('aria-roledescription', L10N[lang()].slide);
 
     var pic = document.createElement('picture');
     if (s.image_mobile_url) {
       var src = document.createElement('source');
-      src.media = '(max-width: 767px)';
+      src.media = STACKED;
       src.srcset = mediaUrl(s.image_mobile_url);
       pic.appendChild(src);
     }
@@ -105,21 +113,34 @@
     root.appendChild(pic);
 
     var el = { root: root, img: img };
-    if (s.kind !== 'image') {
+    if (s.kind !== 'image' && !split) {
       var veil = document.createElement('div');
       veil.className = 'hero-overlay';
       root.appendChild(veil);
     }
-    if (s.kind === 'custom') {
+    // Bannière promo : le fond de la marque se fond dans la photo, à gauche (en bas sur téléphone).
+    if (split) {
+      var panel = document.createElement('div');
+      panel.className = 'hero-split-panel';
+      root.appendChild(panel);
+    }
+    if (s.kind === 'custom' || split) {
       var copy = document.createElement('div');
       copy.className = 'hero-slide-copy';
-      copy.innerHTML = '<p class="hero-slide-eyebrow"></p><h2 class="hero-slide-title"></h2><p class="hero-slide-sub"></p>'
-        + (link ? '<div class="hero-ctas"><a class="btn-primary"></a></div>' : '');
+      var ctas = (link ? '<a class="' + (split ? 'hero-btn-solid' : 'btn-primary') + '" data-cta="1"></a>' : '')
+        + (link2 ? '<a class="' + (split ? 'hero-btn-link' : 'btn-secondary') + '" data-cta="2"></a>' : '');
+      copy.innerHTML = '<p class="hero-slide-eyebrow"></p><h2 class="hero-slide-title"></h2>'
+        + (split ? '<p class="hero-split-tagline"></p><span class="hero-split-rule" aria-hidden="true"></span>' : '')
+        + '<p class="hero-slide-sub"></p>'
+        + (ctas ? '<div class="hero-ctas">' + ctas + '</div>' : '');
       el.eyebrow = copy.querySelector('.hero-slide-eyebrow');
       el.title = copy.querySelector('.hero-slide-title');
+      el.tagline = copy.querySelector('.hero-split-tagline');
       el.sub = copy.querySelector('.hero-slide-sub');
-      el.cta = copy.querySelector('.btn-primary');
+      el.cta = copy.querySelector('[data-cta="1"]');
+      el.cta2 = copy.querySelector('[data-cta="2"]');
       if (el.cta) el.cta.href = link;
+      if (el.cta2) el.cta2.href = link2;
       root.appendChild(copy);
     }
     if (s.kind === 'image' && link) {
@@ -144,7 +165,10 @@
         el.eyebrow.textContent = eb; el.eyebrow.hidden = !eb;
         el.title.innerHTML = rich(txt(s, 'title'));
         el.sub.textContent = sub; el.sub.hidden = !sub;
+        if (el.tagline) { var tg = txt(s, 'tagline'); el.tagline.textContent = tg; el.tagline.hidden = !tg; }
         if (el.cta) el.cta.textContent = txt(s, 'cta_label') || l.cta;
+        // Second bouton : sans texte, on ne l'affiche pas (pas de libellé inventé).
+        if (el.cta2) { var c2 = txt(s, 'cta2_label'); el.cta2.textContent = c2; el.cta2.hidden = !c2; }
       }
       if (el.link) el.link.setAttribute('aria-label', txt(s, 'alt') || l.cta);
     });
@@ -262,6 +286,8 @@
     }, FADE_MS);
 
     hero.classList.toggle('hero--own', slides[n].kind !== 'default');
+    // Fond sable : les traits de progression passent en foncé pour rester lisibles.
+    hero.classList.toggle('hero--light', slides[n].kind === 'split' && slides[n].theme === 'sand');
     dots.forEach(function (d, i) {
       d.classList.toggle('is-active', i === n);
       if (i === n) d.setAttribute('aria-current', 'true'); else d.removeAttribute('aria-current');

@@ -190,6 +190,102 @@
 
 .hero-slide-link { position: absolute; inset: 0; z-index: 1; }
 .hero-slide-link:focus-visible { outline: 2px solid #fff; outline-offset: -8px; }
+.hero-slide.is-active .hero-slide-copy > :nth-child(5) { transition-delay: 0.75s; }
+.hero-slide.is-active .hero-slide-copy > :nth-child(6) { transition-delay: 0.85s; }
+
+/* ── Bannière promo (type « split ») ──
+   Texte et vrais boutons à gauche sur un fond de la marque qui se fond
+   dans la photo (sans texte) à droite. Les couleurs dérivent des
+   variables du back-office : un changement de marque suit tout seul. */
+.hero-slide--split {
+  --split-bg: color-mix(in srgb, var(--lingon) 55%, var(--midnight));
+  --split-fg: var(--warm-white);
+  --split-accent: var(--hero-accent);
+  background: var(--split-bg);
+}
+.hero-slide--split.hero-theme--ink { --split-bg: var(--midnight); }
+.hero-slide--split.hero-theme--sand { --split-bg: var(--cream); --split-fg: var(--midnight); --split-accent: var(--lingon); }
+/* La taille se pose sur <picture> seul : l'image remplit son cadre. */
+.hero-slide--split picture { left: auto; right: 0; width: 64%; }
+.hero-slide--split img { object-position: center; }
+.hero-split-panel {
+  position: absolute; top: 0; bottom: 0; left: 0; width: 54%; z-index: 1;
+  background: linear-gradient(90deg, var(--split-bg) 0%, var(--split-bg) 62%, transparent 100%);
+}
+.hero-slide--split .hero-slide-copy {
+  z-index: 2;
+  align-items: flex-start; text-align: left;
+  padding: 0 0 0 max(40px, calc((100% - 1280px) / 2 + 40px));
+  color: var(--split-fg);
+}
+.hero-slide--split .hero-slide-copy > * { max-width: min(560px, 42vw); }
+.hero-slide--split .hero-slide-eyebrow {
+  justify-content: flex-start; letter-spacing: 4px; margin-bottom: 22px;
+  color: color-mix(in srgb, var(--split-fg) 86%, transparent);
+}
+.hero-slide--split .hero-slide-eyebrow::before, .hero-slide--split .hero-slide-eyebrow::after { display: none; }
+.hero-slide--split .hero-slide-title { color: var(--split-fg); text-shadow: none; margin-bottom: 14px; }
+.hero-slide--split .hero-slide-title em { color: var(--split-accent); }
+.hero-split-tagline {
+  font-family: var(--font-display); font-style: italic; font-weight: 300;
+  font-size: clamp(24px, 2.5vw, 36px); line-height: 1.2;
+  color: color-mix(in srgb, var(--split-fg) 90%, transparent);
+  margin-bottom: 30px;
+}
+.hero-split-rule {
+  display: block; width: 72px; height: 1px; margin-bottom: 30px;
+  background: color-mix(in srgb, var(--split-fg) 40%, transparent);
+}
+.hero-slide--split .hero-slide-sub {
+  font-family: var(--font-ui); font-size: 16px; line-height: 1.65;
+  color: color-mix(in srgb, var(--split-fg) 90%, transparent);
+  text-shadow: none; margin: 0 0 40px; max-width: min(460px, 40vw);
+}
+.hero-slide--split .hero-ctas { justify-content: flex-start; align-items: center; gap: 18px 36px; }
+.hero-btn-solid, .hero-btn-link {
+  display: inline-block;
+  font-family: var(--font-ui); font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+  text-decoration: none;
+}
+.hero-btn-solid {
+  padding: 18px 40px; border-radius: 1px;
+  background: var(--split-fg); color: var(--split-bg);
+  transition: background 0.2s;
+}
+.hero-btn-solid:hover { background: color-mix(in srgb, var(--split-fg) 86%, var(--split-bg)); }
+.hero-theme--sand .hero-btn-solid { background: var(--lingon); color: var(--snow); }
+.hero-theme--sand .hero-btn-solid:hover { background: var(--lingon-mid); }
+.hero-btn-link {
+  padding: 6px 0; color: var(--split-fg);
+  border-bottom: 1px solid currentColor;
+  transition: border-color 0.2s;
+}
+.hero-btn-link:hover { border-bottom-color: transparent; }
+.hero-btn-solid:focus-visible, .hero-btn-link:focus-visible { outline: 2px solid var(--split-fg); outline-offset: 4px; }
+/* Fond sable : traits de progression en foncé. */
+.hero--light .hero-controls { filter: none; }
+.hero--light .hero-dot-bar { background: color-mix(in srgb, var(--midnight) 22%, transparent); }
+.hero--light .hero-dot-fill { background: var(--midnight); }
+.hero--light .hero-pause, .hero--light .hero-pause:hover { color: var(--midnight); }
+
+/* Téléphone et tablette en portrait : la photo prend la place laissée au-dessus
+   du texte (jamais de texte posé sur la photo), un fondu fait la jonction. */
+@media (max-width: 767px), (orientation: portrait) and (max-width: 1024px) {
+  .hero-slide--split { display: flex; flex-direction: column; }
+  .hero-slide--split picture { position: relative; inset: auto; width: 100%; height: auto; flex: 1 1 auto; min-height: 26%; }
+  .hero-slide--split picture::after {
+    content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 32%;
+    background: linear-gradient(0deg, var(--split-bg), transparent);
+  }
+  .hero-split-panel { display: none; }
+  /* 96 px en bas : les traits de progression (44 px, à 28 px du bord) + de l'air. */
+  .hero-slide--split .hero-slide-copy { position: relative; inset: auto; flex: none; justify-content: flex-start; padding: 8px 24px 96px; }
+  .hero-slide--split .hero-slide-copy > *, .hero-slide--split .hero-slide-sub { max-width: 100%; }
+  .hero-slide--split .hero-slide-eyebrow { letter-spacing: 2.5px; margin-bottom: 16px; }
+  .hero-slide--split .hero-slide-sub { font-size: 15px; margin-bottom: 28px; }
+  .hero-split-tagline, .hero-split-rule { margin-bottom: 18px; }
+  .hero-slide--split .hero-ctas { gap: 14px 28px; }
+}
 
 /* Texte de l'accueil : s'efface quand la diapositive porte le sien. */
 .hero-content { transition: opacity 0.6s ease, transform 0.6s ease, visibility 0s; }
@@ -514,10 +610,9 @@
   .rit-list { grid-template-columns: 1fr; gap: 48px; }
   .rit-media { aspect-ratio: 16 / 10; }
 }
-@media(max-width: 767px) {
-  /* Sur téléphone, les traits prennent la place du « Découvrir » centré. */
-  .hero--carousel .hero-scroll { display: none; }
-}
+/* Carrousel : les traits de progression prennent la place du « Découvrir »
+   centré (le hero tient dans l'écran, les deux se chevaucheraient). */
+.hero--carousel .hero-scroll { display: none; }
 @media(max-width: 600px) {
   .hero h1, .hero-slide-title { font-size: 46px; letter-spacing: -1px; }
   .hero-slide-copy { padding: 0 24px; }
@@ -581,7 +676,7 @@
 <script>(function(){try{var sf=JSON.parse(sessionStorage.getItem('sd_full_v1'));if(sf&&sf.cms){var sc=sf.cms;var himg=document.querySelector('.hero-media img');if(himg&&sc.hero_image&&sc.hero_image.value_fr)himg.src=sc.hero_image.value_fr;var eimg=document.querySelector('.ei-image img');if(eimg&&sc.editorial_image&&sc.editorial_image.value_fr)eimg.src=sc.editorial_image.value_fr;var fimg=document.querySelector('.feat-band-img img');if(fimg&&sc.feature_image&&sc.feature_image.value_fr)fimg.src=sc.feature_image.value_fr;var aimg=document.querySelector('.about-split-img img');if(aimg&&sc.about_image&&sc.about_image.value_fr)aimg.src=sc.about_image.value_fr;}}catch(e){}try{var c=JSON.parse(localStorage.getItem('sd_cms_v1'));if(!c)return;var lg=localStorage.getItem('sd_lang')||'fr';var lk=lg==='sv'?'value_sv':lg==='en'?'value_en':'value_fr';var h=document.querySelector('.hero h1');if(h&&c.hero_title&&c.hero_title[lk])h.innerHTML=c.hero_title[lk];var s=document.querySelector('.hero-sub');if(s&&c.hero_subtitle&&c.hero_subtitle[lk])s.textContent=c.hero_subtitle[lk];var ey=document.querySelector('.hero-eyebrow');if(ey&&c.hero_eyebrow&&c.hero_eyebrow[lk])ey.textContent=c.hero_eyebrow[lk];var eb1=document.getElementById('ei-body1');if(eb1&&c.editorial_body1&&c.editorial_body1[lk])eb1.textContent=c.editorial_body1[lk];var eb2=document.getElementById('ei-body2');if(eb2&&c.editorial_body2&&c.editorial_body2[lk])eb2.textContent=c.editorial_body2[lk];var ab1=document.getElementById('about-body1');if(ab1&&c.about_body1&&c.about_body1[lk])ab1.textContent=c.about_body1[lk];var aq=document.getElementById('about-quote-text');if(aq&&c.about_quote&&c.about_quote[lk])aq.textContent=c.about_quote[lk];var ab2=document.getElementById('about-body2');if(ab2&&c.about_body2&&c.about_body2[lk])ab2.textContent=c.about_body2[lk];}catch(e){}}());</script>
 <!-- Image fixe ou carrousel (back-office → Bannière d'accueil). Chargé ici, avant
      la suite de la page, pour poser le carrousel mémorisé dès le premier rendu. -->
-<script src="js/hero-carousel.js?v=1"></script>
+<script src="js/hero-carousel.js?v=2"></script>
 
 <!-- ═══ TICKER ═══ -->
 <!-- Les textes de livraison sont recalculés depuis les réglages du back-office
