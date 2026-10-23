@@ -5,6 +5,10 @@ window._SD_STATIC=PRODUCTS.slice();
 var CATS=[{id:'Épices',emoji:'🌶️'},{id:'Flocons & Céréales',emoji:'🌾'},{id:'Baies séchées',emoji:'🫐'},{id:'Sucres & Sirops',emoji:'🍯'},{id:'Thés & Tisanes',emoji:'🫖'},{id:'Farines & Graines',emoji:'🌻'},{id:'Mélanges',emoji:'🎄'},{id:'Chips & Snacks',emoji:'🍟'},{id:'Basics suédois',emoji:'🇸🇪'},{id:'Confiseries',emoji:'🍬'},{id:'Fika & Boulangerie',emoji:'🧁'},{id:'Art de la table',emoji:'🍽️'},{id:'Maison & Déco',emoji:'🕯️'}];
 const CAT_LABELS={'Épices':{sv:'Épices & Aromates',fr:'Épices & Aromates',en:'Spices & Herbs'},'Flocons & Céréales':{sv:'Flocons & Céréales',fr:'Flocons & Céréales',en:'Oats & Cereals'},'Baies séchées':{sv:'Baies séchées',fr:'Baies séchées',en:'Dried berries'},'Sucres & Sirops':{sv:'Sucres & Sirops',fr:'Sucres & Sirops',en:'Sugars & Syrups'},'Thés & Tisanes':{sv:'Thés & Tisanes',fr:'Thés & Tisanes',en:'Teas & Infusions'},'Farines & Graines':{sv:'Farines & Graines',fr:'Farines & Graines',en:'Flours & Seeds'},'Mélanges':{sv:'Blandningar',fr:'Mélanges suédois',en:'Swedish blends'},'Chips & Snacks':{sv:'Chips & Snacks',fr:'Chips & Snacks',en:'Chips & Snacks'},'Basics suédois':{sv:'Svenska baser',fr:'Basics suédois',en:'Swedish basics'},'Confiseries':{sv:'Konfektyr',fr:'Confiseries',en:'Confectionery'},'Fika & Boulangerie':{sv:'Fika & Bakning',fr:'Fika & Boulangerie',en:'Fika & Baking'},'Art de la table':{sv:'Dukning',fr:'Art de la table',en:'Tableware'},'Maison & Déco':{sv:'Hem & Inredning',fr:'Maison & Déco',en:'Home & Decor'}};
 const UI={sv:{addedCart:'Tillagd i korgen!',emptyCart:'Din korg är tom',subtotal:'Delsumma',checkout:'Beställ →',keepShopping:'Fortsätt handla',freeShip:'Fri frakt från 29€',searchPlaceholder:'Sök en krydda, ett produkt...',noResults:'Inga resultat',cartTitle:'Din korg',products:'produkter',product:'produkt',filterAll:'Alla',sortDefault:'Standard',sortPriceAsc:'Pris stigande',sortPriceDesc:'Pris fallande',sortName:'Namn A→Ö',subscribe:'Tack!'},fr:{addedCart:'Ajouté au panier !',emptyCart:'Votre panier est vide',subtotal:'Sous-total',checkout:'Commander →',keepShopping:'Continuer mes achats',freeShip:'Livraison offerte dès 29€',searchPlaceholder:'Rechercher une épice, un produit...',noResults:'Aucun résultat',cartTitle:'Votre panier',products:'produits',product:'produit',filterAll:'Tous',sortDefault:'Par défaut',sortPriceAsc:'Prix croissant',sortPriceDesc:'Prix décroissant',sortName:'Nom A→Z',subscribe:'Merci !'},en:{addedCart:'Added to cart!',emptyCart:'Your cart is empty',subtotal:'Subtotal',checkout:'Checkout →',keepShopping:'Continue shopping',freeShip:'Free delivery from €29',searchPlaceholder:'Search for a spice, product...',noResults:'No results',cartTitle:'Your cart',products:'products',product:'product',filterAll:'All',sortDefault:'Default',sortPriceAsc:'Price: low to high',sortPriceDesc:'Price: high to low',sortName:'Name A→Z',subscribe:'Thanks!'}};
+/* « Livraison offerte dès … » : calculé depuis les réglages (SD_SHIP), jamais écrit en dur */
+['fr','en','sv'].forEach(function(l){Object.defineProperty(UI[l],'freeShip',{configurable:true,enumerable:true,get:function(){return sdFreeShipText(l);}});});
+/* Petit traducteur des textes d'interface : _sdT('fr','en','sv') */
+function _sdT(fr,en,sv){return LANG==='en'?en:LANG==='sv'?sv:fr;}
 
 /* Lien de parrainage : /?parrain=CODE, sur n'importe quelle page. Le code
    ami est gardé 30 jours et proposé au panier ; c'est le serveur qui
@@ -68,7 +72,7 @@ window.SD_SHIP=(function(){
     }
   };
 })();
-window.SD_WL=(function(){var _w={};var _ok=false;try{var _r=localStorage.getItem('sd_wl_v1');if(_r){_w=JSON.parse(_r)||{};_ok=!!_w.site_name;}}catch(e){}var n=_w.site_name||'';return{brand_name:n,brand_tagline:_w.site_slogan||'',contact_email:_w.email||'',instagram:_w.instagram||'',facebook:_w.facebook||'',pinterest:_w.pinterest||'',free_shipping_threshold:_w.free_shipping_threshold||29,announcement:{sv:_w.announcement_sv||'',fr:_w.announcement_fr||'',en:_w.announcement_en||''},footer_desc:{sv:_w.footer_desc_sv||'',fr:_w.footer_desc_fr||'',en:_w.footer_desc_en||''},footer_tagline:{sv:_w.footer_tagline_sv||'',fr:_w.footer_tagline_fr||'',en:_w.footer_tagline_en||''},copyright:{sv:'© 2026 '+n+' · Alla rättigheter förbehållna',fr:'© 2026 '+n+' · Tous droits réservés',en:'© 2026 '+n+' · All rights reserved'},_ready:_ok};})();
+window.SD_WL=(function(){var _w={};var _ok=false;try{var _r=localStorage.getItem('sd_wl_v1');if(_r){_w=JSON.parse(_r)||{};_ok=!!_w.site_name;}}catch(e){}var n=_w.site_name||'';return{brand_name:n,brand_tagline:_w.site_slogan||'',contact_email:_w.email||'',instagram:_w.instagram||'',facebook:_w.facebook||'',pinterest:_w.pinterest||'',free_shipping_threshold:_w.free_shipping_threshold||SD_SHIP.threshold(false),announcement:{sv:_w.announcement_sv||'',fr:_w.announcement_fr||'',en:_w.announcement_en||''},footer_desc:{sv:_w.footer_desc_sv||'',fr:_w.footer_desc_fr||'',en:_w.footer_desc_en||''},footer_tagline:{sv:_w.footer_tagline_sv||'',fr:_w.footer_tagline_fr||'',en:_w.footer_tagline_en||''},copyright:{sv:'© 2026 '+n+' · Alla rättigheter förbehållna',fr:'© 2026 '+n+' · Tous droits réservés',en:'© 2026 '+n+' · All rights reserved'},_ready:_ok};})();
 let _favorites=(function(){try{return JSON.parse(localStorage.getItem('sd_favorites')||'[]');}catch(e){return[];}})();
 function saveFavorites(){try{localStorage.setItem('sd_favorites',JSON.stringify(_favorites));}catch(e){}}
 function toggleFavorite(id){const sid=String(id);const idx=_favorites.indexOf(sid);if(idx===-1){_favorites.push(sid);}else{_favorites.splice(idx,1);}saveFavorites();document.querySelectorAll('[data-fav-id="'+sid+'"]').forEach(el=>{el.classList.toggle('liked',_favorites.includes(sid));el.setAttribute('aria-pressed',_favorites.includes(sid));});}
@@ -78,7 +82,7 @@ function toggleFavorite(id){const sid=String(id);const idx=_favorites.indexOf(si
 function _sdLSGet(k,fb){try{var v=localStorage.getItem(k);if(v==null)return fb;var o=JSON.parse(v);return(o&&typeof o==='object')?o:fb;}catch(e){return fb;}}
 function _sdCartProducts(){return _sdLSGet('sd_cart_products',{});}
 let cart=(function(){var _c=_sdLSGet('sd_cart',{});var _dirty=false;Object.keys(_c).forEach(function(k){if(!k||k==='NaN'||k==='undefined'||k==='null'){delete _c[k];_dirty=true;}});if(_dirty)try{localStorage.setItem('sd_cart',JSON.stringify(_c));}catch(e){}return _c;})();
-let LANG=(function(){try{return localStorage.getItem('sd_lang')||'fr';}catch(e){return 'fr';}})();
+let LANG=(function(){try{var l=localStorage.getItem('sd_lang');return(l==='sv'||l==='en'||l==='fr')?l:'fr';}catch(e){return 'fr';}})();
 var _sekRate=(function(){try{var r=parseFloat(sessionStorage.getItem('_sekRate'));return r>0?r:0;}catch(e){return 0;}})();
 /* Prix : « 6,19 € » en français, « €6.19 » en anglais, couronnes en suédois
    dès que le taux est connu. */
@@ -133,7 +137,7 @@ function sdThumb(u,w){u=String(u||'');return u.indexOf('/media/')===0?'/media-w/
 function sdThumbSet(u){return u&&String(u).indexOf('/media/')===0?sdThumb(u,300)+' 300w, '+sdThumb(u,600)+' 600w':'';}
 function sdBoldAllergens(t){return _sdAttr(t).replace(SD_ALLERGENS,function(m,pre,word,off,str){if(/^butter$/i.test(word)&&/(cocoa|cacao)\s*$/i.test(str.slice(Math.max(0,off-7),off+pre.length)))return m;return pre+'<strong>'+word+'</strong>';});}
 function _doSekRefresh(){try{window.dispatchEvent(new Event('sd:currency'));}catch(e){}renderCartDrawer();if(typeof renderCart==='function')renderCart();document.querySelectorAll('.prod-price,.prod-price-old').forEach(_sdToSek);['pdp-price','pdp-price-old','sticky-atc-price-old','sticky-atc-price'].forEach(function(id){_sdToSek(document.getElementById(id));});}
-function loadSekRate(){if(_sekRate>0){if(LANG==='sv')_doSekRefresh();return;}fetch('https://api.frankfurter.app/latest?from=EUR&to=SEK').then(function(r){return r.json();}).then(function(d){var rate=d&&d.rates&&d.rates.SEK;if(rate>0){_sekRate=rate;try{sessionStorage.setItem('_sekRate',String(rate));}catch(e){}if(LANG==='sv')_doSekRefresh();}}).catch(function(){});}
+function loadSekRate(){if(_sekRate>0){if(LANG==='sv')_doSekRefresh();return;}/* api.frankfurter.app redirige (301) vers .dev sans en-tête CORS : le navigateur refusait, les prix suédois restaient en euros */fetch('https://api.frankfurter.dev/v1/latest?base=EUR&symbols=SEK').then(function(r){return r.json();}).then(function(d){var rate=d&&d.rates&&d.rates.SEK;if(rate>0){_sekRate=rate;try{sessionStorage.setItem('_sekRate',String(rate));}catch(e){}if(LANG==='sv')_doSekRefresh();}}).catch(function(){});}
 function saveCart(){try{localStorage.setItem('sd_cart',JSON.stringify(cart));}catch(e){}}
 /* Panier synchronisé entre onglets. La page de confirmation vide le panier
    après paiement, mais seulement dans SON onglet : un autre onglet ouvert
@@ -154,10 +158,18 @@ function saveLang(l){try{localStorage.setItem('sd_lang',l);}catch(e){}}
 // ─── Tracking publicitaire : Meta Pixel + e-commerce GA4 (pour lancer des pubs mesurées) ───
 // POUR ACTIVER META : coller l'ID du Pixel Meta ci-dessous (ex. '1234567890123456'). Vide = inactif.
 window.SD_META_PIXEL_ID = window.SD_META_PIXEL_ID || '';
+/* Rien ne part vers Meta avant « Accepter » sur la bannière cookies
+   (sd-consent.js, CNIL) : le pixel se charge au consentement, et un refus
+   ultérieur le révoque. Si le pixel est activé, citer Meta dans le texte de
+   la bannière et dans la politique de confidentialité. */
 (function(){
-  if(!window.SD_META_PIXEL_ID || window.fbq) return;
-  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
-  fbq('init', window.SD_META_PIXEL_ID); fbq('track','PageView');
+  function load(){
+    if(!window.SD_META_PIXEL_ID || window.fbq) return;
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', window.SD_META_PIXEL_ID); fbq('track','PageView');
+  }
+  if(typeof window.sdConsent==='function' && window.sdConsent()==='granted') load();
+  window.addEventListener('sd:consent',function(e){ if(e.detail==='granted') load(); else if(window.fbq){ try{ fbq('consent','revoke'); }catch(x){} } });
 })();
 /* Événements e-commerce GA4 (importés dans Google Ads). item_id = UUID produit = g:id du flux Merchant : c'est ce qui relie une conversion au produit Shopping cliqué et alimente le remarketing dynamique. Ne pas changer l'un sans l'autre. */
 function _sdGaPrice(p){var b=(p&&p.price)||0;return window.SDPrice?SDPrice.effective(b,p):b;}
@@ -229,52 +241,126 @@ function sdMessageRevalidation(changes){
 function sdAfficherRecalage(changes){
   if(!changes||!changes.length)return;
   var root=document.getElementById('cart-page-root');if(!root||!root.parentNode)return;
-  var esc=function(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');};
   var T={
-    tete:{fr:'Votre panier a été ajusté au stock disponible :',en:'Your cart was adjusted to the stock available:',sv:'Din varukorg har anpassats efter lagret:'},
+    tete:{fr:'Votre panier a été ajusté au stock disponible :',en:'Your cart was adjusted to the stock available:',sv:'Din varukorg har anpassats efter lagret:'},
     pied:{fr:'Vos commandes déjà passées ne sont pas concernées.',en:'Orders you have already placed are not affected.',sv:'Beställningar du redan har gjort påverkas inte.'},
     fermer:{fr:'Fermer',en:'Close',sv:'Stäng'}
   };
   var t=function(o){return o[LANG]||o.fr;};
   var n=document.getElementById('sd-recalage');
-  if(!n){n=document.createElement('div');n.id='sd-recalage';n.setAttribute('role','status');root.parentNode.insertBefore(n,root);}
-  n.style.cssText='position:relative;margin:0 0 20px;padding:14px 44px 14px 18px;background:#FBF1E4;border:1px solid #E8D2B0;border-radius:6px;font-family:var(--font-body,Georgia),serif;font-size:15px;line-height:1.5;color:#5B4A35;';
-  n.innerHTML='<strong style="font-weight:600;">'+t(T.tete)+'</strong>'
-    +'<ul style="margin:6px 0 6px 18px;padding:0;">'+changes.map(function(c){return '<li>'+esc(sdLigneRecalage(c))+'</li>';}).join('')+'</ul>'
-    +'<span style="font-size:13.5px;color:#7A6A55;">'+t(T.pied)+'</span>'
-    +'<button type="button" aria-label="'+t(T.fermer)+'" style="position:absolute;top:8px;right:10px;background:none;border:none;font-size:20px;line-height:1;color:#9A8F7F;cursor:pointer;">&times;</button>';
+  if(!n){n=document.createElement('div');n.id='sd-recalage';n.className='sd-recalage';n.setAttribute('role','status');root.parentNode.insertBefore(n,root);}
+  n.innerHTML='<strong>'+t(T.tete)+'</strong>'
+    +'<ul>'+changes.map(function(c){return '<li>'+_sdAttr(sdLigneRecalage(c))+'</li>';}).join('')+'</ul>'
+    +'<span class="sd-recalage-foot">'+t(T.pied)+'</span>'
+    +'<button type="button" class="sd-recalage-x" aria-label="'+t(T.fermer)+'">'+_sdIcons.close+'</button>';
   n.querySelector('button').onclick=function(){n.remove();};
 }
 function _sdCartQtyForProduct(cid){let n=0;Object.keys(cart).forEach(function(k){var ri=k.indexOf('_');var base=ri===-1?k:k.slice(0,ri);if(base===String(cid))n+=cart[k]||0;});return n;}
 function _sdStockMsg(kind,n){if(kind==='out')return LANG==='en'?'Out of stock':LANG==='sv'?'Slut i lager':'Produit épuisé';if(kind==='max')return LANG==='en'?'Maximum available quantity reached':LANG==='sv'?'Max antal i lager nått':'Quantité maximale en stock atteinte';return LANG==='en'?('Only '+n+' left in stock'):LANG==='sv'?(n+' kvar i lager'):('Il ne reste que '+n+' en stock');}
-function addToCart(id,qty=1,variant=null){if(id===undefined||id===null||String(id)==='NaN'||String(id)==='undefined')return;const p=_sdFindProd(id);const cid=(p&&p.uuid)?p.uuid:id;const key=variant?`${cid}_${variant}`:`${cid}`;const stock=_sdStock(p);if(stock<=0){showToast(_sdStockMsg('out'));return;}const already=_sdCartQtyForProduct(cid);let add=qty;if(stock!==Infinity)add=Math.min(qty,Math.max(0,stock-already));if(add<=0){showToast(_sdStockMsg('max'));openCart();return;}cart[key]=(cart[key]||0)+add;saveCart();updateCartBadge();if(p){try{const cp=_sdCartProducts();cp[String(cid)]={name:p.name,photo:p.photo,price:p.price,weight:p.weight,variants:p.variants||[],pickup_only:!!p.pickup_only,discountType:p.discountType||null,discountValue:p.discountValue!=null?p.discountValue:null,discountStart:p.discountStart||null,discountEnd:p.discountEnd||null};localStorage.setItem('sd_cart_products',JSON.stringify(cp));}catch(e){}}if(stock!==Infinity&&add<qty){showToast(_sdStockMsg('only',stock));}else if(p){const name=p.name[LANG];showToast(name.substring(0,28)+(name.length>28?'…':'')+' — '+UI[LANG].addedCart);}sdTrackAddToCart(p,add);openCart();}
-function openSnipcartCheckout(){closeCart();const here=window.location.pathname;if(!here.includes('panier')){window.location.href='panier.html';}}
+/* Ajout au panier. Le tiroir s'ouvre et confirme lui-même l'ajout (bandeau
+   en tête du tiroir, lu par les lecteurs d'écran) : le toast ne recouvre
+   plus le bouton « Commander » sur mobile. */
+function addToCart(id,qty=1,variant=null){if(id===undefined||id===null||String(id)==='NaN'||String(id)==='undefined')return;const p=_sdFindProd(id);const cid=(p&&p.uuid)?p.uuid:id;const key=variant?`${cid}_${variant}`:`${cid}`;const stock=_sdStock(p);if(stock<=0){showToast(_sdStockMsg('out'));return;}const already=_sdCartQtyForProduct(cid);let add=qty;if(stock!==Infinity)add=Math.min(qty,Math.max(0,stock-already));if(add<=0){openCart();showToast(_sdStockMsg('max'));return;}cart[key]=(cart[key]||0)+add;saveCart();updateCartBadge();if(p){try{const cp=_sdCartProducts();cp[String(cid)]={name:p.name,photo:p.photo,price:p.price,weight:p.weight,variants:p.variants||[],pickup_only:!!p.pickup_only,discountType:p.discountType||null,discountValue:p.discountValue!=null?p.discountValue:null,discountStart:p.discountStart||null,discountEnd:p.discountEnd||null};localStorage.setItem('sd_cart_products',JSON.stringify(cp));}catch(e){}}sdTrackAddToCart(p,add);openCart();if(stock!==Infinity&&add<qty){showToast(_sdStockMsg('only',stock));}else if(p){const name=(p.name&&(p.name[LANG]||p.name.fr))||'';showToast(_sdT('Ajouté au panier : ','Added to cart: ','Tillagd i korgen: ')+name);}}
+function openSnipcartCheckout(){closeCart(false);if(!/\/panier(\.html)?$/.test(window.location.pathname))window.location.href='/panier';}
 function _snipAdd(){}
 function changeQty(key,delta){var ri=key.indexOf('_');var cid=ri===-1?key:key.slice(0,ri);var p=_sdFindProd(cid);var stock=_sdStock(p);var target=(cart[key]||0)+delta;if(target>0&&stock!==Infinity){var others=_sdCartQtyForProduct(cid)-(cart[key]||0);var maxThis=stock-others;if(target>maxThis){target=Math.max(0,maxThis);showToast(_sdStockMsg('only',stock));}}if(target<=0)delete cart[key];else cart[key]=target;saveCart();updateCartBadge();renderCartDrawer();}
 function removeItem(key){delete cart[key];saveCart();updateCartBadge();renderCartDrawer();}
-function updateCartBadge(){const total=Object.values(cart).reduce((a,b)=>a+b,0);document.querySelectorAll('.cart-badge').forEach(el=>el.textContent=total);}
-function cartTotal(){return Object.entries(cart).filter(([,q])=>q>0).reduce((sum,[key,qty])=>{const _ti=key.indexOf('_');const idStr=_ti===-1?key:key.slice(0,_ti);const variant=_ti===-1?undefined:key.slice(_ti+1);const _cpt=_sdCartProducts();const p=PRODUCTS.find(x=>String(x.uuid||x.id)===idStr||(/^d+$/.test(idStr)&&x.id===parseInt(idStr)))||_cpt[idStr]||(window._SD_STATIC||[]).find(x=>String(x.id)===idStr);if(!p)return sum;const v=variant?p.variants?.find(x=>x.label===variant):p.variants?.[0];const _base=v?v.price:p.price;const _eff=window.SDPrice?SDPrice.effective(_base,p):_base;return sum+_eff*qty;},0);}
+/* Pastille du panier : masquée à zéro ; le bouton annonce le nombre d'articles */
+function updateCartBadge(){const total=_sdCartCount();document.querySelectorAll('.cart-badge').forEach(el=>{el.textContent=total>0?String(total):'';el.hidden=!(total>0);});const base=_sdT('Panier','Cart','Varukorg');const unit=total>1?_sdT('articles','items','varor'):_sdT('article','item','vara');document.querySelectorAll('.btn-cart').forEach(b=>b.setAttribute('aria-label',total>0?base+', '+total+' '+unit:base));}
+function cartTotal(){return Object.entries(cart).filter(([,q])=>q>0).reduce((sum,[key,qty])=>{const _ti=key.indexOf('_');const idStr=_ti===-1?key:key.slice(0,_ti);const variant=_ti===-1?undefined:key.slice(_ti+1);const _cpt=_sdCartProducts();const p=PRODUCTS.find(x=>String(x.uuid||x.id)===idStr||(/^\d+$/.test(idStr)&&x.id===parseInt(idStr,10)))||_cpt[idStr]||(window._SD_STATIC||[]).find(x=>String(x.id)===idStr);if(!p)return sum;const v=variant?p.variants?.find(x=>x.label===variant):p.variants?.[0];const _base=v?v.price:p.price;const _eff=window.SDPrice?SDPrice.effective(_base,p):_base;return sum+_eff*qty;},0);}
 
-function renderCartDrawer(){const list=document.getElementById('drawer-items-list');const foot=document.getElementById('drawer-footer');if(!list)return;const entries=Object.entries(cart).filter(([,q])=>q>0);if(entries.length===0){list.innerHTML=`<div class="cart-empty-msg">${UI[LANG].emptyCart}</div>`;if(foot)foot.style.display='none';return;}if(foot)foot.style.display='block';let total=0;list.innerHTML=entries.map(([key,qty])=>{const _ri=key.indexOf('_');const idStr=_ri===-1?key:key.slice(0,_ri);const variant=_ri===-1?undefined:key.slice(_ri+1);const _cpd=_sdCartProducts();const p=PRODUCTS.find(x=>String(x.uuid||x.id)===idStr||(/^d+$/.test(idStr)&&x.id===parseInt(idStr)))||_cpd[idStr]||(window._SD_STATIC||[]).find(x=>String(x.id)===idStr);if(!p)return'';const v=variant?p.variants?.find(x=>x.label===variant):p.variants?.[0];const _base=v?v.price:p.price;const _onSale=!!(window.SDPrice&&SDPrice.active(p));const _eff=window.SDPrice?SDPrice.effective(_base,p):_base;const line=_eff*qty;total+=line;const priceCell=_onSale?`<span class="cart-row-price-old">${fmtPrice(_base*qty)}</span><span class="cart-row-price cart-row-price--sale">${fmtPrice(line)}</span>`:`<span class="cart-row-price">${fmtPrice(line)}</span>`;return`<div class="cart-row"><div class="cart-row-thumb" style="background-image:url('${p.photo}')"></div><div class="cart-row-info"><div class="cart-row-name">${p.name[LANG]}</div><div class="cart-row-sub">${variant||p.weight}</div><div class="cart-qty"><button class="cq-btn" onclick="changeQty('${key}',-1)" aria-label="${LANG==='en'?'Decrease':LANG==='sv'?'Minska':'Diminuer'}">−</button><span class="cq-num">${qty}</span><button class="cq-btn" onclick="changeQty('${key}',1)" aria-label="${LANG==='en'?'Increase':LANG==='sv'?'Öka':'Augmenter'}">+</button></div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;">${priceCell}<button class="cart-del" onclick="removeItem('${key}')" aria-label="${LANG==='en'?'Remove':LANG==='sv'?'Ta bort':'Retirer'}">✕</button></div></div>`;}).join('');const totalEl=document.getElementById('cart-total-price');if(totalEl)totalEl.textContent=fmtPrice(total);/* Frais de port affichés AVANT le panier : point relais France, même
-   règle que panier.html et /api/checkout (SD_SHIP ↔ lib/shipping.ts).
-   Le pays exact se choisit au panier ; l'Europe est rappelée en dessous. */
-const _fr=window.SD_SHIP?SD_SHIP.rules(false):{threshold:29,cost:4.90};const _eu=window.SD_SHIP?SD_SHIP.rules(true):{threshold:50,cost:9.90};const _thr=_fr.threshold;const _shipCost=total>=_thr?0:_fr.cost;const shipPriceEl=document.getElementById('cart-ship-price');if(shipPriceEl)shipPriceEl.innerHTML=_shipCost===0?`<span style="color:var(--moss)">${LANG==='en'?'Free':LANG==='sv'?'Gratis':'Offerte'}</span>`:fmtPrice(_shipCost);const grandEl=document.getElementById('cart-grand-total');if(grandEl)grandEl.textContent=fmtPrice(total+_shipCost);
-const shipEl=document.getElementById('cart-ship-note');if(shipEl){const _freeTxt=(window.SD_SHIP&&SD_SHIP.label(LANG))||(LANG==='fr'?'Livraison offerte':LANG==='en'?'Free delivery':'Fri frakt');const _euTxt=LANG==='en'?`Europe: ${fmtPrice(_eu.cost)}, free from ${fmtPrice(_eu.threshold)}`:LANG==='sv'?`Europa: ${fmtPrice(_eu.cost)}, fri frakt från ${fmtPrice(_eu.threshold)}`:`Europe : ${fmtPrice(_eu.cost)}, offerte dès ${fmtPrice(_eu.threshold)}`;const remaining=_thr-total;if(remaining>0){const pct=Math.min(100,(total/_thr)*100);shipEl.innerHTML=`<div class="ship-bar"><div class="ship-bar-fill" style="width:${pct}%"></div></div><span>${LANG==='fr'?`Plus que ${fmtPrice(remaining)} pour la livraison offerte`:LANG==='en'?`${fmtPrice(remaining)} away from free delivery`:`${fmtPrice(remaining)} kvar till fri frakt`}</span><span class="cart-ship-eu">${_euTxt}</span>`;}else{shipEl.innerHTML=`<span style="color:var(--moss);font-weight:600;">${_freeTxt} ✓</span><span class="cart-ship-eu">${_euTxt}</span>`;}}}
+/* ── Tiroir panier ──
+   Lignes échappées (noms venus de l'API) et actions par délégation
+   (data-cart-act, voir sdInitA11y) : plus de clé de panier recopiée dans un
+   onclick. Frais de port : point relais France, même règle que panier.html
+   et /api/checkout (SD_SHIP ↔ lib/shipping.ts) ; l'Europe est rappelée. */
+function _sdCartLineProd(idStr){const cp=_sdCartProducts();return PRODUCTS.find(x=>String(x.uuid||x.id)===idStr||(/^\d+$/.test(idStr)&&x.id===parseInt(idStr,10)))||cp[idStr]||(window._SD_STATIC||[]).find(x=>String(x.id)===idStr);}
+/* Suggestions pour atteindre la livraison offerte : l'épicerie d'abord, puis
+   un article Maison (serviettes, petit prix) en dernier. Jamais un article
+   épuisé, déjà dans le panier, une box ou un produit à plusieurs formats. */
+function _sdDrawerSuggestions(remaining){
+  if(!(remaining>0))return[];
+  const inCart={};Object.keys(cart).forEach(k=>{const i=k.indexOf('_');inCart[i===-1?k:k.slice(0,i)]=1;});
+  const eff=p=>window.SDPrice?SDPrice.effective(p.price,p):p.price;
+  const pool=(PRODUCTS||[]).filter(p=>p&&p.uuid&&!inCart[String(p.uuid)]&&!sdIsOut(p)&&p.price>0&&!(p.variants&&p.variants.length>1)&&(p.tags||[]).indexOf('box')===-1);
+  const rank=(a,b)=>{const ua=eff(a)>=remaining?0:1,ub=eff(b)>=remaining?0:1;if(ua!==ub)return ua-ub;if(!!a.bestseller!==!!b.bestseller)return a.bestseller?-1:1;return eff(a)-eff(b);};
+  const food=pool.filter(p=>!sdIsHomeProduct(p)).sort(rank),home=pool.filter(sdIsHomeProduct).sort(rank);
+  return home.length?food.slice(0,2).concat(home.slice(0,1)):food.slice(0,3);
+}
+function _sdDrawerSuggHTML(remaining){
+  const list=_sdDrawerSuggestions(remaining);if(!list.length)return'';
+  return`<section class="cart-sugg" aria-labelledby="cart-sugg-t"><h3 class="cart-sugg-title" id="cart-sugg-t">${_sdT('Pour compléter votre panier','To complete your order','Komplettera din beställning')}</h3><ul class="cart-sugg-list">${list.map(p=>{const name=(p.name&&(p.name[LANG]||p.name.fr))||'';const sale=!!(window.SDPrice&&SDPrice.active(p));const e=window.SDPrice?SDPrice.effective(p.price,p):p.price;const unlock=e>=remaining;return`<li class="cart-sugg-item">${p.photo?`<img src="${_sdAttr(sdThumb(p.photo,300))}" alt="" width="44" height="44" loading="lazy" decoding="async">`:'<span class="cart-sugg-ph"></span>'}<span class="cart-sugg-text"><a class="cart-sugg-name" href="${_sdAttr(sdProductUrl(p))}" onclick="closeCart(false)">${_sdAttr(name)}</a><span class="cart-sugg-meta"><span class="cart-sugg-price${sale?' prod-price--sale':''}">${fmtPrice(e)}</span>${unlock?`<span class="cart-sugg-unlock">${_sdT('livraison offerte avec cet article','free delivery with this item','fri frakt med denna vara')}</span>`:''}</span></span><button type="button" class="cart-sugg-add" data-sugg-add="${_sdAttr(p.uuid)}" aria-label="${_sdAttr(_sdT('Ajouter au panier : ','Add to cart: ','Lägg i korgen: ')+name)}"><svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><line x1="7" y1="1" x2="7" y2="13"/><line x1="1" y1="7" x2="13" y2="7"/></svg></button></li>`;}).join('')}</ul></section>`;
+}
+function renderCartDrawer(){
+  const list=document.getElementById('drawer-items-list');const foot=document.getElementById('drawer-footer');if(!list)return;
+  const entries=Object.entries(cart).filter(([,q])=>q>0);
+  if(entries.length===0){list.innerHTML=`<div class="cart-empty"><p class="cart-empty-msg">${UI[LANG].emptyCart}</p><a class="btn-outline-dark" href="/boutique" onclick="closeCart(false)">${_sdT('Découvrir la boutique','Browse the shop','Utforska butiken')}</a></div>`;if(foot){foot.hidden=true;foot.style.display='';}return;}
+  if(foot){foot.hidden=false;foot.style.display='';}
+  let total=0;
+  const rows=entries.map(([key,qty])=>{
+    const ri=key.indexOf('_');const idStr=ri===-1?key:key.slice(0,ri);const variant=ri===-1?undefined:key.slice(ri+1);
+    const p=_sdCartLineProd(idStr);if(!p)return'';
+    const v=variant?p.variants?.find(x=>x.label===variant):p.variants?.[0];
+    const base=v?v.price:p.price;const onSale=!!(window.SDPrice&&SDPrice.active(p));const eff=window.SDPrice?SDPrice.effective(base,p):base;const line=eff*qty;total+=line;
+    const name=(p.name&&(p.name[LANG]||p.name.fr))||'';const nm=_sdAttr(name);
+    const url=/^[0-9a-f]{8}-[0-9a-f-]{27}$/i.test(idStr)?sdProductUrl({name:p.name,uuid:idStr}):'';
+    const price=onSale?`<span class="cart-row-price-old">${fmtPrice(base*qty)}</span><span class="cart-row-price cart-row-price--sale">${fmtPrice(line)}</span>`:`<span class="cart-row-price">${fmtPrice(line)}</span>`;
+    const thumb=p.photo?`<img src="${_sdAttr(sdThumb(p.photo,300))}" alt="" width="60" height="60" loading="lazy" decoding="async">`:'';
+    return`<li class="cart-row" data-key="${_sdAttr(key)}"><div class="cart-row-thumb">${thumb}</div><div class="cart-row-info"><p class="cart-row-name">${url?`<a href="${_sdAttr(url)}" onclick="closeCart(false)">${nm}</a>`:nm}</p><p class="cart-row-sub">${_sdAttr(variant||p.weight||'')}</p><div class="cart-qty" role="group" aria-label="${_sdAttr(_sdT('Quantité : ','Quantity: ','Antal: ')+name)}"><button type="button" class="cq-btn" data-cart-act="dec" aria-label="${_sdT('Retirer un','Remove one','Ta bort en')}">−</button><span class="cq-num">${qty}</span><button type="button" class="cq-btn" data-cart-act="inc" aria-label="${_sdT('Ajouter un','Add one','Lägg till en')}">+</button></div></div><div class="cart-row-side">${price}<button type="button" class="cart-del" data-cart-act="del" aria-label="${_sdAttr(_sdT('Retirer du panier : ','Remove from cart: ','Ta bort ur korgen: ')+name)}">${_sdIcons.close}</button></div></li>`;
+  }).join('');
+  const fr=SD_SHIP.rules(false),eu=SD_SHIP.rules(true);
+  const remaining=fr.threshold-total;const free=remaining<=0;const shipCost=free?0:fr.cost;
+  list.innerHTML=`<ul class="cart-rows">${rows}</ul>`+_sdDrawerSuggHTML(remaining);
+  const set=(id,h)=>{const el=document.getElementById(id);if(el)el.innerHTML=h;};
+  set('cart-total-price',fmtPrice(total));
+  set('cart-ship-price',free?`<span class="cart-ship-free">${_sdT('Offerte','Free','Gratis')}</span>`:fmtPrice(shipCost));
+  set('cart-grand-total',fmtPrice(total+shipCost));
+  const pct=fr.threshold>0?Math.min(100,total/fr.threshold*100):100;
+  const promo=SD_SHIP.label(LANG);
+  const msg=!free?_sdT(`Plus que ${fmtPrice(remaining)} pour la livraison offerte en France`,`${fmtPrice(remaining)} away from free delivery in France`,`${fmtPrice(remaining)} kvar till fri frakt i Frankrike`):(promo||_sdT('Livraison offerte en France','Free delivery in France','Fri frakt i Frankrike'));
+  const euTxt=_sdT(`Europe : ${fmtPrice(eu.cost)}, offerte dès ${sdPriceShort(eu.threshold)}`,`Europe: ${fmtPrice(eu.cost)}, free from ${sdPriceShort(eu.threshold)}`,`Europa: ${fmtPrice(eu.cost)}, fri frakt från ${sdPriceShort(eu.threshold)}`);
+  set('cart-ship-note',`<span class="ship-bar" aria-hidden="true"><span class="ship-bar-fill" style="width:${pct.toFixed(1)}%"></span></span><span class="cart-ship-msg${free?' is-free':''}">${_sdAttr(msg)}</span><span class="cart-ship-eu">${euTxt}</span>`);
+}
 
-function openCart(){renderCartDrawer();document.getElementById('cart-drawer')?.classList.add('open');document.getElementById('drawer-overlay')?.classList.add('open');document.body.style.overflow='hidden';}
-function closeCart(){document.getElementById('cart-drawer')?.classList.remove('open');document.getElementById('drawer-overlay')?.classList.remove('open');document.body.style.overflow='';}
-function setLang(l){LANG=l;saveLang(l);document.documentElement.lang=l;document.querySelectorAll('[data-sv]').forEach(el=>{const v=el.getAttribute('data-'+l);if(v!==null)el.innerHTML=v;});document.querySelectorAll('[data-sv-ph]').forEach(el=>{const v=el.getAttribute('data-'+l+'-ph');if(v)el.placeholder=v;});document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.dataset.lang===l));renderCartDrawer();updateCartBadge();if(l==='sv')loadSekRate();if(typeof refreshSuggestLang==='function')refreshSuggestLang();if(typeof onLangChange==='function')onLangChange(l);}
-function openSearch(){const so=document.getElementById('search-overlay');if(!so)return;so.classList.add('open');doSearch('');setTimeout(()=>document.getElementById('search-inp')?.focus(),80);}
-function closeSearch(){const so=document.getElementById('search-overlay');const was=so&&so.classList.contains('open');so?.classList.remove('open');const i=document.getElementById('search-inp');if(i)i.value='';const r=document.getElementById('search-res');if(r)r.innerHTML='';if(was)document.querySelector('.btn-search')?.focus();}
+/* ── Surcouches : panier, menu, recherche, suggestion, aide au paiement ──
+   Une seule mécanique : le focus entre dans la surcouche puis revient au
+   bouton d'origine, Tab reste piégé dedans, Échap ferme la plus haute, la
+   page ne défile plus et les bulles flottantes s'effacent (sdInitA11y). */
+var _sdOpeners={};
+var SD_LAYERS=['sd-cart-help','suggest-modal','search-overlay','mobile-nav','cart-drawer'];
+function _sdTopLayer(){for(var i=0;i<SD_LAYERS.length;i++){var el=document.getElementById(SD_LAYERS[i]);if(el&&el.classList.contains('open'))return el;}return null;}
+function _sdSyncLayers(){var open=!!_sdTopLayer();document.body.style.overflow=open?'hidden':'';document.body.classList.toggle('sd-layer-open',open);}
+function _sdRemember(id){var a=document.activeElement,box=document.getElementById(id);if(a&&a!==document.body&&!(box&&box.contains(a)))_sdOpeners[id]=a;}
+function _sdRestore(id,fallback){var a=_sdOpeners[id];delete _sdOpeners[id];if(!a||!a.isConnected||!a.getClientRects().length)a=fallback?document.querySelector(fallback):null;if(a&&a.getClientRects().length){try{a.focus({preventScroll:true});}catch(e){}}}
+function _sdFocusables(root){return[].filter.call(root.querySelectorAll('a[href],button:not([disabled]),input:not([disabled]):not([type="hidden"]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])'),function(x){return x.getClientRects().length>0;});}
+function _sdExpanded(sel,v){document.querySelectorAll(sel).forEach(function(b){b.setAttribute('aria-expanded',v?'true':'false');});}
+function openCart(){renderCartDrawer();const d=document.getElementById('cart-drawer');if(!d)return;const was=d.classList.contains('open');if(!was)_sdRemember('cart-drawer');d.classList.add('open');document.getElementById('drawer-overlay')?.classList.add('open');_sdExpanded('.btn-cart',true);_sdSyncLayers();if(!was)setTimeout(()=>{if(d.classList.contains('open')&&!d.contains(document.activeElement))d.querySelector('.drawer-close')?.focus({preventScroll:true});},60);}
+/* closeCart(false) : sans rendre le focus (on quitte la page par un lien) */
+function closeCart(restore){const d=document.getElementById('cart-drawer');const was=!!(d&&d.classList.contains('open'));d?.classList.remove('open');document.getElementById('drawer-overlay')?.classList.remove('open');_sdExpanded('.btn-cart',false);_sdSyncLayers();const n=document.getElementById('drawer-note');if(n)n.textContent='';if(was&&restore!==false)_sdRestore('cart-drawer','.btn-cart');}
+function setLang(l){if(!UI[l])l='fr';LANG=l;saveLang(l);document.documentElement.lang=l;document.querySelectorAll('[data-sv]').forEach(el=>{const v=el.getAttribute('data-'+l);if(v!==null)el.innerHTML=v;});document.querySelectorAll('[data-sv-ph]').forEach(el=>{const v=el.getAttribute('data-'+l+'-ph');if(v)el.placeholder=v;});document.querySelectorAll('[data-sv-aria]').forEach(el=>{const v=el.getAttribute('data-'+l+'-aria');if(v)el.setAttribute('aria-label',v);});document.querySelectorAll('.lang-btn').forEach(b=>{const on=b.dataset.lang===l;b.classList.toggle('active',on);b.setAttribute('aria-pressed',on?'true':'false');});renderCartDrawer();updateCartBadge();sdFillShipping();_sdWaRefresh();if(l==='sv')loadSekRate();if(typeof refreshSuggestLang==='function')refreshSuggestLang();try{window.dispatchEvent(new CustomEvent('sd:lang',{detail:l}));}catch(e){}if(typeof onLangChange==='function')onLangChange(l);}
+function openSearch(){const so=document.getElementById('search-overlay');if(!so)return;if(!so.classList.contains('open'))_sdRemember('search-overlay');so.classList.add('open');_sdExpanded('.btn-search',true);_sdSyncLayers();const i=document.getElementById('search-inp');doSearch(i?i.value:'');setTimeout(()=>i?.focus(),50);}
+function closeSearch(){const so=document.getElementById('search-overlay');const was=!!(so&&so.classList.contains('open'));so?.classList.remove('open');_sdExpanded('.btn-search',false);_sdSyncLayers();const i=document.getElementById('search-inp');if(i)i.value='';const r=document.getElementById('search-res');if(r)r.innerHTML='';const st=document.getElementById('search-status');if(st)st.textContent='';if(was)_sdRestore('search-overlay','.btn-search');}
 function handleSearchClick(e){if(e.target===document.getElementById('search-overlay'))closeSearch();}
+/* Entrée : tous les résultats dans la boutique, qui lit ?q= */
+function _sdSearchKey(e){if(e.key!=='Enter')return;const q=(e.target.value||'').trim();if(!q)return;e.preventDefault();location.href='/boutique?q='+encodeURIComponent(q);}
 /* Une ligne de résultat = un vrai lien vers la fiche */
-function _sdSearchItem(p){const sale=!!(window.SDPrice&&SDPrice.active(p));const price=sale?`<span class="search-item-price-old">${fmtPrice(p.price||0)}</span> <span class="prod-price--sale">${fmtPrice(SDPrice.effective(p.price,p))}</span>`:fmtPrice(p.price||0);const cat=(p.category&&(p.category[LANG]||p.category.fr))||CAT_LABELS[p.cat]?.[LANG]||p.cat||'';return`<a class="search-item" href="${sdProductUrl(p)}"><div class="search-thumb" style="background-image:url('${_sdAttr(p.photo)}')"></div><div><div class="search-item-name">${_sdAttr(p.name[LANG]||p.name.fr||'')}</div><div class="search-item-cat">${_sdAttr(cat)}</div></div><span class="search-item-price">${price}</span></a>`;}
-/* Recherche vide : les produits les plus demandés plutôt qu'un écran blanc */
-function _sdSearchSuggestions(){const list=(PRODUCTS||[]).filter(p=>p.bestseller&&!(p.trackStock&&p.stock!=null&&p.stock<=0)).slice(0,6);if(!list.length)return'';const h=LANG==='en'?'Popular right now':LANG==='sv'?'Populärt just nu':'Les plus demandés';return`<p class="search-hint">${h}</p>`+list.map(_sdSearchItem).join('');}
-function doSearch(q){const res=document.getElementById('search-res');if(!res)return;if(!q.trim()){res.innerHTML=_sdSearchSuggestions();return;}const found=PRODUCTS.filter(p=>sdMatches(p,q)).sort((a,b)=>sdIsOut(a)-sdIsOut(b)).slice(0,6);if(!found.length){const qq=LANG==='fr'?`« ${_sdAttr(q)} »`:`"${_sdAttr(q)}"`;res.innerHTML=`<div style="padding:20px;text-align:center;font-family:var(--font-body);font-style:italic;color:var(--dust);">${UI[LANG].noResults} ${qq}</div>`;return;}res.innerHTML=found.map(_sdSearchItem).join('');}
-function showToast(msg){const t=document.getElementById('toast');if(!t)return;t.textContent=msg;t.classList.add('show');clearTimeout(window._tt);window._tt=setTimeout(()=>t.classList.remove('show'),2800);}
-function openMob(){const n=document.getElementById('mobile-nav');if(!n)return;_sdFillMobRayons();n.classList.add('open');document.body.style.overflow='hidden';document.querySelectorAll('.hamburger').forEach(b=>b.setAttribute('aria-expanded','true'));setTimeout(()=>n.querySelector('.mob-close')?.focus(),30);}
-function closeMob(){const n=document.getElementById('mobile-nav');if(!n||!n.classList.contains('open'))return;n.classList.remove('open');document.body.style.overflow='';document.querySelectorAll('.hamburger').forEach(b=>b.setAttribute('aria-expanded','false'));const h=document.querySelector('.hamburger');if(h&&h.offsetParent)h.focus();}
+function _sdSearchItem(p){const out=sdIsOut(p);const sale=!out&&!!(window.SDPrice&&SDPrice.active(p));const price=out?`<span class="search-item-out">${_sdT('Bientôt disponible','Coming soon','Kommer snart')}</span>`:sale?`<span class="search-item-price-old">${fmtPrice(p.price||0)}</span> <span class="prod-price--sale">${fmtPrice(SDPrice.effective(p.price,p))}</span>`:fmtPrice(p.price||0);const cat=(p.category&&(p.category[LANG]||p.category.fr))||CAT_LABELS[p.cat]?.[LANG]||p.cat||'';const name=(p.name&&(p.name[LANG]||p.name.fr))||'';const img=p.photo?`<img class="search-thumb" src="${_sdAttr(sdThumb(p.photo,300))}" alt="" width="44" height="44" loading="lazy" decoding="async">`:'<span class="search-thumb"></span>';return`<a class="search-item" href="${_sdAttr(sdProductUrl(p))}">${img}<span class="search-item-text"><span class="search-item-name">${_sdAttr(name)}</span><span class="search-item-cat">${_sdAttr(cat)}</span></span><span class="search-item-price">${price}</span></a>`;}
+/* Recherche vide : les plus demandés plutôt qu'un écran blanc. L'épicerie
+   d'abord, puis un article Maison (serviettes) en dernier. */
+function _sdSearchSuggestions(){const pool=(PRODUCTS||[]).filter(p=>!sdIsOut(p));const food=pool.filter(p=>p.bestseller&&!sdIsHomeProduct(p));const home=pool.filter(sdIsHomeProduct).sort((a,b)=>(b.bestseller?1:0)-(a.bestseller?1:0));const f=food.slice(0,home.length?5:6),h=home.slice(0,1);if(!f.length&&!h.length)return'';return(f.length?`<p class="search-hint">${_sdT('Les plus demandés','Popular right now','Populärt just nu')}</p>`+f.map(_sdSearchItem).join(''):'')+(h.length?`<p class="search-hint">${_sdT('Pour la table','For the table','Till bordet')}</p>`+h.map(_sdSearchItem).join(''):'');}
+function doSearch(q){const res=document.getElementById('search-res');if(!res)return;q=String(q||'');const qt=q.trim();
+  const st=document.getElementById('search-status');clearTimeout(window._sdSayT);const say=t=>{window._sdSayT=setTimeout(()=>{if(st)st.textContent=t;},450);};
+  if(!qt){res.innerHTML=_sdSearchSuggestions();say('');return;}
+  const all=(PRODUCTS||[]).filter(p=>sdMatches(p,qt)).sort((a,b)=>sdIsOut(a)-sdIsOut(b));const found=all.slice(0,6);
+  if(!found.length){const qq=LANG==='fr'?`« ${_sdAttr(qt)} »`:LANG==='sv'?`”${_sdAttr(qt)}”`:`“${_sdAttr(qt)}”`;res.innerHTML=`<div class="search-empty"><p>${UI[LANG].noResults} ${qq}</p><p class="search-empty-sub">${_sdT('Un produit suédois qui manque ? Dites-le-nous.','A Swedish product missing? Let us know.','Saknar du en svensk produkt? Berätta för oss.')}</p><button type="button" class="btn-outline-dark" onclick="_sdSuggestFromSearch()">${_sdT('Suggérer ce produit','Suggest this product','Föreslå produkten')}</button></div>`+_sdSearchSuggestions();say(UI[LANG].noResults);return;}
+  const n=all.length;res.innerHTML=found.map(_sdSearchItem).join('')+(n>found.length?`<a class="search-all" href="/boutique?q=${encodeURIComponent(qt)}">${_sdT(`Voir les ${n} résultats dans la boutique`,`See all ${n} results in the shop`,`Visa alla ${n} resultat i butiken`)}</a>`:'');
+  say(n+' '+(n>1?_sdT('résultats','results','resultat'):_sdT('résultat','result','resultat')));}
+function _sdSuggestFromSearch(){const q=(document.getElementById('search-inp')?.value||'').trim();closeSearch();if(typeof openSuggest==='function')openSuggest(q);}
+/* Message court. Tiroir panier ouvert : il s'affiche en tête du tiroir
+   (le toast recouvrait « Commander » sur mobile). */
+function showToast(msg){const d=document.getElementById('cart-drawer');const n=document.getElementById('drawer-note');if(d&&n&&d.classList.contains('open')){n.textContent=msg;return;}const t=document.getElementById('toast');if(!t)return;t.textContent=msg;t.classList.add('show');clearTimeout(window._tt);window._tt=setTimeout(()=>t.classList.remove('show'),3200);}
+function openMob(){const n=document.getElementById('mobile-nav');if(!n)return;_sdFillMobRayons();if(!n.classList.contains('open'))_sdRemember('mobile-nav');n.classList.add('open');n.scrollTop=0;_sdExpanded('.hamburger',true);_sdSyncLayers();setTimeout(()=>n.querySelector('.mob-close')?.focus(),30);}
+function closeMob(){const n=document.getElementById('mobile-nav');if(!n||!n.classList.contains('open'))return;n.classList.remove('open');_sdExpanded('.hamburger',false);_sdSyncLayers();_sdRestore('mobile-nav','.hamburger');}
 
 /* ── NEWSLETTER (capture email → CRM contacts, exploitable par le module Marketing) ── */
 function sdNewsletterSubscribe(email){
@@ -282,24 +368,126 @@ function sdNewsletterSubscribe(email){
   return fetch(base+'/api/newsletter',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:email})})
     .then(function(r){return r.ok;}).catch(function(){return false;});
 }
-function sdFooterNlSubmit(){
-  var el=document.getElementById('footer-nl-email');if(!el)return;
-  var email=(el.value||'').trim();var msg=document.getElementById('footer-nl-msg');
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){if(msg)msg.textContent=(LANG==='sv'?'Ogiltig e-post':LANG==='en'?'Invalid email':'E-mail invalide');return;}
-  if(msg)msg.textContent='…';
+/* Formulaire du pied de page : vrai <form> (Entrée envoie), message annoncé */
+function sdFooterNlSubmit(e){
+  if(e&&e.preventDefault)e.preventDefault();
+  var el=document.getElementById('footer-nl-email');if(!el)return false;
+  var email=(el.value||'').trim();var msg=document.getElementById('footer-nl-msg');var btn=document.getElementById('footer-nl-btn');
+  var say=function(t){if(msg)msg.textContent=t;};
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){el.setAttribute('aria-invalid','true');say(_sdT('Adresse e-mail invalide.','Please enter a valid email address.','Ange en giltig e-postadress.'));el.focus();return false;}
+  el.removeAttribute('aria-invalid');if(btn)btn.disabled=true;say(_sdT('Inscription en cours…','Subscribing…','Registrerar…'));
   sdNewsletterSubscribe(email).then(function(ok){
-    if(msg)msg.textContent=ok?(LANG==='sv'?'Tack!':LANG==='en'?'Thanks!':'Merci, c\'est noté !'):(LANG==='sv'?'Försök igen':LANG==='en'?'Please try again':'Réessayez');
+    if(btn)btn.disabled=false;
+    say(ok?_sdT('Merci, c’est noté !','Thanks, you’re on the list!','Tack, du är anmäld!'):_sdT('L’inscription n’a pas abouti. Réessayez dans un instant.','That didn’t work. Please try again in a moment.','Det gick inte. Försök igen om en stund.'));
     if(ok)el.value='';
   });
+  return false;
 }
 
 /* Carte produit. Le nom est un vrai lien, étiré sur toute la carte (clavier,
    nouvel onglet, moteurs de recherche) ; « + » et favori restent au-dessus.
    Stock : seules les exceptions sont signalées. */
-function productCardHTML(p){const badge=p.badge?`<div class="prod-badge ${p.badge}">${getBadgeLabel(p.badge)}</div>`:'';const _onSale=!!(window.SDPrice&&SDPrice.active(p));const _salePrice=_onSale?SDPrice.effective(p.price,p):(p.price||0);const promoBadge=_onSale?`<div class="prod-badge badge-promo">${LANG==='en'?'Special offer':LANG==='sv'?'Erbjudande':'Offre spéciale'}</div>`:'';const priceHtml=_onSale?`<span class="prod-price-old">${fmtPrice(p.price||0)}</span><span class="prod-price prod-price--sale">${fmtPrice(_salePrice)}</span>`:`<span class="prod-price">${fmtPrice(p.price||0)}</span>`;const origin=typeof p.origin==='object'?p.origin[LANG]||'':p.origin||'';const navId=p.uuid||p.id;const addId=p.uuid?`'${p.uuid}'`:(typeof p.id==='string'?`'${p.id}'`:p.id);const isFav=_favorites.includes(String(navId));const name=p.name?.[LANG]||p.name?.fr||'';const _rawW=p.weight||'';const _cleanW=_rawW.replace(/^\d+\s*[xX×]\s*/,'').trim();const weightHtml=_cleanW?`<span class="prod-weight">${_cleanW}</span>`:'';const _tracked=p.trackStock&&p.stock!==null&&p.stock!==undefined;const _isOut=_tracked&&p.stock<=0;let stockBadge='';if(_isOut){const l={fr:'Bientôt disponible',en:'Coming soon',sv:'Kommer snart'};stockBadge=`<div class="prod-stock-badge psb-out">${l[LANG]||l.fr}</div>`;}else if(_tracked&&p.stock<=2){const l={fr:'Stock limité',en:'Limited stock',sv:'Begränsat'};stockBadge=`<div class="prod-stock-badge psb-low">${l[LANG]||l.fr}</div>`;}const addLbl=(LANG==='en'?'Add to cart: ':LANG==='sv'?'Lägg i korgen: ':'Ajouter au panier : ')+name;const favLbl=(LANG==='en'?'Save to favourites: ':LANG==='sv'?'Spara som favorit: ':'Ajouter aux favoris : ')+name;return`<div class="prod-card"><div class="prod-img">${badge}${promoBadge}${stockBadge}<div class="prod-img-inner"><img src="${p.photo||''}" alt="${_sdAttr(p.name?.fr||'')}" loading="lazy" onerror="this.style.display='none'" style="width:100%;height:100%;object-fit:contain;padding:8px;background:var(--cream);"></div><button type="button" class="prod-quick"${_isOut?' disabled style="opacity:.35;cursor:not-allowed"':` onclick="event.stopPropagation();addToCart(${addId})"`} aria-label="${_sdAttr(addLbl)}"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><line x1="7" y1="1" x2="7" y2="13"/><line x1="1" y1="7" x2="13" y2="7"/></svg></button><button type="button" class="prod-wish${isFav?' liked':''}" data-fav-id="${navId}" aria-label="${_sdAttr(favLbl)}" aria-pressed="${isFav}" onclick="event.stopPropagation();toggleFavorite('${navId}')"><svg width="14" height="13" viewBox="0 0 14 13" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M7 11.5C7 11.5 1 7.8 1 4a3 3 0 0 1 6 0 3 3 0 0 1 6 0c0 3.8-6 7.5-6 7.5z"/></svg></button></div><div class="prod-body"><div class="prod-cat">${CAT_LABELS[p.cat]?.[LANG]||p.cat||''}</div><div class="prod-name"><a class="prod-link" href="${sdProductUrl(p)}">${name}</a></div><div class="prod-origin">${origin}</div><div class="prod-footer">${priceHtml}${weightHtml}</div></div></div>`;}
+function productCardHTML(p){const name=p.name?.[LANG]||p.name?.fr||'';const bl=p.badge?getBadgeLabel(p.badge):'';const badge=bl?`<div class="prod-badge ${_sdAttr(p.badge)}">${bl}</div>`:'';const _onSale=!!(window.SDPrice&&SDPrice.active(p));const _salePrice=_onSale?SDPrice.effective(p.price,p):(p.price||0);const promoBadge=_onSale?`<div class="prod-badge badge-promo">${_sdT('Offre spéciale','Special offer','Erbjudande')}</div>`:'';const priceHtml=_onSale?`<span class="prod-price-old">${fmtPrice(p.price||0)}</span><span class="prod-price prod-price--sale">${fmtPrice(_salePrice)}</span>`:`<span class="prod-price">${fmtPrice(p.price||0)}</span>`;const origin=(p.origin&&typeof p.origin==='object')?(p.origin[LANG]||''):(p.origin||'');const addId=p.uuid?`'${_sdAttr(p.uuid)}'`:(typeof p.id==='string'?`'${_sdAttr(p.id)}'`:(+p.id||0));
+  /* Poids : « 16 × 21 g » pour un lot (le « 16x » n'est plus coupé) */
+  const q=sdNetQty(p.weight);const wLbl=q?q.label:String(p.weight||'').trim();const weightHtml=wLbl?`<span class="prod-weight">${_sdAttr(wLbl)}</span>`:'';
+  const _tracked=p.trackStock&&p.stock!==null&&p.stock!==undefined;const _isOut=_tracked&&p.stock<=0;let stockBadge='';if(_isOut)stockBadge=`<div class="prod-stock-badge psb-out">${_sdT('Bientôt disponible','Coming soon','Kommer snart')}</div>`;else if(_tracked&&p.stock<=2)stockBadge=`<div class="prod-stock-badge psb-low">${_sdT('Stock limité','Limited stock','Begränsat lager')}</div>`;
+  const addLbl=_isOut?name+' — '+_sdT('bientôt disponible','coming soon','kommer snart'):_sdT('Ajouter au panier : ','Add to cart: ','Lägg i korgen: ')+name;
+  /* Catégorie réelle du back-office (comme la boutique et la recherche) */
+  const cat=(p.category&&(p.category[LANG]||p.category.fr))||CAT_LABELS[p.cat]?.[LANG]||p.cat||'';
+  /* Vignette redimensionnée (/media-w) au lieu de la photo d'origine */
+  const set=sdThumbSet(p.photo);const img=p.photo?`<img src="${_sdAttr(sdThumb(p.photo,300))}"${set?` srcset="${_sdAttr(set)}" sizes="(max-width:600px) 50vw, (max-width:1024px) 33vw, 300px"`:''} alt="${_sdAttr(name)}" width="300" height="300" loading="lazy" decoding="async" onerror="this.style.display='none'">`:'';
+  /* Plus de cœur « favori » sur les cartes : sans compte client, les favoris
+     n'étaient visibles nulle part (voir toggleFavorite, gardé pour la fiche). */
+  return`<div class="prod-card"><div class="prod-img">${badge}${promoBadge}${stockBadge}<div class="prod-img-inner">${img}</div><button type="button" class="prod-quick"${_isOut?' disabled':` onclick="event.stopPropagation();addToCart(${addId})"`} aria-label="${_sdAttr(addLbl)}"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><line x1="7" y1="1" x2="7" y2="13"/><line x1="1" y1="7" x2="13" y2="7"/></svg></button></div><div class="prod-body"><div class="prod-cat">${_sdAttr(cat)}</div><div class="prod-name"><a class="prod-link" href="${_sdAttr(sdProductUrl(p))}">${_sdAttr(name)}</a></div><div class="prod-origin">${_sdAttr(origin)}</div><div class="prod-footer">${priceHtml}${weightHtml}</div></div></div>`;}
 function getBadgeLabel(b){const m={'badge-new':{sv:'Ny',fr:'Nouveau',en:'New'},'badge-pop':{sv:'Bästsäljare',fr:'Best-seller',en:'Best-seller'},'badge-org':{sv:'Ekologisk',fr:'Bio',en:'Organic'},'badge-must':{sv:'Klassiker',fr:'Incontournable',en:'Must have'}};return m[b]?.[LANG]||'';}
 
-function renderHeader(activePage=''){const _searchIcon='<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="7.5" cy="7.5" r="5.5"/><line x1="11.5" y1="11.5" x2="17" y2="17"/></svg>';const _closeIcon='<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="1" y1="1" x2="13" y2="13"/><line x1="13" y1="1" x2="1" y2="13"/></svg>';return`<a class="skip-link" href="${_sdAttr(location.pathname+location.search)}#contenu"data-sv="Hoppa till innehållet" data-fr="Aller au contenu" data-en="Skip to content">Aller au contenu</a><div class="lang-bar"><button class="lang-btn${LANG==='sv'?' active':''}" data-lang="sv" onclick="setLang('sv')">Svenska</button><button class="lang-btn${LANG==='fr'?' active':''}" data-lang="fr" onclick="setLang('fr')">Français</button><button class="lang-btn${LANG==='en'?' active':''}" data-lang="en" onclick="setLang('en')">English</button></div><div class="announcement" data-sv="${_sdAnn(SD_WL.announcement.sv)}" data-fr="${_sdAnn(SD_WL.announcement.fr)}" data-en="${_sdAnn(SD_WL.announcement.en)}">${_sdAnn(SD_WL.announcement[LANG])}</div>${sdSeasonBannerHTML()}<header><div class="nav-inner"><a href="index.html" class="logo"><img class="logo-mark" src="/img/sc-monogramme.png" alt="${SD_WL.brand_name}" width="28" height="42"><span class="logo-text"><span class="logo-main">${SD_WL.brand_name}</span><span class="logo-tag">${SD_WL.brand_tagline}</span></span></a><nav><a href="index.html"${activePage==='home'?' class="active"':''} data-sv="Hem" data-fr="Accueil" data-en="Home">Accueil</a><a href="boutique.html"${activePage==='shop'?' class="active"':''} data-sv="Butiken" data-fr="Boutique" data-en="Shop">Boutique</a><a href="maison.html"${activePage==='maison'?' class="active"':''} data-sv="Inredning" data-fr="Maison" data-en="Home &amp; living">Maison</a><a href="recettes.html"${activePage==='recipes'?' class="active"':''} data-sv="Recept" data-fr="Recettes" data-en="Recipes">Recettes</a><a href="a-propos.html"${activePage==='about'?' class="active"':''} data-sv="Vår historia" data-fr="Notre histoire" data-en="Our story">Notre histoire</a><a href="contact.html"${activePage==='contact'?' class="active"':''} data-sv="Contact" data-fr="Contact" data-en="Contact">Contact</a>${(window.SD_PAGES||[]).filter(p=>p.show_in_nav).map(p=>`<a href="page.html?slug=${p.slug}"${activePage===p.slug?' class="active"':''} data-sv="${p.nav_label_sv||p.title_sv}" data-fr="${p.nav_label_fr||p.title_fr}" data-en="${p.nav_label_en||p.title_en}">${p.nav_label_fr||p.title_fr}</a>`).join('')}</nav><div class="nav-actions"><button class="btn-search" onclick="openSearch()" aria-label="Rechercher">${_searchIcon}</button><button class="btn-cart" onclick="openCart()" aria-label="Panier"><svg class="cart-ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span class="cart-label" data-sv="Korg" data-fr="Panier" data-en="Cart">Panier</span><span class="cart-badge">${Object.values(cart).reduce((a,b)=>a+b,0)}</span></button><button class="hamburger" onclick="openMob()" aria-label="Menu" aria-expanded="false" aria-controls="mobile-nav"><span></span><span></span><span></span></button></div></div></header><div class="mobile-nav" id="mobile-nav" role="dialog" aria-modal="true" aria-label="Menu"><button class="mob-close" onclick="closeMob()" aria-label="Fermer">${_closeIcon}</button><a href="index.html" onclick="closeMob()" data-sv="Hem" data-fr="Accueil" data-en="Home">Accueil</a><a href="boutique.html" onclick="closeMob()" data-sv="Butiken" data-fr="Boutique" data-en="Shop">Boutique</a><a href="maison.html" onclick="closeMob()" data-sv="Inredning" data-fr="Maison" data-en="Home &amp; living">Maison</a><a href="recettes.html" onclick="closeMob()" data-sv="Recept" data-fr="Recettes" data-en="Recipes">Recettes</a><a href="a-propos.html" onclick="closeMob()" data-sv="Vår historia" data-fr="Notre histoire" data-en="Our story">Notre histoire</a><a href="contact.html" onclick="closeMob()" data-sv="Contact" data-fr="Contact" data-en="Contact">Contact</a>${(window.SD_PAGES||[]).filter(p=>p.show_in_nav).map(p=>`<a href="page.html?slug=${p.slug}" onclick="closeMob()" data-sv="${p.nav_label_sv||p.title_sv}" data-fr="${p.nav_label_fr||p.title_fr}" data-en="${p.nav_label_en||p.title_en}">${p.nav_label_fr||p.title_fr}</a>`).join('')}<div class="mob-rayons" id="mob-rayons"></div><div class="mob-langs"><button class="lang-btn${LANG==='sv'?' active':''}" data-lang="sv" onclick="setLang('sv')">Svenska</button><button class="lang-btn${LANG==='fr'?' active':''}" data-lang="fr" onclick="setLang('fr')">Français</button><button class="lang-btn${LANG==='en'?' active':''}" data-lang="en" onclick="setLang('en')">English</button></div></div><div class="search-overlay" id="search-overlay" onclick="handleSearchClick(event)" role="dialog" aria-modal="true" aria-label="Rechercher"><div class="search-box"><div class="search-row"><span class="search-icon-wrap">${_searchIcon}</span><input type="search" id="search-inp" oninput="doSearch(this.value)" autocomplete="off" aria-label="Rechercher un produit" data-sv-ph="Sök..." data-fr-ph="Rechercher..." data-en-ph="Search..." placeholder="Rechercher..."><button class="search-close" onclick="closeSearch()" aria-label="Fermer">${_closeIcon}</button></div><div class="search-results" id="search-res"></div></div></div><div class="drawer-overlay" id="drawer-overlay" onclick="closeCart()"></div><div class="cart-drawer" id="cart-drawer" role="dialog" aria-modal="true" aria-labelledby="cart-drawer-title"><div class="drawer-head"><p class="drawer-title" id="cart-drawer-title" data-sv="Din korg" data-fr="Votre panier" data-en="Your cart">Votre panier</p><button class="drawer-close" onclick="closeCart()" aria-label="Fermer">${_closeIcon}</button></div><div class="drawer-items" id="drawer-items-list"></div><div class="drawer-foot" id="drawer-footer" style="display:none;"><div class="cart-subtotal-row"><span data-sv="Delsumma" data-fr="Sous-total" data-en="Subtotal">Sous-total</span><span id="cart-total-price">${fmtPrice(0)}</span></div><div class="cart-subtotal-row cart-ship-row"><span data-sv="Frakt (Frankrike)" data-fr="Livraison (France)" data-en="Shipping (France)">Livraison (France)</span><span id="cart-ship-price"></span></div><div class="cart-subtotal-row cart-grand-row"><span>Total</span><span id="cart-grand-total"></span></div><p class="cart-free-ship" id="cart-ship-note"></p><button class="btn-checkout" onclick="openSnipcartCheckout()" data-sv="Beställ →" data-fr="Commander →" data-en="Checkout →">Commander →</button><button class="btn-keep-shopping" onclick="closeCart()" data-sv="Fortsätt handla" data-fr="Continuer mes achats" data-en="Continue shopping">Continuer mes achats</button></div></div><div class="toast" id="toast"></div>`;}
+var _sdIcons={
+  search:'<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true" focusable="false"><circle cx="7.5" cy="7.5" r="5.5"/><line x1="11.5" y1="11.5" x2="17" y2="17"/></svg>',
+  close:'<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true" focusable="false"><line x1="1" y1="1" x2="13" y2="13"/><line x1="13" y1="1" x2="1" y2="13"/></svg>',
+  cart:'<svg class="cart-ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>'
+};
+
+/* ── Livraison : textes calculés depuis les réglages (SD_SHIP), jamais en dur ── */
+/* Montant rond dans une langue donnée (« 29 € », « €29 », couronnes en suédois) */
+function _sdShortIn(n,l){n=+n||0;if(l==='sv'&&_sekRate>0)return Math.round(n*_sekRate)+' kr';var s=n%1?n.toFixed(2):String(n);return l==='fr'?s.replace('.',',')+' €':'€'+s;}
+/* « Livraison offerte dès 29 € en France », ou le libellé de l'opération en cours */
+function sdFreeShipText(l){l=l||LANG;var lab=SD_SHIP.label(l);if(lab)return lab;var t=_sdShortIn(SD_SHIP.rules(false).threshold,l);return l==='en'?'Free delivery in France from '+t:l==='sv'?'Fri frakt i Frankrike från '+t:'Livraison offerte dès '+t+' en France';}
+/* Pour les pages : <span data-sd-ship="fr-threshold">29 €</span> est recalculé
+   au chargement, au changement de langue et de devise. Clés : fr-threshold,
+   eu-threshold, fr-cost, eu-cost, free-fr (phrase complète), line (sdShipLine). */
+function sdFillShipping(root){
+  var fr=SD_SHIP.rules(false),eu=SD_SHIP.rules(true);
+  var v={'fr-threshold':sdPriceShort(fr.threshold),'eu-threshold':sdPriceShort(eu.threshold),'fr-cost':fmtPrice(fr.cost),'eu-cost':fmtPrice(eu.cost),'free-fr':sdFreeShipText(LANG),'line':sdShipLine()};
+  (root||document).querySelectorAll('[data-sd-ship]').forEach(function(el){var k=el.getAttribute('data-sd-ship');if(v[k]!=null)el.textContent=v[k];});
+  _sdRefreshAnn();
+}
+/* Barre d'annonce : texte du back-office, mais le message de livraison est
+   recalculé (un « dès 29€ » saisi à la main se périme quand le seuil change)
+   et passe en tête : sur mobile, seul le premier message s'affiche. */
+var _SD_SHIP_RX=/livraison|delivery|shipping|frakt|leverans/i;
+function _sdAnnText(){var o={};['sv','fr','en'].forEach(function(l){var raw=String((SD_WL.announcement&&SD_WL.announcement[l])||'');var had=false;var segs=raw.split(/\s+·\s+/).map(function(s){return s.trim();}).filter(Boolean).filter(function(s){if(_SD_SHIP_RX.test(s)&&/\d/.test(s)){had=true;return false;}return true;});if(had||!segs.length)segs.unshift(sdFreeShipText(l));o[l]=segs.join(' · ');});return o;}
+function _sdRefreshAnn(){var el=document.querySelector('#header-root .announcement');if(!el)return;var a=_sdAnnText();['sv','fr','en'].forEach(function(l){el.setAttribute('data-'+l,_sdAnn(a[l]));});el.innerHTML=_sdAnn(a[LANG]||a.fr);}
+
+function _sdNavLinks(active,mob){
+  var L=[['home','/','Hem','Accueil','Home'],['shop','/boutique','Butiken','Boutique','Shop'],['maison','/maison','Inredning','Maison','Home &amp; living'],['recipes','/recettes','Recept','Recettes','Recipes'],['about','/a-propos','Vår historia','Notre histoire','Our story'],['contact','/contact','Kontakt','Contact','Contact']];
+  (window.SD_PAGES||[]).filter(function(p){return p&&p.show_in_nav&&p.slug;}).forEach(function(p){L.push([p.slug,'/page?slug='+encodeURIComponent(p.slug),_sdAttr(p.nav_label_sv||p.title_sv||''),_sdAttr(p.nav_label_fr||p.title_fr||''),_sdAttr(p.nav_label_en||p.title_en||'')]);});
+  return L.map(function(x){var on=active===x[0];return'<a href="'+x[1]+'"'+(on?' class="active" aria-current="page"':'')+(mob?' onclick="closeMob()"':'')+' data-sv="'+x[2]+'" data-fr="'+x[3]+'" data-en="'+x[4]+'">'+(LANG==='sv'?x[2]:LANG==='en'?x[4]:x[3])+'</a>';}).join('');
+}
+function _sdLangBtns(){return[['sv','Svenska'],['fr','Français'],['en','English']].map(function(x){var on=LANG===x[0];return'<button type="button" class="lang-btn'+(on?' active':'')+'" data-lang="'+x[0]+'" lang="'+x[0]+'" aria-pressed="'+on+'" onclick="setLang(\''+x[0]+'\')">'+x[1]+'</button>';}).join('');}
+/* Texte d'interface traduit : data-sv/fr/en + texte de la langue courante */
+function _sdTx(sv,fr,en){return' data-sv="'+sv+'" data-fr="'+fr+'" data-en="'+en+'">'+(LANG==='sv'?sv:LANG==='en'?en:fr);}
+function _sdAria(sv,fr,en){return' aria-label="'+(LANG==='sv'?sv:LANG==='en'?en:fr)+'" data-sv-aria="'+sv+'" data-fr-aria="'+fr+'" data-en-aria="'+en+'"';}
+
+/* L'en-tête est redessiné quand la marque arrive de l'API (sd-api-client.js) :
+   un panier, un menu ou une recherche ouverts le restent, focus compris. */
+function _sdHeaderKeep(){
+  var st={};['cart-drawer','mobile-nav','search-overlay'].forEach(function(id){var el=document.getElementById(id);if(el&&el.classList.contains('open'))st[id]=1;});
+  if(!Object.keys(st).length)return;
+  var a=document.activeElement,sel=null;if(a&&a.id)sel='#'+a.id;
+  var q=(document.getElementById('search-inp')||{}).value||'';
+  (window.queueMicrotask||setTimeout)(function(){
+    Object.keys(st).forEach(function(id){var el=document.getElementById(id);if(el)el.classList.add('open');});
+    if(st['cart-drawer']){document.getElementById('drawer-overlay')?.classList.add('open');_sdExpanded('.btn-cart',true);}
+    if(st['mobile-nav'])_sdExpanded('.hamburger',true);
+    if(st['search-overlay']){_sdExpanded('.btn-search',true);var i=document.getElementById('search-inp');if(i){i.value=q;doSearch(q);}}
+    _sdSyncLayers();
+    var L=_sdTopLayer();var f=sel&&document.querySelector(sel);if((!f||!L||!L.contains(f))&&L)f=L.querySelector('#search-inp,.drawer-close,.mob-close');
+    if(f){try{f.focus({preventScroll:true});}catch(e){}}
+  });
+}
+
+function renderHeader(activePage=''){
+  _sdHeaderKeep();
+  const I=_sdIcons;const ann=_sdAnnText();
+  const LANGS_LBL=' role="group" aria-label="Langue · Language · Språk"';
+  return `<a class="skip-link" href="${_sdAttr(location.pathname+location.search)}#contenu"${_sdTx('Hoppa till innehållet','Aller au contenu','Skip to content')}</a>`
+  +`<div class="lang-bar"${LANGS_LBL}>${_sdLangBtns()}</div>`
+  +`<div class="announcement" data-sv="${_sdAttr(_sdAnn(ann.sv))}" data-fr="${_sdAttr(_sdAnn(ann.fr))}" data-en="${_sdAttr(_sdAnn(ann.en))}">${_sdAnn(ann[LANG]||ann.fr)}</div>`
+  +sdSeasonBannerHTML()
+  +`<header><div class="nav-inner"><a href="/" class="logo"><img class="logo-mark" src="/img/sc-monogramme.png" alt="" width="28" height="42"><span class="logo-text"><span class="logo-main">${_sdAttr(SD_WL.brand_name)}</span><span class="logo-tag">${_sdAttr(SD_WL.brand_tagline)}</span></span></a>`
+  +`<nav class="main-nav"${_sdAria('Huvudmeny','Menu principal','Main menu')}>${_sdNavLinks(activePage,false)}</nav>`
+  +`<div class="nav-actions"><button type="button" class="btn-search" onclick="openSearch()"${_sdAria('Sök','Rechercher','Search')} aria-haspopup="dialog" aria-expanded="false" aria-controls="search-overlay">${I.search}</button>`
+  +`<button type="button" class="btn-cart" onclick="openCart()" aria-label="${_sdT('Panier','Cart','Varukorg')}" aria-haspopup="dialog" aria-expanded="false" aria-controls="cart-drawer">${I.cart}<span class="cart-label"${_sdTx('Korg','Panier','Cart')}</span><span class="cart-badge" aria-hidden="true" hidden></span></button>`
+  +`<button type="button" class="hamburger" onclick="openMob()"${_sdAria('Meny','Menu','Menu')} aria-haspopup="dialog" aria-expanded="false" aria-controls="mobile-nav"><span></span><span></span><span></span></button></div></div></header>`
+  +`<div class="mobile-nav" id="mobile-nav" role="dialog" aria-modal="true"${_sdAria('Meny','Menu','Menu')}><button type="button" class="mob-close" onclick="closeMob()"${_sdAria('Stäng menyn','Fermer le menu','Close the menu')}>${I.close}</button>`
+  +`<nav class="mob-links"${_sdAria('Huvudmeny','Menu principal','Main menu')}>${_sdNavLinks(activePage,true)}</nav>`
+  +`<p class="mob-section"${_sdTx('Våra avdelningar','Nos rayons','Our aisles')}</p><div class="mob-rayons" id="mob-rayons"></div>`
+  +`<div class="mob-langs"${LANGS_LBL}>${_sdLangBtns()}</div></div>`
+  +`<div class="search-overlay" id="search-overlay" onclick="handleSearchClick(event)" role="dialog" aria-modal="true"${_sdAria('Sök','Rechercher','Search')}><div class="search-box"><div class="search-row"><span class="search-icon-wrap">${I.search}</span>`
+  +`<input type="search" id="search-inp" oninput="doSearch(this.value)" onkeydown="_sdSearchKey(event)" enterkeyhint="search" autocomplete="off" spellcheck="false" aria-controls="search-res"${_sdAria('Sök en produkt','Rechercher un produit','Search for a product')} data-sv-ph="En produkt, ett märke…" data-fr-ph="Un produit, une marque…" data-en-ph="A product, a brand…" placeholder="${_sdT('Un produit, une marque…','A product, a brand…','En produkt, ett märke…')}">`
+  +`<button type="button" class="search-close" onclick="closeSearch()"${_sdAria('Stäng sökningen','Fermer la recherche','Close search')}>${I.close}</button></div>`
+  +`<p class="sr-only" id="search-status" role="status" aria-live="polite"></p><div class="search-results" id="search-res"></div></div></div>`
+  +`<div class="drawer-overlay" id="drawer-overlay" onclick="closeCart()"></div>`
+  +`<div class="cart-drawer" id="cart-drawer" role="dialog" aria-modal="true" aria-labelledby="cart-drawer-title"><div class="drawer-head"><h2 class="drawer-title" id="cart-drawer-title"${_sdTx('Din korg','Votre panier','Your cart')}</h2><button type="button" class="drawer-close" onclick="closeCart()"${_sdAria('Stäng korgen','Fermer le panier','Close the cart')}>${I.close}</button></div>`
+  +`<p class="drawer-note" id="drawer-note" role="status" aria-live="polite"></p><p class="sr-only" id="drawer-live" aria-live="polite"></p>`
+  +`<div class="drawer-items" id="drawer-items-list"></div>`
+  +`<div class="drawer-foot" id="drawer-footer" hidden><div class="cart-subtotal-row"><span${_sdTx('Delsumma','Sous-total','Subtotal')}</span><span id="cart-total-price">${fmtPrice(0)}</span></div>`
+  +`<div class="cart-subtotal-row cart-ship-row"><span${_sdTx('Frakt (Frankrike)','Livraison (France)','Shipping (France)')}</span><span id="cart-ship-price"></span></div>`
+  +`<div class="cart-subtotal-row cart-grand-row"><span>Total</span><span id="cart-grand-total"></span></div><p class="cart-free-ship" id="cart-ship-note"></p>`
+  +`<button type="button" class="btn-checkout" onclick="openSnipcartCheckout()"${_sdTx('Till kassan','Commander','Checkout')}</button>`
+  +`<button type="button" class="btn-keep-shopping" onclick="closeCart()"${_sdTx('Fortsätt handla','Continuer mes achats','Continue shopping')}</button></div></div>`
+  +`<div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>`;
+}
 
 /* Moyens de paiement affichés (pied de page + panier). Ce sont ceux
    activés dans le Dashboard Stripe : Checkout les propose seul selon
@@ -319,36 +507,69 @@ function sdPayLogos(cls){
   return L.map(function(l){return '<span class="'+cls+'" role="img" aria-label="'+l[0]+'" title="'+l[0]+'">'+l[1]+'</span>';}).join('');
 }
 
-function renderFooter(){return`<footer><div class="footer-inner"><div class="footer-grid"><div class="footer-logo"><a href="index.html" class="logo"><span class="logo-main">${SD_WL.brand_name}</span><span class="logo-tag">${SD_WL.brand_tagline}</span></a><p data-sv="${SD_WL.footer_desc.sv}" data-fr="${SD_WL.footer_desc.fr}" data-en="${SD_WL.footer_desc.en}">${SD_WL.footer_desc[LANG]}</p><div class="footer-social">${SD_WL.instagram?`<a href="${SD_WL.instagram}" class="soc-link" target="_blank" rel="noopener" aria-label="Instagram">IG</a>`:''}${SD_WL.facebook?`<a href="${SD_WL.facebook}" class="soc-link" target="_blank" rel="noopener" aria-label="Facebook">FB</a>`:''}${SD_WL.pinterest?`<a href="${SD_WL.pinterest}" class="soc-link" target="_blank" rel="noopener" aria-label="Pinterest">PIN</a>`:''}</div><div class="footer-nl" style="margin-top:22px;max-width:280px;"><div style="font-family:var(--font-ui);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.72);margin-bottom:8px;" data-sv="Nyhetsbrev — nyheter & erbjudanden" data-fr="Newsletter — nouveautés & offres" data-en="Newsletter — news & offers">Newsletter — nouveautés & offres</div><div style="display:flex;gap:6px;"><input id="footer-nl-email" type="email" data-sv-ph="Din e-post" data-fr-ph="Votre e-mail" data-en-ph="Your email" placeholder="Votre e-mail" aria-label="Votre adresse e-mail" style="flex:1;min-width:0;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.3);border-radius:2px;padding:12px 10px;font-family:var(--font-body);font-size:15px;color:#fff;"><button onclick="sdFooterNlSubmit()" style="background:var(--lingon);color:#fff;border:none;border-radius:2px;padding:12px 16px;font-family:var(--font-ui);font-size:12px;letter-spacing:1px;cursor:pointer;">OK</button></div><div id="footer-nl-msg" style="font-family:var(--font-body);font-size:13px;color:rgba(255,255,255,0.72);margin-top:6px;min-height:16px;"></div></div></div><div class="footer-col"><h2 data-sv="Butiken" data-fr="La boutique" data-en="Shop">La boutique</h2><ul><li><a href="boutique.html" data-sv="Hela butiken" data-fr="Toute la boutique" data-en="Whole shop">Toute la boutique</a></li><li><a href="bonbons-suedois.html" data-sv="Godis" data-fr="Bonbons suédois" data-en="Swedish sweets">Bonbons suédois</a></li><li><a href="boutique.html?rayon=chocolat" data-sv="Choklad" data-fr="Chocolat" data-en="Chocolate">Chocolat</a></li><li><a href="olw.html" data-sv="OLW dippmix" data-fr="Dips OLW" data-en="OLW dips">Dips OLW</a></li><li><a href="ahlgrens-bilar.html">Ahlgrens Bilar</a></li><li><a href="boutique.html?rayon=epices" data-sv="Kryddor" data-fr="Épices &amp; aromates" data-en="Spices">Épices &amp; aromates</a></li><li><a href="boutique.html?rayon=patisserie-basics" data-sv="Baka &amp; fika" data-fr="Bake &amp; Fika" data-en="Bake &amp; Fika">Bake &amp; Fika</a></li><li><a href="maison.html" data-sv="Inredning" data-fr="Maison" data-en="Home &amp; living">Maison</a></li><li><a href="recettes.html" data-sv="Recept" data-fr="Recettes" data-en="Recipes">Recettes</a></li></ul></div><div class="footer-col"><h2 data-sv="Kundservice" data-fr="Service" data-en="Service">Service</h2><ul><li><a href="livraison.html" data-sv="Leverans" data-fr="Livraison" data-en="Delivery">Livraison</a></li><li><a href="faq.html">FAQ</a></li><li><a href="contact.html" data-sv="Beställningsspårning" data-fr="Suivi commande" data-en="Order tracking">Suivi commande</a></li><li><a href="/cgv" data-sv="Allmänna villkor" data-fr="CGV" data-en="T&Cs">CGV</a></li><li><button type="button" onclick="openSuggest()" data-sv="Föreslå en produkt" data-fr="Suggérer un produit" data-en="Suggest a product">Suggérer un produit</button></li></ul></div><div class="footer-col"><h2>Contact</h2><ul><li><a href="mailto:${SD_WL.contact_email}">${SD_WL.contact_email}</a></li><li><a href="a-propos.html" data-sv="Vår historia" data-fr="Notre histoire" data-en="Our story">Notre histoire</a></li><li><a href="/contact" data-sv="Kontakta oss" data-fr="Nous contacter" data-en="Contact us">Nous contacter</a></li><li><a href="/mentions-legales" data-sv="Rättsliga uppgifter" data-fr="Mentions légales" data-en="Legal notice">Mentions légales</a></li><li><a href="/confidentialite" data-sv="Integritetspolicy" data-fr="Confidentialité" data-en="Privacy">Confidentialité</a></li><li><a href="#" onclick="window.sdCookieSettings&&sdCookieSettings();return false;">Cookies</a></li></ul><p class="footer-origin">SE · FR</p></div></div><div class="footer-bottom"><p data-sv="${SD_WL.copyright.sv}" data-fr="${SD_WL.copyright.fr}" data-en="${SD_WL.copyright.en}">${SD_WL.copyright[LANG]}</p><div class="pay-badges" aria-label="Moyens de paiement acceptés">${sdPayLogos('pay-badge')}</div><p data-sv="${SD_WL.footer_tagline.sv}" data-fr="${SD_WL.footer_tagline.fr}" data-en="${SD_WL.footer_tagline.en}">${SD_WL.footer_tagline[LANG]}</p></div></div></footer>`;}
+/* Présentation de repli quand le back-office n'en fournit pas (footer_desc_*) */
+var SD_FOOTER_DESC={
+  fr:'Épicerie suédoise en ligne : bonbons, chocolat, fika et épicerie salée, importés de Suède et livrés en France et en Europe.',
+  en:'A Swedish grocery online: sweets, chocolate, fika and savoury staples, imported from Sweden and delivered across France and Europe.',
+  sv:'Svensk speceributik på nätet: godis, choklad, fika och skafferivaror, importerade från Sverige och levererade i Frankrike och Europa.'
+};
+/* Texte du back-office en trois langues : échappé deux fois dans data-*
+   (setLang le remet en innerHTML), une fois dans le contenu. */
+function _sdTri(tag,o,cls){var e=function(s){return _sdAttr(_sdAttr(s));};return'<'+tag+(cls?' class="'+cls+'"':'')+' data-sv="'+e(o.sv)+'" data-fr="'+e(o.fr)+'" data-en="'+e(o.en)+'">'+_sdAttr(o[LANG]||o.fr)+'</'+tag+'>';}
+function _sdML(o,fb){var r={};['sv','fr','en'].forEach(function(l){r[l]=(o&&o[l])||(fb&&fb[l])||'';});return r;}
+function _sdFLink(href,sv,fr,en){return'<li><a href="'+href+'"'+_sdTx(sv,fr,en)+'</a></li>';}
+function renderFooter(){
+  const n=SD_WL.brand_name||'';const yr=new Date().getFullYear();
+  const desc=_sdML(SD_WL.footer_desc,SD_FOOTER_DESC);const tag=_sdML(SD_WL.footer_tagline);
+  const copy={sv:'© '+yr+' '+n+' · Alla rättigheter förbehållna',fr:'© '+yr+' '+n+' · Tous droits réservés',en:'© '+yr+' '+n+' · All rights reserved'};
+  const soc=[['instagram','Instagram','IG'],['facebook','Facebook','FB'],['pinterest','Pinterest','PIN']].filter(s=>/^https?:\/\//i.test(SD_WL[s[0]]||'')).map(s=>`<a href="${_sdAttr(SD_WL[s[0]])}" class="soc-link" target="_blank" rel="noopener" aria-label="${s[1]}">${s[2]}</a>`).join('');
+  const mail=SD_WL.contact_email?`<li><a href="mailto:${_sdAttr(SD_WL.contact_email)}">${_sdAttr(SD_WL.contact_email)}</a></li>`:'';
+  return`<footer><div class="footer-inner"><div class="footer-grid">`
+  +`<div class="footer-logo"><a href="/" class="logo"><span class="logo-main">${_sdAttr(n)}</span><span class="logo-tag">${_sdAttr(SD_WL.brand_tagline)}</span></a>${_sdTri('p',desc)}${soc?`<div class="footer-social">${soc}</div>`:''}`
+  +`<form class="footer-nl" onsubmit="return sdFooterNlSubmit(event)" novalidate><label class="footer-nl-label" for="footer-nl-email"${_sdTx('Nyhetsbrev: nyheter och erbjudanden','Newsletter : nouveautés et offres','Newsletter: new arrivals and offers')}</label>`
+  +`<div class="footer-nl-row"><input id="footer-nl-email" name="email" type="email" autocomplete="email" inputmode="email" required aria-describedby="footer-nl-msg" data-sv-ph="Din e-postadress" data-fr-ph="Votre adresse e-mail" data-en-ph="Your email address" placeholder="${_sdT('Votre adresse e-mail','Your email address','Din e-postadress')}"><button type="submit" id="footer-nl-btn" class="footer-nl-btn"${_sdTx('Prenumerera','S’inscrire','Subscribe')}</button></div>`
+  +`<p id="footer-nl-msg" class="footer-nl-msg" role="status" aria-live="polite"></p>`
+  +`<p class="footer-nl-legal"><span${_sdTx('Du kan avregistrera dig när som helst.','Désinscription possible à tout moment.','You can unsubscribe at any time.')}</span> <a href="/confidentialite"${_sdTx('Integritet','Confidentialité','Privacy')}</a></p></form></div>`
+  +`<div class="footer-col"><h2${_sdTx('Butiken','La boutique','Shop')}</h2><ul>`
+  +_sdFLink('/boutique','Hela butiken','Toute la boutique','Whole shop')
+  +_sdFLink('/bonbons-suedois','Godis','Bonbons suédois','Swedish sweets')
+  +_sdFLink('/boutique?rayon=chocolat','Choklad','Chocolat','Chocolate')
+  +_sdFLink('/olw','OLW dippmix','Dips OLW','OLW dips')
+  +_sdFLink('/ahlgrens-bilar','Ahlgrens Bilar','Ahlgrens Bilar','Ahlgrens Bilar')
+  +_sdFLink('/boutique?rayon=epices','Kryddor','Épices &amp; aromates','Spices')
+  +_sdFLink('/boutique?rayon=patisserie-basics','Baka &amp; fika','Bake &amp; Fika','Bake &amp; Fika')
+  +_sdFLink('/maison','Inredning','Maison','Home &amp; living')
+  +_sdFLink('/recettes','Recept','Recettes','Recipes')
+  +`</ul></div><div class="footer-col"><h2${_sdTx('Kundservice','Service','Service')}</h2><ul>`
+  +_sdFLink('/livraison','Leverans','Livraison','Delivery')
+  +_sdFLink('/faq','Vanliga frågor','FAQ','FAQ')
+  +_sdFLink('/compte','Min beställning','Ma commande','My order')
+  +_sdFLink('/cgv','Allmänna villkor','CGV','Terms of sale')
+  +`<li><button type="button" onclick="openSuggest()" aria-haspopup="dialog"${_sdTx('Föreslå en produkt','Suggérer un produit','Suggest a product')}</button></li>`
+  +`</ul></div><div class="footer-col"><h2${_sdTx('Kontakt','Contact','Contact')}</h2><ul>${mail}`
+  +_sdFLink('/a-propos','Vår historia','Notre histoire','Our story')
+  +_sdFLink('/contact','Kontakta oss','Nous contacter','Contact us')
+  +_sdFLink('/mentions-legales','Rättsliga uppgifter','Mentions légales','Legal notice')
+  +_sdFLink('/confidentialite','Integritetspolicy','Confidentialité','Privacy')
+  +`<li><button type="button" onclick="window.sdCookieSettings&amp;&amp;sdCookieSettings()">Cookies</button></li>`
+  +`</ul><p class="footer-origin">SE · FR</p></div></div>`
+  +`<div class="footer-bottom">${_sdTri('p',copy)}<div class="pay-badges" role="group"${_sdAria('Godkända betalningssätt','Moyens de paiement acceptés','Accepted payment methods')}>${sdPayLogos('pay-badge')}</div>${tag[LANG]?_sdTri('p',tag):''}</div></div></footer>`;
+}
 
 /* ── Bulle WhatsApp flottante (contact direct Victoria) ─────────────
-   Présente sur toutes les pages (web + mobile). Animée « vivante »
-   (halo qui pulse + léger rebond). Ouvre le WhatsApp du visiteur vers
-   le +33 6 25 53 64 43 avec un message pré-rempli dans sa langue. */
+   Présente sur toutes les pages. Une invitation discrète à l'arrivée (deux
+   halos), puis immobile. Elle s'efface au-dessus du premier écran de
+   l'accueil, quand une surcouche est ouverte et en bas de page, et se
+   soulève au-dessus de la barre d'achat collante (styles : style.css). */
+var SD_WA_NUM='33625536443';
+var SD_WA_SVG='<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path d="M16.04 3C9.4 3 4 8.4 4 15.04c0 2.12.55 4.13 1.6 5.93L4 29l8.24-1.56a12 12 0 0 0 3.8.62h.01c6.63 0 12.03-5.4 12.03-12.03C28.08 8.4 22.68 3 16.04 3zm7.05 17.1c-.3.83-1.74 1.6-2.4 1.66-.64.06-1.24.29-4.18-.87-3.53-1.39-5.8-4.98-5.98-5.21-.17-.24-1.44-1.92-1.44-3.66s.91-2.6 1.24-2.95c.3-.33.66-.41.88-.41l.63.01c.2 0 .47-.08.74.56.3.71 1.01 2.46 1.1 2.64.09.18.15.39.03.62-.12.24-.18.39-.35.6-.18.21-.37.47-.53.63-.18.18-.36.37-.16.72.2.35.9 1.48 1.93 2.4 1.33 1.18 2.44 1.55 2.79 1.73.35.18.55.15.76-.09.21-.24.87-1.02 1.1-1.37.24-.35.47-.29.79-.17.32.12 2.05.97 2.4 1.15.35.18.58.26.66.41.09.15.09.83-.21 1.66z"/></svg>';
+function _sdWaHref(text){return'https://wa.me/'+SD_WA_NUM+'?text='+encodeURIComponent(text||_sdT('Bonjour Victoria, j’ai une question.','Hello Victoria, I have a question.','Hej Victoria, jag har en fråga.'));}
+function _sdWaRefresh(){var a=document.getElementById('sd-wa-bubble');if(!a)return;var lbl=_sdT('Écrire à Victoria sur WhatsApp','Message Victoria on WhatsApp','Skriv till Victoria på WhatsApp');a.href=_sdWaHref();a.title=lbl;a.setAttribute('aria-label',lbl+' '+_sdT('(nouvelle fenêtre)','(opens in a new window)','(öppnas i ett nytt fönster)'));}
 function renderWhatsAppBubble(){
   if(document.getElementById('sd-wa-bubble'))return;
-  var NUM='33625536443';
-  var msg={fr:"Bonjour Victoria, j'ai une question 🙂",en:'Hello Victoria, I have a question 🙂',sv:'Hej Victoria, jag har en fråga 🙂'};
-  var label={fr:'Discuter sur WhatsApp',en:'Chat on WhatsApp',sv:'Chatta på WhatsApp'};
-  var lang=(typeof LANG!=='undefined'?LANG:'fr');
-  if(!document.getElementById('sd-wa-style')){
-    var st=document.createElement('style');st.id='sd-wa-style';
-    st.textContent='#sd-wa-bubble{position:fixed;right:20px;bottom:22px;z-index:900;width:58px;height:58px;border-radius:50%;background:var(--lingon,#4E6651);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(0,0,0,.22);animation:sd-wa-bob 2.6s ease-in-out infinite;transition:transform .15s;}'
-      +'#sd-wa-bubble:hover{transform:scale(1.07);}'
-      +'#sd-wa-bubble svg{width:32px;height:32px;fill:#fff;display:block;}'
-      +'#sd-wa-bubble::after{content:"";position:absolute;inset:0;border-radius:50%;animation:sd-wa-pulse 2s ease-out infinite;}'
-      +'@keyframes sd-wa-pulse{0%{box-shadow:0 0 0 0 rgba(78,102,81,.45)}70%{box-shadow:0 0 0 16px rgba(78,102,81,0)}100%{box-shadow:0 0 0 0 rgba(78,102,81,0)}}'
-      +'@keyframes sd-wa-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}'
-      +'@media(max-width:767px){#sd-wa-bubble{bottom:90px;right:16px;width:52px;height:52px}#sd-wa-bubble svg{width:28px;height:28px}}'
-      +'@media(prefers-reduced-motion:reduce){#sd-wa-bubble,#sd-wa-bubble::after{animation:none}}';
-    document.head.appendChild(st);
-  }
-  var a=document.createElement('a');a.id='sd-wa-bubble';
-  a.href='https://wa.me/'+NUM+'?text='+encodeURIComponent(msg[lang]||msg.fr);
-  a.target='_blank';a.rel='noopener';
-  a.setAttribute('aria-label',label[lang]||label.fr);a.title=label[lang]||label.fr;
-  a.innerHTML='<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16.04 3C9.4 3 4 8.4 4 15.04c0 2.12.55 4.13 1.6 5.93L4 29l8.24-1.56a12 12 0 0 0 3.8.62h.01c6.63 0 12.03-5.4 12.03-12.03C28.08 8.4 22.68 3 16.04 3zm7.05 17.1c-.3.83-1.74 1.6-2.4 1.66-.64.06-1.24.29-4.18-.87-3.53-1.39-5.8-4.98-5.98-5.21-.17-.24-1.44-1.92-1.44-3.66s.91-2.6 1.24-2.95c.3-.33.66-.41.88-.41l.63.01c.2 0 .47-.08.74.56.3.71 1.01 2.46 1.1 2.64.09.18.15.39.03.62-.12.24-.18.39-.35.6-.18.21-.37.47-.53.63-.18.18-.36.37-.16.72.2.35.9 1.48 1.93 2.4 1.33 1.18 2.44 1.55 2.79 1.73.35.18.55.15.76-.09.21-.24.87-1.02 1.1-1.37.24-.35.47-.29.79-.17.32.12 2.05.97 2.4 1.15.35.18.58.26.66.41.09.15.09.83-.21 1.66z"/></svg>';
-  document.body.appendChild(a);
+  var a=document.createElement('a');a.id='sd-wa-bubble';a.className='sd-fab';
+  a.target='_blank';a.rel='noopener';a.innerHTML=SD_WA_SVG;
+  document.body.appendChild(a);_sdWaRefresh();
 }
 
 /* ── Panier non validé : message d'aide + WhatsApp Victoria ────────────
@@ -359,50 +580,30 @@ function renderWhatsAppBubble(){
 function _sdCartCount(){ try{ return Object.values(cart).reduce(function(a,b){return a+(b||0);},0); }catch(e){ return 0; } }
 function renderCartHelpModal(){
   if(document.getElementById('sd-cart-help'))return;
-  var NUM='33625536443';
-  var lang=(typeof LANG!=='undefined'?LANG:'fr');
   var T={
-    title:{fr:'Une question avant de valider ?',en:'A question before you check out?',sv:'En fråga innan du betalar?'},
-    body:{fr:'Victoria vous répond en direct sur WhatsApp — un doute sur un produit, la livraison ou le paiement ? On vous aide à finaliser votre commande.',en:'Victoria replies to you directly on WhatsApp — unsure about a product, delivery or payment? We’ll help you complete your order.',sv:'Victoria svarar dig direkt på WhatsApp — osäker på en produkt, leverans eller betalning? Vi hjälper dig att slutföra din beställning.'},
+    title:{fr:'Une question avant de valider ?',en:'A question before you check out?',sv:'En fråga innan du betalar?'},
+    body:{fr:'Un doute sur un produit, la livraison ou le paiement ? Victoria vous répond en direct sur WhatsApp et vous aide à finaliser votre commande.',en:'Unsure about a product, delivery or payment? Victoria replies directly on WhatsApp and helps you complete your order.',sv:'Osäker på en produkt, leveransen eller betalningen? Victoria svarar direkt på WhatsApp och hjälper dig att slutföra beställningen.'},
     cta:{fr:'Écrire à Victoria sur WhatsApp',en:'Message Victoria on WhatsApp',sv:'Skriv till Victoria på WhatsApp'},
     dismiss:{fr:'Non merci, je continue',en:'No thanks, continue',sv:'Nej tack, fortsätt'},
-    wamsg:{fr:"Bonjour Victoria, j'ai un panier en cours sur Swedish Cravings et une petite question 🙂",en:'Hello Victoria, I have a cart on Swedish Cravings and a quick question 🙂',sv:'Hej Victoria, jag har en varukorg på Swedish Cravings och en liten fråga 🙂'}
+    wamsg:{fr:'Bonjour Victoria, j’ai un panier en cours sur Swedish Cravings et une petite question.',en:'Hello Victoria, I have a cart on Swedish Cravings and a quick question.',sv:'Hej Victoria, jag har en varukorg på Swedish Cravings och en liten fråga.'}
   };
-  var tr=function(o){return o[lang]||o.fr;};
-  if(!document.getElementById('sd-cart-help-style')){
-    var st=document.createElement('style');st.id='sd-cart-help-style';
-    st.textContent='#sd-cart-help{position:fixed;inset:0;z-index:1200;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(30,26,22,.46);}'
-      +'#sd-cart-help.open{display:flex;}'
-      +'#sd-cart-help .sch-card{position:relative;background:#FBF6EE;max-width:384px;width:100%;border-radius:10px;padding:30px 24px 22px;text-align:center;box-shadow:0 18px 50px rgba(40,30,20,.32);animation:sch-pop .22s ease;}'
-      +'@keyframes sch-pop{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}'
-      +'#sch-close{position:absolute;top:10px;right:12px;background:none;border:none;font-size:22px;line-height:1;color:#9A8F7F;cursor:pointer;padding:4px;}'
-      +'.sch-ico{width:54px;height:54px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;margin:2px auto 14px;}'
-      +'.sch-ico svg{width:30px;height:30px;fill:#fff;display:block;}'
-      +'.sch-title{font-family:var(--font-display,Georgia),serif;font-size:22px;font-weight:600;color:#2A2420;margin:0 0 8px;}'
-      +'.sch-body{font-family:var(--font-body,Georgia),serif;font-size:14.5px;line-height:1.55;color:#5B534B;margin:0 0 18px;}'
-      +'.sch-cta{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;background:#25D366;color:#fff;text-decoration:none;padding:13px 16px;border-radius:7px;font-family:var(--font-ui,sans-serif);font-size:13.5px;font-weight:600;box-shadow:0 4px 14px rgba(37,211,102,.32);}'
-      +'.sch-cta svg{width:19px;height:19px;fill:#fff;}'
-      +'.sch-dismiss{display:inline-block;margin-top:13px;background:none;border:none;cursor:pointer;font-family:var(--font-ui,sans-serif);font-size:12px;letter-spacing:.3px;color:#9A8F7F;text-decoration:underline;}';
-    document.head.appendChild(st);
-  }
-  var waSvg='<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16.04 3C9.4 3 4 8.4 4 15.04c0 2.12.55 4.13 1.6 5.93L4 29l8.24-1.56a12 12 0 0 0 3.8.62h.01c6.63 0 12.03-5.4 12.03-12.03C28.08 8.4 22.68 3 16.04 3zm7.05 17.1c-.3.83-1.74 1.6-2.4 1.66-.64.06-1.24.29-4.18-.87-3.53-1.39-5.8-4.98-5.98-5.21-.17-.24-1.44-1.92-1.44-3.66s.91-2.6 1.24-2.95c.3-.33.66-.41.88-.41l.63.01c.2 0 .47-.08.74.56.3.71 1.01 2.46 1.1 2.64.09.18.15.39.03.62-.12.24-.18.39-.35.6-.18.21-.37.47-.53.63-.18.18-.36.37-.16.72.2.35.9 1.48 1.93 2.4 1.33 1.18 2.44 1.55 2.79 1.73.35.18.55.15.76-.09.21-.24.87-1.02 1.1-1.37.24-.35.47-.29.79-.17.32.12 2.05.97 2.4 1.15.35.18.58.26.66.41.09.15.09.83-.21 1.66z"/></svg>';
+  var tr=function(o){return o[LANG]||o.fr;};
   var ov=document.createElement('div');ov.id='sd-cart-help';
-  ov.innerHTML='<div class="sch-card" role="dialog" aria-modal="true">'
-    +'<button id="sch-close" aria-label="Fermer">&times;</button>'
-    +'<div class="sch-ico">'+waSvg+'</div>'
-    +'<p class="sch-title">'+tr(T.title)+'</p>'
-    +'<p class="sch-body">'+tr(T.body)+'</p>'
-    +'<a class="sch-cta" href="https://wa.me/'+NUM+'?text='+encodeURIComponent(tr(T.wamsg))+'" target="_blank" rel="noopener">'+waSvg+'<span>'+tr(T.cta)+'</span></a>'
-    +'<button class="sch-dismiss">'+tr(T.dismiss)+'</button>'
+  ov.innerHTML='<div class="sch-card" role="dialog" aria-modal="true" aria-labelledby="sch-title" aria-describedby="sch-body">'
+    +'<button type="button" id="sch-close" class="sch-close" aria-label="'+_sdT('Fermer','Close','Stäng')+'">'+_sdIcons.close+'</button>'
+    +'<h2 class="sch-title" id="sch-title">'+tr(T.title)+'</h2>'
+    +'<p class="sch-body" id="sch-body">'+tr(T.body)+'</p>'
+    +'<a class="sch-cta" href="'+_sdAttr(_sdWaHref(tr(T.wamsg)))+'" target="_blank" rel="noopener">'+SD_WA_SVG+'<span>'+tr(T.cta)+'</span></a>'
+    +'<button type="button" class="sch-dismiss">'+tr(T.dismiss)+'</button>'
     +'</div>';
   document.body.appendChild(ov);
-  var close=function(){ ov.classList.remove('open'); };
-  ov.addEventListener('click',function(e){ if(e.target===ov) close(); });
-  ov.querySelector('#sch-close').addEventListener('click',close);
-  ov.querySelector('.sch-dismiss').addEventListener('click',close);
-  ov.querySelector('.sch-cta').addEventListener('click',function(){ setTimeout(close,100); });
-  document.addEventListener('keydown',function(e){ if(e.key==='Escape') close(); });
+  ov.addEventListener('click',function(e){ if(e.target===ov) closeCartHelp(); });
+  ov.querySelector('#sch-close').addEventListener('click',closeCartHelp);
+  ov.querySelector('.sch-dismiss').addEventListener('click',closeCartHelp);
+  ov.querySelector('.sch-cta').addEventListener('click',function(){ setTimeout(closeCartHelp,100); });
 }
+function openCartHelp(){renderCartHelpModal();var m=document.getElementById('sd-cart-help');if(!m||m.classList.contains('open'))return;_sdRemember('sd-cart-help');m.classList.add('open');_sdSyncLayers();setTimeout(function(){var c=m.querySelector('.sch-cta');if(c)c.focus();},60);}
+function closeCartHelp(){var m=document.getElementById('sd-cart-help');if(!m||!m.classList.contains('open'))return;m.classList.remove('open');_sdSyncLayers();_sdRestore('sd-cart-help');}
 var _schShown=false;
 function _schMaybeShow(){
   if(_schShown)return;
@@ -410,8 +611,7 @@ function _schMaybeShow(){
   if(_sdCartCount()<=0) return;            // rien dans le panier → on ne dérange pas
   _schShown=true;
   try{ sessionStorage.setItem('sd_cart_help_shown','1'); }catch(e){}
-  renderCartHelpModal();
-  var m=document.getElementById('sd-cart-help'); if(m) m.classList.add('open');
+  openCartHelp();
 }
 function initCartHelp(){
   /* Déclencheur : le client RESSORT de Stripe sans avoir payé. Stripe le
@@ -430,9 +630,18 @@ function initCartHelp(){
   setTimeout(_schMaybeShow, 1000);
   window.addEventListener('sdapi:ready', function(){ setTimeout(_schMaybeShow, 300); });
 }
-/* Bandeau saisonnier : Kanelbullens dag (4 octobre). Rendu DANS renderHeader (l'en-tête est redessiné après chargement du white-label : un élément inséré à côté serait effacé). Se retire tout seul après la date de fin. */
-function sdSeasonBannerHTML(){var today=new Date().toISOString().slice(0,10);if(today>'2026-10-04')return '';var T={fr:'🇸🇪 4 octobre, Kanelbullens dag — le sucre perlé pour vos kanelbullar est là · Voir la recette →',sv:'🇸🇪 4 oktober, Kanelbullens dag — pärlsocker till dina kanelbullar · Se receptet →',en:'🇸🇪 4 October, Cinnamon Bun Day — pearl sugar for your kanelbullar is here · See the recipe →'};return '<a id="sd-season" href="/recette-kanelbullar" data-sv="'+T.sv+'" data-fr="'+T.fr+'" data-en="'+T.en+'" style="display:block;text-align:center;background:var(--heather);color:var(--snow);text-decoration:none;padding:9px 16px;font-family:var(--font-ui);font-size:12px;letter-spacing:1px;">'+(T[LANG]||T.fr)+'</a>';}
-function initPage(activePage){window._activePage=activePage;document.body.classList.add('js-ready');var _hr=document.getElementById('header-root');var _fr=document.getElementById('footer-root');_hr.innerHTML=renderHeader(activePage);_fr.innerHTML=renderFooter();if(SD_WL._ready){_hr.classList.add('wl-ready');_fr.classList.add('wl-ready');}setLang(LANG);updateCartBadge();renderCartDrawer();if(LANG==='sv')loadSekRate();initScrollReveal();initHeaderShrink();renderSuggestionWidget();renderWhatsAppBubble();initCartHelp();/* Marque dans le titre : on n'y touche que si elle n'y est pas déjà, sans jamais couper le titre SEO */if(SD_WL.brand_name&&document.title.indexOf(SD_WL.brand_name)===-1){document.title=document.title.replace(/([|—–])[^|—–]*$/,'$1 '+SD_WL.brand_name);const _m=document.querySelector('meta[property="og:title"]');if(_m)_m.setAttribute('content',document.title);}sdInitA11y();}
+/* Bandeaux saisonniers datés (date de Paris). Rendus DANS renderHeader :
+   l'en-tête est redessiné quand la marque arrive, un élément inséré à côté
+   serait effacé. Chacun se retire seul après sa date de fin. */
+var SD_SEASONS=[
+  {until:'2026-10-04',href:'/recette-kanelbullar',
+   fr:'4 octobre, Kanelbullens dag : le sucre perlé pour vos kanelbullar est là · Voir la recette',
+   sv:'4 oktober, Kanelbullens dag: pärlsocker till dina kanelbullar · Se receptet',
+   en:'4 October, Cinnamon Bun Day: pearl sugar for your kanelbullar is here · See the recipe'}
+];
+function _sdToday(){try{return new Date().toLocaleDateString('en-CA',{timeZone:'Europe/Paris'});}catch(e){return new Date().toISOString().slice(0,10);}}
+function sdSeasonBannerHTML(){var t=_sdToday();var s=SD_SEASONS.filter(function(x){return(!x.from||t>=x.from)&&t<=x.until;})[0];if(!s)return'';return'<a id="sd-season" class="sd-season" href="'+_sdAttr(s.href)+'" data-sv="'+_sdAttr(s.sv)+'" data-fr="'+_sdAttr(s.fr)+'" data-en="'+_sdAttr(s.en)+'">'+_sdAttr(s[LANG]||s.fr)+'</a>';}
+function initPage(activePage){window._activePage=activePage;document.body.classList.add('js-ready');var _hr=document.getElementById('header-root');var _fr=document.getElementById('footer-root');if(_hr)_hr.innerHTML=renderHeader(activePage);if(_fr)_fr.innerHTML=renderFooter();if(SD_WL._ready){if(_hr)_hr.classList.add('wl-ready');if(_fr)_fr.classList.add('wl-ready');}setLang(LANG);updateCartBadge();renderCartDrawer();if(LANG==='sv')loadSekRate();initScrollReveal();initHeaderShrink();renderSuggestionWidget();renderWhatsAppBubble();initCartHelp();/* Marque dans le titre : on n'y touche que si elle n'y est pas déjà, sans jamais couper le titre SEO */if(SD_WL.brand_name&&document.title.indexOf(SD_WL.brand_name)===-1){document.title=document.title.replace(/([|—–])[^|—–]*$/,'$1 '+SD_WL.brand_name);const _m=document.querySelector('meta[property="og:title"]');if(_m)_m.setAttribute('content',document.title);}sdInitA11y();}
 
 /* Annonce « A · B · C » découpée en messages : sur mobile, seul le premier
    s'affiche, sur une ligne (voir .ann-seg dans style.css). */
@@ -446,14 +655,38 @@ function _sdRayonUrl(slug){return 'boutique.html?rayon='+encodeURIComponent(slug
 function _sdFillMobRayons(){var box=document.getElementById('mob-rayons');if(!box)return;box.innerHTML=_sdShopRayons().slice(0,6).map(function(r){return'<a href="'+_sdRayonUrl(r.slug)+'" onclick="closeMob()">'+_sdAttr(r.label[LANG]||r.label.fr)+'</a>';}).join('');}
 
 /* Clavier et lecteurs d'écran, communs à toutes les pages */
+function _sdCartRefocus(key,act){
+  var list=document.getElementById('drawer-items-list');if(!list)return;
+  var row=[].filter.call(list.querySelectorAll('[data-key]'),function(r){return r.getAttribute('data-key')===key;})[0];
+  var live=document.getElementById('drawer-live');var t=row&&row.querySelector('[data-cart-act="'+act+'"]');
+  if(row){var n=row.querySelector('.cq-num');if(live&&n)live.textContent=_sdT('Quantité : ','Quantity: ','Antal: ')+n.textContent;if(!t)t=row.querySelector('[data-cart-act="inc"]');}
+  else{if(live)live.textContent=_sdT('Article retiré du panier','Item removed from the cart','Varan har tagits bort');t=list.querySelector('[data-cart-act="del"]')||document.querySelector('#cart-drawer .drawer-close');}
+  if(t){try{t.focus({preventScroll:true});}catch(e){}}
+}
 function sdInitA11y(){
   if(window._sdA11y)return;window._sdA11y=true;
-  /* Échap ferme ce qui est ouvert : recherche, menu, panier */
   document.addEventListener('keydown',function(e){
-    if(e.key!=='Escape')return;
-    var so=document.getElementById('search-overlay');if(so&&so.classList.contains('open')){closeSearch();return;}
-    var mn=document.getElementById('mobile-nav');if(mn&&mn.classList.contains('open')){closeMob();return;}
-    var cd=document.getElementById('cart-drawer');if(cd&&cd.classList.contains('open'))closeCart();
+    /* Échap ferme la surcouche du dessus */
+    if(e.key==='Escape'){var L=_sdTopLayer();if(!L)return;var id=L.id;e.preventDefault();
+      if(id==='sd-cart-help')closeCartHelp();else if(id==='suggest-modal')closeSuggest();else if(id==='search-overlay')closeSearch();else if(id==='mobile-nav')closeMob();else closeCart();return;}
+    /* Tab reste dans la surcouche ouverte */
+    if(e.key!=='Tab')return;var top=_sdTopLayer();if(!top)return;
+    var root=top.id==='sd-cart-help'?(top.querySelector('.sch-card')||top):top;var f=_sdFocusables(root);
+    if(!f.length){e.preventDefault();return;}
+    var first=f[0],last=f[f.length-1],a=document.activeElement;
+    if(!root.contains(a)){e.preventDefault();(e.shiftKey?last:first).focus();}
+    else if(e.shiftKey&&a===first){e.preventDefault();last.focus();}
+    else if(!e.shiftKey&&a===last){e.preventDefault();first.focus();}
+  });
+  /* Tiroir panier : + / − / retirer / suggestion, par délégation (le tiroir est redessiné) */
+  document.addEventListener('click',function(e){
+    var t=e.target&&e.target.closest?e.target:null;if(!t)return;
+    var s=t.closest('[data-sugg-add]');
+    if(s){var id=s.getAttribute('data-sugg-add');addToCart(id);_sdCartRefocus(id,'inc');return;}
+    var b=t.closest('[data-cart-act]');if(!b)return;var row=b.closest('[data-key]');if(!row)return;
+    var key=row.getAttribute('data-key'),act=b.getAttribute('data-cart-act');
+    if(act==='del')removeItem(key);else changeQty(key,act==='inc'?1:-1);
+    _sdCartRefocus(key,act);
   });
   /* Cible du lien d'évitement : le premier bloc de contenu après l'en-tête */
   if(!document.getElementById('contenu')){
@@ -467,6 +700,10 @@ function sdInitA11y(){
     document.body.classList.add('sd-hero-visible');
     new IntersectionObserver(function(es){es.forEach(function(en){document.body.classList.toggle('sd-hero-visible',en.intersectionRatio>0.35);});},{threshold:[0,0.35,0.6,1]}).observe(hero);
   }
+  /* Textes de livraison des pages (data-sd-ship) : devise, langue, réglages */
+  sdFillShipping();
+  window.addEventListener('sd:currency',function(){sdFillShipping();});
+  window.addEventListener('sdapi:ready',function(){sdFillShipping();updateCartBadge();});
 }
 /* ── SCROLL REVEAL ── */
 function initScrollReveal() {
@@ -488,44 +725,63 @@ function initScrollReveal() {
   });
 }
 
-// Anime les cartes produit après render dynamique
+// Anime les cartes produit après render dynamique (décalage plafonné : une
+// longue liste ne fait plus attendre ses dernières cartes plusieurs secondes)
 function revealNew(container) {
   if (!container) return;
   container.querySelectorAll('.prod-card, .prod-list-item').forEach((el, i) => {
-    el.style.animationDelay = (i * 0.07) + 's';
+    el.style.animationDelay = (Math.min(i, 8) * 0.06) + 's';
     el.classList.add('prod-card-anim');
   });
 }
 
-/* ── HEADER SHRINK ── */
+/* ── HEADER SHRINK + BAS DE PAGE ──
+   L'en-tête rétrécit sans faire sauter la page (la marge compense, voir
+   style.css). L'élément est relu à chaque fois : l'en-tête est redessiné
+   quand la marque arrive. En bas d'une page longue, les bulles flottantes
+   s'effacent pour ne pas cacher le pied de page. */
 function initHeaderShrink() {
-  const header = document.querySelector('header');
-  if (!header) return;
+  if (window._sdScrollInit) return; window._sdScrollInit = true;
   let ticking = false;
-  window.addEventListener('scroll', () => {
-    if (!ticking) {
-      requestAnimationFrame(() => {
-        header.classList.toggle('shrunk', window.scrollY > 72);
-        ticking = false;
-      });
-      ticking = true;
-    }
-  }, { passive: true });
+  const run = () => {
+    const header = document.querySelector('#header-root header') || document.querySelector('header');
+    if (header) header.classList.toggle('shrunk', window.scrollY > 72);
+    const doc = document.documentElement;
+    const long = doc.scrollHeight > window.innerHeight * 1.5;
+    document.body.classList.toggle('sd-at-end', long && (window.innerHeight + window.scrollY) >= doc.scrollHeight - 160);
+    ticking = false;
+  };
+  window.addEventListener('scroll', () => { if (!ticking) { requestAnimationFrame(run); ticking = true; } }, { passive: true });
+  run();
 }
 
-/* ── STICKY ADD TO CART (product page) ── */
+/* ── STICKY ADD TO CART (product page) ──
+   Visible dès que le bouton principal n'est plus à l'écran. Masquée, elle
+   sort aussi de la tabulation (visibility, style.css) ; affichée, elle
+   réserve sa hauteur en bas de page et les bulles passent au-dessus. */
 function initStickyAtc(productName, price) {
   const bar = document.getElementById('sticky-atc');
   if (!bar) return;
-  document.getElementById('sticky-atc-name').textContent = productName;
-  document.getElementById('sticky-atc-price').textContent = fmtPrice(price || 0);
-
+  const nm = document.getElementById('sticky-atc-name'); if (nm) nm.textContent = productName || '';
+  const pr = document.getElementById('sticky-atc-price'); if (pr) pr.textContent = fmtPrice(price || 0);
+  bar.setAttribute('role', 'region');
+  bar.setAttribute('aria-label', _sdT('Achat rapide', 'Quick buy', 'Snabbköp'));
   const addRow = document.querySelector('.add-row');
   if (!addRow) return;
-  const obs = new IntersectionObserver(([e]) => {
-    bar.classList.toggle('visible', !e.isIntersecting);
-  }, { threshold: 0 });
+  if (bar._sdObs) bar._sdObs.disconnect();
+  const sync = (on) => {
+    on = on && bar.isConnected;
+    bar.classList.toggle('visible', on);
+    document.body.classList.toggle('sd-atc-visible', on);
+    if (on) document.documentElement.style.setProperty('--sd-atc-h', bar.offsetHeight + 'px');
+  };
+  const obs = new IntersectionObserver(([e]) => sync(!e.isIntersecting), { threshold: 0 });
   obs.observe(addRow);
+  bar._sdObs = obs;
+  if (window.ResizeObserver && !bar._sdRo) {
+    bar._sdRo = new ResizeObserver(() => { if (bar.classList.contains('visible')) document.documentElement.style.setProperty('--sd-atc-h', bar.offsetHeight + 'px'); });
+    bar._sdRo.observe(bar);
+  }
 }
 
 /* ── MOBILE FILTER TOGGLE ── */
@@ -533,282 +789,145 @@ function toggleMobFilter() {
   const sb = document.querySelector('.sidebar');
   if (!sb) return;
   sb.classList.toggle('mob-hidden');
+  const hid = sb.classList.contains('mob-hidden');
   const btn = document.querySelector('.mob-filter-btn');
-  if (btn) btn.textContent = sb.classList.contains('mob-hidden') ? 'Afficher les filtres' : 'Masquer les filtres';
+  if (btn) { btn.textContent = hid ? _sdT('Afficher les filtres', 'Show filters', 'Visa filter') : _sdT('Masquer les filtres', 'Hide filters', 'Dölj filter'); btn.setAttribute('aria-expanded', hid ? 'false' : 'true'); }
 }
 
 /* ── BADGE INIT ── */
-console.log('[SD v4] loaded, cart keys:', Object.keys(cart).length);
-window.addEventListener('load', function() { console.log('[SD v4] window.load, updating badge'); updateCartBadge(); });
+window.addEventListener('load', function() { updateCartBadge(); });
 document.addEventListener('DOMContentLoaded', function() { updateCartBadge(); });
 
-/* ── SUGGESTION WIDGET ── */
+/* ── SUGGESTION WIDGET ──
+   Le bouton flottant est léger ; la fenêtre (formulaire) n'est construite
+   qu'à la première ouverture. Styles : css/style.css (#suggest-…).
+   openSuggest('nom') pré-remplit le produit (depuis une recherche vide). */
 var _suggestOpen = false;
+var SD_SUGGEST_T = {
+  btn:           {fr:'Suggérer un produit', sv:'Föreslå en produkt', en:'Suggest a product'},
+  title:         {fr:'Suggérer un produit', sv:'Föreslå en produkt', en:'Suggest a product'},
+  sub:           {fr:'Un produit suédois introuvable ici ? Dites-le-nous, nous ferons notre possible pour le faire venir.', sv:'Hittar du inte det du söker? Berätta för oss, vi gör vårt bästa för att ta hem det.', en:"Can't find a Swedish product here? Tell us and we'll do our best to bring it in."},
+  yourInfoTitle: {fr:'Vos coordonnées', sv:'Dina uppgifter', en:'Your details'},
+  customerLabel: {fr:'Votre prénom et nom', sv:'Ditt namn', en:'Your name'},
+  /* Pas d'exemple de nom ni d'e-mail : un faux contenu se confond avec une saisie */
+  customerPh:    {fr:'', sv:'', en:''},
+  emailLabel:    {fr:'Votre e-mail', sv:'Din e-post', en:'Your email'},
+  emailPh:       {fr:'', sv:'', en:''},
+  productTitle:  {fr:'Le produit recherché', sv:'Produkten du söker', en:'The product you want'},
+  nameLabel:     {fr:'Nom du produit', sv:'Produktnamn', en:'Product name'},
+  namePh:        {fr:'Ex. : confiture d’airelles, knäckebröd…', sv:'T.ex. lingonsylt, knäckebröd…', en:'E.g. lingonberry jam, knäckebröd…'},
+  descLabel:     {fr:'Description (facultatif)', sv:'Beskrivning (valfritt)', en:'Description (optional)'},
+  descPh:        {fr:'Pourquoi ce produit ? Où l’avez-vous découvert ?', sv:'Varför vill du ha den? Var hittade du den?', en:'Why this product? Where did you discover it?'},
+  urlLabel:      {fr:'Lien où vous l’avez vu (facultatif)', sv:'Länk där du såg den (valfritt)', en:'Link where you saw it (optional)'},
+  urlPh:         {fr:'https://…', sv:'https://…', en:'https://…'},
+  submit:        {fr:'Envoyer ma suggestion', sv:'Skicka mitt förslag', en:'Send my suggestion'},
+  hint:          {fr:'Champs marqués * obligatoires. Nous lisons chaque suggestion avec attention.', sv:'Fält markerade med * är obligatoriska. Vi läser varje förslag noggrant.', en:'Fields marked * are required. We read every suggestion carefully.'},
+  successTitle:  {fr:'Merci pour votre suggestion !', sv:'Tack för ditt förslag!', en:'Thanks for your suggestion!'},
+  successSub:    {fr:'Nous en prenons note et vous recontacterons dès que ce produit est disponible.', sv:'Vi noterar det och återkommer till dig så snart produkten finns tillgänglig.', en:"We've noted it and will get back to you as soon as the product is available."},
+  close:         {fr:'Fermer', sv:'Stäng', en:'Close'},
+  errCustomer:   {fr:'Merci d’indiquer votre prénom et nom.', sv:'Ange ditt namn.', en:'Please enter your name.'},
+  errEmail:      {fr:'Merci d’indiquer votre adresse e-mail.', sv:'Ange din e-postadress.', en:'Please enter your email address.'},
+  errEmailBad:   {fr:'Cette adresse e-mail ne semble pas valide.', sv:'E-postadressen verkar inte giltig.', en:'This email address doesn’t look valid.'},
+  errName:       {fr:'Merci d’indiquer le nom du produit.', sv:'Ange ett produktnamn.', en:'Please enter the product name.'},
+  errSend:       {fr:'L’envoi n’a pas abouti. Réessayez dans un instant.', sv:'Det gick inte att skicka. Försök igen om en stund.', en:'Could not send. Please try again in a moment.'}
+};
+function _sgT(k){var o=SD_SUGGEST_T[k];return o?(o[LANG]||o.fr):'';}
 
 function renderSuggestionWidget() {
   if (document.getElementById('suggest-widget')) return;
-  var css = `
-    #suggest-btn{position:fixed;bottom:22px;left:20px;z-index:800;display:flex;align-items:center;justify-content:center;gap:8px;
-      background:var(--heather,#A99282);color:var(--on-heather,#1B2118);border:none;border-radius:50%;width:52px;height:52px;padding:0;
-      font-family:var(--font-ui,'Jost',sans-serif);font-size:13px;font-weight:600;cursor:pointer;
-      box-shadow:0 4px 18px rgba(0,0,0,0.18);transition:transform 0.18s,box-shadow 0.18s;letter-spacing:0.2px;}
-    #suggest-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.22);}
-    #suggest-btn svg{flex-shrink:0;width:20px;height:20px;}
-    #suggest-btn-label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;}
-    #suggest-overlay{position:fixed;inset:0;background:rgba(20,26,20,0.6);z-index:900;backdrop-filter:blur(4px);
-      opacity:0;pointer-events:none;transition:opacity 0.26s;}
-    #suggest-overlay.open{opacity:1;pointer-events:all;}
-    #suggest-modal{position:fixed;top:50%;left:50%;z-index:901;width:100%;max-width:620px;max-height:92vh;
-      background:var(--cream,#F6F1E9);border-radius:18px;box-shadow:0 32px 80px rgba(0,0,0,0.28);
-      overflow:hidden;display:flex;flex-direction:column;
-      transform:translate(-50%,-48%) scale(0.96);opacity:0;pointer-events:none;
-      transition:transform 0.28s cubic-bezier(.34,1.4,.64,1),opacity 0.22s;}
-    #suggest-modal.open{transform:translate(-50%,-50%) scale(1);opacity:1;pointer-events:all;}
-    #suggest-form-view{display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden;}
-    #suggest-modal .sm-hero{background:var(--heather-text,#695A51);padding:28px 32px 24px;position:relative;flex-shrink:0;}
-    #suggest-modal .sm-hero-close{position:absolute;top:16px;right:18px;background:rgba(255,255,255,0.15);
-      border:none;color:#fff;width:32px;height:32px;border-radius:50%;font-size:18px;line-height:32px;text-align:center;
-      cursor:pointer;transition:background 0.15s;padding:0;}
-    #suggest-modal .sm-hero-close:hover{background:rgba(255,255,255,0.28);}
-    #suggest-modal .sm-hero-icon{font-size:28px;margin-bottom:10px;}
-    #suggest-modal .sm-title{font-family:var(--font-display,'Cormorant Garamond',Georgia,serif);font-size:26px;
-      color:#fff;font-weight:600;line-height:1.2;margin-bottom:6px;}
-    #suggest-modal .sm-sub{font-size:14px;color:rgba(255,255,255,0.75);font-family:var(--font-body,'Crimson Pro',Georgia,serif);line-height:1.5;}
-    #suggest-modal .sm-body{padding:26px 32px 28px;overflow-y:auto;flex:1;min-height:0;}
-    #suggest-modal .sm-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
-    #suggest-modal .sm-field{margin-bottom:16px;}
-    #suggest-modal .sm-field:last-of-type{margin-bottom:0;}
-    #suggest-modal .sm-label{display:block;font-size:11px;font-weight:700;letter-spacing:0.6px;text-transform:uppercase;
-      color:#6A7280;margin-bottom:6px;font-family:var(--font-ui,'Jost',sans-serif);}
-    #suggest-modal .sm-label .req{color:var(--heather-text,#695A51);}
-    #suggest-modal input,#suggest-modal textarea{width:100%;box-sizing:border-box;border:1.5px solid #D8CEBC;border-radius:9px;
-      padding:11px 14px;font-size:15px;font-family:var(--font-body,'Crimson Pro',Georgia,serif);color:var(--midnight,#1C2028);
-      background:#fff;outline:none;transition:border-color 0.15s,box-shadow 0.15s;resize:none;}
-    #suggest-modal input:focus,#suggest-modal textarea:focus{border-color:var(--heather,#3E5238);box-shadow:0 0 0 3px rgba(62,82,56,0.1);}
-    #suggest-modal input.error,#suggest-modal textarea.error{border-color:#DC2626;box-shadow:0 0 0 3px rgba(220,38,38,0.1);}
-    #suggest-modal input::placeholder,#suggest-modal textarea::placeholder{color:#C4B9AB;}
-    #suggest-modal .sm-divider{border:none;border-top:1px solid #E8E0D4;margin:20px 0;}
-    #suggest-modal .sm-section-title{font-size:11px;font-weight:700;letter-spacing:0.6px;text-transform:uppercase;
-      color:#9CA3AF;font-family:var(--font-ui,'Jost',sans-serif);margin-bottom:14px;}
-    #suggest-modal .sm-submit{width:100%;padding:14px;background:var(--heather-text,#695A51);color:#fff;border:none;
-      border-radius:10px;font-size:15px;font-weight:600;letter-spacing:0.3px;cursor:pointer;
-      font-family:var(--font-ui,'Jost',sans-serif);transition:opacity 0.15s,transform 0.15s;margin-top:20px;}
-    #suggest-modal .sm-submit:hover{opacity:0.9;transform:translateY(-1px);}
-    #suggest-modal .sm-submit:disabled{opacity:0.45;cursor:not-allowed;transform:none;}
-    #suggest-modal .sm-hint{text-align:center;font-size:12px;color:#9CA3AF;margin-top:10px;
-      font-family:var(--font-body,'Crimson Pro',Georgia,serif);}
-    #suggest-modal .sm-success{padding:48px 32px;text-align:center;}
-    #suggest-modal .sm-success-icon{font-size:52px;margin-bottom:16px;}
-    #suggest-modal .sm-success-title{font-family:var(--font-display,'Cormorant Garamond',Georgia,serif);font-size:28px;
-      color:var(--midnight,#1C2028);font-weight:600;margin-bottom:10px;}
-    #suggest-modal .sm-success-sub{font-size:15px;color:#6A7280;font-family:var(--font-body,'Crimson Pro',Georgia,serif);line-height:1.6;}
-    @media(max-width:600px){
-      #suggest-modal{max-width:100%;max-height:100%;border-radius:0;top:0;left:0;transform:translateY(100%) scale(1);
-        border-radius:18px 18px 0 0;bottom:0;top:auto;max-height:94vh;}
-      #suggest-modal.open{transform:translateY(0) scale(1);}
-      #suggest-modal .sm-row{grid-template-columns:1fr;}
-      #suggest-modal .sm-hero{padding:22px 20px 18px;}
-      #suggest-modal .sm-body{padding:20px 20px 24px;}
-      #suggest-modal .sm-title{font-size:22px;}
-      #suggest-btn{left:16px;bottom:16px;}
-    }
-    @media(max-width:768px){
-      #suggest-btn{padding:0;width:52px;height:52px;border-radius:50%;justify-content:center;left:16px;bottom:16px;}
-      #suggest-btn svg{width:20px;height:20px;}
-    }
-  `;
-
-  var T = {
-    btn:           {fr:'Suggérer un produit', sv:'Föreslå en produkt', en:'Suggest a product'},
-    title:         {fr:'Suggérer un produit', sv:'Föreslå en produkt', en:'Suggest a product'},
-    sub:           {fr:'Un produit suédois introuvable ici ? Dites-le nous, on fera le maximum pour le sourcer.', sv:'Hittar du inte det du söker? Berätta för oss, vi gör vårt bästa för att hitta det!', en:"Can't find a Swedish product here? Tell us and we'll do our best to source it."},
-    yourInfoTitle: {fr:'Vos coordonnées', sv:'Dina uppgifter', en:'Your details'},
-    customerLabel: {fr:'Votre prénom & nom *', sv:'Ditt namn *', en:'Your name *'},
-    customerPh:    {fr:'Marie Dupont', sv:'Anna Svensson', en:'Jane Smith'},
-    emailLabel:    {fr:'Votre email *', sv:'Din e-post *', en:'Your email *'},
-    emailPh:       {fr:'marie@exemple.fr', sv:'anna@exempel.se', en:'jane@example.com'},
-    productTitle:  {fr:'Le produit recherché', sv:'Produkten du söker', en:'The product you want'},
-    nameLabel:     {fr:'Nom du produit *', sv:'Produktnamn *', en:'Product name *'},
-    namePh:        {fr:'Ex: Lingonberry jam, Knäckebröd…', sv:'T.ex. Lingonsylt, Knäckebröd…', en:'E.g. Lingonberry jam, Knäckebröd…'},
-    descLabel:     {fr:'Description (optionnel)', sv:'Beskrivning (valfritt)', en:'Description (optional)'},
-    descPh:        {fr:'Pourquoi ce produit ? Où l\'avez-vous découvert ?', sv:'Varför vill du ha den? Var hittade du den?', en:'Why this product? Where did you discover it?'},
-    urlLabel:      {fr:'Lien où vous l\'avez vu (optionnel)', sv:'Länk där du såg den (valfritt)', en:'Link where you saw it (optional)'},
-    urlPh:         {fr:'https://…', sv:'https://…', en:'https://…'},
-    submit:        {fr:'Envoyer ma suggestion →', sv:'Skicka mitt förslag →', en:'Send my suggestion →'},
-    hint:          {fr:'Nous lisons chaque suggestion avec attention.', sv:'Vi läser varje förslag noggrant.', en:'We read every suggestion carefully.'},
-    successTitle:  {fr:'Merci pour votre suggestion !', sv:'Tack för ditt förslag!', en:'Thanks for your suggestion!'},
-    successSub:    {fr:'Nous en prenons note et vous recontacterons dès que ce produit est disponible.', sv:'Vi noterar det och återkommer till dig så snart produkten finns tillgänglig.', en:"We've noted it and will get back to you as soon as the product is available."},
-    errCustomer:   {fr:'Merci d\'indiquer votre prénom et nom.', sv:'Ange ditt namn.', en:'Please enter your name.'},
-    errEmail:      {fr:'Merci d\'indiquer votre adresse email.', sv:'Ange din e-postadress.', en:'Please enter your email address.'},
-    errName:       {fr:'Merci d\'indiquer le nom du produit.', sv:'Ange ett produktnamn.', en:'Please enter the product name.'},
-    errSend:       {fr:'Erreur lors de l\'envoi. Réessayez.', sv:'Det gick inte att skicka. Försök igen.', en:'Could not send. Please try again.'},
-  };
-
-  var l = LANG || 'fr';
-  var t = function(k) { return T[k][l] || T[k].fr; };
-
-  var html = `
-    <style>${css}</style>
-    <button id="suggest-btn" onclick="openSuggest()" title="${t('btn')}">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M8 1.5C4.41 1.5 1.5 4.1 1.5 7.3c0 1.7.75 3.22 1.97 4.3L2.5 14.5l3.2-1.4A7.1 7.1 0 008 13.1c3.59 0 6.5-2.6 6.5-5.8S11.59 1.5 8 1.5z"/>
-      </svg>
-      <span id="suggest-btn-label">${t('btn')}</span>
-    </button>
-    <div id="suggest-overlay" onclick="closeSuggest()"></div>
-    <div id="suggest-modal" role="dialog" aria-modal="true">
-      <div id="suggest-form-view">
-        <div class="sm-hero">
-          <button class="sm-hero-close" onclick="closeSuggest()" aria-label="Fermer">×</button>
-          <div class="sm-title" id="sg-title">${t('title')}</div>
-          <div class="sm-sub" id="sg-sub">${t('sub')}</div>
-        </div>
-        <div class="sm-body">
-          <div class="sm-section-title" id="sg-your-info-title">${t('yourInfoTitle')}</div>
-          <div class="sm-row">
-            <div class="sm-field">
-              <label class="sm-label" id="sg-customer-lbl">${t('customerLabel').replace('*','<span class="req">*</span>')}</label>
-              <input type="text" id="sg-customer" placeholder="${t('customerPh')}" maxlength="80" autocomplete="name">
-            </div>
-            <div class="sm-field">
-              <label class="sm-label" id="sg-email-lbl">${t('emailLabel').replace('*','<span class="req">*</span>')}</label>
-              <input type="email" id="sg-email" placeholder="${t('emailPh')}" autocomplete="email">
-            </div>
-          </div>
-          <hr class="sm-divider">
-          <div class="sm-section-title" id="sg-product-title">${t('productTitle')}</div>
-          <div class="sm-field">
-            <label class="sm-label" id="sg-name-lbl">${t('nameLabel').replace('*','<span class="req">*</span>')}</label>
-            <input type="text" id="sg-name" placeholder="${t('namePh')}" maxlength="120">
-          </div>
-          <div class="sm-field">
-            <label class="sm-label" id="sg-desc-lbl">${t('descLabel')}</label>
-            <textarea id="sg-desc" rows="3" placeholder="${t('descPh')}" maxlength="400"></textarea>
-          </div>
-          <div class="sm-field">
-            <label class="sm-label" id="sg-url-lbl">${t('urlLabel')}</label>
-            <input type="url" id="sg-url" placeholder="${t('urlPh')}">
-          </div>
-          <button class="sm-submit" id="sg-submit" onclick="submitSuggestion()">${t('submit')}</button>
-          <div class="sm-hint" id="sg-hint">${t('hint')}</div>
-        </div>
-      </div>
-      <div id="suggest-success-view" style="display:none">
-        <div class="sm-success">
-          <div class="sm-success-title" id="sg-ok-title">${t('successTitle')}</div>
-          <div class="sm-success-sub" id="sg-ok-sub">${t('successSub')}</div>
-        </div>
-      </div>
-    </div>
-  `;
-
   var wrap = document.createElement('div');
   wrap.id = 'suggest-widget';
-  wrap.innerHTML = html;
+  wrap.innerHTML = '<button type="button" id="suggest-btn" class="sd-fab" onclick="openSuggest()" aria-haspopup="dialog" title="' + _sdAttr(_sgT('btn')) + '">'
+    + '<svg width="20" height="20" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M8 1.5C4.41 1.5 1.5 4.1 1.5 7.3c0 1.7.75 3.22 1.97 4.3L2.5 14.5l3.2-1.4A7.1 7.1 0 008 13.1c3.59 0 6.5-2.6 6.5-5.8S11.59 1.5 8 1.5z"/></svg>'
+    + '<span id="suggest-btn-label" class="sr-only">' + _sgT('btn') + '</span></button>';
   document.body.appendChild(wrap);
 }
 
-function openSuggest() {
+function _sdBuildSuggest() {
+  if (document.getElementById('suggest-modal')) return;
+  renderSuggestionWidget();
+  var w = document.getElementById('suggest-widget');
+  var field = function (id, type, extra) { return '<div class="sm-field"><label class="sm-label" for="' + id + '" id="' + id + '-lbl"></label>' + (type === 'textarea' ? '<textarea id="' + id + '" rows="3"' + extra + '></textarea>' : '<input type="' + type + '" id="' + id + '"' + extra + '>') + '</div>'; };
+  w.insertAdjacentHTML('beforeend',
+    '<div id="suggest-overlay" onclick="closeSuggest()"></div>'
+    + '<div id="suggest-modal" role="dialog" aria-modal="true" aria-labelledby="sg-title" aria-describedby="sg-sub">'
+    + '<div id="suggest-form-view"><div class="sm-hero"><button type="button" class="sm-hero-close" id="sg-close" onclick="closeSuggest()">' + _sdIcons.close + '</button>'
+    + '<h2 class="sm-title" id="sg-title"></h2><p class="sm-sub" id="sg-sub"></p></div>'
+    + '<form class="sm-body" onsubmit="event.preventDefault();submitSuggestion();" novalidate>'
+    + '<p class="sm-section-title" id="sg-your-info-title"></p>'
+    + '<div class="sm-row">' + field('sg-customer', 'text', ' maxlength="80" autocomplete="name" required') + field('sg-email', 'email', ' autocomplete="email" inputmode="email" required') + '</div>'
+    + '<hr class="sm-divider"><p class="sm-section-title" id="sg-product-title"></p>'
+    + field('sg-name', 'text', ' maxlength="120" required') + field('sg-desc', 'textarea', ' maxlength="400"') + field('sg-url', 'url', ' inputmode="url" autocomplete="url"')
+    + '<p class="sm-error" id="sg-error" role="alert"></p>'
+    + '<button type="submit" class="sm-submit" id="sg-submit"></button><p class="sm-hint" id="sg-hint"></p></form></div>'
+    + '<div id="suggest-success-view" hidden><div class="sm-success"><h2 class="sm-success-title" id="sg-ok-title" tabindex="-1"></h2><p class="sm-success-sub" id="sg-ok-sub"></p>'
+    + '<button type="button" class="btn-outline-dark" id="sg-ok-close" onclick="closeSuggest()"></button></div></div></div>');
+  refreshSuggestLang();
+}
+
+function openSuggest(prefill) {
+  _sdBuildSuggest();
+  var m = document.getElementById('suggest-modal'); if (!m) return;
+  if (!m.classList.contains('open')) _sdRemember('suggest-modal');
   _suggestOpen = true;
   refreshSuggestLang();
-  document.getElementById('suggest-form-view').style.display = '';
-  document.getElementById('suggest-success-view').style.display = 'none';
-  ['sg-customer','sg-email','sg-name'].forEach(function(id){
-    var el = document.getElementById(id); if(el) el.classList.remove('error');
-  });
+  document.getElementById('suggest-form-view').hidden = false;
+  document.getElementById('suggest-success-view').hidden = true;
+  ['sg-customer','sg-email','sg-name'].forEach(function(id){ var el = document.getElementById(id); if (el) el.removeAttribute('aria-invalid'); });
+  var er = document.getElementById('sg-error'); if (er) er.textContent = '';
+  var sb = document.getElementById('sg-submit'); if (sb) sb.disabled = false;
+  if (typeof prefill === 'string' && prefill.trim()) { var pn = document.getElementById('sg-name'); if (pn && !pn.value) pn.value = prefill.trim().slice(0, 120); }
   document.getElementById('suggest-overlay').classList.add('open');
-  document.getElementById('suggest-modal').classList.add('open');
-  document.body.style.overflow = 'hidden';
-  setTimeout(function() { var n = document.getElementById('sg-customer'); if (n) n.focus(); }, 250);
+  m.classList.add('open');
+  _sdSyncLayers();
+  setTimeout(function() { var n = document.getElementById('sg-customer'); if (n) n.focus(); }, 60);
 }
 
 function closeSuggest() {
   _suggestOpen = false;
-  document.getElementById('suggest-overlay').classList.remove('open');
-  document.getElementById('suggest-modal').classList.remove('open');
-  document.body.style.overflow = '';
+  var m = document.getElementById('suggest-modal'); var was = !!(m && m.classList.contains('open'));
+  var o = document.getElementById('suggest-overlay'); if (o) o.classList.remove('open');
+  if (m) m.classList.remove('open');
+  _sdSyncLayers();
+  if (was) _sdRestore('suggest-modal');
 }
 
 function refreshSuggestLang() {
-  var l = LANG || 'fr';
-  var T = {
-    btn:           {fr:'Suggérer un produit', sv:'Föreslå en produkt', en:'Suggest a product'},
-    title:         {fr:'Suggérer un produit', sv:'Föreslå en produkt', en:'Suggest a product'},
-    sub:           {fr:'Un produit suédois introuvable ici ? Dites-le nous, on fera le maximum pour le sourcer.', sv:'Hittar du inte det du söker? Berätta för oss, vi gör vårt bästa för att hitta det!', en:"Can't find a Swedish product here? Tell us and we'll do our best to source it."},
-    yourInfoTitle: {fr:'Vos coordonnées', sv:'Dina uppgifter', en:'Your details'},
-    customerLabel: {fr:'Votre prénom & nom *', sv:'Ditt namn *', en:'Your name *'},
-    customerPh:    {fr:'Marie Dupont', sv:'Anna Svensson', en:'Jane Smith'},
-    emailLabel:    {fr:'Votre email *', sv:'Din e-post *', en:'Your email *'},
-    emailPh:       {fr:'marie@exemple.fr', sv:'anna@exempel.se', en:'jane@example.com'},
-    productTitle:  {fr:'Le produit recherché', sv:'Produkten du söker', en:'The product you want'},
-    nameLabel:     {fr:'Nom du produit *', sv:'Produktnamn *', en:'Product name *'},
-    namePh:        {fr:'Ex: Lingonberry jam, Knäckebröd…', sv:'T.ex. Lingonsylt, Knäckebröd…', en:'E.g. Lingonberry jam, Knäckebröd…'},
-    descLabel:     {fr:'Description (optionnel)', sv:'Beskrivning (valfritt)', en:'Description (optional)'},
-    descPh:        {fr:'Pourquoi ce produit ? Où l\'avez-vous découvert ?', sv:'Varför vill du ha den? Var hittade du den?', en:'Why this product? Where did you discover it?'},
-    urlLabel:      {fr:'Lien où vous l\'avez vu (optionnel)', sv:'Länk där du såg den (valfritt)', en:'Link where you saw it (optional)'},
-    submit:        {fr:'Envoyer ma suggestion →', sv:'Skicka mitt förslag →', en:'Send my suggestion →'},
-    hint:          {fr:'Nous lisons chaque suggestion avec attention.', sv:'Vi läser varje förslag noggrant.', en:'We read every suggestion carefully.'},
-    successTitle:  {fr:'Merci pour votre suggestion !', sv:'Tack för ditt förslag!', en:'Thanks for your suggestion!'},
-    successSub:    {fr:'Nous en prenons note et vous recontacterons dès que ce produit est disponible.', sv:'Vi noterar det och återkommer till dig så snart produkten finns tillgänglig.', en:"We've noted it and will get back to you as soon as the product is available."},
-  };
-  function _t(k) { return T[k][l] || T[k].fr; }
-  var els = {
-    'suggest-btn-label': _t('btn'),
-    'sg-title':          _t('title'),
-    'sg-sub':            _t('sub'),
-    'sg-your-info-title':_t('yourInfoTitle'),
-    'sg-product-title':  _t('productTitle'),
-    'sg-desc-lbl':       _t('descLabel'),
-    'sg-url-lbl':        _t('urlLabel'),
-    'sg-submit':         _t('submit'),
-    'sg-hint':           _t('hint'),
-    'sg-ok-title':       _t('successTitle'),
-    'sg-ok-sub':         _t('successSub'),
-  };
-  Object.keys(els).forEach(function(id) {
-    var el = document.getElementById(id); if (el) el.textContent = els[id];
+  var lb = document.getElementById('suggest-btn-label'); if (lb) lb.textContent = _sgT('btn');
+  var bt = document.getElementById('suggest-btn'); if (bt) bt.title = _sgT('btn');
+  if (!document.getElementById('suggest-modal')) return;
+  var txt = {'sg-title':'title','sg-sub':'sub','sg-your-info-title':'yourInfoTitle','sg-product-title':'productTitle','sg-desc-lbl':'descLabel','sg-url-lbl':'urlLabel','sg-submit':'submit','sg-hint':'hint','sg-ok-title':'successTitle','sg-ok-sub':'successSub','sg-ok-close':'close'};
+  Object.keys(txt).forEach(function(id) { var el = document.getElementById(id); if (el) el.textContent = _sgT(txt[id]); });
+  [['sg-customer-lbl','customerLabel'],['sg-email-lbl','emailLabel'],['sg-name-lbl','nameLabel']].forEach(function(x) {
+    var el = document.getElementById(x[0]); if (el) el.innerHTML = _sdAttr(_sgT(x[1])) + ' <span class="req" aria-hidden="true">*</span>';
   });
-  var lbl = function(id, key) {
-    var el = document.getElementById(id);
-    if (el) el.innerHTML = _t(key).replace('*','<span class="req">*</span>');
-  };
-  lbl('sg-customer-lbl', 'customerLabel');
-  lbl('sg-email-lbl',    'emailLabel');
-  lbl('sg-name-lbl',     'nameLabel');
-  var ph = function(id, key) {
-    var el = document.getElementById(id); if (el) el.placeholder = T[key][l] || T[key].fr;
-  };
-  ph('sg-customer', 'customerPh');
-  ph('sg-email',    'emailPh');
-  ph('sg-name',     'namePh');
-  ph('sg-desc',     'descPh');
+  [['sg-customer','customerPh'],['sg-email','emailPh'],['sg-name','namePh'],['sg-desc','descPh'],['sg-url','urlPh']].forEach(function(x) {
+    var el = document.getElementById(x[0]); if (el) el.placeholder = _sgT(x[1]);
+  });
+  var c = document.getElementById('sg-close'); if (c) c.setAttribute('aria-label', _sgT('close'));
 }
 
 async function submitSuggestion() {
-  var l = LANG || 'fr';
   var customerEl = document.getElementById('sg-customer');
   var emailEl    = document.getElementById('sg-email');
   var nameEl     = document.getElementById('sg-name');
   var descEl     = document.getElementById('sg-desc');
   var urlEl      = document.getElementById('sg-url');
   var btn        = document.getElementById('sg-submit');
+  var err        = document.getElementById('sg-error');
   var customer   = customerEl ? customerEl.value.trim() : '';
   var email      = emailEl    ? emailEl.value.trim()    : '';
   var name       = nameEl     ? nameEl.value.trim()     : '';
-  var T = {
-    errCustomer:{fr:'Merci d\'indiquer votre prénom et nom.', sv:'Ange ditt namn.', en:'Please enter your name.'},
-    errEmail:   {fr:'Merci d\'indiquer votre adresse email.', sv:'Ange din e-postadress.', en:'Please enter your email address.'},
-    errName:    {fr:'Merci d\'indiquer le nom du produit.', sv:'Ange ett produktnamn.', en:'Please enter the product name.'},
-    errSend:    {fr:'Erreur lors de l\'envoi. Réessayez.', sv:'Det gick inte att skicka. Försök igen.', en:'Could not send. Please try again.'},
-  };
-  function _t(k) { return T[k][l] || T[k].fr; }
-  [customerEl, emailEl, nameEl].forEach(function(el){ if(el) el.classList.remove('error'); });
-  if (!customer) { customerEl && customerEl.classList.add('error'); showToast(_t('errCustomer')); customerEl && customerEl.focus(); return; }
-  if (!email)    { emailEl    && emailEl.classList.add('error');    showToast(_t('errEmail'));    emailEl    && emailEl.focus();    return; }
-  if (!name)     { nameEl     && nameEl.classList.add('error');     showToast(_t('errName'));     nameEl     && nameEl.focus();     return; }
+  [customerEl, emailEl, nameEl].forEach(function(el){ if (el) el.removeAttribute('aria-invalid'); });
+  var fail = function(el, k) { if (el) { el.setAttribute('aria-invalid', 'true'); el.focus(); } if (err) err.textContent = _sgT(k); };
+  if (!customer) return fail(customerEl, 'errCustomer');
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return fail(emailEl, email ? 'errEmailBad' : 'errEmail');
+  if (!name) return fail(nameEl, 'errName');
+  if (err) err.textContent = '';
   if (btn) btn.disabled = true;
   try {
-    var res = await fetch(SD_API_URL + '/api/product-suggestions', {
+    var base = (typeof SD_API_URL !== 'undefined' && SD_API_URL) ? SD_API_URL : 'https://admin.swedishcravings.fr';
+    var res = await fetch(base + '/api/product-suggestions', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -817,20 +936,17 @@ async function submitSuggestion() {
         description:   descEl ? descEl.value.trim() : '',
         source_url:    urlEl  ? urlEl.value.trim()  : '',
         customer_email:email,
-        lang: l,
+        lang: LANG || 'fr',
       }),
     });
     if (!res.ok) throw new Error('error');
-    document.getElementById('suggest-form-view').style.display = 'none';
-    document.getElementById('suggest-success-view').style.display = '';
-    if (customerEl) customerEl.value = '';
-    if (nameEl)     nameEl.value     = '';
-    if (descEl)     descEl.value     = '';
-    if (urlEl)      urlEl.value      = '';
-    if (emailEl)    emailEl.value    = '';
-    setTimeout(closeSuggest, 3800);
+    document.getElementById('suggest-form-view').hidden = true;
+    document.getElementById('suggest-success-view').hidden = false;
+    [customerEl, nameEl, descEl, urlEl, emailEl].forEach(function(el){ if (el) el.value = ''; });
+    if (btn) btn.disabled = false;
+    var ok = document.getElementById('sg-ok-title'); if (ok) ok.focus();
   } catch(e) {
-    showToast(_t('errSend'));
+    if (err) err.textContent = _sgT('errSend');
     if (btn) btn.disabled = false;
   }
 }

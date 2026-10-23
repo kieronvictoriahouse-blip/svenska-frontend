@@ -166,7 +166,9 @@
 .c3-table-img{ display:block; width:120px; aspect-ratio:1; background:var(--snow); border:1px solid var(--linen); }
 .c3-table-img img{ width:100%; height:100%; object-fit:contain; padding:8px; }
 .c3-table-img:hover{ border-color:var(--driftwood); }
-@media(max-width:700px){ .c3-table{ grid-template-columns:1fr; padding:22px 18px; } .c3-table-img{ width:calc((100% - 20px) / 3); } .c3-table-imgs{ width:100%; } }
+.c3-table-txt{ min-width:0; }
+@media(max-width:1100px){ .c3-table{ grid-template-columns:1fr; } .c3-table-imgs{ width:100%; max-width:380px; } .c3-table-img{ flex:1 1 0; width:auto; min-width:0; } }
+@media(max-width:700px){ .c3-table{ padding:22px 18px; } }
 
 /* ÉTAT VIDE (recherche) / ERREUR (catalogue indisponible) */
 .c3-empty{ text-align:center; padding:72px 20px; background:var(--snow); border:1px solid var(--linen); margin-top:26px; }

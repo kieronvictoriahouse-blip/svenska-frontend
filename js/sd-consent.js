@@ -2,16 +2,39 @@
  * Mesure d'audience & publicité — SOURCE UNIQUE (chargé dans le <head> de chaque page,
  * AVANT app.js, en script bloquant : il doit définir gtag() avant tout événement).
  *
- * - Consent Mode v2 : tout est refusé par défaut. Rien n'est déposé (cookies GA/Ads)
- *   tant que le visiteur n'a pas cliqué « Accepter ». Obligatoire en France (CNIL)
- *   et exigé par Google pour mesurer/recibler les visiteurs de l'EEE dans Google Ads.
+ * - Consent Mode v2, mode « basique » : tout est refusé par défaut et la balise Google
+ *   (gtag.js) n'est même pas téléchargée tant que le visiteur n'a pas cliqué « Accepter ».
+ *   Avant le consentement, aucune requête ne part vers Google (ni cookie, ni signal
+ *   anonyme). Les événements (gtag('event', …)) restent en file dans dataLayer.
+ *   Le pixel Meta suit la même règle (app.js écoute l'événement « sd:consent »).
  * - GA4 + Google Ads sont configurés ici et nulle part ailleurs.
- * - Bannière : « Accepter » et « Refuser » au même niveau (exigence CNIL), choix
- *   mémorisé 6 mois, réouvrable via sdCookieSettings() (lien « Cookies » du pied de page).
+ * - Bannière : « Accepter » et « Refuser » strictement identiques (exigence CNIL), choix
+ *   mémorisé 6 mois, réouvrable via sdCookieSettings() (bouton « Cookies » du pied de page).
+ *   Un refus après acceptation efface les cookies _ga / _gcl / _fbp déjà posés.
+ * - window.sdConsent() renvoie 'granted', 'denied' ou null (pas encore choisi).
  *
  * Pour brancher Google Ads : renseigner ADS_ID (AW-…) et PURCHASE_LABEL (Google Ads →
  * Objectifs → Conversions → balise → « send_to: AW-XXX/LABEL »), bumper ?v= partout.
+ * Si le pixel Meta est activé (app.js), citer Meta dans le texte ci-dessous.
  */
+
+/* Polices de la marque. Ce script est le seul du <head> commun à toutes les pages :
+   il lance le chargement des polices tout de suite, en parallèle de style.css (qui les
+   importait auparavant, en cascade, après son propre téléchargement). */
+(function () {
+  try {
+    if (document.getElementById('sd-fonts')) return;
+    var h = document.head || document.getElementsByTagName('head')[0];
+    var pc = document.createElement('link');
+    pc.rel = 'preconnect'; pc.href = 'https://fonts.gstatic.com'; pc.crossOrigin = 'anonymous';
+    h.appendChild(pc);
+    var f = document.createElement('link');
+    f.id = 'sd-fonts'; f.rel = 'stylesheet';
+    f.href = 'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Jost:wght@300;400;500;600&family=Crimson+Pro:ital,wght@0,300;0,400;1,300;1,400&display=swap';
+    h.appendChild(f);
+  } catch (e) {}
+})();
+
 (function () {
   var GA4_ID = 'G-14P3X9NYVY';
   var ADS_ID = '';          // ex. 'AW-123456789' — vide = Google Ads non branché
@@ -33,65 +56,127 @@
     return null;
   }
   var choice = readChoice();
+  window.sdConsent = function () { return choice; };
 
   gtag('consent', 'default', Object.assign({}, choice === 'granted' ? GRANTED : DENIED, { wait_for_update: 500 }));
-  // Sans consentement : pas de cookie, identifiants publicitaires masqués, gclid propagé dans l'URL.
   gtag('set', 'ads_data_redaction', true);
   gtag('set', 'url_passthrough', true);
-
   gtag('js', new Date());
   gtag('config', GA4_ID);
   if (ADS_ID) gtag('config', ADS_ID, { allow_enhanced_conversions: true });
 
-  var s = document.createElement('script');
-  s.async = true;
-  s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA4_ID;
-  document.head.appendChild(s);
-
   window.SD_ADS = { id: ADS_ID, purchaseLabel: PURCHASE_LABEL };
 
+  /* La balise Google n'est téléchargée qu'après « Accepter » */
+  var tagLoaded = false;
+  function loadTag() {
+    if (tagLoaded) return;
+    tagLoaded = true;
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA4_ID;
+    (document.head || document.documentElement).appendChild(s);
+  }
+  if (choice === 'granted') loadTag();
+
+  /* Refus après acceptation : on retire les cookies de mesure déjà posés */
+  function clearTrackingCookies() {
+    try {
+      var host = location.hostname, parts = host.split('.'), doms = ['', host];
+      for (var i = 0; i < parts.length - 1; i++) doms.push('.' + parts.slice(i).join('.'));
+      document.cookie.split(';').forEach(function (c) {
+        var n = c.split('=')[0].trim();
+        if (!/^(_ga|_gid|_gat|_gcl_|_fbp|_fbc)/.test(n)) return;
+        doms.forEach(function (d) { document.cookie = n + '=; Max-Age=0; path=/' + (d ? '; domain=' + d : ''); });
+      });
+    } catch (e) {}
+  }
+
+  var opener = null;
   function save(v) {
+    choice = v;
     try { localStorage.setItem(STORE_KEY, JSON.stringify({ v: v, ts: Date.now() })); } catch (e) {}
     gtag('consent', 'update', v === 'granted' ? GRANTED : DENIED);
+    if (v === 'granted') loadTag(); else clearTrackingCookies();
+    try { window.dispatchEvent(new CustomEvent('sd:consent', { detail: v })); } catch (e) {}
     var b = document.getElementById('sd-consent');
     if (b) b.remove();
+    if (opener && opener.isConnected) { try { opener.focus({ preventScroll: true }); } catch (e) {} }
+    opener = null;
   }
 
   var TXT = {
-    fr: { t: 'Cookies', p: 'Nous utilisons des cookies de mesure d’audience (Google Analytics) et publicitaires (Google Ads) pour comprendre comment le site est utilisé et vous montrer nos produits ailleurs sur le web. Vous pouvez changer d’avis à tout moment via le lien « Cookies » en bas de page.', ok: 'Accepter', no: 'Refuser', more: 'En savoir plus' },
-    en: { t: 'Cookies', p: 'We use analytics (Google Analytics) and advertising (Google Ads) cookies to understand how the site is used and to show you our products elsewhere on the web. You can change your mind at any time via the “Cookies” link at the bottom of the page.', ok: 'Accept', no: 'Decline', more: 'Learn more' },
-    sv: { t: 'Cookies', p: 'Vi använder analys- (Google Analytics) och annonscookies (Google Ads) för att förstå hur sajten används och visa våra produkter på andra webbplatser. Du kan ändra dig när som helst via länken ”Cookies” längst ner på sidan.', ok: 'Acceptera', no: 'Avböj', more: 'Läs mer' }
+    fr: { t: 'Cookies', p: 'Nous utilisons des cookies de mesure d’audience (Google Analytics) et publicitaires (Google Ads) pour comprendre comment le site est utilisé et vous montrer nos produits ailleurs sur le web. Rien n’est déposé sans votre accord. Vous pouvez changer d’avis à tout moment via le lien « Cookies » en bas de page.', ok: 'Accepter', no: 'Refuser', more: 'En savoir plus', cur: { granted: 'Choix actuel : cookies acceptés.', denied: 'Choix actuel : cookies refusés.' } },
+    en: { t: 'Cookies', p: 'We use analytics (Google Analytics) and advertising (Google Ads) cookies to understand how the site is used and to show you our products elsewhere on the web. Nothing is set without your consent. You can change your mind at any time via the “Cookies” link at the bottom of the page.', ok: 'Accept', no: 'Decline', more: 'Learn more', cur: { granted: 'Current choice: cookies accepted.', denied: 'Current choice: cookies declined.' } },
+    sv: { t: 'Cookies', p: 'Vi använder analys- (Google Analytics) och annonscookies (Google Ads) för att förstå hur sajten används och visa våra produkter på andra webbplatser. Inget sparas utan ditt samtycke. Du kan ändra dig när som helst via länken ”Cookies” längst ner på sidan.', ok: 'Acceptera', no: 'Avböj', more: 'Läs mer', cur: { granted: 'Nuvarande val: cookies accepterade.', denied: 'Nuvarande val: cookies avböjda.' } }
   };
-
-  function showBanner() {
-    if (document.getElementById('sd-consent')) return;
-    var lang = 'fr';
-    try { lang = localStorage.getItem('sd_lang') || 'fr'; } catch (e) {}
-    var T = TXT[lang] || TXT.fr;
-    var el = document.createElement('div');
-    el.id = 'sd-consent';
-    el.setAttribute('role', 'dialog');
-    el.setAttribute('aria-label', T.t);
-    el.style.cssText = 'position:fixed;left:16px;right:16px;bottom:16px;z-index:10000;max-width:560px;margin:0 auto;background:#fff;color:#1f2a24;border:1px solid rgba(0,0,0,.12);border-radius:6px;box-shadow:0 10px 30px rgba(0,0,0,.18);padding:18px 18px 16px;font:14px/1.5 var(--font-body,system-ui,sans-serif);';
-    var btn = 'flex:1;min-width:120px;padding:11px 14px;border-radius:3px;font:600 13px var(--font-ui,system-ui,sans-serif);letter-spacing:.3px;cursor:pointer;';
-    el.innerHTML =
-      '<div style="font-weight:700;margin-bottom:6px;">' + T.t + '</div>' +
-      '<p style="margin:0 0 12px;">' + T.p + ' <a href="/confidentialite#cookies"style="color:inherit;text-decoration:underline;">' + T.more + '</a></p>' +
-      '<div style="display:flex;gap:10px;flex-wrap:wrap;">' +
-        '<button type="button" data-c="denied" style="' + btn + 'background:#fff;color:#1f2a24;border:1px solid #1f2a24;">' + T.no + '</button>' +
-        '<button type="button" data-c="granted" style="' + btn + 'background:#1f2a24;color:#fff;border:1px solid #1f2a24;">' + T.ok + '</button>' +
-      '</div>';
-    el.addEventListener('click', function (e) {
-      var v = e.target && e.target.getAttribute && e.target.getAttribute('data-c');
-      if (v) save(v);
-    });
-    document.body.appendChild(el);
+  function lang() {
+    var l = 'fr';
+    try { l = localStorage.getItem('sd_lang') || 'fr'; } catch (e) {}
+    return TXT[l] ? l : 'fr';
   }
 
-  window.sdCookieSettings = showBanner;
+  /* Styles aux couleurs de la marque (variables de style.css, avec repli) */
+  function injectStyle() {
+    if (document.getElementById('sd-consent-style')) return;
+    var st = document.createElement('style');
+    st.id = 'sd-consent-style';
+    st.textContent =
+      '#sd-consent{position:fixed;left:16px;right:16px;bottom:16px;z-index:10000;max-width:560px;margin:0 auto;background:var(--warm-white,#FEFCF7);color:var(--midnight,#1B2118);border:1px solid var(--linen,#DDD3BE);border-radius:2px;box-shadow:var(--shadow-lg,0 16px 56px rgba(27,33,24,.16));padding:20px 20px 18px;font-family:var(--font-body,Georgia,serif);font-size:15px;line-height:1.55;}'
+      + '#sd-consent .sdc-title{font-family:var(--font-ui,sans-serif);font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;margin:0 0 8px;}'
+      + '#sd-consent .sdc-text{margin:0 0 14px;}'
+      + '#sd-consent .sdc-cur{margin:-6px 0 12px;font-size:14px;color:var(--dust,#55614F);}'
+      + '#sd-consent a{color:inherit;text-decoration:underline;text-underline-offset:2px;}'
+      + '#sd-consent .sdc-actions{display:flex;gap:10px;flex-wrap:wrap;}'
+      + '#sd-consent .sdc-btn{flex:1 1 140px;min-height:44px;padding:12px 16px;background:var(--midnight,#1B2118);color:var(--snow,#fff);border:1px solid var(--midnight,#1B2118);border-radius:1px;font-family:var(--font-ui,sans-serif);font-size:12px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;}'
+      + '#sd-consent .sdc-btn:hover{background:var(--slate,#3A4636);}'
+      + '#sd-consent :focus-visible{outline:2px solid var(--lingon,#4E6651);outline-offset:3px;}'
+      + '@media(max-width:480px){#sd-consent{left:8px;right:8px;bottom:8px;padding:16px 16px 14px;font-size:14px;line-height:1.5;}}';
+    (document.head || document.documentElement).appendChild(st);
+  }
+
+  /* Bannière non bloquante (région), placée en tête du <body> : premier arrêt clavier */
+  function render(el, reopened) {
+    var T = TXT[lang()];
+    el.innerHTML =
+      '<h2 class="sdc-title" id="sd-consent-t">' + T.t + '</h2>' +
+      '<p class="sdc-text">' + T.p + ' <a href="/confidentialite#cookies">' + T.more + '</a></p>' +
+      (reopened && choice ? '<p class="sdc-cur">' + T.cur[choice] + '</p>' : '') +
+      '<div class="sdc-actions">' +
+        '<button type="button" class="sdc-btn" data-c="denied">' + T.no + '</button>' +
+        '<button type="button" class="sdc-btn" data-c="granted">' + T.ok + '</button>' +
+      '</div>';
+  }
+  function showBanner(reopened) {
+    var el = document.getElementById('sd-consent');
+    if (!el) {
+      injectStyle();
+      el = document.createElement('section');
+      el.id = 'sd-consent';
+      el.setAttribute('aria-labelledby', 'sd-consent-t');
+      el.addEventListener('click', function (e) {
+        var b = e.target && e.target.closest && e.target.closest('[data-c]');
+        if (b) save(b.getAttribute('data-c'));
+      });
+      document.body.insertBefore(el, document.body.firstChild);
+    }
+    render(el, reopened);
+    if (reopened) { var f = el.querySelector('button'); if (f) f.focus(); }
+  }
+
+  /* Réouverture (bouton « Cookies » du pied de page, liens des pages légales) */
+  window.sdCookieSettings = function () {
+    opener = document.activeElement && document.activeElement !== document.body ? document.activeElement : null;
+    if (document.body) showBanner(true);
+  };
+  /* Changement de langue sur le site : la bannière suit */
+  window.addEventListener('sd:lang', function () {
+    var el = document.getElementById('sd-consent');
+    if (el) render(el, !!choice);
+  });
 
   if (!choice) {
-    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', showBanner);
-    else showBanner();
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function () { showBanner(false); });
+    else showBanner(false);
   }
 })();
