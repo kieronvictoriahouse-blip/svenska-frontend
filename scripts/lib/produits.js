@@ -11,7 +11,7 @@ function slugify(nameFr, id) {
   return base + '-' + String(id || '').slice(0, 8);
 }
 
-// Art de la table (serviettes…) : univers « Maison », hors épicerie et hors flux Shopping.
+// Art de la table (serviettes…) : univers « Maison », présenté à part de l'épicerie.
 const HOME_CATS = ['art-de-la-table', 'maison-deco'];
 const isHome = p => HOME_CATS.includes((p.categories && p.categories.slug) || '');
 const isBox = p => (p.tags || []).includes('box') || (Array.isArray(p.bundle_items) && p.bundle_items.length > 0);

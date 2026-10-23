@@ -298,7 +298,7 @@ function _upsellPick(remaining, cartIds) {
   const avail = (window.PRODUCTS || []).filter(function(p) {
     const id = String(p.uuid || p.id);
     if (cartIds.has(id)) return false;
-    if (p.pickup_only || sdIsHomeProduct(p)) return false;
+    if (p.pickup_only) return false;
     if (p.trackStock && p.stock !== null && p.stock <= 0) return false;
     return (p.price || 0) > 0;
   });
@@ -328,7 +328,12 @@ function _crossSellHtml(cartIds) {
   if (picks.length < 2) return '';
   const rank = function(x) { return x.badge === 'badge-pop' ? 0 : x.badge === 'badge-must' ? 1 : x.badge ? 2 : 3; };
   picks.sort(function(a, b) { return rank(a) - rank(b); });
-  const list = picks.slice(0, 8);
+  /* Sept produits d'épicerie, puis une serviette « pour la table » : petit
+     prix, et l'univers Maison n'était visible nulle part dans le parcours. */
+  const table = (window.PRODUCTS || []).filter(function(p) {
+    return sdIsHomeProduct(p) && !cartIds.has(String(p.uuid || p.id)) && !sdIsOut(p) && (p.price || 0) > 0;
+  });
+  const list = picks.slice(0, table.length ? 7 : 8).concat(table.slice(0, 1));
   const addTxt = LANG === 'sv' ? 'Lägg till' : LANG === 'en' ? 'Add' : 'Ajouter';
   const title = LANG === 'sv' ? 'Komplettera din beställning' : LANG === 'en' ? 'Complete your order' : 'Complétez votre commande';
   const sub = LANG === 'sv' ? 'Populära tillägg till din korg' : LANG === 'en' ? 'Popular add-ons for your cart' : "Les petits plus qu'on ajoute souvent";
