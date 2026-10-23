@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <!-- Google tag + consentement (source unique : js/sd-consent.js) -->
-<script src="/js/sd-consent.js?v=1"></script>
+<script src="/js/sd-consent.js?v=2"></script>
 <meta charset="UTF-8">
 <link rel="icon" type="image/png" href="/img/favicon.png">
 <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
@@ -12,7 +12,7 @@
 <meta name="robots" content="noindex">
 <meta property="og:site_name" content="Swedish Cravings">
 <meta name="twitter:card" content="summary">
-<link rel="stylesheet" href="css/style.css?v=21">
+<link rel="stylesheet" href="css/style.css?v=22">
 <script>const SD_API_URL = 'https://admin.swedishcravings.fr';</script>
 <script>(function(){try{var w=JSON.parse(localStorage.getItem('sd_wl_v1'));if(w&&w.id){var r=document.documentElement.style;if(w.color_primary){r.setProperty('--heather',w.color_primary);r.setProperty('--heather-mid',w.color_primary+'CC');}if(w.color_secondary){r.setProperty('--lingon',w.color_secondary);r.setProperty('--lingon-mid',w.color_secondary+'CC');}if(w.color_bg)r.setProperty('--cream',w.color_bg);if(w.color_text)r.setProperty('--midnight',w.color_text);if(w.font_display)r.setProperty('--font-display',"'"+w.font_display+"',Georgia,serif");if(w.font_body)r.setProperty('--font-body',"'"+w.font_body+"',Georgia,serif");if(w.font_ui)r.setProperty('--font-ui',"'"+w.font_ui+"',sans-serif");}}catch(e){}}());</script>
 <style>
@@ -223,7 +223,7 @@
   <button type="button" class="btn-pay" id="pay-bar-btn" onclick="doCheckout()" tabindex="-1"></button>
 </div>
 <div id="footer-root"></div>
-<script src="js/app.js?v=34"></script>
+<script src="js/app.js?v=35"></script>
 <script>
 /* Mode de livraison par defaut : POINT RELAIS, pas le retrait.
    Le retrait etait presolectionne, si bien qu'un visiteur de Lille lisait
@@ -564,7 +564,7 @@ function _renderCartPage() {
           </svg>
         </div>
         <h2 data-sv="Din korg är tom" data-fr="Votre panier est vide" data-en="Your cart is empty">${UI[LANG].emptyCart}</h2>
-        <p data-sv="Upptäck våra produkter och lägg till dina favoriter." data-fr="Découvrez nos produits et ajoutez vos favoris." data-en="Discover our products and add your favourites.">${LANG==='sv'?'Upptäck våra produkter och lägg till dina favoriter.':LANG==='en'?'Discover our products and add your favourites.':'Découvrez nos produits et ajoutez vos favoris.'}</p>
+        <p data-sv="Godis, chips, fika: fyll din korg med svenska favoriter." data-fr="Bonbons, chips, fika : composez votre colis suédois." data-en="Sweets, crisps, fika: build your Swedish parcel.">${LANG==='sv'?'Godis, chips, fika: fyll din korg med svenska favoriter.':LANG==='en'?'Sweets, crisps, fika: build your Swedish parcel.':'Bonbons, chips, fika : composez votre colis suédois.'}</p>
         <a href="boutique.html" class="btn-primary">${LANG==='sv'?'Utforska butiken':LANG==='en'?'Explore the shop':'Explorer la boutique'}</a>
       </div>`;
     return;
@@ -1278,6 +1278,6 @@ window.addEventListener('sdapi:ready', () => { renderCartPageFull(); if (typeof 
 if (typeof PRODUCTS !== 'undefined' && PRODUCTS.length && typeof sdTrackViewCart === 'function') sdTrackViewCart();
 </script>
 <script>(function(){var _hr=document.getElementById("header-root");if(_hr&&typeof MutationObserver!=="undefined")new MutationObserver(function(){if(typeof updateCartBadge==="function")updateCartBadge();}).observe(_hr,{childList:true});})();</script>
-<script src="js/sd-api-client.js?v=10"></script>
+<script src="js/sd-api-client.js?v=11"></script>
 </body>
 </html>
