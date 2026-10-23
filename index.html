@@ -148,7 +148,8 @@
 .hero-slide.is-active img, .hero-slide.is-prev img { transform: scale(1); }
 .hero-slide.is-prev img, .hero-slide:not(.is-active):not(.is-prev) img { transition: none; }
 /* Visuel avec texte intégré : ni zoom ni recadrage vers le haut. */
-.hero-slide--image img, .hero-slide--image.is-active img { object-position: center; transform: none; transition: none; }
+.hero-slide--image img, .hero-slide--image.is-active img,
+.hero-slide--html img, .hero-slide--html.is-active img { object-position: center; transform: none; transition: none; }
 
 .hero-slide-copy {
   position: absolute; inset: 0; z-index: 1;
@@ -197,14 +198,20 @@
    Texte et vrais boutons à gauche sur un fond de la marque qui se fond
    dans la photo (sans texte) à droite. Les couleurs dérivent des
    variables du back-office : un changement de marque suit tout seul. */
-.hero-slide--split {
+.hero-slide--split, .hero-slide--html {
   --split-bg: color-mix(in srgb, var(--lingon) 55%, var(--midnight));
   --split-fg: var(--warm-white);
   --split-accent: var(--hero-accent);
   background: var(--split-bg);
 }
-.hero-slide--split.hero-theme--ink { --split-bg: var(--midnight); }
-.hero-slide--split.hero-theme--sand { --split-bg: var(--cream); --split-fg: var(--midnight); --split-accent: var(--lingon); }
+.hero-slide.hero-theme--ink { --split-bg: var(--midnight); }
+.hero-slide.hero-theme--sand { --split-bg: var(--cream); --split-fg: var(--midnight); --split-accent: var(--lingon); }
+
+/* ── Code HTML (type « html ») : le design collé, dans un cadre sandbox ──
+   Taille fixe : le cadre garde la taille du design et js/hero-carousel.js
+   le met à l'échelle ; l'espace autour prend le fond choisi. */
+.hero-frame { position: absolute; border: 0; transform-origin: center; background: transparent; }
+.hero-slide--html picture, .hero-slide--html .hero-slide-link { display: none; }
 /* La taille se pose sur <picture> seul : l'image remplit son cadre. */
 .hero-slide--split picture { left: auto; right: 0; width: 64%; }
 .hero-slide--split img { object-position: center; }
@@ -271,6 +278,9 @@
 /* Téléphone et tablette en portrait : la photo prend la place laissée au-dessus
    du texte (jamais de texte posé sur la photo), un fondu fait la jonction. */
 @media (max-width: 767px), (orientation: portrait) and (max-width: 1024px) {
+  /* Code HTML avec une image téléphone : l'image remplace le design, souvent illisible en petit. */
+  .hero-slide--html.has-mobile .hero-frame { display: none; }
+  .hero-slide--html.has-mobile picture, .hero-slide--html.has-mobile .hero-slide-link { display: block; }
   .hero-slide--split { display: flex; flex-direction: column; }
   .hero-slide--split picture { position: relative; inset: auto; width: 100%; height: auto; flex: 1 1 auto; min-height: 26%; }
   .hero-slide--split picture::after {
@@ -676,7 +686,7 @@
 <script>(function(){try{var sf=JSON.parse(sessionStorage.getItem('sd_full_v1'));if(sf&&sf.cms){var sc=sf.cms;var himg=document.querySelector('.hero-media img');if(himg&&sc.hero_image&&sc.hero_image.value_fr)himg.src=sc.hero_image.value_fr;var eimg=document.querySelector('.ei-image img');if(eimg&&sc.editorial_image&&sc.editorial_image.value_fr)eimg.src=sc.editorial_image.value_fr;var fimg=document.querySelector('.feat-band-img img');if(fimg&&sc.feature_image&&sc.feature_image.value_fr)fimg.src=sc.feature_image.value_fr;var aimg=document.querySelector('.about-split-img img');if(aimg&&sc.about_image&&sc.about_image.value_fr)aimg.src=sc.about_image.value_fr;}}catch(e){}try{var c=JSON.parse(localStorage.getItem('sd_cms_v1'));if(!c)return;var lg=localStorage.getItem('sd_lang')||'fr';var lk=lg==='sv'?'value_sv':lg==='en'?'value_en':'value_fr';var h=document.querySelector('.hero h1');if(h&&c.hero_title&&c.hero_title[lk])h.innerHTML=c.hero_title[lk];var s=document.querySelector('.hero-sub');if(s&&c.hero_subtitle&&c.hero_subtitle[lk])s.textContent=c.hero_subtitle[lk];var ey=document.querySelector('.hero-eyebrow');if(ey&&c.hero_eyebrow&&c.hero_eyebrow[lk])ey.textContent=c.hero_eyebrow[lk];var eb1=document.getElementById('ei-body1');if(eb1&&c.editorial_body1&&c.editorial_body1[lk])eb1.textContent=c.editorial_body1[lk];var eb2=document.getElementById('ei-body2');if(eb2&&c.editorial_body2&&c.editorial_body2[lk])eb2.textContent=c.editorial_body2[lk];var ab1=document.getElementById('about-body1');if(ab1&&c.about_body1&&c.about_body1[lk])ab1.textContent=c.about_body1[lk];var aq=document.getElementById('about-quote-text');if(aq&&c.about_quote&&c.about_quote[lk])aq.textContent=c.about_quote[lk];var ab2=document.getElementById('about-body2');if(ab2&&c.about_body2&&c.about_body2[lk])ab2.textContent=c.about_body2[lk];}catch(e){}}());</script>
 <!-- Image fixe ou carrousel (back-office → Bannière d'accueil). Chargé ici, avant
      la suite de la page, pour poser le carrousel mémorisé dès le premier rendu. -->
-<script src="js/hero-carousel.js?v=2"></script>
+<script src="js/hero-carousel.js?v=3"></script>
 
 <!-- ═══ TICKER ═══ -->
 <!-- Les textes de livraison sont recalculés depuis les réglages du back-office
