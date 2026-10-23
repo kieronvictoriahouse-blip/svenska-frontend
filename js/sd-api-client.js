@@ -331,16 +331,18 @@
     if (_siteName) {
       var _curSN = document.querySelector('meta[property="og:site_name"]');
       var _oldBrand = _curSN ? (_curSN.getAttribute('content') || '') : '';
-      if (_oldBrand !== _siteName) {
+      /* Sans og:site_name, _oldBrand est vide : replace('', nom) collait le nom
+         devant le titre (« Swedish CravingsRecettes… »). */
+      if (_oldBrand && _oldBrand !== _siteName) {
         document.title = document.title.replace(_oldBrand, _siteName);
       }
       var _qm = function(s) { return document.querySelector(s); };
       var _me;
       _me = _qm('meta[property="og:title"]');
-      if (_me) _me.setAttribute('content', (_me.getAttribute('content') || '').replace(_oldBrand, _siteName));
+      if (_me && _oldBrand) _me.setAttribute('content', (_me.getAttribute('content') || '').replace(_oldBrand, _siteName));
       if (_curSN) _curSN.setAttribute('content', _siteName);
       _me = _qm('meta[name="twitter:title"]');
-      if (_me) _me.setAttribute('content', (_me.getAttribute('content') || '').replace(_oldBrand, _siteName));
+      if (_me && _oldBrand) _me.setAttribute('content', (_me.getAttribute('content') || '').replace(_oldBrand, _siteName));
       _me = _qm('meta[property="og:url"]');
       if (_me) _me.setAttribute('content', location.href);
       var _jld = _qm('script[type="application/ld+json"]');

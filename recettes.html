@@ -7,92 +7,212 @@
 <link rel="icon" type="image/png" href="/img/favicon.png">
 <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Recettes suédoises — dips OLW, tacos fredagsmys, café de Paris | Swedish Cravings</title>
-<meta name="description" content="Nos recettes suédoises faciles avec des produits authentiques : le vrai dip OLW, la soirée tacos fredagsmys, l'entrecôte sauce café de Paris. Ingrédients & étapes.">
+<title>Recettes suédoises : fika, dips et tacos | Swedish Cravings</title>
+<meta name="description" content="Nos recettes suédoises faciles avec des produits authentiques : kanelbullar, dip façon OLW, soirée tacos fredagsmys, entrecôte sauce café de Paris.">
 <link rel="canonical" href="https://www.swedishcravings.fr/recettes">
 <meta property="og:type" content="website">
+<meta property="og:site_name" content="Swedish Cravings">
+<meta property="og:locale" content="fr_FR">
 <meta property="og:url" content="https://www.swedishcravings.fr/recettes">
-<meta property="og:title" content="Recettes suédoises faciles | Swedish Cravings">
-<meta property="og:description" content="Le vrai dip OLW, les tacos du vendredi (fredagsmys), l'entrecôte café de Paris… nos recettes suédoises avec les bons produits.">
-<meta property="og:image" content="https://images.unsplash.com/photo-1543353071-873f17a7a088?w=1200&q=80">
+<meta property="og:title" content="Recettes suédoises : fika, dips et tacos | Swedish Cravings">
+<meta property="og:description" content="Kanelbullar, dip façon OLW, tacos du vendredi, entrecôte café de Paris : nos recettes suédoises avec les bons produits.">
+<meta property="og:image" content="https://www.swedishcravings.fr/media/products/box-fredagsmys-1792617653518.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" href="css/style.css?v=21">
+<script type="application/ld+json">{
+ "@context":"https://schema.org","@type":"ItemList","name":"Recettes suédoises","itemListElement":[
+  {"@type":"ListItem","position":1,"url":"https://www.swedishcravings.fr/recette-kanelbullar"},
+  {"@type":"ListItem","position":2,"url":"https://www.swedishcravings.fr/recette-fredagsmys-tacos"},
+  {"@type":"ListItem","position":3,"url":"https://www.swedishcravings.fr/recette-dip-suedois"},
+  {"@type":"ListItem","position":4,"url":"https://www.swedishcravings.fr/recette-entrecote-cafe-de-paris"}
+ ]
+}</script>
+<script type="application/ld+json">{
+ "@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+  {"@type":"ListItem","position":1,"name":"Accueil","item":"https://www.swedishcravings.fr/"},
+  {"@type":"ListItem","position":2,"name":"Recettes"}
+ ]
+}</script>
 <style>
-.rc-hero{background:var(--heather);padding:64px 40px 56px;text-align:center;}
-.rc-hero .crumb{font-family:var(--font-ui);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:16px;}
-.rc-hero .crumb a{color:rgba(255,255,255,.6);text-decoration:none;}
-.rc-hero h1{font-family:var(--font-display);font-size:clamp(38px,6vw,72px);font-weight:300;color:var(--snow);}
-.rc-hero h1 em{font-style:italic;color:var(--lingon-mid);}
-.rc-hero p{font-family:var(--font-body);font-size:18px;color:rgba(255,255,255,.75);max-width:620px;margin:16px auto 0;line-height:1.7;}
-.rc-wrap{max-width:var(--max-width);margin:0 auto;padding:56px 40px;}
-.rc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:28px;}
-.rc-card{display:block;text-decoration:none;background:var(--snow);border:1px solid var(--linen);overflow:hidden;transition:all .2s;}
-.rc-card:hover{border-color:var(--lingon);box-shadow:var(--shadow-sm,0 4px 20px rgba(0,0,0,.08));transform:translateY(-2px);}
-.rc-card-img{aspect-ratio:16/10;overflow:hidden;background:var(--parchment);}
-.rc-card-img img{width:100%;height:100%;object-fit:cover;}
-.rc-card-body{padding:22px 24px;}
-.rc-card-tag{font-family:var(--font-ui);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--lingon-mid);}
-.rc-card h2{font-family:var(--font-display);font-size:24px;font-weight:400;color:var(--heather);margin:6px 0 8px;}
-.rc-card p{font-family:var(--font-body);font-size:15px;line-height:1.7;color:var(--slate);margin:0;}
-.rc-card-meta{font-family:var(--font-ui);font-size:11px;color:var(--dust);margin-top:14px;letter-spacing:1px;}
-@media(max-width:600px){.rc-hero{padding:44px 20px}.rc-wrap{padding:36px 18px}}
+/* ── Page éditoriale : en-tête sur parchemin, titre à l'encre, un mot en italique mousse ── */
+#contenu:focus { outline:none; }
+.ct-head { background:var(--parchment); border-bottom:1px solid var(--linen); }
+.ct-head-in { max-width:var(--max-width); margin:0 auto; padding:20px 40px 48px; }
+.ct-crumb ol { list-style:none; display:flex; flex-wrap:wrap; align-items:center; font-family:var(--font-ui); font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--dust); }
+.ct-crumb li + li::before { content:"/"; margin:0 9px; }
+.ct-crumb a { display:inline-block; padding:13px 0; color:var(--dust); transition:color 0.2s; }
+.ct-crumb a:hover { color:var(--lingon); }
+.ct-crumb [aria-current] { color:var(--slate); }
+.ct-head .sect-eyebrow { margin:14px 0 0; }
+.ct-h1 { font-family:var(--font-display); font-weight:300; font-size:clamp(40px,5.5vw,72px); line-height:1.02; color:var(--midnight); margin:12px 0 0; text-wrap:balance; }
+.ct-h1 em { font-style:italic; color:var(--lingon); }
+.ct-lead { font-family:var(--font-body); font-size:18px; line-height:1.7; color:var(--slate); max-width:620px; margin:16px 0 0; text-wrap:pretty; }
+
+/* ── Cartes recette ── */
+.rc-wrap { max-width:var(--max-width); margin:0 auto; padding:56px 40px 72px; }
+.rc-grid { list-style:none; display:grid; grid-template-columns:repeat(4,1fr); gap:20px; }
+.rc-card { display:flex; flex-direction:column; height:100%; background:var(--snow); border:1px solid var(--linen); transition:border-color 0.25s, box-shadow 0.25s; }
+.rc-card:hover { border-color:var(--driftwood); box-shadow:var(--shadow-md); }
+.rc-img { display:block; aspect-ratio:4 / 3; background:var(--parchment); overflow:hidden; }
+.rc-img img { width:100%; height:100%; object-fit:contain; padding:16px; mix-blend-mode:multiply; transition:transform 0.5s cubic-bezier(0.2,0.6,0.3,1); }
+.rc-card:hover .rc-img img { transform:scale(1.03); }
+.rc-body { display:flex; flex-direction:column; flex:1; padding:20px 22px 22px; }
+.rc-tag { font-family:var(--font-ui); font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--lingon); }
+.rc-title { font-family:var(--font-display); font-size:24px; font-weight:400; line-height:1.2; color:var(--heather-text); margin:8px 0 10px; text-wrap:balance; }
+.rc-text { font-family:var(--font-body); font-size:16px; line-height:1.65; color:var(--slate); margin:0 0 16px; }
+.rc-meta { margin-top:auto; font-family:var(--font-ui); font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--dust); }
+
+/* ── Produits des recettes (catalogue en direct) ── */
+.ct-band { background:var(--parchment); border-top:1px solid var(--linen); }
+.ct-see-all { display:inline-flex; align-items:flex-end; min-height:44px; padding:0 0 3px; font-family:var(--font-ui); font-size:11px; letter-spacing:2.5px; text-transform:uppercase; color:var(--lingon); border-bottom:1px solid currentColor; transition:color 0.2s; }
+.ct-see-all:hover { color:var(--lingon-hover); }
+.ct-shop { max-width:var(--max-width); margin:0 auto; padding:64px 40px 72px; }
+.ct-shop-head { display:flex; align-items:flex-end; justify-content:space-between; flex-wrap:wrap; gap:8px 32px; margin:0 0 30px; }
+.ct-fallback { list-style:none; max-width:620px; }
+.ct-fallback a { display:block; padding:12px 0; border-bottom:1px solid var(--linen); font-family:var(--font-body); font-size:17px; color:var(--midnight); transition:color 0.2s; }
+.ct-fallback a:hover { color:var(--lingon); }
+.ct-ship { font-family:var(--font-body); font-size:15px; font-style:italic; line-height:1.5; color:var(--dust); margin:22px 0 0; }
+.ct-ship:empty { display:none; }
+
+@media (max-width:1024px) {
+  .ct-head-in, .rc-wrap, .ct-shop { padding-left:24px; padding-right:24px; }
+  .rc-grid { grid-template-columns:repeat(2,1fr); }
+}
+@media (max-width:600px) {
+  .ct-head-in { padding:12px 20px 36px; }
+  .rc-wrap { padding:36px 20px 48px; }
+  .rc-grid { grid-template-columns:1fr; gap:16px; }
+  .ct-shop { padding:48px 20px 56px; }
+}
+@media (prefers-reduced-motion: reduce) { .rc-img img { transition:none; } .rc-card:hover .rc-img img { transform:none; } }
 </style>
 </head>
 <body>
 <div id="header-root"></div>
-<div class="rc-hero">
-  <div class="crumb"><a href="index.html" data-fr="Accueil" data-sv="Hem" data-en="Home">Accueil</a> › <span data-fr="Recettes" data-sv="Recept" data-en="Recipes">Recettes</span></div>
-  <h1 data-fr="Recettes <em>suédoises</em>" data-sv="Svenska <em>recept</em>" data-en="Swedish <em>recipes</em>">Recettes <em>suédoises</em></h1>
-  <p data-fr="Des recettes simples et authentiques pour cuisiner la Suède à la maison — avec les bons produits, testés et approuvés." data-sv="Enkla och äkta recept för att laga Sverige hemma — med rätt produkter, testade och godkända." data-en="Simple, authentic recipes to cook Sweden at home — with the right products, tested and approved.">Des recettes simples et authentiques pour cuisiner la Suède à la maison — avec les bons produits, testés et approuvés.</p>
-</div>
-<div class="rc-wrap">
-  <div class="rc-grid">
+<main id="contenu" tabindex="-1">
 
-    <a class="rc-card" href="recette-kanelbullar.html">
-      <div class="rc-card-img"><img src="https://www.swedishcravings.fr/media/products/svenskt-parlsocker-1789396524696-80245.png" alt="Sucre perlé suédois pour kanelbullar" loading="lazy" style="object-fit:contain;background:#F1EADC;"></div>
-      <div class="rc-card-body">
-        <div class="rc-card-tag" data-fr="Fika · 4 octobre" data-sv="Fika · 4 oktober" data-en="Fika · 4 October">Fika · 4 octobre</div>
-        <h2 data-fr="Kanelbullar, les brioches suédoises à la cannelle" data-sv="Kanelbullar" data-en="Kanelbullar, Swedish cinnamon buns">Kanelbullar, les brioches suédoises à la cannelle</h2>
-        <p data-fr="La recette traditionnelle pour Kanelbullens dag : pâte à la cardamome, beurre-cannelle et sucre perlé croquant." data-sv="Det klassiska receptet till Kanelbullens dag: kardemummadeg, smör och kanel och knaprigt pärlsocker." data-en="The traditional recipe for Cinnamon Bun Day: cardamom dough, butter-cinnamon filling and crunchy pearl sugar.">La recette traditionnelle pour Kanelbullens dag : pâte à la cardamome, beurre-cannelle et sucre perlé croquant.</p>
-        <div class="rc-card-meta" data-fr="🕒 40 min + levée · 🥐 30 brioches · Facile" data-sv="🕒 40 min + jäsning · 🥐 30 bullar · Enkelt" data-en="🕒 40 min + rising · 🥐 30 buns · Easy">🕒 40 min + levée · 🥐 30 brioches · Facile</div>
-      </div>
-    </a>
-
-    <a class="rc-card" href="recette-fredagsmys-tacos.html">
-      <div class="rc-card-img"><img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&q=80" alt="Tacos du vendredi à la suédoise (fredagsmys)" loading="lazy"></div>
-      <div class="rc-card-body">
-        <div class="rc-card-tag" data-fr="Tradition · Vendredi" data-sv="Tradition · Fredag" data-en="Tradition · Friday">Tradition · Vendredi</div>
-        <h2 data-fr="Fredagsmys : la soirée tacos suédoise" data-sv="Fredagsmys: den svenska tacokvällen" data-en="Fredagsmys: the Swedish taco night">Fredagsmys : la soirée tacos suédoise</h2>
-        <p data-fr="Le rituel cocooning du vendredi en Suède : tacos, chips et dips crémeux OLW devant un film." data-sv="Fredagens myssrutin i Sverige: tacos, chips och krämiga OLW-dippar framför en film." data-en="Sweden's cosy Friday ritual: tacos, chips and creamy OLW dips in front of a film.">Le rituel cocooning du vendredi en Suède : tacos, chips et dips crémeux OLW devant un film.</p>
-        <div class="rc-card-meta" data-fr="🕒 30 min · 👨‍👩‍👧 4 pers · Facile" data-sv="🕒 30 min · 👨‍👩‍👧 4 pers · Enkelt" data-en="🕒 30 min · 👨‍👩‍👧 serves 4 · Easy">🕒 30 min · 👨‍👩‍👧 4 pers · Facile</div>
-      </div>
-    </a>
-
-    <a class="rc-card" href="recette-dip-suedois.html">
-      <div class="rc-card-img"><img src="https://images.unsplash.com/photo-1541529086526-db283c563270?w=800&q=80" alt="Dip crémeux suédois façon OLW" loading="lazy"></div>
-      <div class="rc-card-body">
-        <div class="rc-card-tag" data-fr="Apéro · Express" data-sv="Tilltugg · Snabbt" data-en="Apéritif · Quick">Apéro · Express</div>
-        <h2 data-fr="Le vrai dip suédois (façon OLW)" data-sv="Den äkta svenska dippen (OLW-stil)" data-en="The real Swedish dip (OLW-style)">Le vrai dip suédois (façon OLW)</h2>
-        <p data-fr="2 ingrédients, 5 minutes : la sauce crémeuse qui accompagne chips et crudités partout en Suède." data-sv="2 ingredienser, 5 minuter: den krämiga såsen till chips och grönsaker i hela Sverige." data-en="2 ingredients, 5 minutes: the creamy sauce served with chips and veggies all over Sweden.">2 ingrédients, 5 minutes : la sauce crémeuse qui accompagne chips et crudités partout en Suède.</p>
-        <div class="rc-card-meta" data-fr="🕒 5 min + repos · 🥣 pour 4 · Très facile" data-sv="🕒 5 min + vila · 🥣 för 4 · Mycket enkelt" data-en="🕒 5 min + resting · 🥣 serves 4 · Very easy">🕒 5 min + repos · 🥣 pour 4 · Très facile</div>
-      </div>
-    </a>
-
-    <a class="rc-card" href="recette-entrecote-cafe-de-paris.html">
-      <div class="rc-card-img"><img src="https://images.unsplash.com/photo-1600891964092-4316c288032e?w=800&q=80" alt="Entrecôte grillée sauce café de Paris" loading="lazy"></div>
-      <div class="rc-card-body">
-        <div class="rc-card-tag" data-fr="Plat · Grillades" data-sv="Huvudrätt · Grill" data-en="Main · Grilling">Plat · Grillades</div>
-        <h2 data-fr="Entrecôte, sauce café de Paris" data-sv="Entrecôte, café de Paris-sås" data-en="Entrecôte, Café de Paris sauce">Entrecôte, sauce café de Paris</h2>
-        <p data-fr="La sauce au beurre d'herbes qui sublime une belle pièce de bœuf grillée. Un classique irrésistible." data-sv="Örtsmörssåsen som lyfter en fin grillad köttbit. En oemotståndlig klassiker." data-en="The herb-butter sauce that elevates a fine grilled cut of beef. An irresistible classic.">La sauce au beurre d'herbes qui sublime une belle pièce de bœuf grillée. Un classique irrésistible.</p>
-        <div class="rc-card-meta" data-fr="🕒 20 min · 🍽 2 pers · Facile" data-sv="🕒 20 min · 🍽 2 pers · Enkelt" data-en="🕒 20 min · 🍽 serves 2 · Easy">🕒 20 min · 🍽 2 pers · Facile</div>
-      </div>
-    </a>
-
+<div class="ct-head">
+  <div class="ct-head-in">
+    <nav class="ct-crumb" aria-label="Fil d’Ariane" data-aria-fr="Fil d’Ariane" data-aria-en="Breadcrumb" data-aria-sv="Brödsmulor">
+      <ol>
+        <li><a href="/" data-fr="Accueil" data-en="Home" data-sv="Hem">Accueil</a></li>
+        <li aria-current="page" data-fr="Recettes" data-sv="Recept" data-en="Recipes">Recettes</li>
+      </ol>
+    </nav>
+    <p class="sect-eyebrow" data-fr="La cuisine du Nord, à la maison" data-en="Nordic cooking at home" data-sv="Nordisk mat hemma">La cuisine du Nord, à la maison</p>
+    <h1 class="ct-h1" data-fr="Recettes <em>suédoises</em>" data-sv="Svenska <em>recept</em>" data-en="Swedish <em>recipes</em>">Recettes <em>suédoises</em></h1>
+    <p class="ct-lead" data-fr="Des recettes simples pour cuisiner la Suède chez vous, avec les produits que l'on trouve dans les cuisines suédoises : sucre perlé, mélanges pour dips, épices et sauces." data-sv="Enkla recept för att laga svensk mat hemma, med produkterna man hittar i svenska kök: pärlsocker, dippmixer, kryddor och såser." data-en="Simple recipes to cook Swedish food at home, with the products you find in Swedish kitchens: pearl sugar, dip mixes, spices and sauces.">Des recettes simples pour cuisiner la Suède chez vous, avec les produits que l'on trouve dans les cuisines suédoises : sucre perlé, mélanges pour dips, épices et sauces.</p>
   </div>
 </div>
+
+<div class="rc-wrap">
+  <ul class="rc-grid">
+    <li>
+      <a class="rc-card" href="/recette-kanelbullar">
+        <div class="rc-img"><img src="/media-w/600/products/svenskt-parlsocker-1789396524696-80245.png" srcset="/media-w/300/products/svenskt-parlsocker-1789396524696-80245.png 300w, /media-w/600/products/svenskt-parlsocker-1789396524696-80245.png 600w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 300px" width="600" height="450" alt="" loading="lazy"></div>
+        <div class="rc-body">
+          <span class="rc-tag" data-fr="Fika · 4 octobre" data-sv="Fika · 4 oktober" data-en="Fika · 4 October">Fika · 4 octobre</span>
+          <h2 class="rc-title" data-fr="Kanelbullar, les brioches suédoises à la cannelle" data-sv="Kanelbullar som hos mormor" data-en="Kanelbullar, Swedish cinnamon buns">Kanelbullar, les brioches suédoises à la cannelle</h2>
+          <span class="rc-text" data-fr="La recette traditionnelle pour Kanelbullens dag : pâte à la cardamome, beurre-cannelle et sucre perlé croquant." data-sv="Det klassiska receptet till Kanelbullens dag: kardemummadeg, smör och kanel och knaprigt pärlsocker." data-en="The traditional recipe for Cinnamon Bun Day: cardamom dough, butter-cinnamon filling and crunchy pearl sugar.">La recette traditionnelle pour Kanelbullens dag : pâte à la cardamome, beurre-cannelle et sucre perlé croquant.</span>
+          <span class="rc-meta" data-fr="40 min + levée · 30 brioches · Facile" data-sv="40 min + jäsning · 30 bullar · Enkelt" data-en="40 min + rising · 30 buns · Easy">40 min + levée · 30 brioches · Facile</span>
+        </div>
+      </a>
+    </li>
+    <li>
+      <a class="rc-card" href="/recette-fredagsmys-tacos">
+        <div class="rc-img"><img src="/media-w/600/products/box-fredagsmys-1792617653518.jpg" srcset="/media-w/300/products/box-fredagsmys-1792617653518.jpg 300w, /media-w/600/products/box-fredagsmys-1792617653518.jpg 600w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 300px" width="600" height="450" alt="" loading="lazy"></div>
+        <div class="rc-body">
+          <span class="rc-tag" data-fr="Tradition · Vendredi" data-sv="Tradition · Fredag" data-en="Tradition · Friday">Tradition · Vendredi</span>
+          <h2 class="rc-title" data-fr="Fredagsmys : la soirée tacos suédoise" data-sv="Fredagsmys: den svenska tacokvällen" data-en="Fredagsmys: the Swedish taco night">Fredagsmys : la soirée tacos suédoise</h2>
+          <span class="rc-text" data-fr="Le rituel cocooning du vendredi en Suède : tacos, chips et dips crémeux devant un film." data-sv="Fredagens mysritual i Sverige: tacos, chips och krämiga dippar framför en film." data-en="Sweden's cosy Friday ritual: tacos, chips and creamy dips in front of a film.">Le rituel cocooning du vendredi en Suède : tacos, chips et dips crémeux devant un film.</span>
+          <span class="rc-meta" data-fr="30 min · 4 personnes · Facile" data-sv="30 min · 4 personer · Enkelt" data-en="30 min · Serves 4 · Easy">30 min · 4 personnes · Facile</span>
+        </div>
+      </a>
+    </li>
+    <li>
+      <a class="rc-card" href="/recette-dip-suedois">
+        <div class="rc-img"><img src="/media-w/600/products/picture-47-1783834791763-267520.png" srcset="/media-w/300/products/picture-47-1783834791763-267520.png 300w, /media-w/600/products/picture-47-1783834791763-267520.png 600w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 300px" width="600" height="450" alt="" loading="lazy"></div>
+        <div class="rc-body">
+          <span class="rc-tag" data-fr="Apéro · Express" data-sv="Tilltugg · Snabbt" data-en="Apéritif · Quick">Apéro · Express</span>
+          <h2 class="rc-title" data-fr="Le vrai dip suédois, façon OLW" data-sv="Den äkta svenska dippen, OLW-stil" data-en="The real Swedish dip, OLW-style">Le vrai dip suédois, façon OLW</h2>
+          <span class="rc-text" data-fr="Un sachet, de la crème fraîche, 5 minutes : la sauce crémeuse qui accompagne chips et crudités partout en Suède." data-sv="En påse, crème fraiche, 5 minuter: den krämiga såsen till chips och grönsaker i hela Sverige." data-en="One packet, some crème fraîche, 5 minutes: the creamy sauce served with chips and veggies all over Sweden.">Un sachet, de la crème fraîche, 5 minutes : la sauce crémeuse qui accompagne chips et crudités partout en Suède.</span>
+          <span class="rc-meta" data-fr="5 min + 30 min au frais · Très facile" data-sv="5 min + 30 min i kylen · Mycket enkelt" data-en="5 min + 30 min chilling · Very easy">5 min + 30 min au frais · Très facile</span>
+        </div>
+      </a>
+    </li>
+    <li>
+      <a class="rc-card" href="/recette-entrecote-cafe-de-paris">
+        <div class="rc-img"><img src="/media-w/600/products/cafe-de-paris-9207-se-1783834373894-978215.jpg" srcset="/media-w/300/products/cafe-de-paris-9207-se-1783834373894-978215.jpg 300w, /media-w/600/products/cafe-de-paris-9207-se-1783834373894-978215.jpg 600w" sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 300px" width="600" height="450" alt="" loading="lazy"></div>
+        <div class="rc-body">
+          <span class="rc-tag" data-fr="Plat · Grillades" data-sv="Huvudrätt · Grill" data-en="Main · Grilling">Plat · Grillades</span>
+          <h2 class="rc-title" data-fr="Entrecôte, sauce café de Paris" data-sv="Entrecôte, café de Paris-sås" data-en="Entrecôte, Café de Paris sauce">Entrecôte, sauce café de Paris</h2>
+          <span class="rc-text" data-fr="La sauce aux herbes qui sublime une belle pièce de bœuf saisie, prête en quelques minutes." data-sv="Örtsåsen som lyfter en fin stekt köttbit, klar på några minuter." data-en="The herb sauce that lifts a fine seared cut of beef, ready in minutes.">La sauce aux herbes qui sublime une belle pièce de bœuf saisie, prête en quelques minutes.</span>
+          <span class="rc-meta" data-fr="20 min · 2 personnes · Facile" data-sv="20 min · 2 personer · Enkelt" data-en="20 min · Serves 2 · Easy">20 min · 2 personnes · Facile</span>
+        </div>
+      </a>
+    </li>
+  </ul>
+</div>
+
+<section class="ct-band" aria-labelledby="rc-shop-h">
+  <div class="ct-shop">
+    <div class="ct-shop-head">
+      <div>
+        <p class="sect-eyebrow" data-fr="Dans la boutique" data-en="In the shop" data-sv="I butiken">Dans la boutique</p>
+        <h2 class="sect-title" id="rc-shop-h" data-fr="Les produits des <em>recettes</em>" data-en="The products in the <em>recipes</em>" data-sv="Produkterna i <em>recepten</em>">Les produits des <em>recettes</em></h2>
+      </div>
+      <a class="ct-see-all" href="/boutique" data-fr="Toute la boutique →" data-en="The whole shop →" data-sv="Hela butiken →">Toute la boutique →</a>
+    </div>
+    <!-- Liens de secours, remplacés par les cartes produit (prix et stock en direct) dès que le catalogue est chargé -->
+    <div id="rc-products">
+      <ul class="ct-fallback">
+        <li><a href="/produit/sucre-perle-suedois-10adc88a" data-fr="Sucre perlé suédois" data-en="Swedish pearl sugar" data-sv="Pärlsocker">Sucre perlé suédois</a></li>
+        <li><a href="/produit/box-fredagsmys-apero-suedois-9fdcd606" data-fr="Box Fredagsmys, apéro suédois" data-en="Fredagsmys box" data-sv="Fredagsmyslåda">Box Fredagsmys, apéro suédois</a></li>
+        <li><a href="/produit/melange-pour-dip-au-fromage-olw-96eff74d" data-fr="Mélange pour dip au fromage OLW" data-sv="OLW dippmix Cheez" data-en="OLW Cheez dip mix">Mélange pour dip au fromage OLW</a></li>
+        <li><a href="/produit/sauce-cafe-de-paris-7e314fec" data-fr="Sauce Café de Paris" data-sv="Café de Paris-sås" data-en="Café de Paris Sauce">Sauce Café de Paris</a></li>
+      </ul>
+    </div>
+    <p class="ct-ship" id="ct-ship"></p>
+  </div>
+</section>
+
+</main>
 <div id="footer-root"></div>
 <script src="js/app.js?v=34"></script>
-<script>initPage('recipes');function onLangChange(){}</script>
+<script>
+/* Produits des recettes (début des identifiants), lus dans le catalogue en direct :
+   prix, promotion et stock ne sont jamais écrits dans la page. */
+var RC_PRODUCTS = ['10adc88a', '9fdcd606', '96eff74d', '7e314fec'];
+var _rcReady = false;
+function _rcFind(pre) { return (window.PRODUCTS || []).find(function (p) { return String(p.uuid || p.id).indexOf(pre) === 0; }); }
+function _rcOut(p) { return typeof sdIsOut === 'function' ? sdIsOut(p) : !!(p && p.trackStock && p.stock != null && p.stock <= 0); }
+function _rcI18nAttrs() {
+  document.querySelectorAll('[data-aria-fr]').forEach(function (el) { el.setAttribute('aria-label', el.getAttribute('data-aria-' + LANG) || el.getAttribute('data-aria-fr')); });
+}
+function _rcRender() {
+  _rcI18nAttrs();
+  if (!_rcReady) return;
+  var box = document.getElementById('rc-products');
+  var list = RC_PRODUCTS.map(_rcFind).filter(Boolean);
+  if (box && list.length) {
+    list.sort(function (a, b) { return _rcOut(a) - _rcOut(b); });
+    box.className = 'grid-4';
+    box.innerHTML = list.map(function (p) { try { return productCardHTML(p); } catch (e) { return ''; } }).join('');
+    if (typeof sdThumb === 'function') box.querySelectorAll('img').forEach(function (img) {
+      var s = img.getAttribute('src') || '';
+      if (s.indexOf('/media/') !== 0) return;
+      img.setAttribute('srcset', sdThumbSet(s)); img.setAttribute('sizes', '(max-width: 600px) 50vw, 300px'); img.setAttribute('src', sdThumb(s, 400));
+    });
+  }
+  var ship = document.getElementById('ct-ship');
+  if (ship) ship.textContent = typeof sdShipLine === 'function' ? sdShipLine() : '';
+}
+function onLangChange() { _rcRender(); }
+window.addEventListener('sdapi:ready', function () { _rcReady = true; _rcRender(); });
+window.addEventListener('sd:currency', _rcRender);
+setTimeout(function () { if (!_rcReady) { _rcReady = true; _rcRender(); } }, 4000);
+initPage('recipes');
+</script>
 <script>(function(){var _hr=document.getElementById("header-root");if(_hr&&typeof MutationObserver!=="undefined")new MutationObserver(function(){if(typeof updateCartBadge==="function")updateCartBadge();}).observe(_hr,{childList:true});})();</script>
 <script src="js/sd-api-client.js?v=10"></script>
 </body>
