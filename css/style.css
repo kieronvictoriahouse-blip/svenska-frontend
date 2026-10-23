@@ -93,13 +93,15 @@ header {
 .logo { display:flex; flex-direction:column; line-height:1; text-decoration:none; }
 .logo-main { font-family:var(--font-display); font-size:24px; font-weight:600; color:var(--heather-text); letter-spacing:0.5px; }
 .logo-tag  { font-family:var(--font-ui); font-size:9px; letter-spacing:3.5px; text-transform:uppercase; color:var(--lingon); margin-top:3px; }
-nav { display:flex; gap:36px; align-items:center; }
-nav a {
+/* Menu du site seulement : un « nav » nu touchait aussi les fils d'Ariane et
+   les listes de la boutique (et les masquait sous 1024 px). */
+.nav-inner > nav { display:flex; gap:36px; align-items:center; }
+.nav-inner > nav a {
   font-family:var(--font-ui); font-size:11px; letter-spacing:1.5px; text-transform:uppercase;
   color:var(--slate); transition:color 0.2s; padding-bottom:2px;
   border-bottom:1px solid transparent;
 }
-nav a:hover, nav a.active { color:var(--lingon); border-bottom-color:var(--lingon); }
+.nav-inner > nav a:hover, .nav-inner > nav a.active { color:var(--lingon); border-bottom-color:var(--lingon); }
 .nav-actions { display:flex; gap:10px; align-items:center; }
 .btn-search {
   background:none; border:none; padding:8px; color:var(--slate);
@@ -398,7 +400,7 @@ footer { background:var(--midnight); color:rgba(255,255,255,0.72); padding:64px 
 /* ── RESPONSIVE ── */
 @media(max-width:1024px) {
   .nav-inner { padding:0 24px; }
-  nav { display:none; }
+  .nav-inner > nav { display:none; }
   .hamburger { display:flex; }
   .grid-3 { grid-template-columns:repeat(2,1fr); }
   .grid-4 { grid-template-columns:repeat(2,1fr); }

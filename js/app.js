@@ -108,7 +108,7 @@ function sdSearchText(p){if(!p)return'';if(p._sdSearch)return p._sdSearch;var o=
 function sdMatches(p,q){var words=sdNorm(q).split(' ').filter(Boolean);if(!words.length)return true;var t=sdSearchText(p);return words.every(function(w){return t.indexOf(w)>-1||(w.length>3&&/s$/.test(w)&&t.indexOf(w.slice(0,-1))>-1);});}
 /* Ligne de livraison sous le prix, calculée depuis les réglages (jamais en dur) */
 /* Montant rond sans centimes (« 29 € », « €29 ») ; sinon fmtPrice */
-function sdPriceShort(n){n=+n||0;if(n%1!==0||(LANG==='sv'&&_sekRate>0))return fmtPrice(n);return LANG==='en'?'€'+n:n+' €';}
+function sdPriceShort(n){n=+n||0;if(n%1!==0||(LANG==='sv'&&_sekRate>0))return fmtPrice(n);return LANG==='fr'?n+' €':'€'+n;}
 function sdShipLine(){var r=SD_SHIP.rules(false);var promo=SD_SHIP.label(LANG);var c=fmtPrice(r.cost),t=sdPriceShort(r.threshold);
   if(LANG==='en')return(promo?promo+' · ':'')+'Pickup point delivery '+c+', free from '+t+' · Free workshop pickup (Drôme)';
   if(LANG==='sv')return(promo?promo+' · ':'')+'Leverans till utlämningsställe '+c+', gratis från '+t+' · Gratis upphämtning i ateljén (Drôme)';
