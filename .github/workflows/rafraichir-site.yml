@@ -1,0 +1,32 @@
+# Redéploie le site toutes les 4 heures pour rafraîchir ce qui est généré au
+# build (scripts/build.js) : stock et prix des fiches pré-générées, sitemap,
+# flux Google Shopping. Le déploiement lui-même est fait par Vercel (lien
+# GitHub + buildCommand de vercel.json) ; ce workflow ne fait qu'appeler un
+# « Deploy Hook ».
+#
+# Mise en place (une fois) :
+#   1. Vercel → projet du site → Settings → Git → Deploy Hooks : créer un hook
+#      sur la branche main, copier l'URL.
+#   2. GitHub → dépôt → Settings → Secrets and variables → Actions : secret
+#      VERCEL_DEPLOY_HOOK = cette URL.
+name: Rafraîchir le site
+
+on:
+  schedule:
+    - cron: '17 */4 * * *'
+  workflow_dispatch:
+
+jobs:
+  rafraichir:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Déclencher un déploiement Vercel
+        env:
+          HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
+        run: |
+          if [ -z "$HOOK" ]; then
+            echo "::warning::Secret VERCEL_DEPLOY_HOOK absent : créer un Deploy Hook dans Vercel (voir l'en-tête de ce fichier)."
+            exit 0
+          fi
+          curl -fsS -X POST "$HOOK" > /dev/null
+          echo "Déploiement demandé."

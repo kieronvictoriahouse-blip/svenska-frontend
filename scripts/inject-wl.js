@@ -63,36 +63,15 @@ async function main() {
     // Remove previous injection
     html = html.replace(new RegExp(`${MARKER_START}.*?${MARKER_END}`, 's'), '');
 
-    // Inject CSS vars right after <link rel="stylesheet" href="css/style.css">
+    /* Variables injectées juste après la feuille de style. Les pages la
+       chargent avec un numéro de version (css/style.css?v=20) : l'ancien
+       motif, sans « ?v= », ne trouvait plus rien et le premier affichage
+       gardait la palette par défaut (vert et orange). Le texte du hero
+       n'est plus cuit ici : l'accueil le lit dans le CMS (carrousel). */
     html = html.replace(
-      /(<link rel="stylesheet" href="css\/style\.css">)/,
+      /(<link rel="stylesheet" href="\/?css\/style\.css(?:\?v=\d+)?">)/,
       `$1\n${styleBlock}${fontLink ? '\n' + fontLink : ''}`
     );
-
-    // index.html only: bake CMS hero text
-    if (file === 'index.html') {
-      const lang = 'fr';
-      const lk = `value_${lang}`;
-
-      if (cms.hero_title?.[lk]) {
-        html = html.replace(
-          /(<h1>)[^<]*(<em>[^<]*<\/em>)?[^<]*(<\/h1>)/,
-          `<h1>${cms.hero_title[lk]}</h1>`
-        );
-      }
-      if (cms.hero_subtitle?.[lk]) {
-        html = html.replace(
-          /(<p class="hero-sub">)[^<]*(<\/p>)/,
-          `<p class="hero-sub">${cms.hero_subtitle[lk]}</p>`
-        );
-      }
-      if (cms.hero_eyebrow?.[lk]) {
-        html = html.replace(
-          /(<p class="hero-eyebrow">)[^&<]*(&amp;[^<]*)?(<\/p>)/,
-          `<p class="hero-eyebrow">${cms.hero_eyebrow[lk]}</p>`
-        );
-      }
-    }
 
     fs.writeFileSync(file, html);
     console.log(`✓ ${file}`);

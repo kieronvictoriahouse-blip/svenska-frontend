@@ -298,7 +298,7 @@ function _upsellPick(remaining, cartIds) {
   const avail = (window.PRODUCTS || []).filter(function(p) {
     const id = String(p.uuid || p.id);
     if (cartIds.has(id)) return false;
-    if (p.pickup_only) return false;
+    if (p.pickup_only || sdIsHomeProduct(p)) return false;
     if (p.trackStock && p.stock !== null && p.stock <= 0) return false;
     return (p.price || 0) > 0;
   });
@@ -321,7 +321,7 @@ function _crossSellHtml(cartIds) {
   const picks = (window.PRODUCTS || []).filter(function(p) {
     const id = String(p.uuid || p.id);
     if (cartIds.has(id)) return false;
-    if (p.pickup_only) return false;
+    if (p.pickup_only || sdIsHomeProduct(p)) return false;
     if (p.trackStock && p.stock !== null && p.stock <= 0) return false;
     return (p.price || 0) > 0;
   });
@@ -337,7 +337,7 @@ function _crossSellHtml(cartIds) {
         const id = p.uuid || p.id;
         const nm = (p.name && (p.name[LANG] || p.name.fr)) || '';
         return '<div class="xsell-card">'
-          + '<img src="' + (p.photo || '') + '" onerror="this.style.display=\'none\'" alt="' + nm.replace(/"/g, '') + '" loading="lazy">'
+          + '<img src="' + _sdAttr(sdThumb(p.photo || '', 300)) + '" width="148" height="148" onerror="this.style.display=\'none\'" alt="' + nm.replace(/"/g, '') + '" loading="lazy">'
           + '<div class="xsell-name">' + nm + '</div>'
           + '<div class="xsell-foot"><span class="xsell-price">' + fmtPrice(p.price) + '</span>'
           + '<button class="xsell-add" title="' + addTxt + '" aria-label="' + addTxt + '" onclick="cartAddQuick(\'' + id + '\')">+</button></div>'

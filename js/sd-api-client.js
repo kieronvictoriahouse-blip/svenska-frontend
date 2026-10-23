@@ -144,6 +144,15 @@
     const SUPA_MEDIA = /^https?:\/\/[a-z0-9]+\.supabase\.co\/storage\/v1\/object\/public\/svenska-media\//i;
     const mediaUrl = (u) => (typeof u === 'string' ? u.replace(SUPA_MEDIA, '/media/') : u);
 
+    /* Remise : celle du produit d'abord, sinon celle de sa catégorie
+       (migration 052) — même précédence que resolveDiscount() côté serveur.
+       Sans cela, une promo « −10 % sur les bonbons » n'apparaissait qu'au
+       paiement, et le flux Shopping annonçait un prix que la fiche taisait. */
+    const own = { discountType: p.discount_type, discountValue: p.discount_value, discountStart: p.discount_start, discountEnd: p.discount_end };
+    const cd = _cRaw || {};
+    const catDisc = { discountType: cd.discount_type, discountValue: cd.discount_value, discountStart: cd.discount_start, discountEnd: cd.discount_end };
+    const disc = (!window.SDPrice.active(own) && window.SDPrice.active(catDisc)) ? catDisc : own;
+
     return {
       id:          p.sort_order || p.id,
       uuid:        p.id,
@@ -165,11 +174,19 @@
       price:       parseFloat(p.price) || 0,
       // Remise par article (migration 049) — champs bruts ; le prix effectif
       // se calcule via window.SDPrice.effective() (gère aussi les variantes).
-      discountType:  p.discount_type || null,
-      discountValue: p.discount_value != null ? parseFloat(p.discount_value) : null,
-      discountStart: p.discount_start || null,
-      discountEnd:   p.discount_end || null,
+      discountType:  disc.discountType || null,
+      discountValue: disc.discountValue != null ? parseFloat(disc.discountValue) : null,
+      discountStart: disc.discountStart || null,
+      discountEnd:   disc.discountEnd || null,
       weight:      p.weight || '',
+      // Informations obligatoires avant achat (règlement 1169/2011, art. 9 et 14)
+      allergens:   ml(p.allergens_sv, p.allergens_fr, p.allergens_en, p.allergens),
+      nutrition:   (p.nutrition && typeof p.nutrition === 'object') ? p.nutrition : {},
+      manufacturer: p.manufacturer || '',
+      ean:         p.ean || '',
+      // Box (migration 054) : ce qu'il y a dedans
+      lotContenu:  Array.isArray(p.lot_contenu) ? p.lot_contenu : [],
+      bundleItems: Array.isArray(p.bundle_items) ? p.bundle_items : [],
       tags:        Array.isArray(p.tags) ? p.tags : [],
       variants,
       bestseller:  !!(p.is_bestseller ?? p.bestseller),
@@ -228,6 +245,8 @@
   window.SDApi = SDApi;
   window.SDApi.isReady = false;
   window.SDApi.BASE = BASE;
+  // Même mise en forme partout (boutique, fiche, panier) : la fiche ne refait plus la sienne.
+  window.SDApi.mapProduct = mapProduct;
 
   function applyWhiteLabel(cfg) {
     if (!cfg || !cfg.id) return; // config vide = pas de white-label configuré

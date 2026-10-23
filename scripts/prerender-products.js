@@ -1,27 +1,29 @@
 /**
  * Build-time product prerenderer (SEO + GEO).
  * Pour chaque produit actif, génère une page statique /produit/<slug>.html
- * (servie en /produit/<slug> grâce à cleanUrls).
+ * (servie en /produit/<slug> grâce à cleanUrls). Lancé à chaque déploiement
+ * par scripts/build.js (buildCommand de vercel.json).
  *
  * Principe : TOUT ce qui compte doit être dans le HTML servi, car les
  * crawlers des moteurs IA (ChatGPT Search, Perplexity, Claude) n'exécutent
- * PAS le JavaScript — avant cette version, une fiche ne leur montrait que
- * 296 caractères de chrome d'interface. Le JS du site ré-hydrate ensuite
- * par-dessus les mêmes conteneurs : aucun changement visuel.
+ * PAS le JavaScript. Le JS du site ré-hydrate ensuite par-dessus les mêmes
+ * conteneurs : aucun changement visuel.
  *
  * Dans le HTML statique :
  *   - <title> ≤ 60 car., meta description coupée au mot, canonical, OG complet
  *   - corps ENTIER : nom, catégorie, sous-titre, prix, poids, description
  *     complète, image avec alt, fil d'Ariane rempli, 4 produits similaires
  *     en liens réels (maillage interne)
- *   - JSON-LD Product enrichi (vraie marque, description complète, poids,
- *     catégorie) + JSON-LD BreadcrumbList
- *   - window.__PRODUCT_ID pour l'hydratation JS existante
- * Régénère aussi sitemap.xml (lastmod réel = updated_at du produit).
+ *   - JSON-LD Product (vraie marque, origine réelle, GTIN, poids, livraison,
+ *     retours) + JSON-LD BreadcrumbList avec le rayon
+ *   - window.__SD_PRODUCT : la fiche elle-même, sans champ commercial, pour
+ *     un affichage et un « Ajouter au panier » immédiats
+ * Régénère aussi sitemap.xml et la liste statique de la boutique.
  */
 const https = require('https');
 const fs = require('fs');
 const path = require('path');
+const { slugify, isHome, isOut, brandOf, isoPays, netQty, mediaUrl, sansPrive } = require('./lib/produits');
 
 const BASE = process.env.SD_API_URL || 'https://admin.swedishcravings.fr';
 const SITE = 'https://www.swedishcravings.fr';
@@ -36,29 +38,10 @@ function get(url) {
   });
 }
 
-// DOIT rester identique à _sdProductSlug() dans produit.html
-function slugify(nameFr, id) {
-  const base = (nameFr || 'produit').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
-    .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60);
-  return base + '-' + String(id || '').slice(0, 8);
-}
-
 const escAttr = s => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const escHtml = s => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-
-// Identique à generate-shopping-feed.js — la marque réelle, pas un fourre-tout.
-const BRANDS = ['Marimekko', 'IHR', 'Ihr', 'OLW', 'Ahlgrens', 'Läkerol', 'Lakerol', 'Kavli', 'Fazer',
-  'Odense', 'Törsleff', 'Torsleff', "Dave & Jon's", 'Santa Maria', 'Polly', 'Ballerina', 'Wasa',
-  'Piffi', 'Marabou', 'P Design', 'Malaco'];
-// Sous-marques → fabricant (le nom produit porte la sous-marque, pas le fabricant).
-const SUB_BRANDS = { 'Kexchoklad': 'Cloetta', 'Center': 'Cloetta', 'Djungelvrål': 'Malaco', 'Gott & Blandat': 'Malaco', 'Tyrkisk Peber': 'Fazer', 'Dumle': 'Fazer', "O'boy": "O'boy" };
-function brandOf(nameFr) {
-  const n = (nameFr || '');
-  for (const b of BRANDS) if (n.toLowerCase().includes(b.toLowerCase()))
-    return b === 'Lakerol' ? 'Läkerol' : (b === 'Torsleff' ? 'Törsleff' : (b === 'Ihr' ? 'IHR' : b));
-  for (const [k, v] of Object.entries(SUB_BRANDS)) if (n.toLowerCase().includes(k.toLowerCase())) return v;
-  return 'Swedish Cravings';
-}
+// JSON posé dans un <script> : « </script> » ou « <!-- » ne doivent pas le fermer.
+const jsonScript = o => JSON.stringify(o).replace(/</g, '\\u003c');
 
 /** Coupe au dernier mot entier ≤ max, ajoute « … » si tronqué. */
 function auMot(s, max) {
@@ -72,7 +55,7 @@ function descComplete(p) {
   const d = (p.desc_fr || '').trim().replace(/\s+/g, ' ');
   if (d) return d;
   const cat = p.categories && p.categories.name_fr ? p.categories.name_fr.toLowerCase() : 'produit suédois';
-  return `${p.name_fr} — ${cat} suédois authentique, importé de Suède et livré partout en France par Swedish Cravings.`;
+  return `${p.name_fr} — ${cat}, importé de Suède et livré partout en France par Swedish Cravings.`;
 }
 
 function titreSeo(p) {
@@ -82,17 +65,47 @@ function titreSeo(p) {
   return auMot(p.name_fr, 60);
 }
 
-const prixFr = n => (parseFloat(n) || 0).toFixed(2).replace('.', ',') + ' €';
+const prixFr = n => (parseFloat(n) || 0).toFixed(2).replace('.', ',') + ' €';
+
+/* Livraison et retours tels que les annoncent livraison.html et les CGV
+   (article 7) : point relais en France, traitement 1 jour, 2 à 4 jours
+   ouvrés de transport ; rétractation 14 jours, retour à la charge du client.
+   Le tarif et le seuil viennent des réglages du back-office. */
+function livraisonLd(cfg) {
+  const cost = 4.90;
+  const seuil = parseFloat(cfg && cfg.free_shipping_threshold) > 0 ? parseFloat(cfg.free_shipping_threshold) : 29;
+  return {
+    shipping: {
+      '@type': 'OfferShippingDetails',
+      shippingRate: { '@type': 'MonetaryAmount', value: cost.toFixed(2), currency: 'EUR' },
+      shippingDestination: { '@type': 'DefinedRegion', addressCountry: 'FR' },
+      deliveryTime: {
+        '@type': 'ShippingDeliveryTime',
+        handlingTime: { '@type': 'QuantitativeValue', minValue: 0, maxValue: 1, unitCode: 'DAY' },
+        transitTime: { '@type': 'QuantitativeValue', minValue: 2, maxValue: 4, unitCode: 'DAY' },
+      },
+    },
+    seuil,
+    returns: {
+      '@type': 'MerchantReturnPolicy',
+      applicableCountry: 'FR',
+      returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
+      merchantReturnDays: 14,
+      returnMethod: 'https://schema.org/ReturnByMail',
+      returnFees: 'https://schema.org/ReturnShippingFees',
+    },
+  };
+}
 
 async function main() {
-  const data = await get(`${BASE}/api/products`);
+  const [data, wl] = await Promise.all([get(`${BASE}/api/products`), get(`${BASE}/api/white-label`)]);
   const products = (data && data.products || []).filter(p => p.is_active);
-  if (!products.length) { console.log('Aucun produit — prerender ignoré'); return; }
+  if (!products.length) { console.log('Aucun produit — prerender ignoré (fichiers existants conservés)'); return; }
+  const liv = livraisonLd(wl && wl.config);
 
-  let template = fs.readFileSync('produit.html', 'utf8');
-  // Pages servies sous /produit/<slug> (sous-dossier) : sans <base>, les chemins relatifs
-  // (css/, js/, img/, liens de nav) se résoudraient vers /produit/... → 404 (page cassée).
-  template = template.replace(/<meta charset="UTF-8">/i, '<meta charset="UTF-8">\n<base href="https://www.swedishcravings.fr/">');
+  // produit.html porte <base href="/"> : servies sous /produit/<slug>, les pages
+  // trouvent css/, js/ et img/ à la racine (et en local, les fichiers locaux).
+  const template = fs.readFileSync('produit.html', 'utf8');
   const outDir = path.join(process.cwd(), 'produit');
   fs.mkdirSync(outDir, { recursive: true });
   /* Purge des fiches obsolètes : un produit renommé change de slug, et
@@ -115,30 +128,36 @@ async function main() {
     const marque = brandOf(p.name_fr);
     const catNom = (p.categories && p.categories.name_fr) || 'Épicerie suédoise';
     const catSlug = (p.categories && p.categories.slug) || '';
-    const img = (p.image_url || '')
-      .replace(/^https?:\/\/[a-z0-9]+\.supabase\.co\/storage\/v1\/object\/public\/svenska-media\//i, `${SITE}/media/`)
-      || `${SITE}/css/og-default.jpg`;
+    const img = mediaUrl(p.image_url, SITE) || `${SITE}/img/sc-logo-horizontal.jpg`;
     const price = (parseFloat(p.price) || 0).toFixed(2);
-    const enStock = !(p.track_stock === true && (p.stock || 0) <= 0);
-    const avail = enStock ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock';
-    const alt = `${p.name_fr} — ${marque}, ${catNom.toLowerCase()} suédois`;
+    const avail = isOut(p) ? 'https://schema.org/OutOfStock' : 'https://schema.org/InStock';
+    const alt = `${p.name_fr}${marque ? ' — ' + marque : ''}, ${catNom.toLowerCase()}`;
+    const rayonUrl = catSlug && !isHome(p) ? `${SITE}/boutique?rayon=${encodeURIComponent(catSlug)}` : (isHome(p) ? `${SITE}/maison` : `${SITE}/boutique`);
 
-    // ── JSON-LD Product enrichi ─────────────────────────────────────
+    // ── JSON-LD Product ─────────────────────────────────────────────
+    const offers = {
+      '@type': 'Offer', price, priceCurrency: 'EUR', availability: avail, url,
+      itemCondition: 'https://schema.org/NewCondition',
+      seller: { '@type': 'Organization', name: 'Swedish Cravings' },
+      shippingDetails: (parseFloat(p.price) || 0) >= liv.seuil
+        ? { ...liv.shipping, shippingRate: { '@type': 'MonetaryAmount', value: '0.00', currency: 'EUR' } }
+        : liv.shipping,
+      hasMerchantReturnPolicy: liv.returns,
+    };
     const ld = {
       '@context': 'https://schema.org', '@type': 'Product',
       name: p.name_fr,
       description: auMot(descFull, 800),
-      image: img, sku: p.id,
-      brand: { '@type': 'Brand', name: marque },
+      image: img, sku: p.sku || p.id,
       category: catNom,
-      countryOfOrigin: 'SE',
-      offers: {
-        '@type': 'Offer', price, priceCurrency: 'EUR', availability: avail, url,
-        itemCondition: 'https://schema.org/NewCondition',
-        seller: { '@type': 'Organization', name: 'Swedish Cravings' },
-      },
+      offers,
     };
-    if (p.weight) ld.weight = { '@type': 'QuantitativeValue', name: String(p.weight) };
+    if (marque) ld.brand = { '@type': 'Brand', name: marque };
+    if (/^\d{8,14}$/.test(String(p.ean || '').trim())) ld.gtin = String(p.ean).trim();
+    const iso = isoPays(p.origin_fr);
+    if (iso) ld.countryOfOrigin = iso;
+    const q = netQty(p.weight);
+    if (q) ld.weight = { '@type': 'QuantitativeValue', value: Math.round(q.total * 1000 * 100) / 100, unitCode: q.liquid ? 'MLT' : 'GRM' };
     if ((p.reviews_count || 0) > 0 && p.rating) {
       ld.aggregateRating = { '@type': 'AggregateRating', ratingValue: p.rating, reviewCount: p.reviews_count };
     }
@@ -146,22 +165,23 @@ async function main() {
       '@context': 'https://schema.org', '@type': 'BreadcrumbList',
       itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Accueil', item: `${SITE}/` },
-        { '@type': 'ListItem', position: 2, name: 'Boutique', item: `${SITE}/boutique` },
-        { '@type': 'ListItem', position: 3, name: p.name_fr, item: url },
+        { '@type': 'ListItem', position: 2, name: isHome(p) ? 'Maison' : 'Boutique', item: isHome(p) ? `${SITE}/maison` : `${SITE}/boutique` },
+        ...(catSlug && !isHome(p) ? [{ '@type': 'ListItem', position: 3, name: catNom, item: rayonUrl }] : []),
+        { '@type': 'ListItem', position: catSlug && !isHome(p) ? 4 : 3, name: p.name_fr, item: url },
       ],
     };
 
     // ── Produits similaires : 4 liens statiques (maillage interne) ──
-    const similaires = products
-      .filter(x => x.id !== p.id && (x.categories && x.categories.slug) === catSlug)
-      .slice(0, 4);
-    const complement = products.filter(x => x.id !== p.id && !similaires.includes(x)).slice(0, 4 - similaires.length);
+    // En stock seulement, et jamais une serviette à côté d'un paquet de bonbons.
+    const voisins = products.filter(x => x.id !== p.id && !isOut(x) && isHome(x) === isHome(p) && (parseFloat(x.price) || 0) > 0);
+    const similaires = voisins.filter(x => (x.categories && x.categories.slug) === catSlug).slice(0, 4);
+    const complement = voisins.filter(x => !similaires.includes(x)).slice(0, 4 - similaires.length);
     const relHtml = [...similaires, ...complement].map(x => {
-      const xImg = (x.image_url || '').replace(/^https?:\/\/[a-z0-9]+\.supabase\.co\/storage\/v1\/object\/public\/svenska-media\//i, `${SITE}/media/`);
+      const xImg = mediaUrl(x.image_url, '').replace(/^\/media\//, '/media-w/400/');
       return `<a href="/produit/${slugify(x.name_fr, x.id)}" style="display:block;text-decoration:none;color:inherit;">` +
-        (xImg ? `<img src="${escAttr(xImg)}" alt="${escAttr(x.name_fr)}" loading="lazy" style="width:100%;aspect-ratio:1;object-fit:contain;background:var(--parchment);">` : '') +
-        `<div style="font-family:var(--font-ui);font-size:13px;margin-top:8px;">${escHtml(x.name_fr)}</div>` +
-        `<div style="font-family:var(--font-ui);font-size:13px;color:var(--dust);">${prixFr(x.price)}</div></a>`;
+        (xImg ? `<img src="${escAttr(xImg)}" alt="${escAttr(x.name_fr)}" loading="lazy" width="400" height="400" style="width:100%;height:auto;aspect-ratio:1;object-fit:contain;background:var(--parchment);">` : '') +
+        `<div style="font-family:var(--font-display);font-size:17px;font-weight:600;color:var(--heather-text);margin-top:8px;">${escHtml(x.name_fr)}</div>` +
+        `<div style="font-family:var(--font-display);font-size:17px;color:var(--midnight);">${prixFr(x.price)}</div></a>`;
     }).join('\n');
 
     let html = template;
@@ -176,8 +196,8 @@ async function main() {
     html = html.replace(/<meta property="og:site_name" content="[^"]*">/,
       `<meta property="og:site_name" content="Swedish Cravings">\n<meta property="og:locale" content="fr_FR">\n<meta property="product:price:amount" content="${price}">\n<meta property="product:price:currency" content="EUR">`);
     html = html.replace(/<script type="application\/ld\+json" id="ld-product">[\s\S]*?<\/script>/,
-      `<script type="application/ld+json" id="ld-product">${JSON.stringify(ld)}</script>\n<script type="application/ld+json">${JSON.stringify(ldBreadcrumb)}</script>`);
-    html = html.replace(/<\/head>/, `<script>window.__PRODUCT_ID=${JSON.stringify(p.id)};</script>\n</head>`);
+      `<script type="application/ld+json" id="ld-product">${jsonScript(ld)}</script>\n<script type="application/ld+json">${jsonScript(ldBreadcrumb)}</script>`);
+    html = html.replace(/<\/head>/, `<script>window.__PRODUCT_ID=${JSON.stringify(p.id)};window.__SD_PRODUCT=${jsonScript(sansPrive(p))};</script>\n</head>`);
 
     // ── Corps statique : le contenu que voient les crawlers sans JS ──
     html = html.replace(/<strong id="bc-name">[^<]*<\/strong>/, `<strong id="bc-name">${escHtml(p.name_fr)}</strong>`);
@@ -189,6 +209,8 @@ async function main() {
     html = html.replace(/<span class="pdp-price" id="pdp-price"><\/span>/, `<span class="pdp-price" id="pdp-price">${prixFr(p.price)}</span>`);
     if (p.weight) html = html.replace(/<div class="pdp-weight" id="pdp-weight" style="display:none;"><\/div>/, `<div class="pdp-weight" id="pdp-weight">${escHtml(String(p.weight))}</div>`);
     html = html.replace(/<p class="pdp-desc" id="pdp-desc"><\/p>/, `<p class="pdp-desc" id="pdp-desc">${escHtml(descFull)}</p>`);
+    if (p.ingredients_fr) html = html.replace(/<div class="accordion" id="accordion"><\/div>/,
+      `<div class="accordion" id="accordion"><div class="acc-item"><h2 class="acc-h">Ingrédients</h2><div class="acc-content">${escHtml(p.ingredients_fr)}${p.allergens_fr ? '<br>' + escHtml(p.allergens_fr) : ''}</div></div></div>`);
     html = html.replace(/<div class="grid-4" id="related-grid" style="margin-top:32px;"><\/div>/, `<div class="grid-4" id="related-grid" style="margin-top:32px;">\n${relHtml}\n</div>`);
 
     fs.writeFileSync(path.join(outDir, `${slug}.html`), html);
@@ -208,7 +230,28 @@ async function main() {
   sm.push('</urlset>');
   fs.writeFileSync('sitemap.xml', sm.join('\n') + '\n');
 
+  // Boutique : liste de liens pour les robots sans JavaScript, et ItemList.
+  remplirBoutique(products.filter(p => !isHome(p)));
+
   console.log(`✓ ${count} fiches produit pré-générées (contenu statique complet) + sitemap (${staticPages.length + productUrls.length} URLs)`);
+}
+
+function remplirBoutique(produits) {
+  const f = 'boutique.html';
+  if (!fs.existsSync(f)) return;
+  let html = fs.readFileSync(f, 'utf8');
+  const liste = '<ul>' + produits.map(p =>
+    `<li><a href="/produit/${slugify(p.name_fr, p.id)}">${escHtml(p.name_fr)}</a> — ${prixFr(p.price)}</li>`).join('') + '</ul>';
+  const itemList = {
+    '@context': 'https://schema.org', '@type': 'ItemList', name: 'Boutique Swedish Cravings',
+    numberOfItems: produits.length,
+    itemListElement: produits.map((p, i) => ({ '@type': 'ListItem', position: i + 1, url: `${SITE}/produit/${slugify(p.name_fr, p.id)}`, name: p.name_fr })),
+  };
+  const avant = html;
+  html = html.replace(/<!-- sd-static-start -->[\s\S]*?<!-- sd-static-end -->/, `<!-- sd-static-start -->${liste}<!-- sd-static-end -->`);
+  html = html.replace(/<!-- sd-itemlist-start -->[\s\S]*?<!-- sd-itemlist-end -->/,
+    `<!-- sd-itemlist-start --><script type="application/ld+json">${jsonScript(itemList)}</script><!-- sd-itemlist-end -->`);
+  if (html !== avant) { fs.writeFileSync(f, html); console.log(`✓ boutique : ${produits.length} liens statiques + ItemList`); }
 }
 
 main().catch(e => { console.error('prerender-products failed:', e.message); process.exit(0); });

@@ -3,6 +3,8 @@
    - cleanUrls : /boutique → boutique.html, /produit/x → produit/x.html
    - /a-propos → page.html
    - /media/* : fichier local s'il existe, sinon redirection vers le stockage Supabase public
+   - /media-w/<largeur>/* : vignette redimensionnée par Supabase
+   - /produit/<slug> sans fichier pré-généré → produit.html
    Usage : node .claude/dev-server.js [port]   (défaut 8088, écoute sur 127.0.0.1) */
 const http = require('http');
 const fs = require('fs');
@@ -46,8 +48,16 @@ http.createServer((req, res) => {
   if (urlPath.length > 1) urlPath = urlPath.replace(/\/+$/, '');
   urlPath = REWRITES[urlPath] || urlPath;
 
-  const file = resolveFile(urlPath === '/' ? '/index' : urlPath);
+  let file = resolveFile(urlPath === '/' ? '/index' : urlPath);
+  // Fiche sans page pré-générée : produit.html la sert (rewrite de vercel.json)
+  if (!file && /^\/produit\/[^/]+$/.test(urlPath)) file = resolveFile('/produit.html');
   if (!file) {
+    const mw = urlPath.match(/^\/media-w\/(\d+)\/(.+)$/);
+    if (mw) {
+      res.writeHead(302, { Location: MEDIA_REMOTE.replace('/object/', '/render/image/') + mw[2].split('/').map(encodeURIComponent).join('/') + '?width=' + mw[1] + '&resize=contain&quality=75' });
+      res.end();
+      return;
+    }
     if (urlPath.startsWith('/media/')) {
       res.writeHead(302, { Location: MEDIA_REMOTE + urlPath.slice('/media/'.length).split('/').map(encodeURIComponent).join('/') });
       res.end();
