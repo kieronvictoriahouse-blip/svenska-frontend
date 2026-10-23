@@ -154,6 +154,20 @@
 .c3-skel-l3{ height:20px; width:40%; margin-top:10px; }
 .c3-loading .c3-skel, .c3-loading .c3-imgwrap{ animation:c3-breathe 1.6s ease-in-out infinite; }
 
+/* « POUR LA TABLE » : passerelle vers les serviettes (page Maison) */
+.c3-table{ display:grid; grid-template-columns:1fr auto; gap:28px; align-items:center; margin-top:34px; padding:28px; background:var(--parchment); border:1px solid var(--linen); }
+.c3-table-eyebrow{ font-family:var(--font-ui); font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--lingon); margin:0 0 8px !important; }
+.c3-table h2{ font-family:var(--font-display); font-size:clamp(26px,3vw,34px); font-weight:300; color:var(--midnight); line-height:1.1; margin:0 0 10px; }
+.c3-table h2 em{ font-style:italic; color:var(--lingon); }
+.c3-table p{ font-family:var(--font-body); font-size:17px; line-height:1.6; color:var(--slate); margin:0 0 14px; max-width:520px; }
+.c3-table-link{ display:inline-flex; align-items:center; min-height:44px; font-family:var(--font-ui); font-size:12px; letter-spacing:2px; text-transform:uppercase; color:var(--heather-text); text-decoration:underline; text-underline-offset:4px; }
+.c3-table-link:hover{ color:var(--lingon); }
+.c3-table-imgs{ display:flex; gap:10px; }
+.c3-table-img{ display:block; width:120px; aspect-ratio:1; background:var(--snow); border:1px solid var(--linen); }
+.c3-table-img img{ width:100%; height:100%; object-fit:contain; padding:8px; }
+.c3-table-img:hover{ border-color:var(--driftwood); }
+@media(max-width:700px){ .c3-table{ grid-template-columns:1fr; padding:22px 18px; } .c3-table-img{ width:calc((100% - 20px) / 3); } .c3-table-imgs{ width:100%; } }
+
 /* ÉTAT VIDE (recherche) / ERREUR (catalogue indisponible) */
 .c3-empty{ text-align:center; padding:72px 20px; background:var(--snow); border:1px solid var(--linen); margin-top:26px; }
 .c3-empty-t{ font-family:var(--font-display); font-size:28px; font-style:italic; font-weight:400; color:var(--midnight); margin:0 0 8px !important; }

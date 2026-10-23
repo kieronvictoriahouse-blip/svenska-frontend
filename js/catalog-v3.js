@@ -56,6 +56,12 @@
 
   // Chaînes d'interface (FR / EN / SV)
   var T = {
+    tableEyebrow: { fr: 'Pour la table', en: 'For the table', sv: 'Till bordet' },
+    tableTitle: { fr: 'Serviettes <em>scandinaves</em>', en: 'Scandinavian <em>napkins</em>', sv: 'Skandinaviska <em>servetter</em>' },
+    tableText: { fr: 'Serviettes en papier aux motifs nordiques ({B}), dès {P}. Pour le fika, l’apéro, ou à glisser avec une box cadeau.',
+      en: 'Paper napkins with Nordic patterns ({B}), from {P}. For fika, drinks, or to slip in with a gift box.',
+      sv: 'Pappersservetter med nordiska mönster ({B}), från {P}. Till fikat, fredagsmyset eller med en presentlåda.' },
+    tableLink: { fr: 'Voir les serviettes', en: 'See the napkins', sv: 'Se servetterna' },
     searchLabel: { fr: 'Rechercher dans la boutique', en: 'Search the shop', sv: 'Sök i butiken' },
     searchPh: { fr: 'Rechercher un produit, une marque…', en: 'Search a product, a brand…', sv: 'Sök en produkt, ett märke…' },
     searchPhShort: { fr: 'Rechercher : bilar, OLW, salmiak…', en: 'Search: bilar, OLW, salmiak…', sv: 'Sök: bilar, OLW, salmiak…' },
@@ -453,6 +459,36 @@
     }).join('');
   }
 
+  /* « Pour la table » : les serviettes (univers Maison) ne sont pas dans les
+     rayons, mais la boutique y mène — en fin de liste, ou dès qu'une
+     recherche les vise (« serviette », « marimekko »…). Rien si tout est épuisé. */
+  function tableHTML() {
+    if (activeEnvies().length) return '';
+    var home = (window.PRODUCTS || []).filter(function (p) {
+      return p && typeof sdIsHomeProduct === 'function' && sdIsHomeProduct(p) && (p.price || 0) > 0 && !(typeof sdIsOut === 'function' && sdIsOut(p));
+    });
+    var q = state.q.trim();
+    if (q) home = home.filter(function (p) { return typeof sdMatches === 'function' && sdMatches(p, q); });
+    if (!home.length) return '';
+    var min = Math.min.apply(null, home.map(function (p) { return p.price; }));
+    var marques = ['Marimekko', 'IHR', 'P Design'].filter(function (b) {
+      return home.some(function (p) { return ((p.name && p.name.fr) || '').toLowerCase().indexOf(b.toLowerCase()) > -1; });
+    });
+    var prix = typeof sdPriceShort === 'function' ? sdPriceShort(min) : fmtPrice(min);
+    var txt = esc(tr(T.tableText)).replace('{B}', esc(marques.join(', ') + (marques.length ? '…' : ''))).replace('{P}', esc(prix)).replace(' ()', '');
+    var imgs = home.slice(0, 3).map(function (p) {
+      var nm = (p.name && (p.name[LANG] || p.name.fr)) || '';
+      return '<a class="c3-table-img" href="' + esc(typeof sdProductUrl === 'function' ? sdProductUrl(p) : '/maison') + '" aria-label="' + esc(nm) + '">' +
+        '<img src="' + esc(thumb(p.photo, 300)) + '" alt="" width="150" height="150" loading="lazy" decoding="async"></a>';
+    }).join('');
+    return '<aside class="c3-table" aria-labelledby="c3-table-h"><div class="c3-table-txt">' +
+      '<p class="c3-table-eyebrow">' + esc(tr(T.tableEyebrow)) + '</p>' +
+      '<h2 id="c3-table-h">' + tr(T.tableTitle) + '</h2>' +
+      '<p>' + txt + '</p>' +
+      '<a class="c3-table-link" href="/maison">' + esc(tr(T.tableLink)) + ' →</a></div>' +
+      '<div class="c3-table-imgs">' + imgs + '</div></aside>';
+  }
+
   function emptyHTML(total) {
     var hints = HINTS.map(function (h) { return '<button type="button" data-role="q" data-q="' + esc(h) + '">' + esc(quote(h)) + '</button>'; });
     var hintTxt = tr(T.emptyHintPre) + hints.slice(0, -1).join(', ') + tr(T.or) + hints[hints.length - 1] + '.';
@@ -521,7 +557,7 @@
     main.removeAttribute('aria-busy');
     var f = filtered();
     _sections = sectionsOf(f.list);
-    main.innerHTML = f.list.length ? sectionsHTML(_sections) : emptyHTML(f.all.length);
+    main.innerHTML = (f.list.length ? sectionsHTML(_sections) : emptyHTML(f.all.length)) + tableHTML();
     renderChrome(f);
     // La grille JS est là : la liste statique (moteurs) ne doit pas être lue deux fois.
     var s = $('c3-static'); if (s) s.hidden = true;

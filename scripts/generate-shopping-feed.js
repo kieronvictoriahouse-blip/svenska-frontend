@@ -16,7 +16,7 @@ function get(url) {
   });
 }
 const lib = require('./lib/produits');
-const { slugify, isHome } = lib;
+const { slugify } = lib;
 const esc = s => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 // La marque réelle (lib/produits) ; à défaut, la boutique — Merchant exige une marque.
 const brandOf = nameFr => lib.brandOf(nameFr) || 'Swedish Cravings';
@@ -127,9 +127,10 @@ function pushLabel(p) {
 
 async function main() {
   const data = await get(`${BASE}/api/products`);
-  /* Art de la table (serviettes) hors du flux : ces articles ne se vendent
-     pas, chaque clic payé dessus était perdu. */
-  const products = (data && data.products || []).filter(p => p.is_active && p.image_url && (parseFloat(p.price) || 0) > 0 && !isHome(p));
+  /* Art de la table compris (serviettes Marimekko, IHR…) : la marque est
+     recherchée sur Google, c'est un point d'entrée pour vendre ces articles.
+     Catégorie Google « Tableware » (googleCat). */
+  const products = (data && data.products || []).filter(p => p.is_active && p.image_url && (parseFloat(p.price) || 0) > 0);
   if (!products.length) { console.log('Aucun produit éligible — flux ignoré'); return; }
 
   const items = products.map(p => {
