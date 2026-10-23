@@ -1,36 +1,38 @@
 # Swedish Cravings
 
 > Épicerie suédoise en ligne basée en France : bonbons, chocolat, biscuits,
-> épicerie salée et art de la table 100 % suédois, importés de Suède et
-> livrés partout en France et en Europe. Site trilingue français / English /
+> épicerie salée et serviettes de table aux motifs nordiques, importés de
+> Suède et livrés en France et en Europe. Site trilingue français / English /
 > svenska. Paiement sécurisé Stripe.
 
-Swedish Cravings vend des produits suédois authentiques des marques
+Swedish Cravings vend des produits authentiques des marques
 Marabou, Läkerol, Ahlgrens Bilar, OLW, Fazer, Kavli, Wasa, Ballerina,
 Santa Maria, Odense, Törsleff, Polly, Marimekko, IHR, entre autres.
-Chaque fiche produit (/produit/…) contient la description complète, le
-prix TTC en euros et la disponibilité en stock réelle.
+Chaque fiche produit (/produit/…) contient la description complète, les
+ingrédients et allergènes, le prix en euros et la disponibilité en stock.
 
 ## Pages principales
 
-- [Boutique — tout le catalogue](https://www.swedishcravings.fr/boutique) : ~70 produits suédois avec prix et stock à jour
+- [Boutique — tout le catalogue](https://www.swedishcravings.fr/boutique) : plus de 80 produits avec prix et stock à jour
 - [Bonbons suédois](https://www.swedishcravings.fr/bonbons-suedois) : guide et sélection godis
 - [Ahlgrens Bilar](https://www.swedishcravings.fr/ahlgrens-bilar) : les bonbons voitures cultes de Suède
-- [OLW](https://www.swedishcravings.fr/olw) : chips et snacks suédois
-- [Maison & art de la table](https://www.swedishcravings.fr/maison) : Marimekko, serviettes, déco scandinave
-- [Recettes suédoises](https://www.swedishcravings.fr/recettes) : dip suédois, fredagsmys tacos, entrecôte Café de Paris
+- [OLW](https://www.swedishcravings.fr/olw) : chips et mélanges pour dips suédois
+- [Maison](https://www.swedishcravings.fr/maison) : serviettes en papier Marimekko et IHR
+- [Recettes suédoises](https://www.swedishcravings.fr/recettes) : kanelbullar, dip suédois, fredagsmys tacos, entrecôte Café de Paris
 - [FAQ](https://www.swedishcravings.fr/faq) : questions fréquentes (commande, paiement, livraison, retours)
-- [Livraison](https://www.swedishcravings.fr/livraison) : délais et tarifs détaillés
+- [Livraison et retours](https://www.swedishcravings.fr/livraison) : modes, délais et tarifs à jour
 - [À propos](https://www.swedishcravings.fr/a-propos) : l'histoire de la boutique
 - [Contact](https://www.swedishcravings.fr/contact)
 
 ## Faits utiles
 
-- Livraison France métropolitaine : 4,90 €, offerte dès 50 € d'achat, 2 à 4 jours ouvrés (Mondial Relay ou domicile).
-- Livraison Europe (Espagne, Portugal, Italie, Allemagne, Pays-Bas, Belgique, Luxembourg, Suède) : 9,90 €, offerte dès 50 €, 3 à 5 jours ouvrés.
-- Commandes passées avant 12 h (heure de Paris) en semaine : expédiées le jour même.
-- Paiement : carte bancaire via Stripe (certifié PCI-DSS). Prix TTC en euros.
-- Catalogue produit lisible en machine : https://www.swedishcravings.fr/google-shopping.xml (flux RSS/Google Shopping, prix et stocks quotidiens)
+- Livraison en point relais uniquement (pas de livraison à domicile) : en France 4,90 €, offerte à partir d'un seuil indiqué sur le site (29 € à ce jour), 2 à 4 jours ouvrés après expédition.
+- Europe (Espagne, Portugal, Italie, Allemagne, Pays-Bas, Belgique, Luxembourg, Suède) : point relais 9,90 €, offerte dès 50 €, 3 à 5 jours ouvrés.
+- Retrait gratuit sur rendez-vous à l'atelier d'Étoile-sur-Rhône (Drôme) : Click & Collect.
+- Commandes expédiées sous 24 à 48 h.
+- Retour possible sous 14 jours pour les produits non ouverts (CGV, article 7).
+- Paiement : carte bancaire, Apple Pay et Google Pay via Stripe. Prix en euros.
+- Catalogue lisible en machine : https://www.swedishcravings.fr/google-shopping.xml (flux Google Shopping, régénéré à chaque mise à jour du site)
 - Plan du site : https://www.swedishcravings.fr/sitemap.xml
 
 ## Langues

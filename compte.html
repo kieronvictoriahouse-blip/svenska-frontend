@@ -2,766 +2,170 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<link rel="icon" type="image/png" href="/img/favicon.png">
-<link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
-<!-- Espace compte retiré : le suivi de commande passe par l'email de confirmation.
-     Redirection immédiate vers l'accueil (l'URL reste accessible en direct). -->
-<script>window.location.replace('index.html');</script>
-<meta http-equiv="refresh" content="0; url=index.html">
+<!-- Liens relatifs résolus depuis la racine : la page peut être servie sous /compte/… (liens des e-mails) -->
+<base href="/">
 <!-- Google tag + consentement (source unique : js/sd-consent.js) -->
 <script src="/js/sd-consent.js?v=1"></script>
-<meta charset="UTF-8">
 <link rel="icon" type="image/png" href="/img/favicon.png">
 <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mon compte</title>
-<meta name="description" content="Consultez vos commandes et gérez votre compte.">
+<title>Suivre ma commande | Swedish Cravings</title>
+<meta name="description" content="Suivre votre commande Swedish Cravings : e-mail de confirmation, numéro de suivi du point relais, retrait à l’atelier sur rendez-vous.">
 <meta name="robots" content="noindex">
+<meta property="og:site_name" content="Swedish Cravings">
 <link rel="stylesheet" href="css/style.css?v=21">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>const SD_API_URL = 'https://admin.swedishcravings.fr';</script>
 <script>(function(){try{var w=JSON.parse(localStorage.getItem('sd_wl_v1'));if(w&&w.id){var r=document.documentElement.style;if(w.color_primary){r.setProperty('--heather',w.color_primary);r.setProperty('--heather-mid',w.color_primary+'CC');}if(w.color_secondary){r.setProperty('--lingon',w.color_secondary);r.setProperty('--lingon-mid',w.color_secondary+'CC');}if(w.color_bg)r.setProperty('--cream',w.color_bg);if(w.color_text)r.setProperty('--midnight',w.color_text);if(w.font_display)r.setProperty('--font-display',"'"+w.font_display+"',Georgia,serif");if(w.font_body)r.setProperty('--font-body',"'"+w.font_body+"',Georgia,serif");if(w.font_ui)r.setProperty('--font-ui',"'"+w.font_ui+"',sans-serif");}}catch(e){}}());</script>
 <style>
-.acct-hero{background:var(--heather);padding:64px 40px 48px;text-align:center;}
-.acct-hero h1{font-family:var(--font-display);font-size:clamp(32px,5vw,60px);font-weight:300;color:var(--snow);}
-.acct-hero h1 em{font-style:italic;color:var(--lingon-mid);}
-.acct-hero p{font-family:var(--font-body);font-size:16px;color:rgba(255,255,255,0.6);margin-top:10px;}
-.acct-wrap{max-width:860px;margin:0 auto;padding:56px 32px 80px;}
+/* Les comptes clients sont désactivés : les clients sont identifiés par l'e-mail
+   saisi au paiement (Stripe). Cette page explique comment suivre une commande. */
+.svc-hero { background:var(--cream); border-bottom:1px solid var(--linen); }
+.svc-hero-in { max-width:860px; margin:0 auto; padding:44px 40px 40px; }
+.svc-crumb { display:flex; flex-wrap:wrap; align-items:center; gap:0 10px; font-family:var(--font-ui); font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--dust); margin-bottom:6px; }
+.svc-crumb a { display:inline-block; padding:14px 0; color:var(--dust); text-decoration:underline; text-decoration-color:var(--birch); text-underline-offset:3px; }
+.svc-crumb a:hover { color:var(--lingon); }
+.svc-hero h1 { font-family:var(--font-display); font-size:clamp(36px,5vw,60px); font-weight:300; line-height:1.05; color:var(--midnight); text-wrap:balance; }
+.svc-hero h1 em { font-style:italic; color:var(--lingon); }
+.svc-lead { font-family:var(--font-body); font-size:18px; line-height:1.6; color:var(--slate); max-width:620px; margin-top:14px; }
 
-/* Login card */
-.login-card{max-width:460px;margin:0 auto;background:var(--snow);border:1px solid var(--linen);padding:48px 40px;}
-.login-card h2{font-family:var(--font-display);font-size:26px;font-weight:500;color:var(--midnight);margin-bottom:8px;}
-.login-card .login-sub{font-family:var(--font-body);font-size:15px;color:var(--slate);margin-bottom:32px;line-height:1.7;}
+.mc-wrap { max-width:860px; margin:0 auto; padding:48px 40px 88px; }
+.mc-wrap h2 { font-family:var(--font-display); font-size:clamp(26px,3vw,34px); font-weight:300; color:var(--midnight); line-height:1.15; margin:56px 0 16px; scroll-margin-top:120px; }
+.mc-wrap p { font-family:var(--font-body); font-size:17px; line-height:1.8; color:var(--slate); max-width:700px; }
+.mc-wrap p a, .mc-list a { color:var(--lingon); text-decoration:underline; text-underline-offset:3px; }
 
-/* Google button */
-.btn-google{width:100%;display:flex;align-items:center;justify-content:center;gap:12px;background:#fff;border:1px solid #dadce0;padding:13px 20px;font-family:var(--font-ui);font-size:14px;color:#3c4043;cursor:pointer;transition:background 0.15s,box-shadow 0.15s;margin-bottom:24px;letter-spacing:0.01em;}
-.btn-google:hover{background:#f8f8f8;box-shadow:0 1px 3px rgba(0,0,0,0.08);}
-.btn-google svg{flex-shrink:0;}
-.btn-google:disabled{opacity:0.5;cursor:not-allowed;}
+.mc-order { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px 24px; padding:22px 24px; background:var(--snow); border:1px solid var(--linen); border-left:3px solid var(--lingon); margin-bottom:40px; }
+.mc-order[hidden] { display:none; }
+.mc-wrap .mc-order-k { font-family:var(--font-ui); font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--dust); }
+.mc-wrap .mc-order-n { font-family:var(--font-display); font-size:28px; font-weight:600; color:var(--midnight); font-variant-numeric:tabular-nums; }
+.mc-wrap .mc-order p:not([class]) { font-size:15px; margin-top:2px; }
 
-.login-divider{display:flex;align-items:center;gap:12px;margin-bottom:24px;}
-.login-divider span{font-family:var(--font-ui);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dust);white-space:nowrap;}
-.login-divider::before,.login-divider::after{content:'';flex:1;height:1px;background:var(--linen);}
-
-.login-field{margin-bottom:20px;}
-.login-field label{display:block;font-family:var(--font-ui);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dust);margin-bottom:8px;}
-.login-field input{width:100%;border:1px solid var(--linen);background:var(--cream);padding:14px 16px;font-family:var(--font-body);font-size:16px;color:var(--midnight);outline:none;transition:border-color 0.2s;box-sizing:border-box;}
-.login-field input:focus{border-color:var(--heather);}
-.login-field input.err{border-color:var(--lingon);}
-.login-error{font-family:var(--font-ui);font-size:11px;color:var(--lingon);margin-top:8px;display:none;}
-.login-error.show{display:block;}
-.btn-login{width:100%;background:var(--heather);color:var(--snow);border:none;padding:16px 24px;font-family:var(--font-ui);font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;transition:background 0.2s;margin-top:4px;}
-.btn-login:hover{background:var(--midnight);}
-.btn-login:disabled{opacity:0.5;cursor:not-allowed;}
-.login-note{font-family:var(--font-body);font-size:13px;color:var(--dust);text-align:center;margin-top:20px;line-height:1.6;}
-
-/* Account header */
-.acct-header{display:flex;align-items:center;gap:20px;margin-bottom:40px;padding-bottom:32px;border-bottom:1px solid var(--linen);}
-.acct-avatar{width:56px;height:56px;border-radius:50%;background:var(--heather);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:22px;font-weight:600;color:var(--snow);flex-shrink:0;letter-spacing:1px;overflow:hidden;}
-.acct-avatar img{width:100%;height:100%;object-fit:cover;}
-.acct-info{flex:1;}
-.acct-name{font-family:var(--font-display);font-size:22px;font-weight:500;color:var(--midnight);}
-.acct-email{font-family:var(--font-ui);font-size:11px;letter-spacing:1.5px;color:var(--dust);margin-top:2px;}
-.acct-badge{display:inline-flex;align-items:center;gap:5px;font-family:var(--font-ui);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--moss,#4a7c59);border:1px solid var(--moss,#4a7c59);padding:3px 10px;margin-top:6px;}
-.btn-logout{background:none;border:1px solid var(--linen);color:var(--dust);padding:10px 20px;font-family:var(--font-ui);font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
-.btn-logout:hover{border-color:var(--lingon);color:var(--lingon);}
-
-/* Stats */
-.acct-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--linen);border:1px solid var(--linen);margin-bottom:40px;}
-.stat-box{background:var(--snow);padding:20px 24px;text-align:center;}
-.stat-val{font-family:var(--font-display);font-size:28px;font-weight:500;color:var(--heather);}
-.stat-lbl{font-family:var(--font-ui);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--dust);margin-top:4px;}
-
-/* Tabs */
-.acct-tabs{display:flex;border-bottom:1px solid var(--linen);margin-bottom:32px;}
-.acct-tab{font-family:var(--font-ui);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dust);padding:12px 24px;cursor:pointer;border:none;border-bottom:2px solid transparent;background:none;transition:all 0.2s;margin-bottom:-1px;}
-.acct-tab:hover{color:var(--midnight);}
-.acct-tab.active{color:var(--heather);border-bottom-color:var(--heather);}
-.acct-panel{display:none;}
-.acct-panel.active{display:block;}
-
-/* Orders */
-.orders-title{font-family:var(--font-ui);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--dust);margin-bottom:16px;display:flex;align-items:center;gap:12px;}
-.orders-title::after{content:'';flex:1;height:1px;background:var(--linen);}
-.order-card{border:1px solid var(--linen);margin-bottom:12px;background:var(--snow);overflow:hidden;}
-.order-head{display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:16px;padding:20px 24px;cursor:pointer;transition:background 0.15s;}
-.order-head:hover{background:var(--warm-white,#faf9f7);}
-.order-num{font-family:var(--font-display);font-size:17px;font-weight:600;color:var(--midnight);}
-.order-date{font-family:var(--font-ui);font-size:10px;letter-spacing:1.5px;color:var(--dust);margin-top:2px;}
-.order-status{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-ui);font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:5px 12px;border-radius:1px;white-space:nowrap;}
-.s-pending{background:#f5f0ff;color:#7c5cbf;} .s-paid{background:#e8f4fd;color:#2563a8;}
-.s-shipped{background:#fff3e0;color:#b45309;} .s-delivered{background:#e8f5e9;color:#2e7d32;}
-.s-cancelled{background:#fce4ec;color:#c62828;} .s-refunded{background:#f3e5f5;color:#7b1fa2;}
-.order-total{font-family:var(--font-display);font-size:18px;font-weight:500;color:var(--midnight);white-space:nowrap;}
-.order-chevron{font-size:12px;color:var(--dust);transition:transform 0.25s;}
-.order-card.open .order-chevron{transform:rotate(180deg);}
-.order-body{max-height:0;overflow:hidden;transition:max-height 0.35s ease;}
-.order-card.open .order-body{max-height:900px;}
-.order-body-inner{border-top:1px solid var(--linen);padding:20px 24px;}
-.order-line{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--parchment,#f5f0e8);font-family:var(--font-body);font-size:14px;}
-.order-line:last-child{border-bottom:none;}
-.order-line-name{color:var(--midnight);flex:1;}
-.order-line-sub{font-family:var(--font-ui);font-size:10px;color:var(--dust);margin-top:1px;}
-.order-line-qty{color:var(--slate);margin:0 16px;}
-.order-line-price{color:var(--midnight);font-weight:500;white-space:nowrap;}
-.order-totals{border-top:1px solid var(--linen);padding-top:14px;margin-top:4px;}
-.order-total-row{display:flex;justify-content:space-between;font-family:var(--font-body);font-size:14px;color:var(--slate);margin-bottom:6px;}
-.order-total-row.grand{font-family:var(--font-display);font-size:17px;font-weight:600;color:var(--midnight);border-top:1px solid var(--linen);padding-top:10px;margin-top:6px;}
-.order-addr{font-family:var(--font-ui);font-size:10px;letter-spacing:1px;color:var(--dust);line-height:1.9;margin-top:12px;}
-.order-tracking{display:flex;align-items:center;gap:10px;margin-top:12px;padding:10px 14px;background:var(--linen,#F0EBE0);border-radius:6px;}
-.order-tracking-label{font-family:var(--font-ui);font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--heather);}
-.order-tracking-num{font-family:var(--font-ui);font-size:13px;color:var(--heather);text-decoration:none;font-weight:600;}
-.order-tracking-num:hover{text-decoration:underline;}
-
-/* Order status timeline */
-.order-timeline{display:flex;align-items:flex-start;margin:4px 0 20px;position:relative;}
-.tl-step{flex:1;display:flex;flex-direction:column;align-items:center;position:relative;}
-.tl-step:not(:last-child)::before{content:'';position:absolute;top:11px;left:50%;width:100%;height:2px;background:var(--linen);z-index:0;}
-.tl-step.done:not(:last-child)::before,.tl-step.current:not(:last-child)::before{background:var(--heather);}
-.tl-dot{width:24px;height:24px;border-radius:50%;border:2px solid var(--linen);background:var(--snow);display:flex;align-items:center;justify-content:center;font-size:11px;z-index:1;position:relative;}
-.tl-step.done .tl-dot{border-color:var(--heather);background:var(--heather);color:var(--snow);}
-.tl-step.current .tl-dot{border-color:var(--heather);box-shadow:0 0 0 3px rgba(var(--heather-rgb,90,74,100),0.12);}
-.tl-lbl{font-family:var(--font-ui);font-size:8px;letter-spacing:1px;text-transform:uppercase;color:var(--dust);margin-top:6px;text-align:center;line-height:1.3;}
-.tl-step.done .tl-lbl,.tl-step.current .tl-lbl{color:var(--heather);}
-
-/* Profile form */
-.profile-section{margin-bottom:28px;}
-.profile-section-title{font-family:var(--font-ui);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--dust);margin-bottom:16px;display:flex;align-items:center;gap:12px;}
-.profile-section-title::after{content:'';flex:1;height:1px;background:var(--linen);}
-.pf-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-.pf-field{display:flex;flex-direction:column;gap:6px;}
-.pf-field.full{grid-column:1/-1;}
-.pf-field label{font-family:var(--font-ui);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dust);}
-.pf-field input,.pf-field select{border:1px solid var(--linen);background:var(--cream);padding:12px 14px;font-family:var(--font-body);font-size:15px;color:var(--midnight);outline:none;transition:border-color 0.2s;width:100%;box-sizing:border-box;}
-.pf-field input:focus,.pf-field select:focus{border-color:var(--heather);}
-.pf-actions{display:flex;align-items:center;margin-top:8px;}
-.btn-save{background:var(--heather);color:var(--snow);border:none;padding:14px 32px;font-family:var(--font-ui);font-size:10px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;transition:background 0.2s;}
-.btn-save:hover{background:var(--midnight);}
-.btn-save:disabled{opacity:0.5;cursor:not-allowed;}
-.save-feedback{font-family:var(--font-ui);font-size:11px;margin-left:14px;opacity:0;transition:opacity 0.3s;color:var(--moss,#4a7c59);}
-.save-feedback.show{opacity:1;}
-.save-feedback.err{color:var(--lingon);}
-
-/* Favorites grid */
-.fav-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:20px;}
-@media(max-width:600px){.fav-grid{grid-template-columns:repeat(2,1fr);gap:12px;}}
-
-/* States */
-.acct-empty{text-align:center;padding:60px 20px;}
-.acct-empty p{font-family:var(--font-body);font-size:18px;color:var(--slate);margin-bottom:24px;}
-.acct-loading{text-align:center;padding:80px 20px;}
-.spinner{display:inline-block;width:32px;height:32px;border:2px solid var(--linen);border-top-color:var(--heather);border-radius:50%;animation:spin 0.7s linear infinite;}
-@keyframes spin{to{transform:rotate(360deg);}}
-
-@media(max-width:700px){
-  .acct-wrap{padding:32px 16px 60px;}
-  .login-card{padding:32px 20px;}
-  .acct-header{flex-wrap:wrap;gap:12px;}
-  .acct-stats{grid-template-columns:repeat(2,1fr);}
-  .order-head{grid-template-columns:1fr auto;gap:10px;}
-  .order-total,.order-chevron{grid-column:auto;}
-  .acct-hero{padding:48px 20px 36px;}
-  .pf-grid{grid-template-columns:1fr;}
-  .pf-field.full{grid-column:auto;}
-  .tl-lbl{font-size:7px;}
+/* Étapes : numéros en Cormorant, filet vertical entre les étapes */
+.mc-steps { list-style:none; counter-reset:mc; }
+.mc-step { position:relative; padding:0 0 30px 64px; counter-increment:mc; }
+.mc-step::before { content:counter(mc); position:absolute; left:0; top:-4px; width:44px; height:44px; display:flex; align-items:center; justify-content:center; border:1px solid var(--driftwood); border-radius:50%; background:var(--warm-white); font-family:var(--font-display); font-size:22px; font-weight:600; color:var(--heather-text); }
+.mc-step:not(:last-child)::after { content:''; position:absolute; left:22px; top:44px; bottom:4px; width:1px; background:var(--linen); }
+.mc-step-t { font-family:var(--font-display); font-size:22px; font-weight:600; line-height:1.3; color:var(--midnight); margin-bottom:6px; }
+.mc-step p { font-size:17px; line-height:1.75; }
+.mc-modes { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px; }
+.mc-mode { background:var(--cream); padding:16px 18px; }
+.mc-wrap .mc-mode-k { font-family:var(--font-ui); font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--lingon); margin-bottom:6px; }
+.mc-mode p { font-size:16px; line-height:1.65; }
+.mc-actions { display:flex; flex-wrap:wrap; gap:12px 20px; align-items:center; margin-top:16px; }
+.mc-actions .btn-outline-dark { min-height:44px; }
+.mc-link { display:inline-block; padding:10px 0; font-family:var(--font-body); font-size:16px; color:var(--lingon); text-decoration:underline; text-underline-offset:3px; }
+.mc-list { list-style:none; border-top:1px solid var(--linen); max-width:700px; }
+.mc-list li { padding:14px 0; border-bottom:1px solid var(--linen); font-family:var(--font-body); font-size:17px; line-height:1.7; color:var(--slate); }
+.mc-list strong { font-weight:600; color:var(--midnight); }
+@media (max-width:640px) {
+  .svc-hero-in { padding:28px 20px 30px; }
+  .mc-wrap { padding:32px 20px 64px; }
+  .mc-modes { grid-template-columns:1fr; }
+  .mc-step { padding-left:58px; }
+  .mc-order { padding:18px 18px; }
 }
 </style>
 </head>
 <body>
-
 <div id="header-root"></div>
 
-<div class="acct-hero">
-  <h1 data-sv="Mitt <em>konto</em>" data-fr="Mon <em>compte</em>" data-en="My <em>account</em>">Mon <em>compte</em></h1>
-  <p data-sv="Följ dina beställningar och hantera ditt konto." data-fr="Suivez vos commandes et gérez votre compte." data-en="Track your orders and manage your account.">Suivez vos commandes et gérez votre compte.</p>
+<main>
+<div class="svc-hero">
+  <div class="svc-hero-in">
+    <nav class="svc-crumb" aria-label="Fil d’Ariane" data-fr-aria="Fil d’Ariane" data-en-aria="Breadcrumb" data-sv-aria="Brödsmulor">
+      <a href="/" data-sv="Hem" data-fr="Accueil" data-en="Home">Accueil</a><span aria-hidden="true">/</span><span aria-current="page" data-sv="Min beställning" data-fr="Ma commande" data-en="My order">Ma commande</span>
+    </nav>
+    <h1 data-sv="Följ min <em>beställning</em>" data-fr="Suivre ma <em>commande</em>" data-en="Track my <em>order</em>">Suivre ma <em>commande</em></h1>
+    <p class="svc-lead" data-sv="Du behöver inget kundkonto: allt går via e-postadressen du betalade med. Så här följer du din beställning." data-fr="Pas d’espace client à créer&nbsp;: tout passe par l’adresse e-mail utilisée pour payer. Voici comment suivre votre commande." data-en="There is no customer account to create: everything goes through the email address you paid with. Here is how to follow your order.">Pas d’espace client à créer&nbsp;: tout passe par l’adresse e-mail utilisée pour payer. Voici comment suivre votre commande.</p>
+  </div>
 </div>
 
-<div class="acct-wrap">
-  <div id="acct-root"><div class="acct-loading"><div class="spinner"></div></div></div>
+<div class="mc-wrap">
+  <!-- Affiché quand on arrive depuis un e-mail (/compte/commandes/SD-0123) ou avec ?commande=SD-0123 -->
+  <div class="mc-order" id="mc-order" hidden>
+    <div>
+      <p class="mc-order-k" data-sv="Din beställning" data-fr="Votre commande" data-en="Your order">Votre commande</p>
+      <p class="mc-order-n" id="mc-order-n"></p>
+      <p data-sv="Ange detta nummer när du skriver till oss: då hittar vi beställningen direkt." data-fr="Donnez ce numéro quand vous nous écrivez&nbsp;: nous retrouvons la commande tout de suite." data-en="Quote this number when you write to us: we will find the order straight away.">Donnez ce numéro quand vous nous écrivez&nbsp;: nous retrouvons la commande tout de suite.</p>
+    </div>
+    <a class="btn-primary" id="mc-order-ask" href="contact?sujet=commande" data-sv="En fråga om beställningen" data-fr="Une question sur cette commande" data-en="A question about this order">Une question sur cette commande</a>
+  </div>
+
+  <h2 id="etapes" style="margin-top:0" data-sv="Steg för steg" data-fr="Étape par étape" data-en="Step by step">Étape par étape</h2>
+  <ol class="mc-steps">
+    <li class="mc-step">
+      <h3 class="mc-step-t" data-sv="Bekräftelse via e-post" data-fr="La confirmation par e-mail" data-en="Confirmation by email">La confirmation par e-mail</h3>
+      <p data-sv="Direkt efter betalningen får du ett bekräftelsemejl med en sammanfattning och ditt ordernummer (SD-…). Har du inte fått det? Titta i skräpposten och skriv sedan till oss." data-fr="Juste après le paiement, vous recevez un e-mail de confirmation avec le récapitulatif et votre numéro de commande (SD-…). Pas reçu&nbsp;? Regardez dans les courriers indésirables, puis écrivez-nous." data-en="Right after payment, you receive a confirmation email with a summary and your order number (SD-…). Not received it? Check your spam folder, then write to us.">Juste après le paiement, vous recevez un e-mail de confirmation avec le récapitulatif et votre numéro de commande (SD-…). Pas reçu&nbsp;? Regardez dans les courriers indésirables, puis écrivez-nous.</p>
+    </li>
+    <li class="mc-step">
+      <h3 class="mc-step-t" data-sv="Packning" data-fr="La préparation" data-en="Packing">La préparation</h3>
+      <p data-sv="Vi packar din beställning omsorgsfullt inom 24–48 timmar (vardagar)." data-fr="Nous préparons votre commande avec soin sous 24 à 48&nbsp;h ouvrées." data-en="We pack your order with care within 24 to 48 working hours.">Nous préparons votre commande avec soin sous 24 à 48&nbsp;h ouvrées.</p>
+    </li>
+    <li class="mc-step">
+      <h3 class="mc-step-t" data-sv="Leverans eller upphämtning" data-fr="La livraison ou le retrait" data-en="Delivery or pickup">La livraison ou le retrait</h3>
+      <div class="mc-modes">
+        <div class="mc-mode">
+          <p class="mc-mode-k" data-sv="Utlämningsställe" data-fr="Point relais" data-en="Pickup point">Point relais</p>
+          <p data-sv="När paketet skickas får du ett mejl med spårningsnumret. Transportören meddelar dig när paketet har kommit till utlämningsstället." data-fr="Dès l’expédition, un e-mail vous donne le numéro de suivi. Le transporteur vous prévient quand le colis arrive au point relais." data-en="As soon as it ships, an email gives you the tracking number. The carrier lets you know when the parcel reaches the pickup point.">Dès l’expédition, un e-mail vous donne le numéro de suivi. Le transporteur vous prévient quand le colis arrive au point relais.</p>
+        </div>
+        <div class="mc-mode">
+          <p class="mc-mode-k" data-sv="Upphämtning i ateljén" data-fr="Retrait à l’atelier" data-en="Workshop pickup">Retrait à l’atelier</p>
+          <p data-sv="Vi kontaktar dig för att boka en tid för upphämtning i vår ateljé i Étoile-sur-Rhône (Drôme)." data-fr="Nous vous contactons pour convenir d’un créneau de retrait à notre atelier d’Étoile-sur-Rhône (Drôme)." data-en="We contact you to arrange a pickup time at our workshop in Étoile-sur-Rhône (Drôme).">Nous vous contactons pour convenir d’un créneau de retrait à notre atelier d’Étoile-sur-Rhône (Drôme).</p>
+        </div>
+      </div>
+    </li>
+    <li class="mc-step">
+      <h3 class="mc-step-t" data-sv="En fråga?" data-fr="Une question&nbsp;?" data-en="A question?">Une question&nbsp;?</h3>
+      <p data-sv="Skriv till oss med ditt ordernummer. Vi svarar normalt inom 24–48 timmar, måndag till fredag." data-fr="Écrivez-nous avec votre numéro de commande. Nous répondons en général sous 24 à 48&nbsp;h, du lundi au vendredi." data-en="Write to us with your order number. We usually reply within 24 to 48 hours, Monday to Friday.">Écrivez-nous avec votre numéro de commande. Nous répondons en général sous 24 à 48&nbsp;h, du lundi au vendredi.</p>
+      <div class="mc-actions">
+        <a class="btn-outline-dark" id="mc-contact" href="contact?sujet=commande" data-sv="Kontakta oss" data-fr="Nous contacter" data-en="Contact us">Nous contacter</a>
+        <a href="livraison" class="mc-link" data-sv="Leverans och returer" data-fr="Livraison et retours" data-en="Delivery and returns">Livraison et retours</a>
+      </div>
+    </li>
+  </ol>
+
+  <h2 id="preferences" data-sv="Dina e-postmeddelanden" data-fr="Vos e-mails" data-en="Your emails">Vos e-mails</h2>
+  <ul class="mc-list">
+    <li data-sv="<strong>Beställningsmejl</strong> (bekräftelse, avsändning): de behövs för att du ska kunna följa din beställning." data-fr="<strong>E-mails de commande</strong> (confirmation, expédition)&nbsp;: ils sont nécessaires au suivi de votre commande." data-en="<strong>Order emails</strong> (confirmation, dispatch): they are needed to follow your order."><strong>E-mails de commande</strong> (confirmation, expédition)&nbsp;: ils sont nécessaires au suivi de votre commande.</li>
+    <li data-sv="<strong>Påminnelse om varukorg</strong>: om en betalning inte går igenom kan vi skicka din varukorg till dig, högst två gånger. Varje mejl har en länk för att avstå från fler." data-fr="<strong>Rappel de panier</strong>&nbsp;: si un paiement n’aboutit pas, nous pouvons vous renvoyer votre panier, deux fois au maximum. Chaque e-mail contient un lien pour ne plus en recevoir." data-en="<strong>Basket reminder</strong>: if a payment does not go through, we may send your basket back to you, twice at most. Each email contains a link to stop receiving them."><strong>Rappel de panier</strong>&nbsp;: si un paiement n’aboutit pas, nous pouvons vous renvoyer votre panier, deux fois au maximum. Chaque e-mail contient un lien pour ne plus en recevoir.</li>
+    <li data-sv="<strong>Nyhetsbrev</strong>: varje utskick har en länk för att avregistrera dig." data-fr="<strong>Newsletter</strong>&nbsp;: chaque envoi contient un lien de désinscription." data-en="<strong>Newsletter</strong>: every issue contains an unsubscribe link."><strong>Newsletter</strong>&nbsp;: chaque envoi contient un lien de désinscription.</li>
+    <li data-sv="För allt annat (inga fler mejl alls, tillgång till eller radering av dina uppgifter): <a href='contact'>skriv till oss</a>. Mer i vår <a href='confidentialite'>integritetspolicy</a> (på franska)." data-fr="Pour toute autre demande (ne plus rien recevoir, accès à vos données ou suppression)&nbsp;: <a href='contact'>écrivez-nous</a>. Plus de détails dans notre <a href='confidentialite'>politique de confidentialité</a>." data-en="For anything else (no more emails at all, access to or deletion of your data): <a href='contact'>write to us</a>. More in our <a href='confidentialite'>privacy policy</a> (in French).">Pour toute autre demande (ne plus rien recevoir, accès à vos données ou suppression)&nbsp;: <a href="contact">écrivez-nous</a>. Plus de détails dans notre <a href="confidentialite">politique de confidentialité</a>.</li>
+  </ul>
+
+  <h2 id="factures" data-sv="Fakturor" data-fr="Factures" data-en="Invoices">Factures</h2>
+  <p data-sv="Vill du ha din faktura eller en kopia? Skriv till oss med ditt ordernummer, så skickar vi den via e-post." data-fr="Pour recevoir votre facture ou un duplicata, écrivez-nous avec votre numéro de commande&nbsp;: nous vous l’envoyons par e-mail." data-en="To receive your invoice or a copy, write to us with your order number: we will email it to you.">Pour recevoir votre facture ou un duplicata, écrivez-nous avec votre numéro de commande&nbsp;: nous vous l’envoyons par e-mail.</p>
+
+  <h2 id="retours" data-sv="Returer" data-fr="Retours" data-en="Returns">Retours</h2>
+  <p data-sv="Du har 14 dagar efter mottagandet på dig att returnera oöppnade livsmedel och porslin eller inredning. <a href='livraison#retours'>Så här returnerar du</a>" data-fr="Vous disposez de 14&nbsp;jours après réception pour retourner les produits alimentaires non ouverts et les articles d’art de la table. <a href='livraison#retours'>Comment faire un retour</a>" data-en="You have 14 days after receipt to return unopened food and tableware or home items. <a href='livraison#retours'>How to return an item</a>">Vous disposez de 14&nbsp;jours après réception pour retourner les produits alimentaires non ouverts et les articles d’art de la table. <a href="livraison#retours">Comment faire un retour</a></p>
 </div>
+</main>
 
 <div id="footer-root"></div>
-<script src="js/app.js?v=34"></script>
+<script src="/js/app.js?v=34"></script>
 <script>
-// Magic link depuis l'admin : ?token=XXX → stocke la session automatiquement
-(function(){
-  try {
-    var p = new URLSearchParams(location.search);
-    var t = p.get('token');
-    if (t) {
-      var payload = JSON.parse(atob(t.split('.')[0].replace(/-/g,'+').replace(/_/g,'/')));
-      if (payload.email && payload.exp > Date.now()) {
-        localStorage.setItem('sd_customer_v1', JSON.stringify({ token: t, customer_email: payload.email }));
-        history.replaceState({}, '', location.pathname);
-      }
-    }
-  } catch(e) {}
+initPage('');
+
+/* Numéro de commande : ?commande=SD-0123, ou chemin /compte/commandes/SD-0123
+   (liens des e-mails, si /compte/* est réécrit vers cette page). */
+(function () {
+  var path = location.pathname.replace(/\/+$/, '');
+  var q = new URLSearchParams(location.search);
+  var m = path.match(/^\/compte\/commandes\/([^\/]+)$/);
+  var num = (q.get('commande') || (m ? decodeURIComponent(m[1]) : '')).replace(/[^\w\-]/g, '').slice(0, 30);
+  if (num) {
+    document.getElementById('mc-order-n').textContent = num;
+    document.getElementById('mc-order').hidden = false;
+    var ask = 'contact?sujet=commande&commande=' + encodeURIComponent(num);
+    document.getElementById('mc-order-ask').setAttribute('href', ask);
+    document.getElementById('mc-contact').setAttribute('href', ask);
+  }
+  /* /compte/preferences, /compte/factures… (ou ?rubrique=…) : on va droit à la rubrique */
+  var sec = q.get('rubrique') || (path.match(/^\/compte\/(preferences|factures)/) || [])[1] || '';
+  var target = sec && document.getElementById(sec);
+  if (target) setTimeout(function () { target.scrollIntoView(); }, 60);
 })();
-initPage('account');
 
-const BASE = window.SD_API_URL || 'https://admin.swedishcravings.fr';
-let _session  = null;
-let _sbClient = null;
-let _profile  = null;
-
-// ── Session helpers ──────────────────────────────────────────
-function saveSession(s) {
-  _session = s;
-  try { localStorage.setItem('sd_customer_v1', JSON.stringify(s)); } catch(e) {}
-}
-function loadSession() {
-  try { return JSON.parse(localStorage.getItem('sd_customer_v1') || 'null'); } catch(e) { return null; }
-}
-function clearSession() {
-  _session = null;
-  try { localStorage.removeItem('sd_customer_v1'); } catch(e) {}
-  if (_sbClient) _sbClient.auth.signOut().catch(() => {});
-}
-
-// ── Supabase init ────────────────────────────────────────────
-async function initSupabase() {
-  try {
-    const cfg = await fetch(BASE + '/api/public-config').then(r => r.json());
-    if (!cfg.supabaseUrl || !cfg.supabaseAnonKey) return null;
-    _sbClient = window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseAnonKey);
-    return _sbClient;
-  } catch(e) { return null; }
-}
-
-function maybeRedirectNext() {
-  const next = new URLSearchParams(window.location.search).get('next');
-  if (next === 'checkout') { window.location.href = 'panier.html'; return true; }
-  return false;
-}
-
-async function signInWithGoogle() {
-  if (!_sbClient) { renderLogin('network'); return; }
-  document.getElementById('btn-google')?.setAttribute('disabled', true);
-  const next = new URLSearchParams(window.location.search).get('next');
-  const redirectTo = window.location.origin + '/compte' + (next ? '?next=' + encodeURIComponent(next) : '');
-  try {
-    const { error } = await _sbClient.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo,
-        queryParams: { access_type: 'online', prompt: 'select_account' },
-      },
-    });
-    if (error) renderLogin('network');
-  } catch(e) { renderLogin('network'); }
-}
-
-// ── Profile helpers ──────────────────────────────────────────
-async function loadProfile(token) {
-  try {
-    const res = await fetch(BASE + '/api/customer/profile', {
-      headers: { Authorization: 'Bearer ' + token },
-    });
-    if (res.ok) _profile = (await res.json()).profile || null;
-  } catch(e) {}
-}
-
-async function saveProfile() {
-  if (!_session?.token) return;
-  const btn = document.getElementById('btn-save-profile');
-  const fb  = document.getElementById('save-feedback');
-  if (btn) btn.disabled = true;
-
-  const data = {
-    name:        document.getElementById('pf-name')?.value.trim()   || '',
-    phone:       document.getElementById('pf-phone')?.value.trim()  || '',
-    address1:    document.getElementById('pf-addr1')?.value.trim()  || '',
-    address2:    document.getElementById('pf-addr2')?.value.trim()  || '',
-    city:        document.getElementById('pf-city')?.value.trim()   || '',
-    postal_code: document.getElementById('pf-postal')?.value.trim() || '',
-    country:     document.getElementById('pf-country')?.value       || 'FR',
-  };
-
-  try {
-    const res = await fetch(BASE + '/api/customer/profile', {
-      method:  'PUT',
-      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + _session.token },
-      body:    JSON.stringify(data),
-    });
-    if (res.ok) {
-      _profile = (await res.json()).profile || _profile;
-      if (data.name && data.name !== _session.customer_name) {
-        _session.customer_name = data.name;
-        saveSession(_session);
-        const nameEl = document.querySelector('.acct-name');
-        if (nameEl) nameEl.textContent = data.name;
-        const avatarEl = document.querySelector('.acct-avatar');
-        if (avatarEl) avatarEl.textContent = initials(data.name);
-      }
-      if (fb) { fb.textContent = '✓ Sauvegardé'; fb.className = 'save-feedback show'; setTimeout(() => fb.classList.remove('show'), 2500); }
-    } else {
-      if (fb) { fb.textContent = 'Erreur, réessayez.'; fb.className = 'save-feedback show err'; setTimeout(() => fb.classList.remove('show'), 3000); }
-    }
-  } catch(e) {
-    if (fb) { fb.textContent = 'Erreur réseau.'; fb.className = 'save-feedback show err'; setTimeout(() => fb.classList.remove('show'), 3000); }
-  }
-  if (btn) btn.disabled = false;
-}
-
-// ── Login with email ─────────────────────────────────────────
-async function loginWithEmail(emailArg, isGoogle, googleName) {
-  const email = (emailArg || '').trim().toLowerCase();
-  if (!email) return;
-
-  showLoading();
-  try {
-    const res  = await fetch(BASE + '/api/customer/orders', {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ email }),
-    });
-    const data = await res.json();
-
-    if (!res.ok) {
-      if (data.error === 'no_orders') {
-        if (isGoogle) { await renderNewGoogleUser(email, googleName); }
-        else {
-          const _next = new URLSearchParams(window.location.search).get('next');
-          if (_next === 'checkout') { await renderNewGoogleUser(email, null); }
-          else { renderLogin('no_orders'); }
-        }
-      } else {
-        renderLogin(data.error || 'network');
-      }
-      return;
-    }
-
-    const session = {
-      token:          data.token,
-      customer_name:  data.customer_name,
-      customer_email: data.customer_email,
-      orders:         data.orders || [],
-    };
-    saveSession(session);
-    await loadProfile(session.token);
-    if (maybeRedirectNext()) return;
-    renderAccount(session);
-
-  } catch(err) { renderLogin('network'); }
-}
-
-// ── Tab switching ────────────────────────────────────────────
-function switchTab(name) {
-  document.querySelectorAll('.acct-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === name));
-  document.querySelectorAll('.acct-panel').forEach(p => p.classList.toggle('active', p.dataset.panel === name));
-  if (name === 'favorites') {
-    const fp = document.querySelector('.acct-panel[data-panel="favorites"]');
-    if (fp) fp.innerHTML = renderFavoritesTab(LANG);
-  }
-}
-
-// ── Render: loading ──────────────────────────────────────────
-function showLoading() {
-  document.getElementById('acct-root').innerHTML = '<div class="acct-loading"><div class="spinner"></div></div>';
-}
-
-// ── Render: login form ───────────────────────────────────────
-function renderLogin(errorKey, googleReady) {
-  const errorMsgs = {
-    no_orders:     LANG==='sv'?'Inga beställningar hittades för denna e-post.':LANG==='en'?'No orders found for this email.':'Aucune commande trouvée pour cet email.',
-    invalid_email: LANG==='sv'?'Ogiltig e-postadress.':LANG==='en'?'Invalid email address.':'Adresse email invalide.',
-    network:       LANG==='sv'?'Anslutningsfel, försök igen.':LANG==='en'?'Connection error, try again.':'Erreur de connexion, réessayez.',
-  };
-  const T = {
-    title: {sv:'Se dina beställningar',fr:'Voir vos commandes',en:'View your orders'},
-    sub:   {sv:'Logga in med Google eller ange din e-postadress för att se dina beställningar.',fr:'Connectez-vous avec Google ou entrez votre email pour consulter vos commandes.',en:'Sign in with Google or enter your email to view your orders.'},
-    google:{sv:'Fortsätt med Google',fr:'Continuer avec Google',en:'Continue with Google'},
-    or:    {sv:'eller',fr:'ou',en:'or'},
-    label: {sv:'E-postadress',fr:'Adresse email',en:'Email address'},
-    btn:   {sv:'Voir mes commandes →',fr:'Voir mes commandes →',en:'View my orders →'},
-    note:  {sv:'Ange e-posten du använde när du beställde.',fr:"Entrez l'email utilisé lors de vos commandes.",en:'Enter the email you used when ordering.'},
-  };
-  const L = LANG || 'fr';
-
-  document.getElementById('acct-root').innerHTML = `
-    <div class="login-card">
-      <h2>${T.title[L]||T.title.fr}</h2>
-      <p class="login-sub">${T.sub[L]||T.sub.fr}</p>
-
-      <button class="btn-google" id="btn-google" onclick="signInWithGoogle()" ${!googleReady&&!_sbClient?'disabled':''}>
-        <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.08 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.36-8.16 2.36-6.26 0-11.57-3.59-13.46-8.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/><path fill="none" d="M0 0h48v48H0z"/></svg>
-        ${T.google[L]||T.google.fr}
-      </button>
-
-      <div class="login-divider"><span>${T.or[L]||T.or.fr}</span></div>
-
-      <form id="login-form" onsubmit="doLoginForm(event)">
-        <div class="login-field">
-          <label for="login-email">${T.label[L]||T.label.fr}</label>
-          <input type="email" id="login-email" autocomplete="email" required placeholder="vous@exemple.fr" class="${errorKey?'err':''}">
-          <div class="login-error${errorKey?' show':''}">${errorMsgs[errorKey]||''}</div>
-        </div>
-        <button type="submit" class="btn-login" id="login-btn">
-          ${T.btn[L]||T.btn.fr}
-        </button>
-      </form>
-      <p class="login-note">${T.note[L]||T.note.fr}</p>
-    </div>`;
-}
-
-// ── Render: Google user with no orders — issue token via /api/customer/auth ──
-async function renderNewGoogleUser(email, googleName) {
-  showLoading();
-  try {
-    const res = await fetch(BASE + '/api/customer/auth', {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ email, name: googleName || '' }),
-    });
-    if (!res.ok) { renderLogin('network'); return; }
-    const data = await res.json();
-    const session = {
-      token:          data.token,
-      customer_name:  data.customer_name || email,
-      customer_email: data.customer_email,
-      orders:         [],
-      via_google:     true,
-    };
-    saveSession(session);
-    await loadProfile(session.token);
-    if (maybeRedirectNext()) return;
-    renderAccount(session);
-  } catch(e) { renderLogin('network'); }
-}
-
-// ── Render: account dashboard ────────────────────────────────
-function renderAccount(session) {
-  const { customer_name, customer_email, orders } = session;
-  const L = LANG || 'fr';
-  const root = document.getElementById('acct-root');
-
-  const totalSpent = orders.reduce((s, o) => s + (o.total || 0), 0);
-  const delivered  = orders.filter(o => o.status === 'delivered').length;
-
-  const T = {
-    orders:     {fr:'Commandes',sv:'Beställningar',en:'Orders'},
-    deliv:      {fr:'Livrées',sv:'Levererade',en:'Delivered'},
-    spent:      {fr:'Total dépensé',sv:'Totalt spenderat',en:'Total spent'},
-    logout:     {fr:'Déconnexion',sv:'Logga ut',en:'Log out'},
-    tabOrders:  {fr:'Mes commandes',sv:'Beställningar',en:'My orders'},
-    tabProfile: {fr:'Mon profil',sv:'Mitt konto',en:'My profile'},
-    tabFavs:    {fr:'Mes favoris',sv:'Favoriter',en:'My favourites'},
-    empty:      {fr:'Aucune commande pour l\'instant.',sv:'Inga beställningar ännu.',en:'No orders yet.'},
-    shop:       {fr:'Explorer la boutique →',sv:'Utforska butiken →',en:'Explore the shop →'},
-    google:     {fr:'Compte Google',sv:'Google-konto',en:'Google account'},
-  };
-
-  const viaGoogle = session.via_google || (loadSession()?.via_google);
-
-  root.innerHTML = `
-    <div class="acct-header">
-      <div class="acct-avatar">${initials(customer_name)}</div>
-      <div class="acct-info">
-        <div class="acct-name">${customer_name}</div>
-        <div class="acct-email">${customer_email}</div>
-        ${viaGoogle ? `<div class="acct-badge">
-          <svg width="12" height="12" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.08 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.36-8.16 2.36-6.26 0-11.57-3.59-13.46-8.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
-          ${T.google[L]||T.google.fr}
-        </div>` : ''}
-      </div>
-      <button class="btn-logout" onclick="doLogout()">${T.logout[L]||T.logout.fr}</button>
-    </div>
-
-    <div class="acct-stats">
-      <div class="stat-box"><div class="stat-val">${orders.length}</div><div class="stat-lbl">${T.orders[L]||T.orders.fr}</div></div>
-      <div class="stat-box"><div class="stat-val">${delivered}</div><div class="stat-lbl">${T.deliv[L]||T.deliv.fr}</div></div>
-      <div class="stat-box"><div class="stat-val">€${totalSpent.toFixed(0)}</div><div class="stat-lbl">${T.spent[L]||T.spent.fr}</div></div>
-    </div>
-
-    <div class="acct-tabs">
-      <button class="acct-tab active" data-tab="orders" onclick="switchTab('orders')">${T.tabOrders[L]||T.tabOrders.fr}</button>
-      <button class="acct-tab" data-tab="profile" onclick="switchTab('profile')">${T.tabProfile[L]||T.tabProfile.fr}</button>
-      <button class="acct-tab" data-tab="favorites" onclick="switchTab('favorites')">${T.tabFavs[L]||T.tabFavs.fr}</button>
-    </div>
-
-    <div class="acct-panel active" data-panel="orders">
-      ${orders.length === 0 ? `
-        <div class="acct-empty">
-          <p>${T.empty[L]||T.empty.fr}</p>
-          <a href="boutique.html" class="btn-primary">${T.shop[L]||T.shop.fr}</a>
-        </div>` : orders.map(o => renderOrderCard(o, L)).join('')}
-    </div>
-
-    <div class="acct-panel" data-panel="profile">
-      ${renderProfileTab(customer_email, L)}
-    </div>
-
-    <div class="acct-panel" data-panel="favorites">
-      ${renderFavoritesTab(L)}
-    </div>
-  `;
-}
-
-// ── Render: profile tab ──────────────────────────────────────
-function renderProfileTab(email, L) {
-  L = L || LANG || 'fr';
-  const p = _profile || {};
-  const T = {
-    infoTitle: {fr:'Informations personnelles',sv:'Personlig information',en:'Personal information'},
-    addrTitle: {fr:'Adresse de livraison',sv:'Leveransadress',en:'Delivery address'},
-    name:      {fr:'Nom complet',sv:'Fullständigt namn',en:'Full name'},
-    phone:     {fr:'Téléphone',sv:'Telefon',en:'Phone'},
-    addr1:     {fr:'Adresse (ligne 1)',sv:'Adress (rad 1)',en:'Address (line 1)'},
-    addr2:     {fr:'Adresse (ligne 2)',sv:'Adress (rad 2)',en:'Address (line 2)'},
-    city:      {fr:'Ville',sv:'Stad',en:'City'},
-    postal:    {fr:'Code postal',sv:'Postnummer',en:'Postal code'},
-    country:   {fr:'Pays',sv:'Land',en:'Country'},
-    save:      {fr:'Sauvegarder',sv:'Spara',en:'Save'},
-    note:      {fr:'Ces informations seront utilisées pour pré-remplir vos prochaines commandes.',sv:'Denna information används för att förifyllas vid dina nästa beställningar.',en:'This information will be pre-filled for your future orders.'},
-  };
-  const g = k => T[k][L] || T[k].fr;
-
-  const countries = [
-    ['FR','France'],['BE','Belgique'],['CH','Suisse'],['LU','Luxembourg'],
-    ['DE','Allemagne'],['ES','Espagne'],['IT','Italie'],['GB','Royaume-Uni'],
-    ['NL','Pays-Bas'],['PT','Portugal'],['SE','Suède'],['NO','Norvège'],['DK','Danemark'],
-  ];
-  const countryOpts = countries.map(([code, name]) =>
-    `<option value="${code}"${(p.country||'FR')===code?' selected':''}>${name}</option>`
-  ).join('');
-
-  return `
-    <div class="profile-section">
-      <div class="profile-section-title">${g('infoTitle')}</div>
-      <div class="pf-grid">
-        <div class="pf-field">
-          <label for="pf-name">${g('name')}</label>
-          <input type="text" id="pf-name" value="${esc(p.name||'')}">
-        </div>
-        <div class="pf-field">
-          <label for="pf-phone">${g('phone')}</label>
-          <input type="tel" id="pf-phone" placeholder="+33 6 00 00 00 00" value="${esc(p.phone||'')}">
-        </div>
-      </div>
-    </div>
-
-    <div class="profile-section">
-      <div class="profile-section-title">${g('addrTitle')}</div>
-      <div class="pf-grid">
-        <div class="pf-field full">
-          <label for="pf-addr1">${g('addr1')}</label>
-          <input type="text" id="pf-addr1" value="${esc(p.address1||'')}">
-        </div>
-        <div class="pf-field full">
-          <label for="pf-addr2">${g('addr2')}</label>
-          <input type="text" id="pf-addr2" value="${esc(p.address2||'')}">
-        </div>
-        <div class="pf-field">
-          <label for="pf-city">${g('city')}</label>
-          <input type="text" id="pf-city" value="${esc(p.city||'')}">
-        </div>
-        <div class="pf-field">
-          <label for="pf-postal">${g('postal')}</label>
-          <input type="text" id="pf-postal" value="${esc(p.postal_code||'')}">
-        </div>
-        <div class="pf-field full">
-          <label for="pf-country">${g('country')}</label>
-          <select id="pf-country">${countryOpts}</select>
-        </div>
-      </div>
-    </div>
-
-    <div class="pf-actions">
-      <button class="btn-save" id="btn-save-profile" onclick="saveProfile()">${g('save')}</button>
-      <span class="save-feedback" id="save-feedback"></span>
-    </div>
-    <p style="font-family:var(--font-body);font-size:12px;color:var(--dust);margin-top:16px;">${g('note')}</p>
-  `;
-}
-
-// ── Render: favorites tab ────────────────────────────────────
-function renderFavoritesTab(L) {
-  L = L || LANG || 'fr';
-  let favIds;
-  try { favIds = JSON.parse(localStorage.getItem('sd_favorites') || '[]'); } catch(e) { favIds = []; }
-  const products = (window._SD_STATIC || []).filter(p => favIds.includes(String(p.uuid || p.id)));
-
-  if (products.length === 0) {
-    const T = {
-      empty: {fr:'Aucun favori pour l\'instant.',sv:'Inga favoriter ännu.',en:'No favourites yet.'},
-      shop:  {fr:'Découvrir nos produits →',sv:'Utforska produkterna →',en:'Explore products →'},
-    };
-    return `<div class="acct-empty"><p>${T.empty[L]||T.empty.fr}</p><a href="boutique.html" class="btn-primary">${T.shop[L]||T.shop.fr}</a></div>`;
-  }
-
-  return `<div class="fav-grid">${products.map(p => productCardHTML(p)).join('')}</div>`;
-}
-
-function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
-
-// ── Render: order card ───────────────────────────────────────
-function renderOrderCard(o, L) {
-  L = L || LANG || 'fr';
-  let lines = []; try { lines = Array.isArray(o.lines) ? o.lines : (o.lines ? JSON.parse(o.lines) : []); } catch(e) { lines = []; }
-  const total    = o.total    || 0;
-  const subtotal = o.subtotal || 0;
-  const shipping = o.shipping || 0;
-  const T = {
-    sub:   {fr:'Sous-total',sv:'Delsumma',en:'Subtotal'},
-    ship:  {fr:'Livraison',sv:'Frakt',en:'Shipping'},
-    free:  {fr:'Gratuite',sv:'Gratis',en:'Free'},
-    total: {fr:'Total',sv:'Total',en:'Total'},
-    items: n => ({fr:`${n} article${n>1?'s':''}`,sv:`${n} artikel${n>1?'ar':''}`,en:`${n} item${n>1?'s':''}`}),
-  };
-  const statusLabels = {
-    pending:   {fr:'En attente',sv:'Väntar',en:'Pending'},
-    paid:      {fr:'Payée',sv:'Betald',en:'Paid'},
-    shipped:   {fr:'Expédiée',sv:'Skickad',en:'Shipped'},
-    delivered: {fr:'Livrée',sv:'Levererad',en:'Delivered'},
-    cancelled: {fr:'Annulée',sv:'Avbruten',en:'Cancelled'},
-    refunded:  {fr:'Remboursée',sv:'Återbetald',en:'Refunded'},
-  };
-  const fmtDate = iso => iso ? new Date(iso).toLocaleDateString(L==='sv'?'sv-SE':L==='en'?'en-GB':'fr-FR',{day:'2-digit',month:'short',year:'numeric'}) : '';
-  const sa = o.shipping_address;
-  const addr = sa?.name ? [sa.name, sa.address1, (sa.city||'')+(sa.postalCode?' '+sa.postalCode:''), sa.country].filter(Boolean).join(' · ') : '';
-
-  // Status timeline (not shown for cancelled/refunded)
-  const tlSteps = [
-    {key:'paid',     icon:'✓', fr:'Payée',    sv:'Betald',   en:'Paid'},
-    {key:'shipped',  icon:'⬆', fr:'Expédiée', sv:'Skickad',  en:'Shipped'},
-    {key:'delivered',icon:'⌂', fr:'Livrée',   sv:'Levererad',en:'Delivered'},
-  ];
-  const tlOrder  = ['pending','paid','shipped','delivered'];
-  const tlCurIdx = tlOrder.indexOf(o.status);
-  const skipTL   = o.status === 'cancelled' || o.status === 'refunded';
-
-  const timelineHTML = skipTL ? '' : `<div class="order-timeline">${
-    tlSteps.map((step, i) => {
-      const stepPos = i + 1; // 'paid'=1,'shipped'=2,'delivered'=3
-      const done    = tlCurIdx > stepPos;
-      const current = tlCurIdx === stepPos;
-      const cls     = done ? 'tl-step done' : current ? 'tl-step current' : 'tl-step';
-      return `<div class="${cls}"><div class="tl-dot">${done ? '✓' : current ? step.icon : ''}</div><div class="tl-lbl">${step[L]||step.fr}</div></div>`;
-    }).join('')
-  }</div>`;
-
-  return `
-    <div class="order-card" id="oc-${o.id}">
-      <div class="order-head" onclick="toggleOrder('${o.id}')">
-        <div><div class="order-num">${o.order_number}</div><div class="order-date">${fmtDate(o.created_at)}</div></div>
-        <div><span class="order-status s-${o.status}">${statusLabels[o.status]?.[L]||o.status}</span><div class="order-date" style="margin-top:4px;">${T.items(lines.length)[L]||T.items(lines.length).fr}</div></div>
-        <div class="order-total">€${total.toFixed(2)}</div>
-        <div class="order-chevron">▾</div>
-      </div>
-      <div class="order-body"><div class="order-body-inner">
-        ${timelineHTML}
-        <div>${lines.map(l=>{
-          // Try stored multilingual name first, then look up live product by product_id
-          let n = L==='en'?(l.name_en||''):L==='sv'?(l.name_sv||''):'';
-          if (!n) {
-            const p = (window.PRODUCTS||[]).find(x=>x.uuid===l.product_id||String(x.id)===String(l.product_id));
-            if (p) n = (L==='en'?p.name?.en:L==='sv'?p.name?.sv:null) || p.name?.fr || p.name_fr || l.name || '';
-            else n = l.name || '';
-          }
-          return`<div class="order-line"><div><div class="order-line-name">${n}</div>${l.variant?`<div class="order-line-sub">${l.variant}</div>`:''}</div><div class="order-line-qty">× ${l.qty||1}</div><div class="order-line-price">€${((l.total||l.price*(l.qty||1))||0).toFixed(2)}</div></div>`;
-        }).join('')}</div>
-        <div class="order-totals">
-          <div class="order-total-row"><span>${T.sub[L]||T.sub.fr}</span><span>€${subtotal.toFixed(2)}</span></div>
-          <div class="order-total-row"><span>${T.ship[L]||T.ship.fr}</span><span>${shipping===0?T.free[L]||T.free.fr:'€'+shipping.toFixed(2)}</span></div>
-          <div class="order-total-row grand"><span>${T.total[L]||T.total.fr}</span><span>€${total.toFixed(2)}</span></div>
-        </div>
-        ${addr ? `<div class="order-addr">${addr}</div>` : ''}
-        ${o.tracking_number ? `<div class="order-tracking"><span class="order-tracking-label">${{fr:'Numéro de suivi',en:'Tracking number',sv:'Spårningsnummer'}[L]||'Suivi'}</span><a href="${o.delivery_mode==='mondial_relay'?'https://www.mondialrelay.fr/suivi-de-colis/?exp='+encodeURIComponent(o.tracking_number):'https://www.laposte.fr/outils/suivre-vos-envois?code='+encodeURIComponent(o.tracking_number)}" target="_blank" rel="noopener" class="order-tracking-num">${o.tracking_number} →</a></div>` : ''}
-      </div></div>
-    </div>`;
-}
-
-function toggleOrder(id) { document.getElementById('oc-' + id)?.classList.toggle('open'); }
-function initials(name) { if(!name)return'?'; const p=name.trim().split(' '); return(p[0][0]+(p[1]?.[0]||'')).toUpperCase(); }
-
-// ── Actions ───────────────────────────────────────────────────
-async function doLoginForm(e) {
-  e.preventDefault();
-  const email = document.getElementById('login-email').value.trim().toLowerCase();
-  const btn   = document.getElementById('login-btn');
-  btn.disabled = true; btn.textContent = '…';
-  await loginWithEmail(email);
-}
-
-async function doLogout() {
-  clearSession();
-  _profile = null;
-  renderLogin(null, !!_sbClient);
-}
-
-// ── Init ──────────────────────────────────────────────────────
-(async function init() {
-  const [sb, savedSession] = await Promise.all([
-    initSupabase(),
-    Promise.resolve(loadSession()),
-  ]);
-
-  if (sb) {
-    const isOAuthCallback = window.location.hash.includes('access_token') || window.location.search.includes('code=');
-    if (isOAuthCallback) {
-      showLoading();
-      const nextParam = new URLSearchParams(window.location.search).get('next');
-      const { data: { subscription } } = sb.auth.onAuthStateChange(async (event, session) => {
-        if (event === 'SIGNED_IN' && session?.user?.email) {
-          subscription.unsubscribe();
-          const email = session.user.email;
-          const name  = session.user.user_metadata?.full_name || session.user.user_metadata?.name || email;
-          await loginWithEmail(email, true, name);
-          if (_session) { _session.via_google = true; _session.customer_name = name || _session.customer_name; saveSession(_session); }
-          if (window.location.search || window.location.hash) {
-            window.history.replaceState({}, '', window.location.pathname);
-          }
-          if (nextParam === 'checkout') { window.location.href = 'panier.html'; return; }
-        }
-      });
-      return;
-    }
-
-    const { data: { session: googleSession } } = await sb.auth.getSession();
-    if (googleSession?.user?.email) {
-      const email = googleSession.user.email;
-      const name  = googleSession.user.user_metadata?.full_name || googleSession.user.user_metadata?.name || email;
-      await loginWithEmail(email, true, name);
-      if (_session) { _session.via_google = true; _session.customer_name = name || _session.customer_name; saveSession(_session); }
-      return;
-    }
-  }
-
-  if (savedSession?.token) {
-    showLoading();
-    try {
-      const [ordersRes] = await Promise.all([
-        fetch(BASE + '/api/customer/orders', { headers: { Authorization: 'Bearer ' + savedSession.token } }),
-        loadProfile(savedSession.token),
-      ]);
-      if (ordersRes.ok) {
-        const data    = await ordersRes.json();
-        const updated = { ...savedSession, orders: data.orders || [] };
-        saveSession(updated);
-        if (maybeRedirectNext()) return;
-        renderAccount(updated);
-      } else {
-        clearSession();
-        renderLogin(null, !!sb);
-      }
-    } catch(e) {
-      renderAccount(savedSession);
-    }
-    return;
-  }
-
-  renderLogin(null, !!sb);
-
-  // Re-render account when products load (needed for translated order line names)
-  window.addEventListener('sdapi:ready', function() {
-    try {
-      const s = JSON.parse(localStorage.getItem('sd_customer_session') || '{}');
-      if (s && s.orders) renderAccount(s);
-    } catch(e) {}
-  });
-})();
 </script>
 <script>(function(){var _hr=document.getElementById("header-root");if(_hr&&typeof MutationObserver!=="undefined")new MutationObserver(function(){if(typeof updateCartBadge==="function")updateCartBadge();}).observe(_hr,{childList:true});})();</script>
-<script src="js/sd-api-client.js?v=10"></script>
+<script src="/js/sd-api-client.js?v=10"></script>
 </body>
 </html>

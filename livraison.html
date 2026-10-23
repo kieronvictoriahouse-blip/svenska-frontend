@@ -7,124 +7,149 @@
 <link rel="icon" type="image/png" href="/img/favicon.png">
 <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Livraison — délais & modes de livraison | Swedish Cravings</title>
-<meta name="description" content="Délais et modes de livraison : point relais, retrait en magasin, international. Livraison offerte dès 29€ en France.">
+<title>Livraison en point relais et retours | Swedish Cravings</title>
+<meta name="description" content="Point relais en France et dans 8 pays d’Europe, retrait gratuit à l’atelier dans la Drôme, délais, retours sous 14 jours : tout sur la livraison.">
+<link rel="canonical" href="https://www.swedishcravings.fr/livraison">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.swedishcravings.fr/livraison">
+<meta property="og:title" content="Livraison et retours | Swedish Cravings">
+<meta property="og:description" content="Point relais en France et en Europe, retrait gratuit à l’atelier dans la Drôme, retours sous 14 jours.">
+<meta property="og:image" content="https://www.swedishcravings.fr/img/sc-logo-vertfond.jpg">
+<meta property="og:site_name" content="Swedish Cravings">
+<meta property="og:locale" content="fr_FR">
+<meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="css/style.css?v=21">
 <script>const SD_API_URL = 'https://admin.swedishcravings.fr';</script>
 <script>(function(){try{var w=JSON.parse(localStorage.getItem('sd_wl_v1'));if(w&&w.id){var r=document.documentElement.style;if(w.color_primary){r.setProperty('--heather',w.color_primary);r.setProperty('--heather-mid',w.color_primary+'CC');}if(w.color_secondary){r.setProperty('--lingon',w.color_secondary);r.setProperty('--lingon-mid',w.color_secondary+'CC');}if(w.color_bg)r.setProperty('--cream',w.color_bg);if(w.color_text)r.setProperty('--midnight',w.color_text);if(w.font_display)r.setProperty('--font-display',"'"+w.font_display+"',Georgia,serif");if(w.font_body)r.setProperty('--font-body',"'"+w.font_body+"',Georgia,serif");if(w.font_ui)r.setProperty('--font-ui',"'"+w.font_ui+"',sans-serif");}}catch(e){}}());</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Accueil","item":"https://www.swedishcravings.fr/"},{"@type":"ListItem","position":2,"name":"Livraison et retours","item":"https://www.swedishcravings.fr/livraison"}]}</script>
+<style>
+.svc-hero { background:var(--cream); border-bottom:1px solid var(--linen); }
+.svc-hero-in { max-width:860px; margin:0 auto; padding:44px 40px 40px; }
+.svc-crumb { display:flex; flex-wrap:wrap; align-items:center; gap:0 10px; font-family:var(--font-ui); font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--dust); margin-bottom:6px; }
+.svc-crumb a { display:inline-block; padding:14px 0; color:var(--dust); text-decoration:underline; text-decoration-color:var(--birch); text-underline-offset:3px; }
+.svc-crumb a:hover { color:var(--lingon); }
+.svc-hero h1 { font-family:var(--font-display); font-size:clamp(36px,5vw,60px); font-weight:300; line-height:1.05; color:var(--midnight); text-wrap:balance; }
+.svc-hero h1 em { font-style:italic; color:var(--lingon); }
+.svc-lead { font-family:var(--font-body); font-size:18px; line-height:1.6; color:var(--slate); max-width:620px; margin-top:14px; }
+
+.dl-wrap { max-width:860px; margin:0 auto; padding:48px 40px 88px; }
+.dl-wrap h2 { font-family:var(--font-display); font-size:clamp(26px,3vw,34px); font-weight:300; color:var(--midnight); line-height:1.15; margin:56px 0 16px; scroll-margin-top:120px; }
+.dl-wrap h2:first-child { margin-top:0; }
+.dl-wrap p { font-family:var(--font-body); font-size:17px; line-height:1.8; color:var(--slate); margin-bottom:12px; max-width:700px; }
+.dl-wrap p a, .dl-note a { color:var(--lingon); text-decoration:underline; text-underline-offset:3px; }
+
+/* Deux modes de livraison */
+.dl-modes { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.dl-mode { background:var(--snow); border:1px solid var(--linen); padding:26px 24px 24px; }
+.dl-wrap .dl-mode-k { font-family:var(--font-ui); font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--lingon); margin-bottom:8px; }
+.dl-mode-t { font-family:var(--font-display); font-size:24px; font-weight:600; line-height:1.2; color:var(--heather-text); margin-bottom:6px; }
+.dl-wrap .dl-mode-price { font-family:var(--font-display); font-size:19px; font-weight:600; color:var(--midnight); margin-bottom:12px; font-variant-numeric:tabular-nums; }
+.dl-wrap .dl-mode p:not([class]) { font-size:16px; line-height:1.7; margin:0; }
+
+/* Tarifs et délais : une ligne par destination, étiquettes visibles (lisible en 375 px sans tableau à défiler) */
+.dl-rates { list-style:none; border-top:1px solid var(--linen); }
+.dl-rate { display:grid; grid-template-columns:1.6fr 1fr 1.1fr; gap:8px 24px; padding:18px 0; border-bottom:1px solid var(--linen); }
+.dl-rate-k { display:block; font-family:var(--font-ui); font-size:11px; font-weight:400; letter-spacing:1.5px; text-transform:uppercase; color:var(--dust); margin-bottom:4px; }
+.dl-rate-dest { font-family:var(--font-body); font-size:17px; line-height:1.5; color:var(--midnight); }
+.dl-rate-v { font-family:var(--font-body); font-size:16px; line-height:1.5; color:var(--slate); }
+.dl-rate-price { font-family:var(--font-display); font-size:19px; font-weight:600; color:var(--midnight); font-variant-numeric:tabular-nums; }
+.dl-rate-price small { display:block; font-family:var(--font-body); font-size:15px; font-weight:400; color:var(--slate); }
+.dl-wrap .dl-note { font-family:var(--font-body); font-size:15px; font-style:italic; line-height:1.7; color:var(--dust); margin-top:14px; }
+
+.dl-help { margin-top:56px; padding:32px 28px; background:var(--parchment); }
+.dl-help p { margin-bottom:18px; }
+.dl-help-links { display:flex; flex-wrap:wrap; gap:12px 24px; align-items:center; }
+.dl-help-links .dyn-email { display:inline-block; padding:10px 0; font-family:var(--font-body); font-size:16px; color:var(--lingon); text-decoration:underline; text-underline-offset:3px; }
+@media (max-width:760px) {
+  .dl-modes { grid-template-columns:1fr; }
+  .dl-rate { grid-template-columns:1fr 1fr; }
+  .dl-rate-dest { grid-column:1 / -1; }
+}
+@media (max-width:600px) {
+  .svc-hero-in { padding:28px 20px 30px; }
+  .dl-wrap { padding:36px 20px 64px; }
+  .dl-wrap h2 { margin-top:44px; }
+  .dl-help { padding:26px 20px; }
+}
+</style>
 </head>
 <body>
 <div id="header-root"></div>
 
-<div class="page-hero" style="background:var(--heather);padding:56px 40px;text-align:center;">
-  <h1 style="font-family:var(--font-display);font-size:clamp(28px,4vw,52px);font-weight:300;color:var(--snow);"
-      data-sv="<em style='font-style:italic;color:var(--lingon-mid);'>Leverans</em>"
-      data-fr="<em style='font-style:italic;color:var(--lingon-mid);'>Livraison</em>"
-      data-en="<em style='font-style:italic;color:var(--lingon-mid);'>Delivery</em>">
-    <em style="font-style:italic;color:var(--lingon-mid);">Livraison</em>
-  </h1>
-  <p style="font-family:var(--font-body);font-size:16px;color:rgba(255,255,255,0.65);margin-top:10px;"
-     data-sv="Skickat med omsorg från Frankrike"
-     data-fr="Expédié avec soin depuis la France"
-     data-en="Shipped with care from France">
-    Expédié avec soin depuis la France
-  </p>
+<main>
+<div class="svc-hero">
+  <div class="svc-hero-in">
+    <nav class="svc-crumb" aria-label="Fil d’Ariane" data-fr-aria="Fil d’Ariane" data-en-aria="Breadcrumb" data-sv-aria="Brödsmulor">
+      <a href="/" data-sv="Hem" data-fr="Accueil" data-en="Home">Accueil</a><span aria-hidden="true">/</span><span aria-current="page" data-sv="Leverans och returer" data-fr="Livraison et retours" data-en="Delivery and returns">Livraison et retours</span>
+    </nav>
+    <h1 data-sv="Leverans och <em>returer</em>" data-fr="Livraison et <em>retours</em>" data-en="Delivery and <em>returns</em>">Livraison et <em>retours</em></h1>
+    <p class="svc-lead" data-sv="Utlämningsställe i Frankrike och åtta europeiska länder, eller gratis upphämtning i vår ateljé i Drôme." data-fr="Point relais en France et dans huit pays d’Europe, ou retrait gratuit à notre atelier de la Drôme." data-en="Pickup points in France and eight European countries, or free pickup at our workshop in the Drôme.">Point relais en France et dans huit pays d’Europe, ou retrait gratuit à notre atelier de la Drôme.</p>
+  </div>
 </div>
 
-<div class="legal-wrap">
-
-  <!-- Tarifs livraison -->
-  <h2 data-sv="Leveranspriser" data-fr="Tarifs de livraison" data-en="Delivery rates">Tarifs de livraison</h2>
-  <div style="overflow-x:auto;margin:16px 0 28px;">
-    <table style="width:100%;border-collapse:collapse;font-family:var(--font-body);font-size:15px;">
-      <thead>
-        <tr style="background:var(--heather);color:#fff;">
-          <th style="padding:12px 16px;text-align:left;font-family:var(--font-ui);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;"
-              data-sv="Destination" data-fr="Destination" data-en="Destination">Destination</th>
-          <th style="padding:12px 16px;text-align:left;font-family:var(--font-ui);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;"
-              data-sv="Leveranstid" data-fr="Délai" data-en="Lead time">Délai</th>
-          <th style="padding:12px 16px;text-align:right;font-family:var(--font-ui);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;"
-              data-sv="Pris" data-fr="Tarif" data-en="Price">Tarif</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr style="border-bottom:1px solid var(--linen);">
-          <td style="padding:12px 16px;"
-              data-sv="Frankrike" data-fr="France métropolitaine" data-en="Metropolitan France">France métropolitaine</td>
-          <td style="padding:12px 16px;color:var(--dust);"
-              data-sv="2–4 arbetsdagar" data-fr="2 à 4 jours ouvrés" data-en="2 to 4 working days">2 à 4 jours ouvrés</td>
-          <td style="padding:12px 16px;text-align:right;font-weight:600;"
-              data-sv="4,90 € <span style='font-size:12px;color:var(--heather);font-weight:400;'>Gratis från 29€</span>"
-              data-fr="4,90 € <span style='font-size:12px;color:var(--heather);font-weight:400;'>Offerte dès 29€</span>"
-              data-en="€4.90 <span style='font-size:12px;color:var(--heather);font-weight:400;'>Free from €29</span>">
-            4,90 € <span style="font-size:12px;color:var(--heather);font-weight:400;">Offerte dès 29€</span>
-          </td>
-        </tr>
-        <tr style="border-bottom:1px solid var(--linen);background:var(--warm-white);">
-          <td style="padding:12px 16px;"
-              data-sv="Spanien, Portugal, Italien, Tyskland, Nederländerna, Belgien, Luxemburg, Sverige"
-              data-fr="Espagne, Portugal, Italie, Allemagne, Pays-Bas, Belgique, Luxembourg, Suède"
-              data-en="Spain, Portugal, Italy, Germany, Netherlands, Belgium, Luxembourg, Sweden">
-            Espagne, Portugal, Italie, Allemagne, Pays-Bas, Belgique, Luxembourg, Suède</td>
-          <td style="padding:12px 16px;color:var(--dust);"
-              data-sv="3–5 arbetsdagar" data-fr="3 à 5 jours ouvrés" data-en="3 to 5 working days">3 à 5 jours ouvrés</td>
-          <td style="padding:12px 16px;text-align:right;font-weight:600;"
-              data-sv="9,90 € <span style='font-size:12px;color:var(--heather);font-weight:400;'>Gratis från 50€</span>"
-              data-fr="9,90 € <span style='font-size:12px;color:var(--heather);font-weight:400;'>Offerte dès 50€</span>"
-              data-en="€9.90 <span style='font-size:12px;color:var(--heather);font-weight:400;'>Free from €50</span>">
-            9,90 € <span style="font-size:12px;color:var(--heather);font-weight:400;">Offerte dès 50€</span>
-          </td>
-        </tr>
-        <tr style="background:var(--warm-white);">
-          <td style="padding:12px 16px;"
-              data-sv="Resten av världen" data-fr="Reste du monde" data-en="Rest of the world">Reste du monde</td>
-          <td style="padding:12px 16px;color:var(--dust);"
-              data-sv="7–14 arbetsdagar" data-fr="7 à 14 jours ouvrés" data-en="7 to 14 working days">7 à 14 jours ouvrés</td>
-          <td style="padding:12px 16px;text-align:right;font-weight:600;"
-              data-sv="Kontakta oss" data-fr="Nous contacter" data-en="Contact us">Nous contacter</td>
-        </tr>
-      </tbody>
-    </table>
+<div class="dl-wrap">
+  <h2 id="modes" data-sv="Två sätt att få din beställning" data-fr="Deux façons de recevoir votre commande" data-en="Two ways to receive your order">Deux façons de recevoir votre commande</h2>
+  <div class="dl-modes">
+    <div class="dl-mode">
+      <p class="dl-mode-k" data-sv="Skickas" data-fr="Expédition" data-en="Shipping">Expédition</p>
+      <h3 class="dl-mode-t" data-sv="Utlämningsställe" data-fr="Point relais" data-en="Pickup point">Point relais</h3>
+      <p class="dl-mode-price" data-sv="Frankrike: <span data-sd-ship='fr-cost'>4,90 €</span>, gratis från <span data-sd-ship='fr-threshold'>29 €</span>" data-fr="France&nbsp;: <span data-sd-ship='fr-cost'>4,90 €</span>, offerte dès <span data-sd-ship='fr-threshold'>29 €</span>" data-en="France: <span data-sd-ship='fr-cost'>€4.90</span>, free from <span data-sd-ship='fr-threshold'>€29</span>">France&nbsp;: <span data-sd-ship="fr-cost">4,90 €</span>, offerte dès <span data-sd-ship="fr-threshold">29 €</span></p>
+      <p data-sv="Du väljer utlämningsställe i varukorgen och ser dess öppettider. I Frankrike: Mondial Relay. I övriga Europa: Mondial Relay eller Chronopost Shop2Shop, beroende på land. Transportören meddelar dig när paketet har kommit fram." data-fr="Vous choisissez votre point relais dans le panier, horaires à l’appui. En France&nbsp;: Mondial Relay. Ailleurs en Europe&nbsp;: Mondial Relay ou Chronopost Shop2Shop, selon le pays. Le transporteur vous prévient quand le colis est arrivé." data-en="You choose your pickup point in the cart, with its opening hours. In France: Mondial Relay. Elsewhere in Europe: Mondial Relay or Chronopost Shop2Shop, depending on the country. The carrier lets you know when the parcel has arrived.">Vous choisissez votre point relais dans le panier, horaires à l’appui. En France&nbsp;: Mondial Relay. Ailleurs en Europe&nbsp;: Mondial Relay ou Chronopost Shop2Shop, selon le pays. Le transporteur vous prévient quand le colis est arrivé.</p>
+    </div>
+    <div class="dl-mode">
+      <p class="dl-mode-k">Click &amp; Collect</p>
+      <h3 class="dl-mode-t" data-sv="Upphämtning i ateljén" data-fr="Retrait à l’atelier" data-en="Workshop pickup">Retrait à l’atelier</h3>
+      <p class="dl-mode-price" data-sv="Gratis" data-fr="Gratuit" data-en="Free">Gratuit</p>
+      <p data-sv="I vår ateljé i Étoile-sur-Rhône (Drôme), efter överenskommelse: efter beställningen kontaktar vi dig för att boka en tid. Några färskvaror finns bara för upphämtning." data-fr="À notre atelier d’Étoile-sur-Rhône (Drôme), sur rendez-vous&nbsp;: après la commande, nous vous contactons pour fixer le créneau. Quelques produits frais ne sont proposés qu’en retrait." data-en="At our workshop in Étoile-sur-Rhône (Drôme), by appointment: after your order, we contact you to arrange a time. A few fresh products are available for pickup only.">À notre atelier d’Étoile-sur-Rhône (Drôme), sur rendez-vous&nbsp;: après la commande, nous vous contactons pour fixer le créneau. Quelques produits frais ne sont proposés qu’en retrait.</p>
+    </div>
   </div>
 
-  <h2 data-sv="Förpackning &amp; Frakt" data-fr="Emballage &amp; expédition" data-en="Packaging &amp; shipping">Emballage &amp; expédition</h2>
-  <p data-sv="Era beställningar förpackas omsorgsfullt i våra miljövänliga emballage. Ömtåliga produkter skyddas individuellt. Varje paket innehåller en orderöversikt."
-     data-fr="Vos commandes sont préparées avec soin dans nos emballages éco-responsables. Les produits fragiles sont protégés individuellement. Chaque colis contient un récapitulatif de commande."
-     data-en="Your orders are carefully packed in our eco-friendly packaging. Fragile items are individually protected. Each parcel includes an order summary.">
-    Vos commandes sont préparées avec soin dans nos emballages éco-responsables. Les produits fragiles sont protégés individuellement. Chaque colis contient un récapitulatif de commande.
-  </p>
-  <p data-sv="Ett bekräftelsemejl med spårningsnummer skickas så snart paketet har avsänts."
-     data-fr="Un email de confirmation avec numéro de suivi vous est envoyé dès l'expédition."
-     data-en="A confirmation email with a tracking number is sent as soon as the parcel is dispatched.">
-    Un email de confirmation avec numéro de suivi vous est envoyé dès l'expédition.
-  </p>
+  <h2 id="tarifs" data-sv="Priser och leveranstider" data-fr="Tarifs et délais" data-en="Rates and delivery times">Tarifs et délais</h2>
+  <ul class="dl-rates">
+    <li class="dl-rate">
+      <div class="dl-rate-dest"><span class="dl-rate-k" data-sv="Destination" data-fr="Destination" data-en="Destination">Destination</span><span data-sv="Frankrike (fastlandet), utlämningsställe" data-fr="France métropolitaine, point relais" data-en="Mainland France, pickup point">France métropolitaine, point relais</span></div>
+      <div class="dl-rate-v"><span class="dl-rate-k" data-sv="Efter avsändning" data-fr="Après expédition" data-en="After dispatch">Après expédition</span><span data-sv="2–4 arbetsdagar" data-fr="2 à 4 jours ouvrés" data-en="2 to 4 working days">2 à 4 jours ouvrés</span></div>
+      <div class="dl-rate-price"><span class="dl-rate-k" data-sv="Pris" data-fr="Tarif" data-en="Price">Tarif</span><span data-sd-ship="fr-cost">4,90 €</span><small data-sv="gratis från <span data-sd-ship='fr-threshold'>29 €</span>" data-fr="offerte dès <span data-sd-ship='fr-threshold'>29 €</span>" data-en="free from <span data-sd-ship='fr-threshold'>€29</span>">offerte dès <span data-sd-ship="fr-threshold">29 €</span></small></div>
+    </li>
+    <li class="dl-rate">
+      <div class="dl-rate-dest"><span class="dl-rate-k" data-sv="Destination" data-fr="Destination" data-en="Destination">Destination</span><span data-sv="Spanien, Portugal, Italien, Tyskland, Nederländerna, Belgien, Luxemburg, Sverige, utlämningsställe" data-fr="Espagne, Portugal, Italie, Allemagne, Pays-Bas, Belgique, Luxembourg, Suède, point relais" data-en="Spain, Portugal, Italy, Germany, Netherlands, Belgium, Luxembourg, Sweden, pickup point">Espagne, Portugal, Italie, Allemagne, Pays-Bas, Belgique, Luxembourg, Suède, point relais</span></div>
+      <div class="dl-rate-v"><span class="dl-rate-k" data-sv="Efter avsändning" data-fr="Après expédition" data-en="After dispatch">Après expédition</span><span data-sv="3–5 arbetsdagar" data-fr="3 à 5 jours ouvrés" data-en="3 to 5 working days">3 à 5 jours ouvrés</span></div>
+      <div class="dl-rate-price"><span class="dl-rate-k" data-sv="Pris" data-fr="Tarif" data-en="Price">Tarif</span><span data-sd-ship="eu-cost">9,90 €</span><small data-sv="gratis från <span data-sd-ship='eu-threshold'>50 €</span>" data-fr="offerte dès <span data-sd-ship='eu-threshold'>50 €</span>" data-en="free from <span data-sd-ship='eu-threshold'>€50</span>">offerte dès <span data-sd-ship="eu-threshold">50 €</span></small></div>
+    </li>
+    <li class="dl-rate">
+      <div class="dl-rate-dest"><span class="dl-rate-k" data-sv="Destination" data-fr="Destination" data-en="Destination">Destination</span><span data-sv="Ateljén i Étoile-sur-Rhône (Drôme), upphämtning" data-fr="Atelier d’Étoile-sur-Rhône (Drôme), retrait" data-en="Workshop in Étoile-sur-Rhône (Drôme), pickup">Atelier d’Étoile-sur-Rhône (Drôme), retrait</span></div>
+      <div class="dl-rate-v"><span class="dl-rate-k" data-sv="När" data-fr="Quand" data-en="When">Quand</span><span data-sv="Efter överenskommelse" data-fr="Sur rendez-vous" data-en="By appointment">Sur rendez-vous</span></div>
+      <div class="dl-rate-price"><span class="dl-rate-k" data-sv="Pris" data-fr="Tarif" data-en="Price">Tarif</span><span data-sv="Gratis" data-fr="Gratuit" data-en="Free">Gratuit</span></div>
+    </li>
+  </ul>
+  <p class="dl-note" data-sv="Exakt belopp, även under en kampanj med fri frakt, visas i varukorgen innan du betalar. Vi levererar inte hem till dörren och inte till andra länder i nuläget." data-fr="Le montant exact, y compris pendant une opération «&nbsp;livraison offerte&nbsp;», s’affiche dans le panier avant le paiement. Nous ne livrons ni à domicile ni vers d’autres pays pour l’instant." data-en="The exact amount, including during a free-delivery promotion, is shown in your cart before you pay. We do not deliver to home addresses or to other countries for now.">Le montant exact, y compris pendant une opération «&nbsp;livraison offerte&nbsp;», s’affiche dans le panier avant le paiement. Nous ne livrons ni à domicile ni vers d’autres pays pour l’instant.</p>
 
-  <h2 data-sv="⏱ Behandlingstider" data-fr="⏱ Délais de traitement" data-en="⏱ Processing times">⏱ Délais de traitement</h2>
-  <p data-sv="Beställningar lagda före <strong>kl. 12:00 (Paris-tid)</strong> måndag till fredag behandlas samma dag. Helgbeställningar behandlas påföljande måndag."
-     data-fr="Les commandes passées avant <strong>12h00 (heure de Paris)</strong> du lundi au vendredi sont traitées le jour même. Les commandes passées le week-end sont traitées le lundi suivant."
-     data-en="Orders placed before <strong>12:00 (Paris time)</strong> Monday to Friday are processed the same day. Weekend orders are processed the following Monday.">
-    Les commandes passées avant <strong>12h00 (heure de Paris)</strong> du lundi au vendredi sont traitées le jour même. Les commandes passées le week-end sont traitées le lundi suivant.
-  </p>
-  <div class="info-box"
-       data-sv="Total estimerad tid = behandlingstid (1 dag) + leveranstid"
-       data-fr="Délai total estimé = délai de traitement (1 jour) + délai de livraison"
-       data-en="Total estimated time = processing time (1 day) + delivery time">
-    Délai total estimé = délai de traitement (1 jour) + délai de livraison
+  <h2 id="suivi" data-sv="Packning och spårning" data-fr="Préparation et suivi" data-en="Packing and tracking">Préparation et suivi</h2>
+  <p data-sv="Din beställning packas och skickas inom 24–48 timmar (vardagar) efter att betalningen har bekräftats. Produkterna packas omsorgsfullt och de ömtåligaste skyddas var för sig." data-fr="Votre commande est préparée et expédiée sous 24 à 48&nbsp;h ouvrées après la confirmation du paiement. Les produits sont emballés avec soin, les plus fragiles protégés un à un." data-en="Your order is packed and shipped within 24 to 48 working hours after payment is confirmed. Products are packed with care, the most fragile ones protected individually.">Votre commande est préparée et expédiée sous 24 à 48&nbsp;h ouvrées après la confirmation du paiement. Les produits sont emballés avec soin, les plus fragiles protégés un à un.</p>
+  <p data-sv="Du får ett bekräftelsemejl direkt efter betalningen och sedan ett mejl med spårningsnummer när paketet skickas. <a href='/compte'>Följ min beställning</a>" data-fr="Vous recevez un e-mail de confirmation juste après le paiement, puis un e-mail avec le numéro de suivi dès l’expédition. <a href='/compte'>Suivre ma commande</a>" data-en="You receive a confirmation email right after payment, then an email with the tracking number as soon as it ships. <a href='/compte'>Track my order</a>">Vous recevez un e-mail de confirmation juste après le paiement, puis un e-mail avec le numéro de suivi dès l’expédition. <a href="/compte">Suivre ma commande</a></p>
+
+  <h2 id="retours" data-sv="Returer" data-fr="Retours" data-en="Returns">Retours</h2>
+  <p data-sv="Du har 14 dagar efter mottagandet på dig att returnera oöppnade livsmedel i originalförpackning samt porslin och inredning. Av hygienskäl kan öppnade livsmedel och färskvaror inte tas tillbaka." data-fr="Vous disposez de 14&nbsp;jours après réception pour retourner les produits alimentaires non ouverts, dans leur emballage d’origine, ainsi que les articles d’art de la table et de décoration. Pour des raisons d’hygiène, un produit alimentaire ouvert ou périssable ne peut pas être repris." data-en="You have 14 days after receipt to return unopened food in its original packaging, as well as tableware and home décor items. For hygiene reasons, opened or perishable food cannot be taken back.">Vous disposez de 14&nbsp;jours après réception pour retourner les produits alimentaires non ouverts, dans leur emballage d’origine, ainsi que les articles d’art de la table et de décoration. Pour des raisons d’hygiène, un produit alimentaire ouvert ou périssable ne peut pas être repris.</p>
+  <p data-sv="Meddela oss via e-post och skicka sedan tillbaka varorna inom 14 dagar till den adress vi anger. Returfrakten betalar du. Vi återbetalar inom 14 dagar, inklusive den ursprungliga frakten (enligt det billigaste leveranssättet). Alla villkor: <a href='/cgv#retractation'>försäljningsvillkoren, artikel 7</a> (på franska)." data-fr="Prévenez-nous par e-mail, puis renvoyez les produits dans les 14&nbsp;jours suivants, à l’adresse que nous vous indiquons. Les frais de retour sont à votre charge. Nous vous remboursons sous 14&nbsp;jours, frais de livraison initiaux compris (sur la base du mode de livraison le moins cher). Toutes les conditions&nbsp;: <a href='/cgv#retractation'>CGV, article&nbsp;7</a>." data-en="Let us know by email, then send the products back within the following 14 days to the address we give you. Return costs are yours. We refund you within 14 days, including the original delivery cost (based on the cheapest delivery option). Full conditions: <a href='/cgv#retractation'>terms of sale, article 7</a> (in French).">Prévenez-nous par e-mail, puis renvoyez les produits dans les 14&nbsp;jours suivants, à l’adresse que nous vous indiquons. Les frais de retour sont à votre charge. Nous vous remboursons sous 14&nbsp;jours, frais de livraison initiaux compris (sur la base du mode de livraison le moins cher). Toutes les conditions&nbsp;: <a href="/cgv#retractation">CGV, article&nbsp;7</a>.</p>
+
+  <h2 id="colis-abime" data-sv="Skadat eller ofullständigt paket" data-fr="Colis abîmé ou incomplet" data-en="Damaged or incomplete parcel">Colis abîmé ou incomplet</h2>
+  <p data-sv="Fotografera paketet och varorna och skriv till oss så snart du har tagit emot det, med ditt ordernummer. Den lagstadgade garantin gäller: vi hittar en lösning tillsammans med dig. Se <a href='/cgv#garanties'>de lagstadgade garantierna</a> (på franska)." data-fr="Photographiez le colis et les produits, puis écrivez-nous dès réception avec votre numéro de commande. La garantie légale de conformité s’applique&nbsp;: nous trouvons la solution avec vous. Voir les <a href='/cgv#garanties'>garanties légales</a>." data-en="Take photos of the parcel and the products, then write to us as soon as you receive it, with your order number. The legal guarantee of conformity applies: we will find a solution with you. See the <a href='/cgv#garanties'>legal guarantees</a> (in French).">Photographiez le colis et les produits, puis écrivez-nous dès réception avec votre numéro de commande. La garantie légale de conformité s’applique&nbsp;: nous trouvons la solution avec vous. Voir les <a href="/cgv#garanties">garanties légales</a>.</p>
+
+  <div class="dl-help">
+    <p data-sv="En fråga om din leverans? Vi svarar normalt inom 24–48 timmar, måndag till fredag." data-fr="Une question sur votre livraison&nbsp;? Nous répondons en général sous 24 à 48&nbsp;h, du lundi au vendredi." data-en="A question about your delivery? We usually reply within 24 to 48 hours, Monday to Friday.">Une question sur votre livraison&nbsp;? Nous répondons en général sous 24 à 48&nbsp;h, du lundi au vendredi.</p>
+    <div class="dl-help-links">
+      <a href="/contact" class="btn-primary" data-sv="Skriv till oss" data-fr="Nous écrire" data-en="Write to us">Nous écrire</a>
+      <a href="/contact" class="dyn-email">contact</a>
+    </div>
   </div>
-
-  <h2 data-sv="Skadat eller saknat paket" data-fr="Colis endommagé ou manquant" data-en="Damaged or missing parcel">Colis endommagé ou manquant</h2>
-  <p data-sv="Vid skadat paket vid leverans: ta foton innan du öppnar det och kontakta oss inom 48h. Vi hanterar ditt ärende så snabbt som möjligt."
-     data-fr="En cas de colis endommagé à réception, prenez des photos avant de l'ouvrir et contactez-nous dans les 48h. Nous traiterons votre réclamation dans les meilleurs délais."
-     data-en="If your parcel arrives damaged, take photos before opening it and contact us within 48h. We will handle your complaint as quickly as possible.">
-    En cas de colis endommagé à réception, prenez des photos avant de l'ouvrir et contactez-nous dans les 48h à <a href="#" class="dyn-email">contact</a>. Nous traiterons votre réclamation dans les meilleurs délais.
-  </p>
 </div>
+</main>
 
 <div id="footer-root"></div>
 <script src="js/app.js?v=34"></script>
 <script>initPage('livraison');</script>
 <script>(function(){var _hr=document.getElementById("header-root");if(_hr&&typeof MutationObserver!=="undefined")new MutationObserver(function(){if(typeof updateCartBadge==="function")updateCartBadge();}).observe(_hr,{childList:true});})();</script>
 <script src="js/sd-api-client.js?v=10"></script>
-<script>(function(){function applyDynamic(){try{var w=JSON.parse(localStorage.getItem('sd_wl_v1'))||{};var e=w.email||'';document.querySelectorAll('.dyn-email').forEach(function(el){if(e){el.href='mailto:'+e;el.textContent=e;}});}catch(err){}}applyDynamic();window.addEventListener('sdapi:ready',function(){try{var cfg=window.SDApi&&window.SDApi.whiteLabel;if(cfg){document.querySelectorAll('.dyn-email').forEach(function(el){if(cfg.email){el.href='mailto:'+cfg.email;el.textContent=cfg.email;}});}}catch(err){}});}());</script>
+<script src="js/sd-legal.js?v=1"></script>
 </body>
 </html>

@@ -63,8 +63,14 @@ http.createServer((req, res) => {
       res.end();
       return;
     }
-    res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' }).end('404 ' + urlPath);
-    return;
+    // Comme Vercel : /compte/* → « Ma commande », sinon la page 404 du site
+    if (/^\/compte\/.+/.test(urlPath)) file = resolveFile('/compte');
+    if (!file) {
+      const nf = resolveFile('/404');
+      res.writeHead(404, { 'Content-Type': nf ? 'text/html; charset=utf-8' : 'text/plain; charset=utf-8' });
+      if (nf && req.method !== 'HEAD') fs.createReadStream(nf).pipe(res); else res.end('404 ' + urlPath);
+      return;
+    }
   }
 
   res.writeHead(200, {

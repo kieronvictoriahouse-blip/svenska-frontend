@@ -10,170 +10,212 @@
 <title>Donner mon avis | Swedish Cravings</title>
 <meta name="description" content="Donnez votre avis sur les produits suédois de votre commande Swedish Cravings.">
 <meta name="robots" content="noindex, nofollow">
+<meta property="og:site_name" content="Swedish Cravings">
 <link rel="stylesheet" href="css/style.css?v=21">
 <script>const SD_API_URL = 'https://admin.swedishcravings.fr';</script>
-<script>(function(){try{var w=JSON.parse(localStorage.getItem('sd_wl_v1'));if(w&&w.id){var r=document.documentElement.style;if(w.color_primary){r.setProperty('--heather',w.color_primary);r.setProperty('--heather-mid',w.color_primary+'CC');}if(w.color_secondary){r.setProperty('--lingon',w.color_secondary);r.setProperty('--lingon-mid',w.color_secondary+'CC');}if(w.color_bg)r.setProperty('--cream',w.color_bg);if(w.color_text)r.setProperty('--midnight',w.color_text);}}catch(e){}}());</script>
+<script>(function(){try{var w=JSON.parse(localStorage.getItem('sd_wl_v1'));if(w&&w.id){var r=document.documentElement.style;if(w.color_primary){r.setProperty('--heather',w.color_primary);r.setProperty('--heather-mid',w.color_primary+'CC');}if(w.color_secondary){r.setProperty('--lingon',w.color_secondary);r.setProperty('--lingon-mid',w.color_secondary+'CC');}if(w.color_bg)r.setProperty('--cream',w.color_bg);if(w.color_text)r.setProperty('--midnight',w.color_text);if(w.font_display)r.setProperty('--font-display',"'"+w.font_display+"',Georgia,serif");if(w.font_body)r.setProperty('--font-body',"'"+w.font_body+"',Georgia,serif");if(w.font_ui)r.setProperty('--font-ui',"'"+w.font_ui+"',sans-serif");}}catch(e){}}());</script>
 <style>
-.page-hero { background:var(--heather); padding:56px 40px; text-align:center; }
-.page-hero h1 { font-family:var(--font-display); font-size:clamp(30px,5vw,54px); font-weight:300; color:var(--snow); }
-.page-hero p { color:rgba(255,255,255,.82); font-family:var(--font-ui); font-size:15px; margin-top:12px; }
-.avis-wrap { max-width:720px; margin:0 auto; padding:56px 24px 88px; }
-.avis-item { border:1px solid var(--linen); background:var(--warm-white); padding:22px; margin-bottom:18px; display:grid; grid-template-columns:78px 1fr; gap:20px; align-items:start; }
-.avis-item img { width:78px; height:78px; object-fit:contain; background:var(--parchment); }
-.avis-nom { font-family:var(--font-display); font-size:20px; font-weight:600; margin-bottom:10px; line-height:1.25; }
-.etoiles { display:flex; gap:4px; margin-bottom:12px; }
-.etoile { font-size:30px; line-height:1; cursor:pointer; color:var(--linen); background:none; border:none; padding:0 2px; transition:color .15s, transform .15s; }
-.etoile:hover { transform:scale(1.14); }
-.etoile.on { color:var(--lingon); }
-.etoile:focus-visible { outline:2px solid var(--heather); outline-offset:2px; }
-.avis-txt { width:100%; border:1px solid var(--linen); background:var(--snow); padding:11px 13px; font-family:var(--font-body); font-size:15px; resize:vertical; min-height:74px; color:var(--midnight); }
-.avis-txt:focus { outline:none; border-color:var(--heather); }
-.avis-etat { font-family:var(--font-ui); font-size:13px; margin-top:9px; min-height:19px; }
-.avis-etat.ok { color:var(--heather); }
-.avis-etat.ko { color:#9A5228; }
-.avis-intro { font-family:var(--font-body); font-size:17px; line-height:1.6; color:var(--slate); margin-bottom:30px; }
-.avis-msg { text-align:center; padding:60px 20px; font-family:var(--font-body); font-size:17px; color:var(--dust); }
-.btn-envoyer { background:var(--heather); color:var(--snow); border:none; padding:10px 22px; font-family:var(--font-ui); font-size:13px; letter-spacing:1px; text-transform:uppercase; cursor:pointer; margin-top:11px; }
-.btn-envoyer:hover { background:var(--heather-mid); }
-.btn-envoyer:disabled { opacity:.45; cursor:default; }
-@media(max-width:560px){ .avis-item{grid-template-columns:1fr;} .avis-item img{width:64px;height:64px;} }
+.svc-hero { background:var(--cream); border-bottom:1px solid var(--linen); }
+.svc-hero-in { max-width:760px; margin:0 auto; padding:44px 40px 40px; }
+.svc-hero h1 { font-family:var(--font-display); font-size:clamp(36px,5vw,60px); font-weight:300; line-height:1.05; color:var(--midnight); }
+.svc-hero h1 em { font-style:italic; color:var(--lingon); }
+.svc-lead { font-family:var(--font-body); font-size:18px; line-height:1.6; color:var(--slate); max-width:600px; margin-top:14px; }
+
+.av-wrap { max-width:760px; margin:0 auto; padding:40px 40px 88px; --av-err:#8E2A20; }
+.av-intro { font-family:var(--font-body); font-size:17px; line-height:1.7; color:var(--slate); margin-bottom:8px; }
+.av-intro strong { color:var(--midnight); font-weight:600; }
+.av-pub { font-family:var(--font-body); font-size:15px; font-style:italic; line-height:1.6; color:var(--dust); margin-bottom:28px; }
+.av-pub a { color:inherit; text-decoration:underline; text-underline-offset:3px; }
+.av-msg { padding:40px 24px; background:var(--parchment); text-align:center; font-family:var(--font-body); font-size:17px; line-height:1.7; color:var(--slate); }
+.av-msg a { color:var(--lingon); text-decoration:underline; text-underline-offset:3px; }
+.av-msg .btn-primary { margin-top:18px; text-decoration:none; color:var(--snow); }
+
+.av-item { display:grid; grid-template-columns:80px 1fr; gap:20px; padding:24px; margin-bottom:16px; background:var(--snow); border:1px solid var(--linen); }
+.av-img { width:80px; height:80px; object-fit:contain; background:var(--parchment); }
+.av-noimg { width:80px; height:80px; background:var(--parchment); }
+.av-name { font-family:var(--font-display); font-size:21px; font-weight:600; line-height:1.25; color:var(--heather-text); margin-bottom:14px; }
+.av-item fieldset { border:none; margin:0 0 16px; padding:0; min-width:0; }
+.av-item legend { font-family:var(--font-ui); font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--slate); margin-bottom:8px; padding:0; }
+/* Note chiffrée de 1 à 5 (pas d'étoiles) : de vrais boutons radio, stylés en cases */
+.av-scale { display:flex; gap:6px; flex-wrap:wrap; }
+.av-scale input { position:absolute; opacity:0; width:1px; height:1px; }
+.av-scale label { display:flex; align-items:center; justify-content:center; width:44px; height:44px; border:1px solid var(--driftwood); background:var(--warm-white); font-family:var(--font-ui); font-size:15px; font-weight:500; color:var(--midnight); cursor:pointer; transition:background .15s, color .15s, border-color .15s; }
+.av-scale label:hover { border-color:var(--lingon); }
+.av-scale input:checked + label { background:var(--lingon); border-color:var(--lingon); color:var(--snow); }
+.av-scale input:focus-visible + label { outline:2px solid var(--lingon); outline-offset:3px; }
+.av-hint { font-family:var(--font-ui); font-size:11px; letter-spacing:1px; color:var(--dust); margin-top:8px; }
+.av-chosen { font-family:var(--font-ui); font-size:13px; letter-spacing:1px; color:var(--midnight); margin-top:6px; min-height:18px; }
+.av-label { display:block; font-family:var(--font-ui); font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--slate); margin-bottom:8px; }
+.av-opt { font-family:var(--font-body); font-size:14px; letter-spacing:0; text-transform:none; font-style:italic; color:var(--dust); }
+.av-txt { width:100%; min-height:96px; padding:12px 14px; border:1px solid var(--driftwood); border-radius:1px; background:var(--snow); font-family:var(--font-body); font-size:17px; line-height:1.6; color:var(--midnight); resize:vertical; }
+.av-txt:focus { border-color:var(--lingon); }
+.av-send { margin-top:14px; min-height:48px; cursor:pointer; }
+.av-send[disabled] { cursor:progress; opacity:.75; }
+.av-state { font-family:var(--font-body); font-size:16px; line-height:1.6; margin-top:10px; min-height:1px; }
+.av-state.ok { color:var(--lingon); }
+.av-state.ko { color:var(--av-err); }
+@media (max-width:600px) {
+  .svc-hero-in { padding:28px 20px 30px; }
+  .av-wrap { padding:28px 16px 64px; }
+  .av-item { grid-template-columns:1fr; gap:12px; padding:20px 16px; }
+  .av-img, .av-noimg { width:64px; height:64px; }
+  .av-noimg { display:none; }
+  .av-scale label { width:48px; }
+}
 </style>
 </head>
 <body>
 <div id="header-root"></div>
 
-<div class="page-hero">
-  <h1>Votre <em>avis</em></h1>
-  <p>Il aide les prochains clients a se decider, et nous a bien choisir.</p>
+<main>
+<div class="svc-hero">
+  <div class="svc-hero-in">
+    <h1 data-sv="Ditt <em>omdöme</em>" data-fr="Votre <em>avis</em>" data-en="Your <em>review</em>">Votre <em>avis</em></h1>
+    <p class="svc-lead" data-sv="Det hjälper nästa kunder att bestämma sig, och oss att välja rätt produkter." data-fr="Il aide les prochains clients à se décider, et nous aide à bien choisir nos produits." data-en="It helps the next customers decide, and helps us choose the right products.">Il aide les prochains clients à se décider, et nous aide à bien choisir nos produits.</p>
+  </div>
 </div>
 
-<div class="avis-wrap">
-  <div id="avis-contenu" class="avis-msg">Chargement de votre commande...</div>
+<div class="av-wrap">
+  <div id="avis-contenu" aria-live="polite"><p class="av-msg" data-sv="Laddar din beställning…" data-fr="Chargement de votre commande…" data-en="Loading your order…">Chargement de votre commande…</p></div>
 </div>
+</main>
 
 <div id="footer-root"></div>
 <script src="js/app.js?v=34"></script>
 <script>
-/* Page de depot d'avis, atteinte depuis l'email post-achat : /avis?c=<id commande>.
-   Le serveur verifie que la commande est payee et qu'elle contenait bien le
-   produit note. LANG vient d'app.js : ne jamais le redeclarer ici. */
-(async function () {
-  var params  = new URLSearchParams(location.search);
-  var orderId = params.get('c') || params.get('order_id');
-  var box     = document.getElementById('avis-contenu');
+/* Dépôt d'avis, atteint depuis l'e-mail post-achat : /avis?c=<id commande>.
+   Le serveur (/api/reviews) vérifie que la commande est payée et qu'elle
+   contenait le produit noté ; un second envoi remplace le premier.
+   LANG vient d'app.js : ne jamais le redéclarer ici. */
+var AV_T = {
+  noLink:   { fr: 'Ce lien est incomplet. Utilisez celui reçu par e-mail après votre commande.', en: 'This link is incomplete. Please use the one you received by email after your order.', sv: 'Länken är ofullständig. Använd länken du fick via e-post efter din beställning.' },
+  notFound: { fr: 'Nous n’avons pas retrouvé cette commande. Le lien a peut-être expiré.', en: 'We could not find this order. The link may have expired.', sv: 'Vi hittade inte beställningen. Länken kan ha gått ut.' },
+  netErr:   { fr: 'La commande n’a pas pu être chargée. Vérifiez votre connexion, puis rechargez la page.', en: 'The order could not be loaded. Check your connection, then reload the page.', sv: 'Beställningen kunde inte laddas. Kontrollera din anslutning och ladda om sidan.' },
+  notPaid:  { fr: 'Cette commande n’est pas encore payée&nbsp;: vous pourrez donner votre avis une fois les produits reçus.', en: 'This order has not been paid yet: you can leave a review once you have received the products.', sv: 'Beställningen är inte betald ännu: du kan lämna ett omdöme när du har fått produkterna.' },
+  empty:    { fr: 'Cette commande ne contient aucun produit à noter.', en: 'This order contains no products to review.', sv: 'Beställningen innehåller inga produkter att betygsätta.' },
+  contact:  { fr: 'Une question&nbsp;? <a href="/contact">Écrivez-nous</a>.', en: 'A question? <a href="/contact">Write to us</a>.', sv: 'En fråga? <a href="/contact">Skriv till oss</a>.' },
+  shop:     { fr: 'Voir la boutique', en: 'Visit the shop', sv: 'Till butiken' },
+  intro:    { fr: 'Commande <strong>{n}</strong>. Donnez une note à ce que vous avez goûté&nbsp;: une note suffit, un mot fait plaisir.', en: 'Order <strong>{n}</strong>. Rate what you tasted: a score is enough, a few words are always welcome.', sv: 'Beställning <strong>{n}</strong>. Betygsätt det du har smakat: ett betyg räcker, några ord gör oss glada.' },
+  pub:      { fr: 'Votre avis est publié sur la fiche du produit avec votre prénom et l’initiale de votre nom. <a href="/confidentialite">Confidentialité</a>', en: 'Your review is published on the product page with your first name and the initial of your last name. <a href="/confidentialite">Privacy</a>', sv: 'Ditt omdöme publiceras på produktsidan med ditt förnamn och initialen i ditt efternamn. <a href="/confidentialite">Integritet</a>' },
+  legend:   { fr: 'Votre note sur 5', en: 'Your score out of 5', sv: 'Ditt betyg av 5' },
+  hint:     { fr: '1 = décevant · 5 = excellent', en: '1 = disappointing · 5 = excellent', sv: '1 = en besvikelse · 5 = utmärkt' },
+  chosen:   { fr: 'Votre note : ', en: 'Your score: ', sv: 'Ditt betyg: ' },
+  comment:  { fr: 'Votre commentaire', en: 'Your comment', sv: 'Din kommentar' },
+  optional: { fr: '(facultatif)', en: '(optional)', sv: '(valfritt)' },
+  send:     { fr: 'Publier mon avis', en: 'Publish my review', sv: 'Publicera mitt omdöme' },
+  resend:   { fr: 'Modifier mon avis', en: 'Update my review', sv: 'Ändra mitt omdöme' },
+  sending:  { fr: 'Envoi…', en: 'Sending…', sv: 'Skickar…' },
+  pick:     { fr: 'Choisissez une note de 1 à 5.', en: 'Choose a score from 1 to 5.', sv: 'Välj ett betyg från 1 till 5.' },
+  ok:       { fr: 'Merci ! Votre avis est publié.', en: 'Thank you! Your review is published.', sv: 'Tack! Ditt omdöme är publicerat.' },
+  refused:  { fr: 'Cet avis ne peut pas être enregistré pour cette commande. Écrivez-nous si le problème persiste.', en: 'This review cannot be saved for this order. Please write to us if the problem persists.', sv: 'Omdömet kan inte sparas för den här beställningen. Skriv till oss om problemet kvarstår.' },
+  failed:   { fr: 'L’envoi n’a pas abouti. Réessayez dans un instant.', en: 'Sending failed. Please try again in a moment.', sv: 'Det gick inte att skicka. Försök igen om en stund.' }
+};
+var PAYEES = ['paid', 'confirmed', 'preparing', 'partial', 'shipped', 'delivered'];
+function _at(k) { var o = AV_T[k]; return o[LANG] || o.fr; }
+function _aesc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
 
-  if (!orderId) {
-    box.textContent = "Ce lien est incomplet. Utilisez celui recu par email apres votre commande.";
+var _av = { state: 'loading', order: null, produits: [], notes: {}, sent: {}, msgs: {}, busy: {} };
+
+function _avMsg(key, withShop) {
+  return '<div class="av-msg"><p>' + _at(key) + '</p>' + (withShop ? '<a class="btn-primary" href="/boutique">' + _at('shop') + '</a>' : '') + '<p style="margin-top:14px">' + _at('contact') + '</p></div>';
+}
+function _avRender() {
+  var box = document.getElementById('avis-contenu');
+  if (_av.state === 'loading') return;
+  if (_av.state !== 'ready') { box.innerHTML = _avMsg(_av.state, _av.state !== 'netErr'); return; }
+  /* Ce qui est en cours de saisie survit au changement de langue */
+  _av.produits.forEach(function (p, i) { var t = document.getElementById('tx-' + i); if (t) p.draft = t.value; });
+  box.innerHTML =
+    '<p class="av-intro">' + _at('intro').replace('{n}', _aesc(_av.order.order_number || '')) + '</p>' +
+    '<p class="av-pub">' + _at('pub') + '</p>' +
+    _av.produits.map(function (p, i) {
+      var note = _av.notes[i], m = _av.msgs[i];
+      return '<form class="av-item" data-i="' + i + '" novalidate>' +
+        (p.img ? '<img class="av-img" src="' + _aesc(p.img) + '" alt="" loading="lazy">' : '<div class="av-noimg" aria-hidden="true"></div>') +
+        '<div>' +
+          '<h2 class="av-name" id="nm-' + i + '">' + _aesc(p.nom) + '</h2>' +
+          '<fieldset><legend>' + _at('legend') + '</legend><div class="av-scale">' +
+            [1, 2, 3, 4, 5].map(function (n) {
+              return '<input type="radio" name="note-' + i + '" id="n-' + i + '-' + n + '" value="' + n + '"' + (note === n ? ' checked' : '') + '>' +
+                     '<label for="n-' + i + '-' + n + '">' + n + '</label>';
+            }).join('') +
+          '</div><p class="av-hint">' + _at('hint') + '</p>' +
+          '<p class="av-chosen" id="ch-' + i + '" aria-live="polite">' + (note ? _at('chosen') + note + '/5' : '') + '</p></fieldset>' +
+          '<label class="av-label" for="tx-' + i + '">' + _at('comment') + ' <span class="av-opt">' + _at('optional') + '</span></label>' +
+          '<textarea class="av-txt" id="tx-' + i + '" maxlength="1500" aria-describedby="nm-' + i + '">' + _aesc(p.draft || '') + '</textarea>' +
+          '<button type="submit" class="btn-primary av-send" id="bt-' + i + '"' + (_av.busy[i] ? ' disabled' : '') + '>' + (_av.busy[i] ? _at('sending') : _at(_av.sent[i] ? 'resend' : 'send')) + '</button>' +
+          '<p class="av-state' + (m ? ' ' + m.cls : '') + '" id="ms-' + i + '" role="status">' + (m ? _at(m.key) : '') + '</p>' +
+        '</div></form>';
+    }).join('');
+}
+
+document.addEventListener('change', function (e) {
+  var t = e.target;
+  if (!t || t.type !== 'radio' || !/^note-\d+$/.test(t.name)) return;
+  var i = +t.name.slice(5);
+  _av.notes[i] = +t.value;
+  var ch = document.getElementById('ch-' + i); if (ch) ch.textContent = _at('chosen') + t.value + '/5';
+  if (_av.msgs[i] && _av.msgs[i].key === 'pick') { _av.msgs[i] = null; var ms = document.getElementById('ms-' + i); if (ms) { ms.textContent = ''; ms.className = 'av-state'; } }
+});
+document.addEventListener('submit', async function (e) {
+  var f = e.target;
+  if (!f || !f.classList || !f.classList.contains('av-item')) return;
+  e.preventDefault();
+  var i = +f.getAttribute('data-i');
+  if (_av.busy[i]) return;                      // un seul envoi à la fois par produit
+  var ms = document.getElementById('ms-' + i), bt = document.getElementById('bt-' + i);
+  if (!_av.notes[i]) {
+    _av.msgs[i] = { cls: 'ko', key: 'pick' }; ms.className = 'av-state ko'; ms.textContent = _at('pick');
+    var first = document.getElementById('n-' + i + '-1'); if (first) first.focus();
     return;
   }
-
-  var order = null;
+  _av.busy[i] = true; bt.disabled = true; bt.textContent = _at('sending');
+  var key = 'failed', ok = false;
   try {
-    var res = await fetch(SD_API_URL + '/api/orders/' + encodeURIComponent(orderId) + '/public');
-    if (res.ok) { var d = await res.json(); order = d.order; }
-  } catch (e) {}
+    var res = await fetch(SD_API_URL + '/api/reviews', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ order_id: _av.orderId, product_id: _av.produits[i].id, rating: _av.notes[i], comment: document.getElementById('tx-' + i).value.trim(), lang: LANG })
+    });
+    ok = res.ok; key = ok ? 'ok' : (res.status === 403 || res.status === 400 ? 'refused' : 'failed');
+  } catch (err) { key = 'failed'; }
+  _av.busy[i] = false;
+  if (ok) _av.sent[i] = true;
+  _av.msgs[i] = { cls: ok ? 'ok' : 'ko', key: key };
+  bt.disabled = false; bt.textContent = _at(_av.sent[i] ? 'resend' : 'send');
+  ms.className = 'av-state ' + (ok ? 'ok' : 'ko'); ms.textContent = _at(key);
+});
 
-  if (!order) {
-    box.textContent = "Nous n'avons pas retrouve cette commande. Le lien a peut-etre expire.";
-    return;
-  }
+function onLangChange() { _avRender(); }
+initPage('');
+
+(async function () {
+  var params = new URLSearchParams(location.search);
+  _av.orderId = params.get('c') || params.get('order_id');
+  if (!_av.orderId) { _av.state = 'noLink'; _avRender(); return; }
+  var order = null, failed = false;
+  try {
+    var res = await fetch(SD_API_URL + '/api/orders/' + encodeURIComponent(_av.orderId) + '/public');
+    if (res.ok) { var d = await res.json(); order = d.order; }
+    else if (res.status !== 404) failed = true;
+  } catch (e) { failed = true; }
+  if (!order) { _av.state = failed ? 'netErr' : 'notFound'; _avRender(); return; }
+  if (PAYEES.indexOf(order.status) === -1) { _av.state = 'notPaid'; _avRender(); return; }
 
   var lignes = [];
   try { lignes = typeof order.lines === 'string' ? JSON.parse(order.lines) : (order.lines || []); } catch (e) {}
-
-  /* Un produit peut apparaitre sur plusieurs lignes (variantes) :
-     on ne propose qu'un seul avis par produit. */
-  var vus = {}, produits = [];
+  /* Un produit peut apparaître sur plusieurs lignes (variantes) : un seul avis par produit */
+  var vus = {};
   lignes.forEach(function (l) {
-    var pid = l.product_id || l.id;
+    var pid = l && (l.product_id || l.id);
     if (!pid || vus[pid]) return;
     vus[pid] = 1;
-    produits.push({ id: pid, nom: l.name, img: l.image_url });
+    _av.produits.push({ id: pid, nom: l.name, img: l.image_url });
   });
-
-  if (!produits.length) {
-    box.textContent = "Cette commande ne contient aucun produit a noter.";
-    return;
-  }
-
-  var esc = function (s) {
-    return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-  };
-
-  box.className = '';
-  box.innerHTML =
-    '<p class="avis-intro">Commande <strong>' + esc(order.order_number) + '</strong> — ' +
-    'donnez une note a ce que vous avez goute. Une etoile suffit, un mot fait plaisir.</p>' +
-    produits.map(function (p, i) {
-      return '<div class="avis-item">' +
-        (p.img ? '<img src="' + esc(p.img) + '" alt="' + esc(p.nom) + '" loading="lazy">' : '<div></div>') +
-        '<div>' +
-          '<div class="avis-nom">' + esc(p.nom) + '</div>' +
-          '<div class="etoiles" id="et-' + i + '" role="group" aria-label="Note sur 5">' +
-            [1, 2, 3, 4, 5].map(function (n) {
-              return '<button type="button" class="etoile" data-n="' + n + '" ' +
-                     'aria-label="' + n + ' etoile' + (n > 1 ? 's' : '') + '" ' +
-                     'onclick="noter(' + i + ',' + n + ')">&#9733;</button>';
-            }).join('') +
-          '</div>' +
-          '<textarea class="avis-txt" id="tx-' + i + '" placeholder="Ce que vous en avez pense (facultatif)"></textarea>' +
-          '<button class="btn-envoyer" id="bt-' + i + '" onclick="envoyer(' + i + ')" disabled>Envoyer</button>' +
-          '<div class="avis-etat" id="ms-' + i + '"></div>' +
-        '</div>' +
-      '</div>';
-    }).join('');
-
-  window._avisProduits = produits;
-  window._avisNotes = {};
-  window._avisOrder = orderId;
+  _av.order = order;
+  _av.state = _av.produits.length ? 'ready' : 'empty';
+  _avRender();
 })();
-
-function noter(i, n) {
-  window._avisNotes[i] = n;
-  document.querySelectorAll('#et-' + i + ' .etoile').forEach(function (b) {
-    b.classList.toggle('on', parseInt(b.dataset.n, 10) <= n);
-  });
-  document.getElementById('bt-' + i).disabled = false;
-}
-
-async function envoyer(i) {
-  var note = window._avisNotes[i];
-  var msg  = document.getElementById('ms-' + i);
-  if (!note) { msg.className = 'avis-etat ko'; msg.textContent = 'Choisissez une note.'; return; }
-
-  var bt = document.getElementById('bt-' + i);
-  bt.disabled = true; bt.textContent = '...';
-  try {
-    var res = await fetch(SD_API_URL + '/api/reviews', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        order_id: window._avisOrder,
-        product_id: window._avisProduits[i].id,
-        rating: note,
-        comment: document.getElementById('tx-' + i).value,
-        lang: (typeof LANG !== 'undefined' ? LANG : 'fr')
-      })
-    });
-    var d = {};
-    try { d = await res.json(); } catch (e) {}
-    if (res.ok) {
-      msg.className = 'avis-etat ok';
-      msg.textContent = 'Merci ! Votre avis est en ligne.';
-      bt.textContent = 'Envoye';
-    } else {
-      msg.className = 'avis-etat ko';
-      msg.textContent = d.error || "L'envoi n'a pas abouti. Reessayez dans un instant.";
-      bt.disabled = false; bt.textContent = 'Envoyer';
-    }
-  } catch (e) {
-    msg.className = 'avis-etat ko';
-    msg.textContent = "Connexion impossible. Reessayez dans un instant.";
-    bt.disabled = false; bt.textContent = 'Envoyer';
-  }
-}
 </script>
-<script>initPage('');</script>
 <script src="js/sd-api-client.js?v=10"></script>
 </body>
 </html>
