@@ -5,11 +5,12 @@
  *
  * - « image » : rien à faire, le hero statique (et son image CMS) reste.
  * - « carousel » : les diapositives se superposent dans .hero-media ; la
- *   nouvelle se fond par-dessus l'ancienne. Quatre types : « default »
+ *   nouvelle se fond par-dessus l'ancienne. Cinq types : « default »
  *   (le texte de l'accueil reste), « custom » (texte propre, centré),
  *   « split » (bannière promo : texte et deux vrais boutons à gauche sur
- *   un fond de la marque, photo à droite) et « image » (visuel seul,
- *   cliquable en entier).
+ *   un fond de la marque, photo à droite), « image » (visuel seul,
+ *   cliquable en entier) et « html » (code d'un design collé dans le
+ *   back-office, affiché dans un cadre sandbox).
  *
  * Le dernier état reçu est gardé en localStorage : au retour, le carrousel
  * est posé avant le premier rendu, sans flash de l'image fixe. Les noms de
@@ -70,7 +71,38 @@
     catch (e) { return new Date().toISOString().slice(0, 10); }
   }
   function visible(s, today) {
-    return s && s.image_url && (!s.starts_on || today >= String(s.starts_on).slice(0, 10)) && (!s.ends_on || today <= String(s.ends_on).slice(0, 10));
+    var content = s && (s.kind === 'html' ? (s.html_fr || s.html_en || s.html_sv) : s.image_url);
+    return !!content && (!s.starts_on || today >= String(s.starts_on).slice(0, 10)) && (!s.ends_on || today <= String(s.ends_on).slice(0, 10));
+  }
+
+  /* « Code HTML » : le design collé s'affiche dans un cadre sandbox — aucun
+     script n'y tourne, il n'a accès ni aux cookies ni au panier, et son CSS
+     ne peut pas toucher la page. <base target="_top"> : ses liens ouvrent la
+     page dans la fenêtre, comme un lien normal. Même construction que
+     l'aperçu du back-office. */
+  var FRAME_SANDBOX = 'allow-top-navigation-by-user-activation allow-popups allow-popups-to-escape-sandbox';
+  var SUPA_MEDIA_ALL = /https?:\/\/[a-z0-9]+\.supabase\.co\/storage\/v1\/object\/public\/svenska-media\//gi;
+  function frameDoc(html) {
+    // Images envoyées : servies par /media/ (cache Vercel), comme partout sur le site.
+    var h = String(html || '').replace(/<script\b[\s\S]*?<\/script\s*>/gi, '').replace(SUPA_MEDIA_ALL, '/media/');
+    var head = '<meta charset="utf-8"><base target="_top"><style>html,body{margin:0;height:100%;overflow:hidden}</style>';
+    if (/<head[\s>]/i.test(h)) return h.replace(/<head([^>]*)>/i, '<head$1>' + head);
+    if (/<html[\s>]/i.test(h)) return h.replace(/<html([^>]*)>/i, '<html$1><head>' + head + '</head>');
+    return '<!doctype html><html><head>' + head + '</head><body>' + h + '</body></html>';
+  }
+  // Taille fixe : le design garde ses proportions et tient dans la bannière.
+  function layoutFrames() {
+    var W = hero.clientWidth, H = hero.clientHeight;
+    slides.forEach(function (s, i) {
+      var f = els[i] && els[i].frame;
+      if (!f) return;
+      if (s.html_fit === 'fill') {
+        f.style.cssText = 'left:0;top:0;width:100%;height:100%;transform:none';
+        return;
+      }
+      var w = +s.html_width || 1920, h = +s.html_height || 720, k = Math.min(W / w, H / h);
+      f.style.cssText = 'left:50%;top:50%;width:' + w + 'px;height:' + h + 'px;transform:translate(-50%,-50%) scale(' + k + ')';
+    });
   }
   function seconds() { var n = parseInt(cfg && cfg.interval, 10); return Math.min(20, Math.max(3, n || 5)); }
   function autoplay() { return slides.length > 1 && !reduceMotion; }
@@ -91,29 +123,49 @@
 
   function buildSlide(s, i) {
     var link = safeLink(s.link_url), link2 = safeLink(s.link2_url);
-    var split = s.kind === 'split';
+    var split = s.kind === 'split', isHtml = s.kind === 'html';
     var root = document.createElement('div');
     root.className = 'hero-slide hero-slide--' + (s.kind || 'default');
-    if (split) root.classList.add('hero-theme--' + (THEMES.indexOf(s.theme) >= 0 ? s.theme : 'moss'));
+    if (split || isHtml) root.classList.add('hero-theme--' + (THEMES.indexOf(s.theme) >= 0 ? s.theme : 'moss'));
     root.setAttribute('role', 'group');
     root.setAttribute('aria-roledescription', L10N[lang()].slide);
 
-    var pic = document.createElement('picture');
-    if (s.image_mobile_url) {
-      var src = document.createElement('source');
-      src.media = STACKED;
-      src.srcset = mediaUrl(s.image_mobile_url);
-      pic.appendChild(src);
+    var el = { root: root };
+    // Code HTML : seule l'image téléphone (facultative) passe par <picture>.
+    if (!isHtml || s.image_mobile_url) {
+      var pic = document.createElement('picture');
+      if (!isHtml && s.image_mobile_url) {
+        var src = document.createElement('source');
+        src.media = STACKED;
+        src.srcset = mediaUrl(s.image_mobile_url);
+        pic.appendChild(src);
+      }
+      var img = document.createElement('img');
+      img.src = mediaUrl(isHtml ? s.image_mobile_url : s.image_url);
+      img.decoding = 'async';
+      img.setAttribute('fetchpriority', i === 0 ? 'high' : 'low');
+      pic.appendChild(img);
+      root.appendChild(pic);
+      el.img = img;
     }
-    var img = document.createElement('img');
-    img.src = mediaUrl(s.image_url);
-    img.decoding = 'async';
-    img.setAttribute('fetchpriority', i === 0 ? 'high' : 'low');
-    pic.appendChild(img);
-    root.appendChild(pic);
+    if (isHtml) {
+      if (s.image_mobile_url) root.classList.add('has-mobile');
+      var fr = document.createElement('iframe');
+      fr.className = 'hero-frame';
+      fr.setAttribute('sandbox', FRAME_SANDBOX);
+      fr.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+      root.appendChild(fr);
+      el.frame = fr;
+      if (s.image_mobile_url && link) {
+        var ml = document.createElement('a');
+        ml.className = 'hero-slide-link';
+        ml.href = link;
+        root.appendChild(ml);
+        el.link = ml;
+      }
+    }
 
-    var el = { root: root, img: img };
-    if (s.kind !== 'image' && !split) {
+    if (s.kind !== 'image' && !split && !isHtml) {
       var veil = document.createElement('div');
       veil.className = 'hero-overlay';
       root.appendChild(veil);
@@ -159,7 +211,13 @@
       var el = els[i];
       el.root.setAttribute('aria-roledescription', l.slide);
       el.root.setAttribute('aria-label', tr('of', i + 1, slides.length));
-      el.img.alt = txt(s, 'alt');
+      if (el.img) el.img.alt = txt(s, 'alt');
+      if (el.frame) {
+        // Le code d'une langue, repli sur le français ; on ne recharge le cadre que s'il change.
+        var doc = frameDoc(s['html_' + lang()] || s.html_fr || '');
+        if (el.frameDoc !== doc) { el.frame.srcdoc = doc; el.frameDoc = doc; }
+        el.frame.title = txt(s, 'alt') || l.region;
+      }
       if (el.title) {
         var eb = txt(s, 'eyebrow'), sub = txt(s, 'subtitle');
         el.eyebrow.textContent = eb; el.eyebrow.hidden = !eb;
@@ -228,6 +286,7 @@
     hero.style.setProperty('--hero-fold', Math.min(Math.max(0, fold), hero.offsetHeight / 2) + 'px');
   }
   window.addEventListener('resize', placeControls);
+  window.addEventListener('resize', layoutFrames);
   window.addEventListener('load', placeControls);
   var headerRoot = document.getElementById('header-root');
   if (headerRoot && window.ResizeObserver) new ResizeObserver(placeControls).observe(headerRoot);
@@ -255,6 +314,7 @@
       buildControls();
     }
     fillTexts();
+    layoutFrames();
 
     var start = 0;
     if (keep) slides.forEach(function (s, i) { if (s.id === keep) start = i; });
@@ -287,7 +347,9 @@
 
     hero.classList.toggle('hero--own', slides[n].kind !== 'default');
     // Fond sable : les traits de progression passent en foncé pour rester lisibles.
-    hero.classList.toggle('hero--light', slides[n].kind === 'split' && slides[n].theme === 'sand');
+    // (Code HTML sur téléphone avec son image : c'est une photo, les traits restent clairs.)
+    var sn = slides[n], photoMobile = sn.kind === 'html' && sn.image_mobile_url && window.matchMedia && window.matchMedia(STACKED).matches;
+    hero.classList.toggle('hero--light', (sn.kind === 'split' || sn.kind === 'html') && sn.theme === 'sand' && !photoMobile);
     dots.forEach(function (d, i) {
       d.classList.toggle('is-active', i === n);
       if (i === n) d.setAttribute('aria-current', 'true'); else d.removeAttribute('aria-current');
@@ -305,7 +367,7 @@
   // seul le voile se fondrait par-dessus la diapositive en cours.
   function advance() {
     var from = idx, next = (idx + 1) % slides.length, img = els[next].img;
-    if (img.complete) { go(next); return; }
+    if (!img || img.complete) { go(next); return; }
     var done = function () {
       img.removeEventListener('load', done); img.removeEventListener('error', done);
       if (idx === from) go(next);
