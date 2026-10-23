@@ -319,8 +319,12 @@
     var start = 0;
     if (keep) slides.forEach(function (s, i) { if (s.id === keep) start = i; });
     idx = -1;
+    // Première pose : le texte de l'accueil cède la place sans fondu, sinon il
+    // s'efface par-dessus la première diapositive à chaque chargement.
+    hero.classList.add('hero--instant');
     go(start, true);
     sync();
+    requestAnimationFrame(function () { requestAnimationFrame(function () { hero.classList.remove('hero--instant'); }); });
   }
 
   /* ── Défilement ───────────────────────────────────────────── */
