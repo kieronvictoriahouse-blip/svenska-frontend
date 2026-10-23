@@ -7,7 +7,7 @@
     { "source": "/a-propos", "destination": "/page" },
     { "source": "/media-w/:w/:path*", "destination": "https://fdagtzhodyxulhqbkkoz.supabase.co/storage/v1/render/image/public/svenska-media/:path*?width=:w&resize=contain&quality=75" },
     { "source": "/media/:path*", "destination": "https://fdagtzhodyxulhqbkkoz.supabase.co/storage/v1/object/public/svenska-media/:path*" },
-    { "source": "/produit/:slug", "destination": "/produit.html" }
+    { "source": "/produit/:slug", "destination": "/produit" }
   ],
   "headers": [
     {
