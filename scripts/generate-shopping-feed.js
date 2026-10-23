@@ -2,7 +2,7 @@
  * Génère google-shopping.xml — flux produit Google Merchant Center (RSS 2.0 + namespace g:).
  * À soumettre dans Merchant Center (Produits → Flux) avec l'URL :
  *   https://www.swedishcravings.fr/google-shopping.xml
- * Régénérer à chaque changement de catalogue/prix (idéalement en CI, cf. prerender).
+ * Régénéré à chaque déploiement par scripts/build.js (et par le rafraîchissement programmé).
  */
 const https = require('https');
 const fs = require('fs');
@@ -15,25 +15,11 @@ function get(url) {
     https.get(url, (res) => { let d = ''; res.on('data', c => d += c); res.on('end', () => { try { resolve(JSON.parse(d)); } catch { resolve(null); } }); }).on('error', () => resolve(null));
   });
 }
-// Identique à produit.html _sdProductSlug / prerender slugify
-function slugify(nameFr, id) {
-  const base = (nameFr || 'produit').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
-    .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60);
-  return base + '-' + String(id || '').slice(0, 8);
-}
+const lib = require('./lib/produits');
+const { slugify, isHome } = lib;
 const esc = s => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-
-const BRANDS = ['Marimekko', 'IHR', 'Ihr', 'OLW', 'Ahlgrens', 'Läkerol', 'Lakerol', 'Kavli', 'Fazer',
-  'Odense', 'Törsleff', 'Torsleff', "Dave & Jon's", 'Santa Maria', 'Polly', 'Ballerina', 'Wasa',
-  'Piffi', 'Marabou', 'P Design', 'Malaco'];
-// Sous-marques → fabricant (le nom produit porte la sous-marque, pas le fabricant).
-const SUB_BRANDS = { 'Kexchoklad': 'Cloetta', 'Center': 'Cloetta', 'Djungelvrål': 'Malaco', 'Gott & Blandat': 'Malaco', 'Tyrkisk Peber': 'Fazer', 'Dumle': 'Fazer', "O'boy": "O'boy" };
-function brandOf(nameFr) {
-  const n = (nameFr || '');
-  for (const b of BRANDS) if (n.toLowerCase().includes(b.toLowerCase())) return b === 'Lakerol' ? 'Läkerol' : (b === 'Torsleff' ? 'Törsleff' : (b === 'Ihr' ? 'IHR' : b));
-  for (const [k, v] of Object.entries(SUB_BRANDS)) if (n.toLowerCase().includes(k.toLowerCase())) return v;
-  return 'Swedish Cravings';
-}
+// La marque réelle (lib/produits) ; à défaut, la boutique — Merchant exige une marque.
+const brandOf = nameFr => lib.brandOf(nameFr) || 'Swedish Cravings';
 /* ── Titre Shopping ─────────────────────────────────────────────
    Google Shopping n'a pas de mots-clés : il compare la recherche au TITRE.
    Forme visée : « Marque + nom + type recherché, poids ». On ne réécrit que
@@ -56,7 +42,7 @@ function titleOf(p) {
   const ov = TITLE_OVERRIDES[String(p.id || '').slice(0, 8)];
   if (ov) return ov;
   const brand = brandOf(p.name_fr);
-  const known = brand !== 'Swedish Cravings';
+  const known = !!lib.brandOf(p.name_fr);
   let name = (p.name_fr || '').replace(/\s+/g, ' ').trim();
   const weight = String(p.weight || '').replace(/\s*gram(s)?$/i, ' g').replace(/(\d)\s*g$/i, '$1 g').trim();
   // Poids déjà dans le nom (« … 180g ») : on le retire pour le remettre au format commun en fin de titre.
@@ -141,7 +127,9 @@ function pushLabel(p) {
 
 async function main() {
   const data = await get(`${BASE}/api/products`);
-  const products = (data && data.products || []).filter(p => p.is_active && p.image_url && (parseFloat(p.price) || 0) > 0);
+  /* Art de la table (serviettes) hors du flux : ces articles ne se vendent
+     pas, chaque clic payé dessus était perdu. */
+  const products = (data && data.products || []).filter(p => p.is_active && p.image_url && (parseFloat(p.price) || 0) > 0 && !isHome(p));
   if (!products.length) { console.log('Aucun produit éligible — flux ignoré'); return; }
 
   const items = products.map(p => {
@@ -169,7 +157,7 @@ async function main() {
     <g:price>${price} EUR</g:price>
     <g:brand>${esc(brandOf(p.name_fr))}</g:brand>
     <g:condition>new</g:condition>
-    <g:identifier_exists>no</g:identifier_exists>
+    ${/^\d{8,14}$/.test(String(p.ean || '').trim()) ? `<g:gtin>${esc(String(p.ean).trim())}</g:gtin>` : '<g:identifier_exists>no</g:identifier_exists>'}
     <g:google_product_category>${esc(googleCat(p))}</g:google_product_category>
 ${extra}
   </item>`;
