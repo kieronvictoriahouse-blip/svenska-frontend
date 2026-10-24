@@ -14,7 +14,12 @@
      serveur refait foi sur le montant facturé. Dates comparées en
      YYYY-MM-DD, bornes incluses (« du 10 au 12 » = 10, 11 et 12). */
   window.SDPrice = window.SDPrice || {
-    _today() { return new Date().toISOString().slice(0, 10); },
+    /* Jour de PARIS, comme le serveur (src/lib/product-price.ts) et _sdToday
+       d'app.js : en UTC, une promo « jusqu'au 31 » courait le 1er jusqu'à 1-2 h. */
+    _today() {
+      try { return new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/Paris' }); }
+      catch (e) { return new Date().toISOString().slice(0, 10); }
+    },
     active(p, today) {
       if (!p) return false;
       const type = p.discountType || p.discount_type;
