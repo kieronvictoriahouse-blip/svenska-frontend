@@ -58,6 +58,13 @@ function descComplete(p) {
   return `${p.name_fr} — ${cat}, importé de Suède et livré partout en France par Swedish Cravings.`;
 }
 
+/* « 75 g », « 2,01 kg », « 33 cl » — q vient de netQty (total en kg ou en l). */
+function quantiteFr(q) {
+  const fr = (n, d) => String(Math.round(n * 10 ** d) / 10 ** d).replace('.', ',');
+  if (q.liquid) return q.total >= 1 ? `${fr(q.total, 2)} l` : `${fr(q.total * 100, 1)} cl`;
+  return q.total >= 1 ? `${fr(q.total, 2)} kg` : `${fr(q.total * 1000, 0)} g`;
+}
+
 function titreSeo(p) {
   const plein = `${p.name_fr} | Swedish Cravings`;
   if (plein.length <= 60) return plein;
@@ -144,10 +151,16 @@ async function main() {
         : liv.shipping,
       hasMerchantReturnPolicy: liv.returns,
     };
+    /* Poids net en clair dans la description : Merchant Center (produits
+       trouvés sur le site) le cherche dans le texte, pas dans `weight`, et
+       signalait les bonbons comme « descriptions incomplètes ». Ajouté
+       après la coupe à 800 caractères pour ne jamais être tronqué. */
+    const q = netQty(p.weight);
+    const poidsTxt = q ? ` ${q.liquid ? 'Contenance' : 'Poids net'} : ${quantiteFr(q)}.` : '';
     const ld = {
       '@context': 'https://schema.org', '@type': 'Product',
       name: p.name_fr,
-      description: auMot(descFull, 800),
+      description: auMot(descFull, 800 - poidsTxt.length) + poidsTxt,
       image: img, sku: p.sku || p.id,
       category: catNom,
       offers,
@@ -156,7 +169,6 @@ async function main() {
     if (/^\d{8,14}$/.test(String(p.ean || '').trim())) ld.gtin = String(p.ean).trim();
     const iso = isoPays(p.origin_fr);
     if (iso) ld.countryOfOrigin = iso;
-    const q = netQty(p.weight);
     if (q) ld.weight = { '@type': 'QuantitativeValue', value: Math.round(q.total * 1000 * 100) / 100, unitCode: q.liquid ? 'MLT' : 'GRM' };
     if ((p.reviews_count || 0) > 0 && p.rating) {
       ld.aggregateRating = { '@type': 'AggregateRating', ratingValue: p.rating, reviewCount: p.reviews_count };
