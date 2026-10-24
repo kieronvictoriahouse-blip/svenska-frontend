@@ -373,7 +373,8 @@ function closeMob(){const n=document.getElementById('mobile-nav');if(!n||!n.clas
 /* ── NEWSLETTER (capture email → CRM contacts, exploitable par le module Marketing) ── */
 function sdNewsletterSubscribe(email){
   var base=(typeof SD_API_URL!=='undefined'&&SD_API_URL)?SD_API_URL:'https://admin.swedishcravings.fr';
-  return fetch(base+'/api/newsletter',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:email})})
+  /* La langue du site part avec l'inscription : la newsletter du jeudi arrive dans cette langue. */
+  return fetch(base+'/api/newsletter',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:email,lang:LANG})})
     .then(function(r){return r.ok;}).catch(function(){return false;});
 }
 /* Formulaire du pied de page : vrai <form> (Entrée envoie), message annoncé */
