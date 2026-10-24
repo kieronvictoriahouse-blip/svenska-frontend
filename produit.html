@@ -22,7 +22,7 @@
 <meta property="og:site_name" content="Swedish Cravings">
 <meta name="twitter:card" content="summary_large_image">
 <script type="application/ld+json" id="ld-product">{"@context":"https://schema.org","@type":"Product","name":"Produit","brand":{"@type":"Brand","name":""}}</script>
-<link rel="stylesheet" href="css/style.css?v=22">
+<link rel="stylesheet" href="css/style.css?v=23">
 <script>const SD_API_URL = 'https://admin.swedishcravings.fr';</script>
 <script>(function(){try{var w=JSON.parse(localStorage.getItem('sd_wl_v1'));if(w&&w.id){var r=document.documentElement.style;if(w.color_primary){r.setProperty('--heather',w.color_primary);r.setProperty('--heather-mid',w.color_primary+'CC');}if(w.color_secondary){r.setProperty('--lingon',w.color_secondary);r.setProperty('--lingon-mid',w.color_secondary+'CC');}if(w.color_bg)r.setProperty('--cream',w.color_bg);if(w.color_text)r.setProperty('--midnight',w.color_text);if(w.font_display)r.setProperty('--font-display',"'"+w.font_display+"',Georgia,serif");if(w.font_body)r.setProperty('--font-body',"'"+w.font_body+"',Georgia,serif");if(w.font_ui)r.setProperty('--font-ui',"'"+w.font_ui+"',sans-serif");}}catch(e){}}());</script>
 <style>
@@ -86,6 +86,20 @@ span.var-btn.active { cursor:default; }
 .var-btn:hover, .var-btn.active { background:var(--heather); border-color:var(--heather); color:var(--on-heather); }
 
 .add-row { display:flex; gap:10px; align-items:center; margin-bottom:26px; }
+.add-row[hidden], .pdp-alert[hidden] { display:none; }
+.pdp-alert { margin:0 0 26px; padding:18px 18px 14px; background:var(--parchment); border-left:3px solid var(--heather); }
+.pdp-alert-label { display:block; font-family:var(--font-ui); font-size:12px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--midnight); margin-bottom:10px; }
+.pdp-alert-row { display:flex; gap:8px; }
+.pdp-alert-row input { flex:1; min-width:0; height:50px; padding:0 14px; border:1px solid var(--linen); background:var(--snow); font-family:var(--font-body); font-size:16px; color:var(--midnight); border-radius:1px; }
+.pdp-alert-row input:focus-visible { outline:2px solid var(--heather); outline-offset:1px; }
+.pdp-alert-btn { flex:none; padding:0 20px; }
+.pdp-alert-hp { position:absolute; left:-9999px; width:1px; height:1px; opacity:0; }
+.pdp-alert-help { font-family:var(--font-body); font-size:14px; font-style:italic; color:var(--dust); margin:8px 0 0; }
+.pdp-alert-msg { font-family:var(--font-body); font-size:15px; color:var(--midnight); margin:6px 0 0; }
+.pdp-alert-msg:empty { display:none; }
+.pdp-alert.is-done .pdp-alert-row, .pdp-alert.is-done .pdp-alert-help { display:none; }
+.pdp-sek { font-family:var(--font-ui); font-size:13px; color:var(--dust); letter-spacing:0.5px; }
+.pdp-sek:empty { display:none; }
 .qty-ctrl { display:flex; align-items:center; border:1px solid var(--linen); background:var(--warm-white); }
 .qty-ctrl button { background:none; border:none; width:46px; height:50px; font-size:20px; display:flex; align-items:center; justify-content:center; color:var(--slate); transition:background 0.15s; }
 .qty-ctrl button:hover { background:var(--parchment); }
@@ -154,7 +168,7 @@ span.var-btn.active { cursor:default; }
   .pdp { padding:0 16px 48px; gap:24px; }
   .pdp-name { font-size:28px; }
   .pdp-price { font-size:32px; }
-  .add-row { flex-wrap:wrap; }
+  .add-row, .pdp-alert-row { flex-wrap:wrap; }
   .btn-add { min-width:100%; }
   .gallery-thumbs { grid-template-columns:repeat(4,1fr); }
   .breadcrumb { font-size:11px; gap:4px; padding:10px 16px; flex-wrap:wrap; }
@@ -174,11 +188,11 @@ span.var-btn.active { cursor:default; }
 
 <!-- BREADCRUMB -->
 <nav class="breadcrumb" aria-label="Fil d’Ariane">
-  <a href="index.html" data-sv="Hem" data-fr="Accueil" data-en="Home">Accueil</a>
+  <a href="/" data-sv="Hem" data-fr="Accueil" data-en="Home">Accueil</a>
   <span>/</span>
-  <a href="boutique.html" id="bc-cat-link" data-sv="Butiken" data-fr="Boutique" data-en="Shop">Boutique</a>
+  <a href="/boutique" id="bc-cat-link" data-sv="Butiken" data-fr="Boutique" data-en="Shop">Boutique</a>
   <span id="bc-rayon-sep" hidden>/</span>
-  <a href="boutique.html" id="bc-rayon" hidden></a>
+  <a href="/boutique" id="bc-rayon" hidden></a>
   <span>/</span>
   <strong id="bc-name">—</strong>
 </nav>
@@ -205,10 +219,22 @@ span.var-btn.active { cursor:default; }
     <div class="price-row">
       <span class="pdp-price-old" id="pdp-price-old" style="display:none;"></span>
       <span class="pdp-price" id="pdp-price"></span>
+      <span class="sd-sek pdp-sek" id="pdp-sek" data-eur="0"></span>
       <div><div class="pdp-per" id="pdp-per"></div><div class="pdp-per-kg" id="pdp-per-kg"></div></div>
     </div>
     <p class="pdp-ship" id="pdp-ship"></p>
     <p class="pdp-out-note" id="pdp-out-note" hidden></p>
+    <!-- Produit épuisé : alerte « retour en stock » à la place du panier -->
+    <form class="pdp-alert" id="pdp-alert" hidden novalidate onsubmit="return pdpAlertSubmit(event)">
+      <label class="pdp-alert-label" for="pdp-alert-email" data-sv="Meddela mig när den är tillbaka" data-fr="Prévenez-moi de son retour" data-en="Tell me when it's back">Prévenez-moi de son retour</label>
+      <div class="pdp-alert-row">
+        <input type="email" id="pdp-alert-email" name="email" autocomplete="email" inputmode="email" maxlength="254" required data-sv-ph="din@epost.se" data-fr-ph="votre@email.fr" data-en-ph="your@email.com" placeholder="votre@email.fr">
+        <button type="submit" class="btn-add pdp-alert-btn" data-sv="Meddela mig" data-fr="Me prévenir" data-en="Notify me">Me prévenir</button>
+      </div>
+      <input type="text" name="website" class="pdp-alert-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <p class="pdp-alert-help" data-sv="Ett enda mejl när varan är tillbaka i lager, inget annat." data-fr="Un seul e-mail quand il revient en stock, rien d'autre." data-en="One single email when it's back in stock, nothing else.">Un seul e-mail quand il revient en stock, rien d'autre.</p>
+      <p class="pdp-alert-msg" id="pdp-alert-msg" role="status" aria-live="polite"></p>
+    </form>
     <div class="pdp-weight" id="pdp-weight" style="display:none;"></div>
     <div id="pdp-pickup-note" style="display:none;background:var(--parchment);border-left:3px solid var(--heather);padding:10px 14px;margin-bottom:18px;font-family:var(--font-ui);font-size:13px;color:var(--midnight);line-height:1.45;"></div>
     <div class="pdp-story" id="pdp-story">
@@ -237,7 +263,7 @@ span.var-btn.active { cursor:default; }
     <div class="pdp-trust">
       <div class="trust-badge"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6l3 3 5-5"/></svg><span data-sv="Säker betalning" data-fr="Paiement sécurisé" data-en="Secure payment">Paiement sécurisé</span></div>
       <div class="trust-badge"><svg width="17" height="13" viewBox="0 0 17 13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="1" width="10" height="8" rx="1"/><path d="M11 4h3l2 3.5V11h-5V4z"/><circle cx="4" cy="11.5" r="1.2"/><circle cx="13" cy="11.5" r="1.2"/></svg><span id="trust-ship">Livraison offerte en point relais</span></div>
-      <div class="trust-badge"><svg width="12" height="14" viewBox="0 0 12 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 1L1 3v4.5C1 10.5 6 13 6 13s5-2.5 5-5.5V3L6 1z"/></svg><span data-sv="Importerat från Sverige" data-fr="Importé de Suède" data-en="Imported from Sweden">Importé de Suède</span></div>
+      <div class="trust-badge"><svg width="12" height="14" viewBox="0 0 12 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 1L1 3v4.5C1 10.5 6 13 6 13s5-2.5 5-5.5V3L6 1z"/></svg><span id="trust-origin">Importé depuis la Suède</span></div>
     </div>
     <div class="accordion" id="accordion"></div>
   </div>
@@ -262,7 +288,7 @@ span.var-btn.active { cursor:default; }
 </section>
 
 <div id="footer-root"></div>
-<script src="js/app.js?v=35"></script>
+<script src="js/app.js?v=36"></script>
 <script>
 let pdpQtyVal = 1;
 let selectedVariant = null;
@@ -308,8 +334,12 @@ function renderPDP(p) {
     mainEmoji.style.display = 'none';
     mainPhoto.style.display = 'block';
     mainPhoto.alt = name;
-    if (mainPhoto.getAttribute('src') !== p.photo && !(mainPhoto.src || '').endsWith(p.photo)) mainPhoto.src = p.photo;
-    mainPhoto.onerror = function () { mainPhoto.style.display = 'none'; mainEmoji.style.display = 'block'; mainEmoji.textContent = name.charAt(0); };
+    if (mainPhoto.getAttribute('src') !== p.photo && !(mainPhoto.src || '').endsWith(p.photo)) _pdpSetMain(p.photo);
+    mainPhoto.onerror = function () {
+      /* Version redimensionnée indisponible : on retombe sur l'original */
+      if (mainPhoto.getAttribute('srcset')) { mainPhoto.removeAttribute('srcset'); return; }
+      mainPhoto.style.display = 'none'; mainEmoji.style.display = 'block'; mainEmoji.textContent = name.charAt(0);
+    };
   } else {
     mainPhoto.style.display = 'none';
     mainEmoji.style.display = 'block';
@@ -322,7 +352,13 @@ function renderPDP(p) {
 
   // Pays d'origine réel (Finlande, Danemark…), plus « Suède » pour tout le monde
   const originEl = document.getElementById('gallery-origin');
-  const originTxt = _pick(p.origin);
+  /* Une box est composée ici, d'origines mêlées : pas de pays sur la photo */
+  const isBoxP = (p.tags || []).some(t => String(t).toLowerCase() === 'box');
+  const originTxt = isBoxP ? _T('Box cadeau', 'Gift box', 'Presentlåda') : _pick(p.origin);
+  const trustOrigin = document.getElementById('trust-origin');
+  if (trustOrigin) trustOrigin.textContent = isBoxP
+    ? _T('Composée et emballée à la main', 'Assembled and packed by hand', 'Ihopsatt och packad för hand')
+    : _T('Importé depuis la Suède', 'Imported from Sweden', 'Importerat från Sverige');
   if (originEl) { originEl.textContent = originTxt; originEl.hidden = !originTxt; }
 
   document.getElementById('pdp-name').textContent = name;
@@ -370,6 +406,18 @@ function renderPDP(p) {
     outNote.textContent = out ? _T('Bientôt de retour. En attendant, d’autres produits du même rayon vous attendent plus bas.',
       'Back soon. Meanwhile, similar products are waiting further down.', 'Tillbaka snart. Under tiden finns liknande produkter längre ner.') : '';
     outNote.hidden = !out;
+  }
+  /* Épuisé : ni quantité ni bouton grisé, mais l'alerte de retour en stock */
+  const addRow = document.querySelector('.add-row');
+  if (addRow) addRow.hidden = out;
+  const alertForm = document.getElementById('pdp-alert');
+  if (alertForm) {
+    if (alertForm.dataset.pid !== String(p.uuid || p.id)) {
+      alertForm.dataset.pid = String(p.uuid || p.id);
+      document.getElementById('pdp-alert-msg').textContent = '';
+      alertForm.classList.remove('is-done');
+    }
+    alertForm.hidden = !out;
   }
 
   selectedVariant = p.variants[0] || { label: '', price: p.price };
@@ -505,7 +553,7 @@ function _renderBox(p) {
     let lien;
     if (pid && it.name_fr) {
       lien = document.createElement('a');
-      lien.href = '/produit/' + sdProductSlug(it.name_fr, pid);
+      lien.href = sdProductUrl((window.PRODUCTS || []).find(x => String(x.uuid || x.id) === String(pid)) || { name_fr: it.name_fr, id: pid });
       lien.textContent = nm;
     } else lien = document.createTextNode(nm);
     const span = document.createElement('span');
@@ -637,6 +685,8 @@ function updatePrice() {
   const oldEl = document.getElementById('pdp-price-old');
   priceEl.textContent = fmtPrice(eff);
   priceEl.classList.toggle('pdp-price--sale', onSale);
+  const sekEl = document.getElementById('pdp-sek');
+  if (sekEl) { sekEl.setAttribute('data-eur', String(eff)); sekEl.textContent = sdSekHint(eff); }
   if (oldEl) {
     if (onSale) { oldEl.textContent = fmtPrice(base); oldEl.style.display = ''; }
     else { oldEl.style.display = 'none'; }
@@ -653,12 +703,28 @@ function selectVar(btn, v) {
   updatePrice();
 }
 
+/* Photo principale : l'original en src, et des versions redimensionnées
+   (600 / 1000 / 1600 px) pour que l'écran Retina ou le mobile ne l'étirent
+   pas. Le srcset doit suivre chaque changement de src, sinon il l'emporte. */
+const PDP_MAIN_SIZES = '(max-width:1024px) 100vw, 560px';
+function _pdpSetMain(url) {
+  const img = document.getElementById('main-photo');
+  if (!img) return;
+  const u = String(url || '');
+  if (u.indexOf('/media/') === 0) {
+    img.srcset = [600, 1000, 1600].map(w => sdThumb(u, w) + ' ' + w + 'w').join(', ');
+    img.sizes = PDP_MAIN_SIZES;
+  } else {
+    img.removeAttribute('srcset');
+  }
+  img.src = u;
+}
+
 function selectThumbImg(el, url) {
   document.querySelectorAll('.g-thumb').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
-  const mainPhoto = document.getElementById('main-photo');
-  mainPhoto.src = url;
-  mainPhoto.style.display = 'block';
+  _pdpSetMain(url);
+  document.getElementById('main-photo').style.display = 'block';
   document.getElementById('main-emoji').style.display = 'none';
 }
 
@@ -668,6 +734,36 @@ function changeQtyPdp(d) {
   pdpQtyVal = Math.max(1, pdpQtyVal + d);
   if (_stock !== Infinity) pdpQtyVal = Math.min(pdpQtyVal, Math.max(1, _stock));
   document.getElementById('pdp-qty').textContent = pdpQtyVal;
+}
+
+/* Alerte « retour en stock » : un e-mail unique quand le produit revient. */
+async function pdpAlertSubmit(e) {
+  e.preventDefault();
+  const form = e.target, msg = document.getElementById('pdp-alert-msg');
+  const input = document.getElementById('pdp-alert-email'), btn = form.querySelector('button[type="submit"]');
+  const email = (input.value || '').trim();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+    msg.textContent = _T('Adresse e-mail invalide.', 'Invalid email address.', 'Ogiltig e-postadress.');
+    input.focus();
+    return false;
+  }
+  btn.disabled = true;
+  try {
+    const res = await fetch((window.SD_API_URL || 'https://admin.swedishcravings.fr') + '/api/stock-alerts', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ product_id: form.dataset.pid, email, lang: LANG, website: form.website.value }),
+    });
+    if (!res.ok) throw new Error(String(res.status));
+    form.classList.add('is-done');
+    msg.textContent = _T('C’est noté : vous recevrez un e-mail dès son retour.',
+      'Noted: you’ll get an email as soon as it’s back.', 'Noterat: du får ett mejl så snart den är tillbaka.');
+  } catch (err) {
+    msg.textContent = _T('L’inscription n’a pas abouti. Réessayez dans un instant.',
+      'That didn’t work. Please try again in a moment.', 'Det gick inte. Försök igen om en stund.');
+  } finally {
+    btn.disabled = false;
+  }
+  return false;
 }
 
 function pdpAdd() {
@@ -873,6 +969,6 @@ async function chargerAvis(productId) {
   } catch (e) {}
 }
 </script>
-<script src="js/sd-api-client.js?v=12"></script>
+<script src="js/sd-api-client.js?v=13"></script>
 </body>
 </html>

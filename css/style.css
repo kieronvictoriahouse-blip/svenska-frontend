@@ -277,6 +277,9 @@ header {
 /* Tiroir : sous-total et livraison discrets, le total ressort */
 .drawer-foot .cart-subtotal-row:not(.cart-grand-row) span:last-child { font-size:17px; font-weight:500; }
 .cart-grand-row { border-top:1px solid var(--linen); padding-top:8px; margin-top:4px; }
+/* Repère en couronnes (suédois) sous un montant en euros : indicatif, discret */
+.sd-sek { display:block; font-family:var(--font-ui); font-size:12px; font-weight:400; letter-spacing:0.5px; color:var(--dust); text-align:right; line-height:1.4; }
+.sd-sek:empty { display:none; }
 .cart-ship-eu { display:block; margin-top:4px; font-size:11px; }
 .cart-ship-msg { display:block; }
 .cart-ship-msg.is-free { color:var(--lingon); font-weight:600; }
@@ -652,10 +655,12 @@ body.sd-atc-visible { padding-bottom: var(--sd-atc-h, 72px); }
   .promise-cell:nth-child(2) { border-right: none; }
   .promise-cell:nth-child(3) { border-bottom: none; }
 }
+/* Petit écran : une grille 2 × 2 serrée plutôt que quatre rangées empilées
+   (la réassurance prenait presque un écran avant le premier produit). */
 @media(max-width:480px) {
-  .promise-bar { grid-template-columns: 1fr; }
-  .promise-cell { border-right: none !important; border-bottom: 1px solid var(--linen); }
-  .promise-cell:last-child { border-bottom: none; }
+  .promise-cell { padding: 11px 14px; gap: 2px; }
+  .promise-title { font-size: 10px; letter-spacing: 1px; }
+  .promise-desc { font-size: 13px; line-height: 1.35; }
 }
 
 /* ── CATEGORY CARDS (no emoji — editorial text grid) ── */
@@ -680,6 +685,9 @@ body.sd-atc-visible { padding-bottom: var(--sd-atc-h, 72px); }
   font-family: var(--font-ui); font-size: 11px; letter-spacing: 1px;
   text-transform: uppercase; color: var(--dust); margin-top: 6px;
 }
+/* Tuile illustrée : un produit du rayon au-dessus du nom */
+.cat-card--img { justify-content: flex-start; padding: 14px 16px 18px; }
+.cat-img { width: 100%; height: auto; aspect-ratio: 1; object-fit: contain; background: var(--parchment); margin-bottom: 12px; mix-blend-mode: multiply; }
 
 /* ── LEGAL PAGES ── */
 .legal-wrap { max-width: 860px; margin: 0 auto; padding: 64px 40px; }
@@ -831,8 +839,11 @@ header.shrunk .logo-mark { height: 38px; }
   70%  { box-shadow: 0 0 0 14px rgba(27,33,24,0); }
   100% { box-shadow: 0 0 0 0 rgba(27,33,24,0); }
 }
-#suggest-btn { left: 20px; width: 52px; height: 52px; background: var(--heather); color: var(--on-heather); }
-#suggest-btn svg { width: 20px; height: 20px; }
+/* « Suggérer un produit » n'est plus une bulle : son icône de dialogue la
+   faisait passer pour un chat en direct, et elle couvrait la colonne des
+   rayons et le pied de page. Elle reste dans le pied de page et dans une
+   recherche sans résultat. Une seule bulle : WhatsApp. */
+#suggest-btn { display: none !important; }
 body.sd-hero-visible .sd-fab,
 body.sd-layer-open .sd-fab,
 body.sd-at-end .sd-fab { opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 0.2s, visibility 0s linear 0.2s; }
@@ -841,8 +852,6 @@ body.sd-atc-visible .sd-fab { bottom: calc(var(--sd-atc-h, 72px) + 16px); }
   .sd-fab { bottom: calc(16px + env(safe-area-inset-bottom, 0px)); }
   #sd-wa-bubble { right: 16px; width: 52px; height: 52px; }
   #sd-wa-bubble svg { width: 28px; height: 28px; }
-  /* Sur mobile, « Suggérer un produit » passe dans le pied de page : une seule bulle */
-  #suggest-btn { display: none !important; }
 }
 
 /* ── Fenêtre « Suggérer un produit » (construite à la première ouverture) ── */

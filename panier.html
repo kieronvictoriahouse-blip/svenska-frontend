@@ -7,12 +7,12 @@
 <link rel="icon" type="image/png" href="/img/favicon.png">
 <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Votre panier</title>
+<title data-fr="Votre panier | Swedish Cravings" data-en="Your cart | Swedish Cravings" data-sv="Din varukorg | Swedish Cravings">Votre panier | Swedish Cravings</title>
 <meta name="description" content="Votre panier.">
 <meta name="robots" content="noindex">
 <meta property="og:site_name" content="Swedish Cravings">
 <meta name="twitter:card" content="summary">
-<link rel="stylesheet" href="css/style.css?v=22">
+<link rel="stylesheet" href="css/style.css?v=23">
 <script>const SD_API_URL = 'https://admin.swedishcravings.fr';</script>
 <script>(function(){try{var w=JSON.parse(localStorage.getItem('sd_wl_v1'));if(w&&w.id){var r=document.documentElement.style;if(w.color_primary){r.setProperty('--heather',w.color_primary);r.setProperty('--heather-mid',w.color_primary+'CC');}if(w.color_secondary){r.setProperty('--lingon',w.color_secondary);r.setProperty('--lingon-mid',w.color_secondary+'CC');}if(w.color_bg)r.setProperty('--cream',w.color_bg);if(w.color_text)r.setProperty('--midnight',w.color_text);if(w.font_display)r.setProperty('--font-display',"'"+w.font_display+"',Georgia,serif");if(w.font_body)r.setProperty('--font-body',"'"+w.font_body+"',Georgia,serif");if(w.font_ui)r.setProperty('--font-ui',"'"+w.font_ui+"',sans-serif");}}catch(e){}}());</script>
 <style>
@@ -70,7 +70,8 @@
 .dt-btn:not(:last-child){border-right:1px solid var(--linen);}
 .summary-title{font-family:var(--font-display);font-size:20px;font-weight:500;color:var(--midnight);margin:0 0 24px;padding-bottom:16px;border-bottom:1px solid var(--linen);}
 .summary-line{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;font-family:var(--font-body);font-size:15px;color:var(--slate);}
-.summary-line.total{font-family:var(--font-display);font-size:20px;font-weight:600;color:var(--midnight);margin-top:16px;padding-top:16px;border-top:1px solid var(--linen);margin-bottom:24px;}
+.summary-line.total{font-family:var(--font-display);font-size:20px;font-weight:600;color:var(--midnight);margin-top:16px;padding-top:16px;border-top:1px solid var(--linen);margin-bottom:24px;align-items:flex-start;}
+.summary-line.total > span:last-child{text-align:right;}
 .summary-ship-bar{margin-bottom:20px;}
 .summary-ship-text{font-family:var(--font-ui);font-size:11px;letter-spacing:1.2px;text-transform:uppercase;color:var(--dust);margin-bottom:8px;line-height:1.45;}
 .summary-bar{height:3px;background:var(--linen);border-radius:2px;overflow:hidden;}
@@ -208,7 +209,7 @@
 <div id="header-root"></div>
 
 <div class="page-hero">
-  <p class="hero-crumb"><a href="index.html" data-sv="Hem" data-fr="Accueil" data-en="Home">Accueil</a> / <span data-sv="Korg" data-fr="Panier" data-en="Cart">Panier</span></p>
+  <p class="hero-crumb"><a href="/" data-sv="Hem" data-fr="Accueil" data-en="Home">Accueil</a> / <span data-sv="Korg" data-fr="Panier" data-en="Cart">Panier</span></p>
   <h1 data-sv="Din <em>korg</em>" data-fr="Votre <em>panier</em>" data-en="Your <em>cart</em>">Votre <em>panier</em></h1>
 </div>
 
@@ -223,7 +224,7 @@
   <button type="button" class="btn-pay" id="pay-bar-btn" onclick="doCheckout()" tabindex="-1"></button>
 </div>
 <div id="footer-root"></div>
-<script src="js/app.js?v=35"></script>
+<script src="js/app.js?v=36"></script>
 <script>
 /* Mode de livraison par defaut : POINT RELAIS, pas le retrait.
    Le retrait etait presolectionne, si bien qu'un visiteur de Lille lisait
@@ -316,18 +317,36 @@ function cartAddQuick(id) {
   renderCartPageFull();
 }
 
-// Carrousel "Complétez votre commande" — produits en stock absents du panier
+/* Carrousel "Complétez votre commande" — de petits plus, pas une deuxième
+   box : jamais de box ni de produit à plusieurs formats, les articles à
+   5 € ou moins d'abord, et en tête ce qui va avec le panier (des dips
+   pour des chips, du chocolat avec des bonbons…). */
+const _XSELL_AVEC = {
+  'snacks-chips': ['dips'], 'dips': ['snacks-chips'],
+  'confiseries': ['chocolat'], 'chocolat': ['confiseries', 'patisserie-basics'],
+  'patisserie-basics': ['chocolat', 'boissons'], 'boissons': ['patisserie-basics'],
+  'epices': ['sauces'], 'sauces': ['epices'],
+};
+function _xsellIsBox(p) { return (p.tags || []).some(function(t) { return String(t).toLowerCase() === 'box'; }); }
+function _xsellPrice(p) { return window.SDPrice ? SDPrice.effective(p.price, p) : p.price; }
 function _crossSellHtml(cartIds) {
+  const voulus = new Set();
+  (window.PRODUCTS || []).forEach(function(p) {
+    if (!cartIds.has(String(p.uuid || p.id))) return;
+    (_XSELL_AVEC[p.category && p.category.slug] || []).forEach(function(s) { voulus.add(s); });
+  });
   const picks = (window.PRODUCTS || []).filter(function(p) {
     const id = String(p.uuid || p.id);
     if (cartIds.has(id)) return false;
-    if (p.pickup_only || sdIsHomeProduct(p)) return false;
+    if (p.pickup_only || sdIsHomeProduct(p) || _xsellIsBox(p)) return false;
+    if ((p.variants || []).length > 1) return false;
     if (p.trackStock && p.stock !== null && p.stock <= 0) return false;
     return (p.price || 0) > 0;
   });
   if (picks.length < 2) return '';
-  const rank = function(x) { return x.badge === 'badge-pop' ? 0 : x.badge === 'badge-must' ? 1 : x.badge ? 2 : 3; };
-  picks.sort(function(a, b) { return rank(a) - rank(b); });
+  const badge = function(x) { return x.badge === 'badge-pop' ? 0 : x.badge === 'badge-must' ? 1 : x.badge ? 2 : 3; };
+  const rank = function(x) { return (_xsellPrice(x) <= 5 ? 0 : 2) + (voulus.has(x.category && x.category.slug) ? 0 : 1); };
+  picks.sort(function(a, b) { return rank(a) - rank(b) || badge(a) - badge(b) || _xsellPrice(a) - _xsellPrice(b); });
   /* Sept produits d'épicerie, puis une serviette « pour la table » : petit
      prix, et l'univers Maison n'était visible nulle part dans le parcours. */
   const table = (window.PRODUCTS || []).filter(function(p) {
@@ -343,13 +362,18 @@ function _crossSellHtml(cartIds) {
         const nm = (p.name && (p.name[LANG] || p.name.fr)) || '';
         return '<div class="xsell-card">'
           + '<img src="' + _sdAttr(sdThumb(p.photo || '', 300)) + '" width="148" height="148" onerror="this.style.display=\'none\'" alt="' + nm.replace(/"/g, '') + '" loading="lazy">'
-          + '<div class="xsell-name">' + nm + '</div>'
-          + '<div class="xsell-foot"><span class="xsell-price">' + fmtPrice(p.price) + '</span>'
+          + '<div class="xsell-name">' + _sdAttr(nm) + '</div>'
+          + '<div class="xsell-foot"><span class="xsell-price">' + fmtPrice(_xsellPrice(p)) + '</span>'
           + '<button class="xsell-add" title="' + addTxt + '" aria-label="' + addTxt + '" onclick="cartAddQuick(\'' + id + '\')">+</button></div>'
           + '</div>';
       }).join('')
     + '</div></div>';
 }
+
+/* Le panier est construit entièrement en JS : au changement de langue on le
+   redessine, sinon le bloc de paiement (point relais, pays, « Payer »…)
+   restait en français jusqu'au rechargement. */
+function onLangChange() { if (window._cartPageReady) renderCartPageFull(); }
 
 initPage('');
 document.body.classList.add('page-panier');
@@ -504,6 +528,7 @@ function renderCartPageFull() {
   const keep = a && a.id && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)
     ? { id: a.id, s: a.selectionStart, e: a.selectionEnd } : null;
   _renderCartPage();
+  window._cartPageReady = true;
   if (keep) {
     const n = document.getElementById(keep.id);
     if (n && n !== document.activeElement) {
@@ -565,7 +590,7 @@ function _renderCartPage() {
         </div>
         <h2 data-sv="Din korg är tom" data-fr="Votre panier est vide" data-en="Your cart is empty">${UI[LANG].emptyCart}</h2>
         <p data-sv="Godis, chips, fika: fyll din korg med svenska favoriter." data-fr="Bonbons, chips, fika : composez votre colis suédois." data-en="Sweets, crisps, fika: build your Swedish parcel.">${LANG==='sv'?'Godis, chips, fika: fyll din korg med svenska favoriter.':LANG==='en'?'Sweets, crisps, fika: build your Swedish parcel.':'Bonbons, chips, fika : composez votre colis suédois.'}</p>
-        <a href="boutique.html" class="btn-primary">${LANG==='sv'?'Utforska butiken':LANG==='en'?'Explore the shop':'Explorer la boutique'}</a>
+        <a href="/boutique" class="btn-primary">${LANG==='sv'?'Utforska butiken':LANG==='en'?'Explore the shop':'Explorer la boutique'}</a>
       </div>`;
     return;
   }
@@ -672,7 +697,7 @@ function _renderCartPage() {
   const _promoApplyLabel = LANG==='sv'?'Tillämpa':LANG==='en'?'Apply':'Appliquer';
   const _promoInputVal = window._appliedPromo?.code || window._promoInput || '';
   const _promoMinFail = !!(window._appliedPromo && !_promoValid);
-  const _promoMsgToShow = _promoMinFail ? { ok: false, text: `${LANG==='en'?'Minimum order':LANG==='sv'?'Minsta order':'Commande minimum'} ${fmtPrice(window._appliedPromo.min_order)} ${LANG==='en'?'required':'requise'}` } : window._promoMsg;
+  const _promoMsgToShow = _promoMinFail ? { ok: false, text: `${LANG==='en'?'Minimum order':LANG==='sv'?'Minsta order':'Commande minimum'} ${fmtPrice(window._appliedPromo.min_order)} ${LANG==='en'?'required':LANG==='sv'?'krävs':'requise'}` } : window._promoMsg;
   const _promoMsgHtml = _promoMsgToShow ? `<div class="promo-msg ${_promoMsgToShow.ok?'ok':(_promoMsgToShow.info?'info':'err')}" role="status">${_promoMsgToShow.text}</div>` : '';
   const _promoDiscHtml = (_promoValid && _discountAmt > 0) ? `<div class="summary-line" style="color:var(--moss)"><span>${LANG==='sv'?'Rabatt':LANG==='en'?'Discount':'Réduction'} (${window._appliedPromo.code})</span><span>−${fmtPrice(_discountAmt)}</span></div>` : ((_promoValid && _isFreeShip) ? `<div class="summary-line" style="color:var(--moss)"><span>Code ${window._appliedPromo.code}</span><span>${LANG==='sv'?'Fri frakt':LANG==='en'?'Free shipping':'Livraison offerte'}</span></div>` : '');
 
@@ -848,9 +873,9 @@ function _renderCartPage() {
           <button type="button" class="dt-btn${window._deliveryMode==='mondial_relay'?' active':''}" aria-pressed="${window._deliveryMode==='mondial_relay'}"${cartHasPickupOnly?' disabled':''} onclick="setDeliveryMode('mondial_relay');renderCartPageFull()">
             ${LANG==='sv'?'Utlämningsställe':LANG==='en'?'Pickup point':'Point relais'}<small>${_relayShipLabel}</small>
           </button>
-          <button type="button" class="dt-btn${window._deliveryMode==='pickup'?' active':''}" aria-pressed="${window._deliveryMode==='pickup'}" onclick="setDeliveryMode('pickup');renderCartPageFull()">
+          ${(window._relayCountry || 'FR') !== 'FR' ? '' : `<button type="button" class="dt-btn${window._deliveryMode==='pickup'?' active':''}" aria-pressed="${window._deliveryMode==='pickup'}" onclick="setDeliveryMode('pickup');renderCartPageFull()">
             Click &amp; Collect<small>${LANG==='sv'?'Gratis · Drôme':LANG==='en'?'Free · Drôme':'Gratuit · Drôme'}</small>
-          </button>
+          </button>`}
         </div>
         ${_pickupOnlyHtml}
         ${_pickupInfoHtml}
@@ -876,9 +901,9 @@ function _renderCartPage() {
         </div>
         <div class="summary-line total">
           <span>Total</span>
-          <span>${fmtPrice(_totalToPay)}</span>
+          <span>${fmtPrice(_totalToPay)}${sdSekSpan(_totalToPay)}</span>
         </div>
-        ${LANG==='sv' ? '<p class="eur-note">Priser i euro (EUR). Din bank räknar om till kronor.</p>' : ''}
+        ${LANG==='sv' ? '<p class="eur-note">Du betalar i euro (EUR). Beloppet i kronor är ungefärligt: din bank räknar om det.</p>' : ''}
         <div class="checkout-email">
           <label class="ck-label" for="checkout-email-input">${LANG==='sv'?'Din e-postadress':LANG==='en'?'Your email':'Votre email'}</label>
           <input id="checkout-email-input" class="ck-input" type="email" autocomplete="email" inputmode="email" required aria-describedby="checkout-email-help checkout-email-err" value="${_sdAttr(window._custEmail||'')}" oninput="window._custEmail=this.value.trim();try{localStorage.setItem('sd_checkout_email',window._custEmail)}catch(e){};this.style.borderColor='';this.removeAttribute('aria-invalid');var er=document.getElementById('checkout-email-err');if(er)er.textContent='';" onchange="_revaliderCodePromo()" placeholder="${LANG==='sv'?'namn@exempel.se':LANG==='en'?'name@example.com':'prenom@exemple.fr'}">
@@ -900,7 +925,7 @@ function _renderCartPage() {
         <div class="pay-methods" aria-label="${LANG==='sv'?'Godkända betalsätt':LANG==='en'?'Accepted payment methods':'Moyens de paiement acceptés'}">${sdPayLogos('pay-m')}</div>
         <div style="text-align:center;font-family:var(--font-body);font-size:13px;color:var(--dust);margin-top:10px;">${LANG==='sv'?'Betala i 3 eller 4 delar med Klarna eller Scalapay (enligt villkor) vid betalningen.':LANG==='en'?'Pay in 3 or 4 instalments with Klarna or Scalapay (subject to eligibility) at checkout.':'Paiement en 3 ou 4 fois avec Klarna ou Scalapay (selon éligibilité), proposé à l’étape du paiement.'}</div>
         <ul class="trust-list">
-          <li>${_TRUST_CHK}${window._deliveryMode==='pickup'?(LANG==='sv'?'Upphämtning efter överenskommelse':LANG==='en'?'Pickup by appointment':'Retrait sur rendez-vous'):(LANG==='sv'?'Skickas inom 24-48h':LANG==='en'?'Shipped within 24-48h':'Expédié sous 24-48h')}</li>
+          <li>${_TRUST_CHK}${window._deliveryMode==='pickup'?(LANG==='sv'?'Upphämtning efter överenskommelse':LANG==='en'?'Pickup by appointment':'Retrait sur rendez-vous'):(LANG==='sv'?'Skickas inom 1–2 arbetsdagar':LANG==='en'?'Ships within 1–2 working days':'Expédié sous 24 à 48 h ouvrées')}</li>
           <li>${_TRUST_CHK}${LANG==='sv'?'Äkta svenska produkter':LANG==='en'?'Authentic Swedish products':'Produits suédois authentiques'}</li>
           <li>${_TRUST_CHK}${LANG==='sv'?'Kundservice som hjälper dig':LANG==='en'?'Responsive customer service':'Service client à votre écoute'}</li>
         </ul>
@@ -909,7 +934,7 @@ function _renderCartPage() {
       <div class="cart-page-more">
         ${_crossSellHtml(cartIdSet)}
         <div style="margin-top:24px;">
-          <a href="boutique.html" class="cart-continue">← ${LANG==='sv'?'Fortsätt handla':LANG==='en'?'Continue shopping':'Continuer mes achats'}</a>
+          <a href="/boutique" class="cart-continue">← ${LANG==='sv'?'Fortsätt handla':LANG==='en'?'Continue shopping':'Continuer mes achats'}</a>
         </div>
       </div>
     </div>`;
@@ -1278,6 +1303,6 @@ window.addEventListener('sdapi:ready', () => { renderCartPageFull(); if (typeof 
 if (typeof PRODUCTS !== 'undefined' && PRODUCTS.length && typeof sdTrackViewCart === 'function') sdTrackViewCart();
 </script>
 <script>(function(){var _hr=document.getElementById("header-root");if(_hr&&typeof MutationObserver!=="undefined")new MutationObserver(function(){if(typeof updateCartBadge==="function")updateCartBadge();}).observe(_hr,{childList:true});})();</script>
-<script src="js/sd-api-client.js?v=12"></script>
+<script src="js/sd-api-client.js?v=13"></script>
 </body>
 </html>

@@ -14,7 +14,7 @@
 const { execFileSync } = require('child_process');
 const https = require('https');
 const fs = require('fs');
-const { slugify } = require('./lib/produits');
+const { slugOf } = require('./lib/produits');
 
 const BASE = process.env.SD_API_URL || 'https://admin.swedishcravings.fr';
 
@@ -49,7 +49,7 @@ async function liensProduits() {
       const p = parPrefixe.get(pre.toLowerCase());
       if (!p) return m;
       n++;
-      return `href="/produit/${slugify(p.name_fr, p.id)}"`;
+      return `href="/produit/${slugOf(p)}"`;
     });
     if (neuf !== html) fs.writeFileSync(f, neuf);
   }

@@ -10,6 +10,10 @@ function slugify(nameFr, id) {
     .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60);
   return base + '-' + String(id || '').slice(0, 8);
 }
+/* Adresse figée en base (produits.slug) quand elle existe : renommer un
+   produit ne change plus son URL. Même règle que sdProductUrl (js/app.js). */
+const SLUG_OK = /^[a-z0-9]+(?:-[a-z0-9]+)*-[0-9a-f]{8}$/;
+const slugOf = p => (p && SLUG_OK.test(String(p.slug || ''))) ? p.slug : slugify(p && p.name_fr, p && p.id);
 
 // Art de la table (serviettes…) : univers « Maison », présenté à part de l'épicerie.
 const HOME_CATS = ['art-de-la-table', 'maison-deco'];
@@ -20,14 +24,24 @@ const isOut = p => p.track_stock === true && (p.stock || 0) <= 0;
 // La marque réelle, pas un fourre-tout.
 const BRANDS = ['Marimekko', 'IHR', 'Ihr', 'OLW', 'Ahlgrens', 'Läkerol', 'Lakerol', 'Kavli', 'Fazer',
   'Odense', 'Törsleff', 'Torsleff', "Dave & Jon's", 'Santa Maria', 'Polly', 'Ballerina', 'Wasa',
-  'Piffi', 'Marabou', 'P Design', 'Malaco'];
+  'Piffi', 'Marabou', 'P Design', 'Malaco', 'Estrella', 'Kockens', 'Blå Band', 'Finn Crisp',
+  'Delicato', 'Dansukker', 'Cloetta', 'Korkat'];
 // Sous-marques → fabricant (le nom produit porte la sous-marque, pas le fabricant).
 const SUB_BRANDS = { 'Kexchoklad': 'Cloetta', 'Center': 'Cloetta', 'Djungelvrål': 'Malaco', 'Gott & Blandat': 'Malaco', 'Tyrkisk Peber': 'Fazer', 'Dumle': 'Fazer', "O'boy": "O'boy" };
-function brandOf(nameFr) {
+/* Le nom ne dit pas tout : la marque se lit aussi dans le fabricant saisi au
+   back-office (« Estrella AB, Angered… » pour des dips vendus sans marque
+   dans leur nom). Une box est composée par la boutique : sa marque, c'est elle. */
+const FABRICANTS = [[/estrella/i, 'Estrella'], [/kockens|culinar/i, 'Kockens'], [/blå band|europe foods/i, 'Blå Band'],
+  [/santa maria/i, 'Santa Maria'], [/lantmännen|finn crisp/i, 'Finn Crisp'], [/delicato/i, 'Delicato'],
+  [/dansukker|nordic sugar/i, 'Dansukker'], [/redhead/i, 'Korkat']];
+function brandOf(nameFr, p) {
   const n = (nameFr || '').toLowerCase();
   for (const b of BRANDS) if (n.includes(b.toLowerCase()))
     return b === 'Lakerol' ? 'Läkerol' : (b === 'Torsleff' ? 'Törsleff' : (b === 'Ihr' ? 'IHR' : b));
   for (const [k, v] of Object.entries(SUB_BRANDS)) if (n.includes(k.toLowerCase())) return v;
+  if (p && isBox(p)) return 'Swedish Cravings';
+  const fab = String((p && p.manufacturer) || '');
+  for (const [re, b] of FABRICANTS) if (re.test(fab)) return b;
   return '';
 }
 
@@ -54,4 +68,4 @@ const mediaUrl = (u, site) => String(u || '').replace(SUPA_MEDIA, `${site}/media
 const PRIVE = /cost|marg|achat|purchase|supplier|fournisseur/i;
 const sansPrive = p => Object.fromEntries(Object.entries(p).filter(([k]) => !PRIVE.test(k)));
 
-module.exports = { slugify, HOME_CATS, isHome, isBox, isOut, brandOf, isoPays, netQty, mediaUrl, sansPrive };
+module.exports = { slugify, slugOf, HOME_CATS, isHome, isBox, isOut, brandOf, isoPays, netQty, mediaUrl, sansPrive };

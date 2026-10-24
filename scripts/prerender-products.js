@@ -23,7 +23,7 @@
 const https = require('https');
 const fs = require('fs');
 const path = require('path');
-const { slugify, isHome, isOut, brandOf, isoPays, netQty, mediaUrl, sansPrive } = require('./lib/produits');
+const { slugOf, isHome, isOut, brandOf, isoPays, netQty, mediaUrl, sansPrive } = require('./lib/produits');
 
 const BASE = process.env.SD_API_URL || 'https://admin.swedishcravings.fr';
 const SITE = 'https://www.swedishcravings.fr';
@@ -88,7 +88,7 @@ function livraisonLd(cfg) {
       shippingDestination: { '@type': 'DefinedRegion', addressCountry: 'FR' },
       deliveryTime: {
         '@type': 'ShippingDeliveryTime',
-        handlingTime: { '@type': 'QuantitativeValue', minValue: 0, maxValue: 1, unitCode: 'DAY' },
+        handlingTime: { '@type': 'QuantitativeValue', minValue: 1, maxValue: 2, unitCode: 'DAY' },   // « 24 à 48 h ouvrées »
         transitTime: { '@type': 'QuantitativeValue', minValue: 2, maxValue: 4, unitCode: 'DAY' },
       },
     },
@@ -118,7 +118,7 @@ async function main() {
   /* Purge des fiches obsolètes : un produit renommé change de slug, et
      l'ancien fichier resterait servi à côté du nouveau — contenu quasi
      dupliqué avec un canonical divergent, exactement ce que Google punit. */
-  const slugsActuels = new Set(products.map(p => slugify(p.name_fr, p.id) + '.html'));
+  const slugsActuels = new Set(products.map(p => slugOf(p) + '.html'));
   for (const f of fs.readdirSync(outDir).filter(x => x.endsWith('.html'))) {
     if (!slugsActuels.has(f)) { fs.unlinkSync(path.join(outDir, f)); console.log('  purgé (slug obsolète) :', f); }
   }
@@ -127,12 +127,12 @@ async function main() {
   let count = 0;
 
   for (const p of products) {
-    const slug = slugify(p.name_fr, p.id);
+    const slug = slugOf(p);
     const url = `${SITE}/produit/${slug}`;
     const title = titreSeo(p);
     const descFull = descComplete(p);
     const descMeta = auMot(descFull, 158);
-    const marque = brandOf(p.name_fr);
+    const marque = brandOf(p.name_fr, p);
     const catNom = (p.categories && p.categories.name_fr) || 'Épicerie suédoise';
     const catSlug = (p.categories && p.categories.slug) || '';
     const img = mediaUrl(p.image_url, SITE) || `${SITE}/img/sc-logo-horizontal.jpg`;
@@ -190,7 +190,7 @@ async function main() {
     const complement = voisins.filter(x => !similaires.includes(x)).slice(0, 4 - similaires.length);
     const relHtml = [...similaires, ...complement].map(x => {
       const xImg = mediaUrl(x.image_url, '').replace(/^\/media\//, '/media-w/400/');
-      return `<a href="/produit/${slugify(x.name_fr, x.id)}" style="display:block;text-decoration:none;color:inherit;">` +
+      return `<a href="/produit/${slugOf(x)}" style="display:block;text-decoration:none;color:inherit;">` +
         (xImg ? `<img src="${escAttr(xImg)}" alt="${escAttr(x.name_fr)}" loading="lazy" width="400" height="400" style="width:100%;height:auto;aspect-ratio:1;object-fit:contain;background:var(--parchment);">` : '') +
         `<div style="font-family:var(--font-display);font-size:17px;font-weight:600;color:var(--heather-text);margin-top:8px;">${escHtml(x.name_fr)}</div>` +
         `<div style="font-family:var(--font-display);font-size:17px;color:var(--midnight);">${prixFr(x.price)}</div></a>`;
@@ -213,8 +213,12 @@ async function main() {
 
     // ── Corps statique : le contenu que voient les crawlers sans JS ──
     html = html.replace(/<strong id="bc-name">[^<]*<\/strong>/, `<strong id="bc-name">${escHtml(p.name_fr)}</strong>`);
+    // Versions redimensionnées (même règle que _pdpSetMain dans produit.html)
+    const imgRel = mediaUrl(p.image_url, '');
+    const srcset = imgRel.startsWith('/media/') && !/[\s,]/.test(imgRel)
+      ? ` srcset="${[600, 1000, 1600].map(w => `${escAttr(imgRel.replace(/^\/media\//, `/media-w/${w}/`))} ${w}w`).join(', ')}" sizes="(max-width:1024px) 100vw, 560px"` : '';
     html = html.replace(/<img id="main-photo" src="" alt="" style="[^"]*display:none;">/,
-      `<img id="main-photo" src="${escAttr(img)}" alt="${escAttr(alt)}" fetchpriority="high" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:16px;">`);
+      `<img id="main-photo" src="${escAttr(img)}"${srcset} alt="${escAttr(alt)}" fetchpriority="high" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:16px;">`);
     html = html.replace(/<div class="pdp-cat" id="pdp-cat"><\/div>/, `<div class="pdp-cat" id="pdp-cat">${escHtml(catNom)}</div>`);
     html = html.replace(/<h1 class="pdp-name" id="pdp-name">[^<]*<\/h1>/, `<h1 class="pdp-name" id="pdp-name">${escHtml(p.name_fr)}</h1>`);
     if (p.subtitle_fr) html = html.replace(/<div class="pdp-sub" id="pdp-sub"><\/div>/, `<div class="pdp-sub" id="pdp-sub">${escHtml(p.subtitle_fr)}</div>`);
@@ -248,16 +252,18 @@ async function main() {
   console.log(`✓ ${count} fiches produit pré-générées (contenu statique complet) + sitemap (${staticPages.length + productUrls.length} URLs)`);
 }
 
-function remplirBoutique(produits) {
+function remplirBoutique(tous) {
   const f = 'boutique.html';
   if (!fs.existsSync(f)) return;
+  // Disponibles d'abord, comme la grille : un épuisé n'ouvre pas la liste.
+  const produits = [...tous.filter(p => !isOut(p)), ...tous.filter(isOut)];
   let html = fs.readFileSync(f, 'utf8');
   const liste = '<ul>' + produits.map(p =>
-    `<li><a href="/produit/${slugify(p.name_fr, p.id)}">${escHtml(p.name_fr)}</a> — ${prixFr(p.price)}</li>`).join('') + '</ul>';
+    `<li><a href="/produit/${slugOf(p)}">${escHtml(p.name_fr)}</a> — ${prixFr(p.price)}</li>`).join('') + '</ul>';
   const itemList = {
     '@context': 'https://schema.org', '@type': 'ItemList', name: 'Boutique Swedish Cravings',
     numberOfItems: produits.length,
-    itemListElement: produits.map((p, i) => ({ '@type': 'ListItem', position: i + 1, url: `${SITE}/produit/${slugify(p.name_fr, p.id)}`, name: p.name_fr })),
+    itemListElement: produits.map((p, i) => ({ '@type': 'ListItem', position: i + 1, url: `${SITE}/produit/${slugOf(p)}`, name: p.name_fr })),
   };
   const avant = html;
   html = html.replace(/<!-- sd-static-start -->[\s\S]*?<!-- sd-static-end -->/, `<!-- sd-static-start -->${liste}<!-- sd-static-end -->`);

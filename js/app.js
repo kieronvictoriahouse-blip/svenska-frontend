@@ -3,7 +3,7 @@ var PRODUCTS=[];
 window._SD_STATIC=PRODUCTS.slice();
 
 var CATS=[{id:'Épices',emoji:'🌶️'},{id:'Flocons & Céréales',emoji:'🌾'},{id:'Baies séchées',emoji:'🫐'},{id:'Sucres & Sirops',emoji:'🍯'},{id:'Thés & Tisanes',emoji:'🫖'},{id:'Farines & Graines',emoji:'🌻'},{id:'Mélanges',emoji:'🎄'},{id:'Chips & Snacks',emoji:'🍟'},{id:'Basics suédois',emoji:'🇸🇪'},{id:'Confiseries',emoji:'🍬'},{id:'Fika & Boulangerie',emoji:'🧁'},{id:'Art de la table',emoji:'🍽️'},{id:'Maison & Déco',emoji:'🕯️'}];
-const CAT_LABELS={'Épices':{sv:'Épices & Aromates',fr:'Épices & Aromates',en:'Spices & Herbs'},'Flocons & Céréales':{sv:'Flocons & Céréales',fr:'Flocons & Céréales',en:'Oats & Cereals'},'Baies séchées':{sv:'Baies séchées',fr:'Baies séchées',en:'Dried berries'},'Sucres & Sirops':{sv:'Sucres & Sirops',fr:'Sucres & Sirops',en:'Sugars & Syrups'},'Thés & Tisanes':{sv:'Thés & Tisanes',fr:'Thés & Tisanes',en:'Teas & Infusions'},'Farines & Graines':{sv:'Farines & Graines',fr:'Farines & Graines',en:'Flours & Seeds'},'Mélanges':{sv:'Blandningar',fr:'Mélanges suédois',en:'Swedish blends'},'Chips & Snacks':{sv:'Chips & Snacks',fr:'Chips & Snacks',en:'Chips & Snacks'},'Basics suédois':{sv:'Svenska baser',fr:'Basics suédois',en:'Swedish basics'},'Confiseries':{sv:'Konfektyr',fr:'Confiseries',en:'Confectionery'},'Fika & Boulangerie':{sv:'Fika & Bakning',fr:'Fika & Boulangerie',en:'Fika & Baking'},'Art de la table':{sv:'Dukning',fr:'Art de la table',en:'Tableware'},'Maison & Déco':{sv:'Hem & Inredning',fr:'Maison & Déco',en:'Home & Decor'}};
+const CAT_LABELS={'Épices':{sv:'Kryddor',fr:'Épices & Aromates',en:'Spices & Herbs'},'Flocons & Céréales':{sv:'Flingor & spannmål',fr:'Flocons & Céréales',en:'Oats & Cereals'},'Baies séchées':{sv:'Torkade bär',fr:'Baies séchées',en:'Dried berries'},'Sucres & Sirops':{sv:'Sucres & Sirops',fr:'Sucres & Sirops',en:'Sugars & Syrups'},'Thés & Tisanes':{sv:'Thés & Tisanes',fr:'Thés & Tisanes',en:'Teas & Infusions'},'Farines & Graines':{sv:'Farines & Graines',fr:'Farines & Graines',en:'Flours & Seeds'},'Mélanges':{sv:'Blandningar',fr:'Mélanges suédois',en:'Swedish blends'},'Chips & Snacks':{sv:'Chips & Snacks',fr:'Chips & Snacks',en:'Chips & Snacks'},'Basics suédois':{sv:'Svenska baser',fr:'Basics suédois',en:'Swedish basics'},'Confiseries':{sv:'Konfektyr',fr:'Confiseries',en:'Confectionery'},'Fika & Boulangerie':{sv:'Fika & Bakning',fr:'Fika & Boulangerie',en:'Fika & Baking'},'Art de la table':{sv:'Dukning',fr:'Art de la table',en:'Tableware'},'Maison & Déco':{sv:'Hem & Inredning',fr:'Maison & Déco',en:'Home & Decor'}};
 const UI={sv:{addedCart:'Tillagd i korgen!',emptyCart:'Din korg är tom',subtotal:'Delsumma',checkout:'Beställ →',keepShopping:'Fortsätt handla',freeShip:'Fri frakt från 29€',searchPlaceholder:'Sök en krydda, ett produkt...',noResults:'Inga resultat',cartTitle:'Din korg',products:'produkter',product:'produkt',filterAll:'Alla',sortDefault:'Standard',sortPriceAsc:'Pris stigande',sortPriceDesc:'Pris fallande',sortName:'Namn A→Ö',subscribe:'Tack!'},fr:{addedCart:'Ajouté au panier !',emptyCart:'Votre panier est vide',subtotal:'Sous-total',checkout:'Commander →',keepShopping:'Continuer mes achats',freeShip:'Livraison offerte dès 29€',searchPlaceholder:'Rechercher une épice, un produit...',noResults:'Aucun résultat',cartTitle:'Votre panier',products:'produits',product:'produit',filterAll:'Tous',sortDefault:'Par défaut',sortPriceAsc:'Prix croissant',sortPriceDesc:'Prix décroissant',sortName:'Nom A→Z',subscribe:'Merci !'},en:{addedCart:'Added to cart!',emptyCart:'Your cart is empty',subtotal:'Subtotal',checkout:'Checkout →',keepShopping:'Continue shopping',freeShip:'Free delivery from €29',searchPlaceholder:'Search for a spice, product...',noResults:'No results',cartTitle:'Your cart',products:'products',product:'product',filterAll:'All',sortDefault:'Default',sortPriceAsc:'Price: low to high',sortPriceDesc:'Price: high to low',sortName:'Name A→Z',subscribe:'Thanks!'}};
 /* « Livraison offerte dès … » : calculé depuis les réglages (SD_SHIP), jamais écrit en dur */
 ['fr','en','sv'].forEach(function(l){Object.defineProperty(UI[l],'freeShip',{configurable:true,enumerable:true,get:function(){return sdFreeShipText(l);}});});
@@ -84,12 +84,17 @@ function _sdCartProducts(){return _sdLSGet('sd_cart_products',{});}
 let cart=(function(){var _c=_sdLSGet('sd_cart',{});var _dirty=false;Object.keys(_c).forEach(function(k){if(!k||k==='NaN'||k==='undefined'||k==='null'){delete _c[k];_dirty=true;}});if(_dirty)try{localStorage.setItem('sd_cart',JSON.stringify(_c));}catch(e){}return _c;})();
 let LANG=(function(){try{var l=localStorage.getItem('sd_lang');return(l==='sv'||l==='en'||l==='fr')?l:'fr';}catch(e){return 'fr';}})();
 var _sekRate=(function(){try{var r=parseFloat(sessionStorage.getItem('_sekRate'));return r>0?r:0;}catch(e){return 0;}})();
-/* Prix : « 6,19 € » en français, « €6.19 » en anglais, couronnes en suédois
-   dès que le taux est connu. */
-function fmtPrice(eur){if(LANG==='sv'&&_sekRate>0)return Math.round((eur||0)*_sekRate)+' kr';var n=(+(eur||0)).toFixed(2);return LANG==='fr'?n.replace('.',',')+' €':'€'+n;}
-/* Relit un prix affiché, quel que soit son format (« €6.19 » ou « 6,19 € ») */
-function _sdParseEur(txt){var m=String(txt||'').match(/€\s*([\d.,]+)|([\d.,]+)\s*€/);if(!m)return null;var v=parseFloat((m[1]||m[2]).replace(',','.'));return isNaN(v)?null:v;}
-function _sdToSek(el){if(!el)return;var v=_sdParseEur(el.textContent);if(v!==null)el.textContent=Math.round(v*_sekRate)+' kr';}
+/* Prix : toujours en euros, la devise que Stripe débite — « 6,19 € » en
+   français et en suédois, « €6.19 » en anglais. Les couronnes, arrondies
+   ligne à ligne, ne tombaient jamais sur le montant prélevé : en suédois
+   elles ne sont plus qu'un repère, à part (sdSekHint). */
+function fmtPrice(eur){var n=(+(eur||0)).toFixed(2);return LANG==='en'?'€'+n:n.replace('.',',')+' €';}
+/* « ≈ 388 kr » en suédois une fois le taux connu, vide sinon. */
+function sdSekHint(eur){eur=+eur||0;return LANG==='sv'&&_sekRate>0&&eur>0?'≈ '+Math.round(eur*_sekRate)+' kr':'';}
+/* Repère <span class="sd-sek" data-eur="…"> : rempli au rendu, puis à
+   l'arrivée du taux et au changement de langue (sdFillSek). */
+function sdSekSpan(eur){return'<span class="sd-sek" data-eur="'+(+eur||0)+'">'+sdSekHint(eur)+'</span>';}
+function sdFillSek(root){(root||document).querySelectorAll('.sd-sek[data-eur]').forEach(function(el){el.textContent=sdSekHint(el.getAttribute('data-eur'));});}
 /* Texte sûr dans un attribut ou du HTML généré */
 function _sdAttr(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
@@ -99,7 +104,10 @@ function _sdAttr(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/"
    pas encore générée est servie par produit.html (rewrite de vercel.json),
    qui retrouve le produit par les 8 caractères d'identifiant du slug. */
 function sdProductSlug(nameFr,id){var base=String(nameFr||'produit').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,60);return base+'-'+String(id||'').slice(0,8);}
-function sdProductUrl(p){if(!p)return'/boutique';var n=p.name&&typeof p.name==='object'?(p.name.fr||p.name.en||p.name.sv):(p.name_fr||p.name);return'/produit/'+sdProductSlug(n,p.uuid||p.id);}
+/* Adresse figée en base (produits.slug) quand elle existe : renommer un
+   produit ne casse plus son URL. Sinon, calculée depuis le nom (avant). */
+var SD_SLUG_OK=/^[a-z0-9]+(?:-[a-z0-9]+)*-[0-9a-f]{8}$/;
+function sdProductUrl(p){if(!p)return'/boutique';if(p.slug&&SD_SLUG_OK.test(p.slug))return'/produit/'+p.slug;var n=p.name&&typeof p.name==='object'?(p.name.fr||p.name.en||p.name.sv):(p.name_fr||p.name);return'/produit/'+sdProductSlug(n,p.uuid||p.id);}
 /* Art de la table (serviettes…) : univers « Maison » à part, jamais proposé
    en suggestion à côté de l'épicerie ni dans le flux Shopping. */
 var SD_HOME_CATS=['art-de-la-table','maison-deco'];
@@ -112,7 +120,7 @@ function sdSearchText(p){if(!p)return'';if(p._sdSearch)return p._sdSearch;var o=
 function sdMatches(p,q){var words=sdNorm(q).split(' ').filter(Boolean);if(!words.length)return true;var t=sdSearchText(p);return words.every(function(w){return t.indexOf(w)>-1||(w.length>3&&/s$/.test(w)&&t.indexOf(w.slice(0,-1))>-1);});}
 /* Ligne de livraison sous le prix, calculée depuis les réglages (jamais en dur) */
 /* Montant rond sans centimes (« 29 € », « €29 ») ; sinon fmtPrice */
-function sdPriceShort(n){n=+n||0;if(n%1!==0||(LANG==='sv'&&_sekRate>0))return fmtPrice(n);return LANG==='fr'?n+' €':'€'+n;}
+function sdPriceShort(n){n=+n||0;if(n%1!==0)return fmtPrice(n);return LANG==='en'?'€'+n:n+' €';}
 function sdShipLine(){var r=SD_SHIP.rules(false);var promo=SD_SHIP.label(LANG);var c=fmtPrice(r.cost),t=sdPriceShort(r.threshold);
   if(LANG==='en')return(promo?promo+' · ':'')+'Pickup point delivery '+c+', free from '+t+' · Free workshop pickup (Drôme)';
   if(LANG==='sv')return(promo?promo+' · ':'')+'Leverans till utlämningsställe '+c+', gratis från '+t+' · Gratis upphämtning i ateljén (Drôme)';
@@ -134,9 +142,9 @@ var SD_ALLERGENS=new RegExp('(^|[^\\p{L}])('+[
 /* Vignette redimensionnée par le stockage (rewrite /media-w/<largeur>/… de
    vercel.json) : une photo de 365 Ko en PNG devient ~12 Ko en WebP à 300 px. */
 function sdThumb(u,w){u=String(u||'');return u.indexOf('/media/')===0?'/media-w/'+(w||400)+'/'+u.slice(7):u;}
-function sdThumbSet(u){return u&&String(u).indexOf('/media/')===0?sdThumb(u,300)+' 300w, '+sdThumb(u,600)+' 600w':'';}
+function sdThumbSet(u){return u&&String(u).indexOf('/media/')===0?sdThumb(u,300)+' 300w, '+sdThumb(u,600)+' 600w, '+sdThumb(u,900)+' 900w':'';}
 function sdBoldAllergens(t){return _sdAttr(t).replace(SD_ALLERGENS,function(m,pre,word,off,str){if(/^butter$/i.test(word)&&/(cocoa|cacao)\s*$/i.test(str.slice(Math.max(0,off-7),off+pre.length)))return m;return pre+'<strong>'+word+'</strong>';});}
-function _doSekRefresh(){try{window.dispatchEvent(new Event('sd:currency'));}catch(e){}renderCartDrawer();if(typeof renderCart==='function')renderCart();document.querySelectorAll('.prod-price,.prod-price-old').forEach(_sdToSek);['pdp-price','pdp-price-old','sticky-atc-price-old','sticky-atc-price'].forEach(function(id){_sdToSek(document.getElementById(id));});}
+function _doSekRefresh(){try{window.dispatchEvent(new Event('sd:currency'));}catch(e){}renderCartDrawer();if(typeof renderCart==='function')renderCart();sdFillSek();}
 function loadSekRate(){if(_sekRate>0){if(LANG==='sv')_doSekRefresh();return;}/* api.frankfurter.app redirige (301) vers .dev sans en-tête CORS : le navigateur refusait, les prix suédois restaient en euros */fetch('https://api.frankfurter.dev/v1/latest?base=EUR&symbols=SEK').then(function(r){return r.json();}).then(function(d){var rate=d&&d.rates&&d.rates.SEK;if(rate>0){_sekRate=rate;try{sessionStorage.setItem('_sekRate',String(rate));}catch(e){}if(LANG==='sv')_doSekRefresh();}}).catch(function(){});}
 function saveCart(){try{localStorage.setItem('sd_cart',JSON.stringify(cart));}catch(e){}}
 /* Panier synchronisé entre onglets. La page de confirmation vide le panier
@@ -314,7 +322,7 @@ function renderCartDrawer(){
   const set=(id,h)=>{const el=document.getElementById(id);if(el)el.innerHTML=h;};
   set('cart-total-price',fmtPrice(total));
   set('cart-ship-price',free?`<span class="cart-ship-free">${_sdT('Offerte','Free','Gratis')}</span>`:fmtPrice(shipCost));
-  set('cart-grand-total',fmtPrice(total+shipCost));
+  set('cart-grand-total',fmtPrice(total+shipCost)+sdSekSpan(total+shipCost));
   const pct=fr.threshold>0?Math.min(100,total/fr.threshold*100):100;
   const promo=SD_SHIP.label(LANG);
   const msg=!free?_sdT(`Plus que ${fmtPrice(remaining)} pour la livraison offerte en France`,`${fmtPrice(remaining)} away from free delivery in France`,`${fmtPrice(remaining)} kvar till fri frakt i Frankrike`):(promo||_sdT('Livraison offerte en France','Free delivery in France','Fri frakt i Frankrike'));
@@ -337,7 +345,7 @@ function _sdExpanded(sel,v){document.querySelectorAll(sel).forEach(function(b){b
 function openCart(){renderCartDrawer();const d=document.getElementById('cart-drawer');if(!d)return;const was=d.classList.contains('open');if(!was)_sdRemember('cart-drawer');d.classList.add('open');document.getElementById('drawer-overlay')?.classList.add('open');_sdExpanded('.btn-cart',true);_sdSyncLayers();if(!was)setTimeout(()=>{if(d.classList.contains('open')&&!d.contains(document.activeElement))d.querySelector('.drawer-close')?.focus({preventScroll:true});},60);}
 /* closeCart(false) : sans rendre le focus (on quitte la page par un lien) */
 function closeCart(restore){const d=document.getElementById('cart-drawer');const was=!!(d&&d.classList.contains('open'));d?.classList.remove('open');document.getElementById('drawer-overlay')?.classList.remove('open');_sdExpanded('.btn-cart',false);_sdSyncLayers();const n=document.getElementById('drawer-note');if(n)n.textContent='';if(was&&restore!==false)_sdRestore('cart-drawer','.btn-cart');}
-function setLang(l){if(!UI[l])l='fr';LANG=l;saveLang(l);document.documentElement.lang=l;document.querySelectorAll('[data-sv]').forEach(el=>{const v=el.getAttribute('data-'+l);if(v!==null)el.innerHTML=v;});document.querySelectorAll('[data-sv-ph]').forEach(el=>{const v=el.getAttribute('data-'+l+'-ph');if(v)el.placeholder=v;});document.querySelectorAll('[data-sv-aria]').forEach(el=>{const v=el.getAttribute('data-'+l+'-aria');if(v)el.setAttribute('aria-label',v);});document.querySelectorAll('.lang-btn').forEach(b=>{const on=b.dataset.lang===l;b.classList.toggle('active',on);b.setAttribute('aria-pressed',on?'true':'false');});renderCartDrawer();updateCartBadge();sdFillShipping();_sdWaRefresh();if(l==='sv')loadSekRate();if(typeof refreshSuggestLang==='function')refreshSuggestLang();try{window.dispatchEvent(new CustomEvent('sd:lang',{detail:l}));}catch(e){}if(typeof onLangChange==='function')onLangChange(l);}
+function setLang(l){if(!UI[l])l='fr';LANG=l;saveLang(l);document.documentElement.lang=l;document.querySelectorAll('[data-sv]').forEach(el=>{const v=el.getAttribute('data-'+l);if(v!==null)el.innerHTML=v;});document.querySelectorAll('[data-sv-ph]').forEach(el=>{const v=el.getAttribute('data-'+l+'-ph');if(v)el.placeholder=v;});document.querySelectorAll('[data-sv-aria]').forEach(el=>{const v=el.getAttribute('data-'+l+'-aria');if(v)el.setAttribute('aria-label',v);});document.querySelectorAll('.lang-btn').forEach(b=>{const on=b.dataset.lang===l;b.classList.toggle('active',on);b.setAttribute('aria-pressed',on?'true':'false');});renderCartDrawer();updateCartBadge();sdFillShipping();sdFillSek();_sdWaRefresh();if(l==='sv')loadSekRate();if(typeof refreshSuggestLang==='function')refreshSuggestLang();try{window.dispatchEvent(new CustomEvent('sd:lang',{detail:l}));}catch(e){}if(typeof onLangChange==='function')onLangChange(l);}
 function openSearch(){const so=document.getElementById('search-overlay');if(!so)return;if(!so.classList.contains('open'))_sdRemember('search-overlay');so.classList.add('open');_sdExpanded('.btn-search',true);_sdSyncLayers();const i=document.getElementById('search-inp');doSearch(i?i.value:'');setTimeout(()=>i?.focus(),50);}
 function closeSearch(){const so=document.getElementById('search-overlay');const was=!!(so&&so.classList.contains('open'));so?.classList.remove('open');_sdExpanded('.btn-search',false);_sdSyncLayers();const i=document.getElementById('search-inp');if(i)i.value='';const r=document.getElementById('search-res');if(r)r.innerHTML='';const st=document.getElementById('search-status');if(st)st.textContent='';if(was)_sdRestore('search-overlay','.btn-search');}
 function handleSearchClick(e){if(e.target===document.getElementById('search-overlay'))closeSearch();}
@@ -409,7 +417,7 @@ var _sdIcons={
 
 /* ── Livraison : textes calculés depuis les réglages (SD_SHIP), jamais en dur ── */
 /* Montant rond dans une langue donnée (« 29 € », « €29 », couronnes en suédois) */
-function _sdShortIn(n,l){n=+n||0;if(l==='sv'&&_sekRate>0)return Math.round(n*_sekRate)+' kr';var s=n%1?n.toFixed(2):String(n);return l==='fr'?s.replace('.',',')+' €':'€'+s;}
+function _sdShortIn(n,l){n=+n||0;var s=n%1?n.toFixed(2):String(n);return l==='en'?'€'+s:s.replace('.',',')+' €';}
 /* « Livraison offerte dès 29 € en France », ou le libellé de l'opération en cours */
 function sdFreeShipText(l){l=l||LANG;var lab=SD_SHIP.label(l);if(lab)return lab;var t=_sdShortIn(SD_SHIP.rules(false).threshold,l);return l==='en'?'Free delivery in France from '+t:l==='sv'?'Fri frakt i Frankrike från '+t:'Livraison offerte dès '+t+' en France';}
 /* Pour les pages : <span data-sd-ship="fr-threshold">29 €</span> est recalculé
@@ -464,7 +472,7 @@ function renderHeader(activePage=''){
   +`<div class="lang-bar"${LANGS_LBL}>${_sdLangBtns()}</div>`
   +`<div class="announcement" data-sv="${_sdAttr(_sdAnn(ann.sv))}" data-fr="${_sdAttr(_sdAnn(ann.fr))}" data-en="${_sdAttr(_sdAnn(ann.en))}">${_sdAnn(ann[LANG]||ann.fr)}</div>`
   +sdSeasonBannerHTML()
-  +`<header><div class="nav-inner"><a href="/" class="logo"><img class="logo-mark" src="/img/sc-monogramme.png" alt="" width="28" height="42"><span class="logo-text"><span class="logo-main">${_sdAttr(SD_WL.brand_name)}</span><span class="logo-tag">${_sdAttr(SD_WL.brand_tagline)}</span></span></a>`
+  +`<header><div class="nav-inner"><a href="/" class="logo"><img class="logo-mark" src="/img/sc-monogramme-96.png" alt="" width="28" height="42"><span class="logo-text"><span class="logo-main">${_sdAttr(SD_WL.brand_name)}</span><span class="logo-tag">${_sdAttr(SD_WL.brand_tagline)}</span></span></a>`
   +`<nav class="main-nav"${_sdAria('Huvudmeny','Menu principal','Main menu')}>${_sdNavLinks(activePage,false)}</nav>`
   +`<div class="nav-actions"><button type="button" class="btn-search" onclick="openSearch()"${_sdAria('Sök','Rechercher','Search')} aria-haspopup="dialog" aria-expanded="false" aria-controls="search-overlay">${I.search}</button>`
   +`<button type="button" class="btn-cart" onclick="openCart()" aria-label="${_sdT('Panier','Cart','Varukorg')}" aria-haspopup="dialog" aria-expanded="false" aria-controls="cart-drawer">${I.cart}<span class="cart-label"${_sdTx('Korg','Panier','Cart')}</span><span class="cart-badge" aria-hidden="true" hidden></span></button>`
@@ -510,7 +518,7 @@ function sdPayLogos(cls){
 /* Présentation de repli quand le back-office n'en fournit pas (footer_desc_*) */
 var SD_FOOTER_DESC={
   fr:'Épicerie suédoise en ligne : bonbons, chocolat, fika et épicerie salée, importés de Suède et livrés en France et en Europe.',
-  en:'A Swedish grocery online: sweets, chocolate, fika and savoury staples, imported from Sweden and delivered across France and Europe.',
+  en:'An online Swedish grocery: sweets, chocolate, fika and savoury staples, imported from Sweden and delivered across France and Europe.',
   sv:'Svensk speceributik på nätet: godis, choklad, fika och skafferivaror, importerade från Sverige och levererade i Frankrike och Europa.'
 };
 /* Texte du back-office en trois langues : échappé deux fois dans data-*
@@ -650,9 +658,13 @@ function _sdAnn(txt){return String(txt||'').split(/\s+·\s+/).filter(Boolean).ma
 /* Rayons réels de la boutique (catégories de l'admin, hors maison), du plus
    fourni au moins fourni. Mêmes règles que js/catalog-v3.js : les box ont
    leur propre section en tête de la boutique et ne comptent pas dans leur rayon. */
-function _sdShopRayons(){var excl={'art-de-la-table':1,'maison-deco':1};var m={};(window.PRODUCTS||[]).forEach(function(p){var c=p&&p.category;if(!c||!c.slug||excl[c.slug])return;if((p.tags||[]).indexOf('box')>-1||/^box\b/i.test((p.name&&p.name.fr)||''))return;if(!m[c.slug])m[c.slug]={slug:c.slug,label:c,count:0};m[c.slug].count++;});return Object.keys(m).map(function(k){return m[k];}).sort(function(a,b){return b.count-a.count;});}
-function _sdRayonUrl(slug){return 'boutique.html?rayon='+encodeURIComponent(slug);}
-function _sdFillMobRayons(){var box=document.getElementById('mob-rayons');if(!box)return;box.innerHTML=_sdShopRayons().slice(0,6).map(function(r){return'<a href="'+_sdRayonUrl(r.slug)+'" onclick="closeMob()">'+_sdAttr(r.label[LANG]||r.label.fr)+'</a>';}).join('');}
+/* Rayons réels de la boutique (hors Maison et box). count = produits
+   disponibles : un « 25 au choix » qui comptait 5 bonbons épuisés promettait
+   ce qu'on ne pouvait pas vendre. photo = un produit disponible du rayon,
+   best-seller d'abord, pour illustrer la tuile. */
+function _sdShopRayons(){var excl={'art-de-la-table':1,'maison-deco':1};var m={};(window.PRODUCTS||[]).forEach(function(p){var c=p&&p.category;if(!c||!c.slug||excl[c.slug])return;if((p.tags||[]).indexOf('box')>-1||/^box\b/i.test((p.name&&p.name.fr)||''))return;if(!m[c.slug])m[c.slug]={slug:c.slug,label:c,count:0,total:0,photo:'',best:false};var r=m[c.slug];r.total++;if(sdIsOut(p))return;r.count++;if(p.photo&&(!r.photo||(p.bestseller&&!r.best))){r.photo=p.photo;r.best=!!p.bestseller;}});return Object.keys(m).map(function(k){return m[k];}).filter(function(r){return r.count>0;}).sort(function(a,b){return b.count-a.count;});}
+function _sdRayonUrl(slug){return '/boutique?rayon='+encodeURIComponent(slug);}
+function _sdFillMobRayons(){var box=document.getElementById('mob-rayons');if(!box)return;box.innerHTML='<a href="'+_sdRayonUrl('box')+'" onclick="closeMob()">'+_sdT('Nos box','Gift boxes','Presentlådor')+'</a>'+_sdShopRayons().slice(0,6).map(function(r){return'<a href="'+_sdRayonUrl(r.slug)+'" onclick="closeMob()">'+_sdAttr(r.label[LANG]||r.label.fr)+'</a>';}).join('');}
 
 /* Clavier et lecteurs d'écran, communs à toutes les pages */
 function _sdCartRefocus(key,act){

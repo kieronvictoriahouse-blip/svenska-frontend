@@ -18,7 +18,7 @@
 <meta property="og:site_name" content="Swedish Cravings">
 <meta property="og:locale" content="fr_FR">
 <meta name="twitter:card" content="summary">
-<link rel="stylesheet" href="css/style.css?v=22">
+<link rel="stylesheet" href="css/style.css?v=23">
 <script>const SD_API_URL = 'https://admin.swedishcravings.fr';</script>
 <script>(function(){try{var w=JSON.parse(localStorage.getItem('sd_wl_v1'));if(w&&w.id){var r=document.documentElement.style;if(w.color_primary){r.setProperty('--heather',w.color_primary);r.setProperty('--heather-mid',w.color_primary+'CC');}if(w.color_secondary){r.setProperty('--lingon',w.color_secondary);r.setProperty('--lingon-mid',w.color_secondary+'CC');}if(w.color_bg)r.setProperty('--cream',w.color_bg);if(w.color_text)r.setProperty('--midnight',w.color_text);if(w.font_display)r.setProperty('--font-display',"'"+w.font_display+"',Georgia,serif");if(w.font_body)r.setProperty('--font-body',"'"+w.font_body+"',Georgia,serif");if(w.font_ui)r.setProperty('--font-ui',"'"+w.font_ui+"',sans-serif");}}catch(e){}}());</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Accueil","item":"https://www.swedishcravings.fr/"},{"@type":"ListItem","position":2,"name":"Politique de confidentialité","item":"https://www.swedishcravings.fr/confidentialite"}]}</script>
@@ -70,6 +70,7 @@
     <li><strong>Newsletter</strong> — votre e-mail, uniquement si vous vous inscrivez. Base légale&nbsp;: consentement. Chaque envoi contient un lien de désinscription.</li>
     <li><strong>Formulaire de contact</strong> — nom, e-mail, message (et numéro de commande si vous l’indiquez), transmis par e-mail à la boutique pour vous répondre. Base légale&nbsp;: intérêt légitime à traiter votre demande.</li>
     <li><strong>Suggestion de produit</strong> — nom, e-mail et produit suggéré, enregistrés pour étudier votre suggestion et vous répondre. Base légale&nbsp;: intérêt légitime à traiter votre demande.</li>
+    <li><strong>Alerte de retour en stock</strong> — e-mail et produit concerné, enregistrés à votre demande sur la fiche d'un produit épuisé pour vous envoyer un seul e-mail à son retour. Base légale&nbsp;: votre demande (exécution de mesures précontractuelles).</li>
     <li><strong>WhatsApp</strong> — si vous nous écrivez sur WhatsApp, votre numéro et vos messages sont traités par WhatsApp (groupe Meta) selon ses propres conditions, et par nous pour vous répondre.</li>
     <li><strong>Comptes clients</strong> — la création de compte n’est plus proposée sur le site&nbsp;: vous êtes identifié par l’adresse e-mail utilisée pour payer. Si vous aviez créé un compte auparavant, vous pouvez nous demander de le supprimer.</li>
     <li><strong>Obligations comptables</strong> — factures et pièces comptables. Base légale&nbsp;: obligation légale.</li>
@@ -99,6 +100,7 @@
     <li>Messages envoyés via le formulaire de contact&nbsp;: le temps de traiter la demande, puis 3&nbsp;ans&nbsp;;</li>
     <li>Avis publiés&nbsp;: en ligne tant que le produit est vendu, puis supprimés au plus tard 3&nbsp;ans après&nbsp;;</li>
     <li>Suggestions de produit envoyées via le site&nbsp;: 1&nbsp;an&nbsp;;</li>
+    <li>Alertes de retour en stock&nbsp;: jusqu'à l'envoi de l'e-mail, puis 90&nbsp;jours&nbsp;; une alerte jamais envoyée est effacée au bout d'un&nbsp;an&nbsp;;</li>
     <li>Programme de fidélité et de parrainage (codes, historique)&nbsp;: 3&nbsp;ans après votre dernier achat.</li>
     <li>Vous pouvez demander la suppression de vos données à tout moment, sauf celles que la loi nous oblige à conserver (factures).</li>
   </ul>
@@ -115,17 +117,17 @@
     <li><strong>Google Ads</strong> (publicité) — mesurer l’efficacité de nos annonces et vous présenter nos produits sur d’autres sites&nbsp;;</li>
     <li><strong>Pixel Meta</strong> (publicité sur Facebook et Instagram), si nous l’activons — mêmes finalités que Google Ads.</li>
   </ul>
-  <p>Tant que vous n’avez pas cliqué «&nbsp;Accepter&nbsp;», ces outils ne sont pas chargés&nbsp;: Google et Meta ne reçoivent aucune donnée et aucun de leurs cookies n’est déposé. Votre choix est conservé 6&nbsp;mois. Si vous retirez votre accord, les cookies déjà déposés (_ga, _gcl, _fbp) sont effacés. Vous pouvez modifier votre choix à tout moment&nbsp;: <button type="button" class="lg-link" onclick="window.sdCookieSettings&amp;&amp;sdCookieSettings()">gérer mes cookies</button>.</p>
+  <p>Tant que vous n’avez pas cliqué «&nbsp;Accepter&nbsp;», ces outils ne sont pas chargés&nbsp;: Google et Meta ne reçoivent aucune donnée et aucun de leurs cookies n’est déposé. Votre choix est conservé 6&nbsp;mois. Si vous retirez votre accord, les cookies déjà déposés (_ga, _gcl, _fbp) sont effacés. Vous pouvez modifier votre choix à tout moment&nbsp;: <button type="button" class="lg-link" onclick="window.sdCookieSettings&amp;&amp;sdCookieSettings()">gérer vos cookies</button>.</p>
 
   <p style="margin-top:40px;font-size:14px;color:var(--dust);">Dernière mise à jour&nbsp;: 23 octobre 2026</p>
 </div>
 </main>
 
 <div id="footer-root"></div>
-<script src="js/app.js?v=35"></script>
+<script src="js/app.js?v=36"></script>
 <script>initPage('');</script>
 <script>(function(){var _hr=document.getElementById("header-root");if(_hr&&typeof MutationObserver!=="undefined")new MutationObserver(function(){if(typeof updateCartBadge==="function")updateCartBadge();}).observe(_hr,{childList:true});})();</script>
-<script src="js/sd-api-client.js?v=12"></script>
+<script src="js/sd-api-client.js?v=13"></script>
 <script src="js/sd-legal.js?v=2"></script>
 </body>
 </html>

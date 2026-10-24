@@ -200,6 +200,8 @@
       trackStock:  !!(p.track_stock),
       pickup_only: !!(p.pickup_only),
       createdAt:   p.created_at || null,
+      // Adresse figée en base (produits.slug) : un renommage ne change plus l'URL
+      slug:        typeof p.slug === 'string' ? p.slug : '',
     };
   }
 
@@ -350,16 +352,19 @@
       if (_me && _oldBrand) _me.setAttribute('content', (_me.getAttribute('content') || '').replace(_oldBrand, _siteName));
       _me = _qm('meta[property="og:url"]');
       if (_me) _me.setAttribute('content', location.href);
-      var _jld = _qm('script[type="application/ld+json"]');
-      if (_jld) {
+      /* Seul le bloc qui décrit la boutique porte son nom. Viser « le premier
+         JSON-LD de la page » renommait le Product des fiches (et l'ItemList
+         de la boutique) en « Swedish Cravings » dans le DOM lu par Google. */
+      document.querySelectorAll('script[type="application/ld+json"]').forEach(function(_jld) {
         try {
           var _d = JSON.parse(_jld.textContent);
+          if (['OnlineStore', 'Store', 'GroceryStore', 'Organization', 'WebSite'].indexOf(_d['@type']) === -1) return;
           if (_d.name !== undefined) _d.name = _siteName;
           if (cfg.email && _d.email !== undefined) _d.email = cfg.email;
           if (_d.url !== undefined) _d.url = location.origin;
           _jld.textContent = JSON.stringify(_d);
         } catch(e) {}
-      }
+      });
     }
 
     if (cfg.email) window._contactEmail = cfg.email;

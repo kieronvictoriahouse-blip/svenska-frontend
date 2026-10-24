@@ -19,7 +19,7 @@ const lib = require('./lib/produits');
 const { slugify } = lib;
 const esc = s => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 // La marque réelle (lib/produits) ; à défaut, la boutique — Merchant exige une marque.
-const brandOf = nameFr => lib.brandOf(nameFr) || 'Swedish Cravings';
+const brandOf = p => lib.brandOf(p.name_fr, p) || 'Swedish Cravings';
 /* ── Titre Shopping ─────────────────────────────────────────────
    Google Shopping n'a pas de mots-clés : il compare la recherche au TITRE.
    Forme visée : « Marque + nom + type recherché, poids ». On ne réécrit que
@@ -28,7 +28,8 @@ const brandOf = nameFr => lib.brandOf(nameFr) || 'Swedish Cravings';
    - « suédois » seulement pour une marque suédoise, sinon « importé de Suède »
      (Fazer est finlandais, Törsleff/Odense danois, Marimekko finlandais…). */
 const SWEDISH_BRANDS = ['OLW', 'Ahlgrens', 'Läkerol', 'Malaco', 'Marabou', 'Polly', 'Santa Maria',
-  'Piffi', 'Ballerina', 'Cloetta', "O'boy", 'Wasa', "Dave & Jon's"];
+  'Piffi', 'Ballerina', 'Cloetta', "O'boy", 'Wasa', "Dave & Jon's", 'Estrella', 'Kockens', 'Blå Band',
+  'Delicato', 'Dansukker', 'Korkat'];
 const TYPE_BY_CAT = {
   confiseries: 'bonbons suédois', chocolat: 'chocolat suédois', dips: 'dip suédois',
   epices: 'épices suédoises', sauces: 'sauce suédoise', 'snacks-chips': 'snack suédois',
@@ -41,8 +42,8 @@ const TITLE_OVERRIDES = {
 function titleOf(p) {
   const ov = TITLE_OVERRIDES[String(p.id || '').slice(0, 8)];
   if (ov) return ov;
-  const brand = brandOf(p.name_fr);
-  const known = !!lib.brandOf(p.name_fr);
+  const brand = brandOf(p);
+  const known = !!lib.brandOf(p.name_fr, p);
   let name = (p.name_fr || '').replace(/\s+/g, ' ').trim();
   const weight = String(p.weight || '').replace(/\s*gram(s)?$/i, ' g').replace(/(\d)\s*g$/i, '$1 g').trim();
   // Poids déjà dans le nom (« … 180g ») : on le retire pour le remettre au format commun en fin de titre.
@@ -134,7 +135,7 @@ async function main() {
   if (!products.length) { console.log('Aucun produit éligible — flux ignoré'); return; }
 
   const items = products.map(p => {
-    const url = `${SITE}/produit/${slugify(p.name_fr, p.id)}`;
+    const url = `${SITE}/produit/${lib.slugOf(p)}`;
     const avail = (p.track_stock === true && (p.stock || 0) <= 0) ? 'out_of_stock' : 'in_stock';
     const price = (parseFloat(p.price) || 0).toFixed(2);
     const disc = discountOf(p);
@@ -156,7 +157,7 @@ async function main() {
     <g:image_link>${esc((p.image_url || '').replace(/^https?:\/\/[a-z0-9]+\.supabase\.co\/storage\/v1\/object\/public\/svenska-media\//i, `${SITE}/media/`))}</g:image_link>
     <g:availability>${avail}</g:availability>
     <g:price>${price} EUR</g:price>
-    <g:brand>${esc(brandOf(p.name_fr))}</g:brand>
+    <g:brand>${esc(brandOf(p))}</g:brand>
     <g:condition>new</g:condition>
     ${/^\d{8,14}$/.test(String(p.ean || '').trim()) ? `<g:gtin>${esc(String(p.ean).trim())}</g:gtin>` : '<g:identifier_exists>no</g:identifier_exists>'}
     <g:google_product_category>${esc(googleCat(p))}</g:google_product_category>

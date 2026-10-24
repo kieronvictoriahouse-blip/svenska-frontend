@@ -47,7 +47,8 @@
   var HINTS = ['bilar', 'OLW', 'salmiak', 'Marabou'];
 
   var FLAG = {
-    out: { fr: 'Épuisé', en: 'Sold out', sv: 'Slut i lager' },
+    // Épuisé : rangé en fin de liste, la fiche propose l'alerte de retour
+    out: { fr: 'Bientôt de retour', en: 'Back soon', sv: 'Snart tillbaka' },
     pickup: { fr: 'Retrait uniquement', en: 'Pickup only', sv: 'Endast upphämtning' },
     new: { fr: 'Nouveau', en: 'New', sv: 'Nyhet' },
     low: { fr: 'Stock limité', en: 'Limited stock', sv: 'Begränsat lager' },
@@ -113,7 +114,7 @@
     subtotal: { fr: 'Sous-total', en: 'Subtotal', sv: 'Delsumma' },
     order: { fr: 'Commander', en: 'Checkout', sv: 'Till kassan' },
     securePay: { fr: 'Paiement sécurisé', en: 'Secure payment', sv: 'Säker betalning' },
-    shipped48: { fr: 'Expédié sous 48 h', en: 'Shipped within 48 h', sv: 'Skickas inom 48 h' },
+    shipped48: { fr: 'Expédié sous 24 à 48 h ouvrées', en: 'Ships within 1–2 working days', sv: 'Skickas inom 1–2 arbetsdagar' },
     myBasket: { fr: 'Mon panier', en: 'My basket', sv: 'Min korg' },
     basketEmpty: { fr: 'Panier vide', en: 'Empty basket', sv: 'Tom korg' },
     openCart: { fr: 'Voir le panier', en: 'View basket', sv: 'Visa korgen' },
@@ -123,7 +124,7 @@
     removedSr: { fr: '{N} retiré du panier. Panier : {C}.', en: '{N} removed from basket. Basket: {C}.', sv: '{N} togs bort ur korgen. Korg: {C}.' },
     shipFrom: { fr: 'Livraison offerte dès {X} d’achat.', en: 'Free delivery from {X}.', sv: 'Fri frakt från {X}.' },
     shipLeft: { fr: 'Plus que {X} pour la livraison offerte.', en: 'Only {X} to go for free delivery.', sv: 'Bara {X} kvar till fri frakt.' },
-    shipDone: { fr: 'Livraison offerte : colis expédié sous 48 h.', en: 'Free delivery: parcel shipped within 48 h.', sv: 'Fri frakt: paketet skickas inom 48 h.' },
+    shipDone: { fr: 'Livraison offerte : colis expédié sous 24 à 48 h ouvrées.', en: 'Free delivery: parcel ships within 1–2 working days.', sv: 'Fri frakt: paketet skickas inom 1–2 arbetsdagar.' },
     shipAlways: { fr: 'Livraison offerte.', en: 'Free delivery.', sv: 'Fri frakt.' },
     shipLine: { fr: 'Livraison (France)', en: 'Shipping (France)', sv: 'Frakt (Frankrike)' },
     shipFree: { fr: 'Offerte', en: 'Free', sv: 'Gratis' },
@@ -411,7 +412,8 @@
       else if (v.tags.best) flags.push(['best', tr(FLAG.best)]);
     }
     var set = v.photo ? thumbSet(v.photo) : '';
-    var sizes = v.isBox ? '(max-width:767px) 46vw, 280px' : '(max-width:767px) 46vw, (max-width:1099px) 30vw, 200px';
+    // Largeurs réellement affichées (box ~336 px, cartes ~232 px sur grand écran)
+    var sizes = v.isBox ? '(max-width:767px) 46vw, 340px' : '(max-width:767px) 46vw, (max-width:1099px) 30vw, 240px';
     // La photo est décorative : le nom (lien) dit déjà ce que c'est.
     var img = v.photo
       ? '<img class="c3-img" src="' + esc(thumb(v.photo, 300)) + '"' + (set ? ' srcset="' + esc(set) + '" sizes="' + sizes + '"' : '') +
