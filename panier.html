@@ -449,9 +449,19 @@ if (window._promoInput && !window._appliedPromo && _ckSaved.promo) {
 }
 
 // ── Offre "cadeau offert" : chargée une fois, re-render au retour ──
-/* Reprise de l'ancien choix unique : un client qui avait deja un cadeau
-   memorise le retrouve, sans quoi son panier semblerait l'avoir perdu. */
-window._giftChoices = (function(){
+/* Plusieurs offres cadeau peuvent cohabiter (« un Center offert » ET
+   « 2 dipmix achetés, le 3e offert ») : un choix par offre, rangé sous
+   l'identifiant de l'offre. L'ancien choix unique est repris par la
+   première offre qui propose ce produit, pour ne rien perdre. */
+window._giftOffers = [];
+window._giftChoicesBy = (function(){
+  try {
+    var m = JSON.parse(localStorage.getItem('sd_gift_choices_v2') || 'null');
+    if (m && typeof m === 'object' && !Array.isArray(m)) return m;
+  } catch(e){}
+  return {};
+})();
+window._giftLegacy = (function(){
   try {
     var m = JSON.parse(localStorage.getItem('sd_gift_choices') || 'null');
     if (Array.isArray(m)) return m;
@@ -459,22 +469,26 @@ window._giftChoices = (function(){
     return seul ? [seul] : [];
   } catch(e){ return []; }
 })();
-window._giftEarned = 0;
+window._giftEarnedBy = {};
+window._giftTouchedBy = {};
+function _saveGiftChoices(){
+  try { localStorage.setItem('sd_gift_choices_v2', JSON.stringify(window._giftChoicesBy)); } catch(e){}
+}
 /* Une offre « 2 achetés, 1 offert » peut en accorder plusieurs : le
    choix est donc une liste, plafonnée par ce que le panier a mérité.
    Recliquer sur un cadeau déjà pris le retire. */
-function selectGift(id){
-  var l = window._giftChoices || [];
+function selectGift(offerId, id){
+  var l = (window._giftChoicesBy[offerId] || []).slice();
   var i = l.indexOf(id);
   if (i >= 0) l.splice(i, 1);
   else {
-    var max = window._giftEarned || 0;
+    var max = window._giftEarnedBy[offerId] || 0;
     if (l.length >= max) l.shift();      // le plus ancien cède la place
     l.push(id);
   }
-  window._giftChoices = l;
-  window._giftTouched = true;
-  try { localStorage.setItem('sd_gift_choices', JSON.stringify(l)); } catch(e){}
+  window._giftChoicesBy[offerId] = l;
+  window._giftTouchedBy[offerId] = true;
+  _saveGiftChoices();
   renderCartPageFull();
 }
 
@@ -511,12 +525,14 @@ function giftEarned(offer, cart, subtotal){
   try {
     const r = await fetch((window.SD_API_URL || 'https://admin.swedishcravings.fr') + '/api/gift-offer');
     const j = await r.json();
-    window._giftOffer = (j && j.offer) || null;
-    try {
-      var m = JSON.parse(localStorage.getItem('sd_gift_choices') || '[]');
-      window._giftChoices = Array.isArray(m) ? m : [];
-    } catch(e) { window._giftChoices = []; }
-  } catch(e) { window._giftOffer = null; }
+    window._giftOffers = (j && Array.isArray(j.offers)) ? j.offers : ((j && j.offer) ? [j.offer] : []);
+    // Reprise de l'ancien choix unique (voir plus haut).
+    (window._giftLegacy || []).forEach(function(gid){
+      var o = window._giftOffers.find(function(of){ return (of.products || []).some(function(p){ return p.id === gid; }); });
+      if (o && !(window._giftChoicesBy[o.id] || []).length) window._giftChoicesBy[o.id] = [gid];
+    });
+    window._giftLegacy = [];
+  } catch(e) { window._giftOffers = []; }
   renderCartPageFull();
 })();
 
@@ -758,18 +774,19 @@ function _renderCartPage() {
 
   // ── Cadeau offert (au-dessus d'un seuil) ──
   let _giftBlockHtml = '';
-  (function(){
-    const offer = window._giftOffer;
-    if (!offer || !offer.products || !offer.products.length) { window._giftChoices = []; return; }
+  /* Une offre après l'autre : chacune a son bloc, son compte et ses choix. */
+  (window._giftOffers || []).forEach(function(offer){
+    if (!offer || !offer.products || !offer.products.length) return;
+    const oid = offer.id;
 
     /* Ce que le panier a RÉELLEMENT mérité. Le seuil seul ne suffit
        plus : une offre « 2 Piffi achetés » ne se déclenche pas parce
        que le sous-total dépasse zéro. */
     const earned = giftEarned(offer, cart, subtotal);
-    window._giftEarned = earned;
+    window._giftEarnedBy[oid] = earned;
 
     if (earned < 1) {
-      window._giftChoices = [];
+      window._giftChoicesBy[oid] = [];
       let msg;
       if (offer.mode === 'quantite') {
         const noms = (offer.trigger_products || [])
@@ -794,27 +811,27 @@ function _renderCartPage() {
             : LANG==='en' ? `Only ${fmtPrice(left)} away from your free gift`
             : `Plus que ${fmtPrice(left)} pour votre cadeau offert`;
       }
-      _giftBlockHtml = `<div class="gift-nudge">${msg}</div>`;
+      _giftBlockHtml += `<div class="gift-nudge">${msg}</div>`;
       return;
     }
 
     const ids = offer.products.map(p => p.id);
     /* On purge les choix devenus invalides, et on plafonne à ce qui est
        mérité : retirer un Piffi du panier doit retirer le cadeau. */
-    window._giftChoices = (window._giftChoices || []).filter(id => ids.includes(id)).slice(0, earned);
+    window._giftChoicesBy[oid] = (window._giftChoicesBy[oid] || []).filter(id => ids.includes(id)).slice(0, earned);
     /* Un seul cadeau possible et un seul produit proposé : on le pose,
        il n'y a rien à choisir. */
-    if (earned === 1 && offer.products.length === 1) window._giftChoices = [offer.products[0].id];
+    if (earned === 1 && offer.products.length === 1) window._giftChoicesBy[oid] = [offer.products[0].id];
     /* Cadeau mérité mais pas encore choisi : on en pose un d'office, que le
        client peut changer. Sans cela, qui ne voyait pas le bloc payait sans
        son cadeau. Un client qui en retire un exprès n'est pas contredit. */
-    else if (!window._giftChoices.length && !window._giftTouched) window._giftChoices = ids.slice(0, earned);
+    else if (!window._giftChoicesBy[oid].length && !window._giftTouchedBy[oid]) window._giftChoicesBy[oid] = ids.slice(0, earned);
 
-    const choisis = window._giftChoices;
+    const choisis = window._giftChoicesBy[oid];
     const choices = offer.products.map(p => {
       const nm = p['name_' + LANG] || p.name_fr || '';
       const sel = choisis.includes(p.id);
-      return `<button type="button" class="gift-choice${sel?' sel':''}" onclick="selectGift('${p.id}')"><img src="${p.image_url||''}" onerror="this.style.display='none'" alt=""><span class="gift-choice-nm">${nm}</span>${sel?'<span class="gift-check">✓</span>':''}</button>`;
+      return `<button type="button" class="gift-choice${sel?' sel':''}" onclick="selectGift('${oid}','${p.id}')"><img src="${p.image_url||''}" onerror="this.style.display='none'" alt=""><span class="gift-choice-nm">${nm}</span>${sel?'<span class="gift-check">✓</span>':''}</button>`;
     }).join('');
 
     const reste = earned - choisis.length;
@@ -826,8 +843,9 @@ function _renderCartPage() {
     const title = earned > 1
       ? `${titleBase} — ${choisis.length}/${earned}`
       : titleBase;
-    _giftBlockHtml = `<div class="gift-block"><div class="gift-title"><span>${title}</span><span class="gift-free">${LANG==='en'?'Free':LANG==='sv'?'Gratis':'Offert'} · 0 €</span></div><div class="gift-choices">${choices}</div></div>`;
-  })();
+    _giftBlockHtml += `<div class="gift-block"><div class="gift-title"><span>${title}</span><span class="gift-free">${LANG==='en'?'Free':LANG==='sv'?'Gratis':'Offert'} · 0 €</span></div><div class="gift-choices">${choices}</div></div>`;
+  });
+  _saveGiftChoices();
 
   /* Produits « retrait uniquement » : le client peut les retirer pour
      retrouver la livraison, au lieu de buter sur un bouton grisé. */
@@ -1143,7 +1161,7 @@ async function doCheckout() {
 
   // Cadeau offert : envoyé si un choix est fait et le seuil atteint (revalidé côté serveur)
   try {
-    if (window._giftOffer && (window._giftChoices || []).length) {
+    if ((window._giftOffers || []).length) {
       let _sub = 0;
       Object.entries(cart).filter(([, q]) => q > 0).forEach(([key, qty]) => {
         const ri = key.indexOf('_'); const idStr = ri === -1 ? key : key.slice(0, ri);
@@ -1156,11 +1174,15 @@ async function doCheckout() {
       });
       /* Le serveur revalide et tranche : on n'envoie que ce qui est
          mérité selon la même règle, un article par cadeau. */
-      const _earned = giftEarned(window._giftOffer, cart, _sub);
-      (window._giftChoices || []).slice(0, _earned).forEach(function(gid){
-        if ((window._giftOffer.products || []).some(p => p.id === gid)) {
-          items.push({ id: gid, quantity: 1, gift: true });
-        }
+      /* Chaque cadeau part avec son offre : le serveur ne le sert
+         qu'au titre de celle-ci. */
+      window._giftOffers.forEach(function(offer){
+        const _earned = giftEarned(offer, cart, _sub);
+        (window._giftChoicesBy[offer.id] || []).slice(0, _earned).forEach(function(gid){
+          if ((offer.products || []).some(p => p.id === gid)) {
+            items.push({ id: gid, quantity: 1, gift: true, offer_id: offer.id });
+          }
+        });
       });
     }
   } catch(e) {}
