@@ -789,8 +789,13 @@ function _renderCartPage() {
       window._giftChoicesBy[oid] = [];
       let msg;
       if (offer.mode === 'quantite') {
-        const noms = (offer.trigger_products || [])
-          .map(p => p['name_' + LANG] || p.name_fr || '').filter(Boolean).join(' / ');
+        /* Au-delà de 3 produits (« tous nos dipmix »), la liste complète
+           devient un pavé : on en cite deux et on dit qu'il y en a d'autres. */
+        const _tous = (offer.trigger_products || [])
+          .map(p => p['name_' + LANG] || p.name_fr || '').filter(Boolean);
+        const noms = _tous.length > 3
+          ? _tous.slice(0, 2).join(' / ') + (LANG==='sv' ? ' eller en annan vara i erbjudandet' : LANG==='en' ? ' or another product in the offer' : ' ou un autre produit de l’offre')
+          : _tous.join(' / ');
         const pas = Number(offer.trigger_qty) || 0;
         let dedans = 0;
         Object.entries(cart || {}).forEach(function(e){
