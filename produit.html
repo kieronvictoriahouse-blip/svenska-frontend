@@ -564,7 +564,8 @@ function _renderBox(p) {
     b.textContent = (Number(it.qty) || 1) + ' × ';
     const pid = it.product_id || it.id;
     let lien;
-    if (pid && it.name_fr) {
+    /* Article masqué du site (vendu seulement dans la box) : nom sans lien, sa fiche n'existe pas. */
+    if (pid && it.name_fr && it.is_active !== false) {
       lien = document.createElement('a');
       lien.href = sdProductUrl((window.PRODUCTS || []).find(x => String(x.uuid || x.id) === String(pid)) || { name_fr: it.name_fr, id: pid });
       lien.textContent = nm;
@@ -576,7 +577,9 @@ function _renderBox(p) {
   }
   const note = document.createElement('p');
   note.className = 'pdp-box-note';
-  note.textContent = _T('Ingrédients et allergènes de chaque article sur sa fiche.', 'Ingredients and allergens for each item on its own page.', 'Ingredienser och allergener för varje vara på dess sida.');
+  const _tousEnLigne = items.every(it => it.is_active !== false);
+  note.textContent = !_tousEnLigne ? _T('Ingrédients et allergènes de chaque article ci-dessous.', 'Ingredients and allergens for each item below.', 'Ingredienser och allergener för varje vara nedan.')
+    : _T('Ingrédients et allergènes de chaque article sur sa fiche.', 'Ingredients and allergens for each item on its own page.', 'Ingredienser och allergener för varje vara på dess sida.');
   el.appendChild(titre); el.appendChild(ul); el.appendChild(note);
   el.style.display = '';
 }

@@ -178,7 +178,7 @@ span.var-btn.active { cursor:default; }
   .breadcrumb { font-size:11px; gap:4px; padding:10px 16px; flex-wrap:wrap; }
 }
 </style>
-<script>window.__PRODUCT_ID="d39ecb59-916e-4477-a980-5ccc598ab135";window.__SD_PRODUCT={"id":"d39ecb59-916e-4477-a980-5ccc598ab135","category_id":"2064dc5b-7ebf-4855-b3f2-5010642fcdda","name_sv":"Pappersservetter Stripe Beige","name_fr":"Serviettes en papier Stripe Beige","name_en":"Paper napkins Stripe Beige","subtitle_sv":"Beige ränder, stort format","subtitle_fr":"Rayures beiges, grand format","subtitle_en":"Beige stripes, large size","desc_sv":"Diskreta beige ränder i stort format, 33 × 40 cm, till middagen eller buffén. Förpackning med 15 servetter.","desc_fr":"Des rayures beiges discrètes en grand format 33 × 40 cm, pour un dîner ou un buffet. Paquet de 15 serviettes.","desc_en":"Discreet beige stripes in a large 33 × 40 cm size, for a dinner or a buffet. Pack of 15 napkins.","price":3.9,"weight":"15 serviettes · 33 × 40 cm","origin_sv":"Suède","origin_fr":"Suède","origin_en":"Sweden","image_url":"https://fdagtzhodyxulhqbkkoz.supabase.co/storage/v1/object/public/svenska-media/products/nappe-sans-fond-1789462308273.png","badge":null,"is_bestseller":false,"is_new":true,"is_active":true,"rating":4.5,"reviews_count":0,"tags":[],"usage_sv":"","usage_fr":"","usage_en":"","ingredients_sv":"","ingredients_fr":"","ingredients_en":"","storage_sv":"","storage_fr":"","storage_en":"","sort_order":0,"created_at":"2026-09-15T08:42:44.008931+00:00","updated_at":"2026-10-24T16:07:57.43956+00:00","stock":null,"track_stock":true,"allergens_sv":"","allergens_fr":"","allergens_en":"","nutrition":{"sel":"","fibres":"","energie":"","portion":"","glucides":"","graisses":"","proteines":"","dont_sucres":"","dont_satures":""},"extra_images":[],"pickup_only":false,"ean":null,"sku":"","pack_size":1,"discount_type":null,"discount_value":null,"discount_start":null,"discount_end":null,"bundle_items":null,"manufacturer":null,"slug":"serviettes-en-papier-stripe-beige-d39ecb59","product_variants":[],"categories":{"slug":"art-de-la-table","name_en":"Tableware","name_fr":"Art de la table","name_sv":"Dukning","discount_end":null,"discount_type":null,"discount_start":null,"discount_value":null}};</script>
+<script>window.__PRODUCT_ID="d39ecb59-916e-4477-a980-5ccc598ab135";window.__SD_PRODUCT={"id":"d39ecb59-916e-4477-a980-5ccc598ab135","category_id":"2064dc5b-7ebf-4855-b3f2-5010642fcdda","name_sv":"Pappersservetter Stripe Beige","name_fr":"Serviettes en papier Stripe Beige","name_en":"Paper napkins Stripe Beige","subtitle_sv":"Beige ränder, stort format","subtitle_fr":"Rayures beiges, grand format","subtitle_en":"Beige stripes, large size","desc_sv":"Diskreta beige ränder i stort format, 33 × 40 cm, till middagen eller buffén. Förpackning med 15 servetter.","desc_fr":"Des rayures beiges discrètes en grand format 33 × 40 cm, pour un dîner ou un buffet. Paquet de 15 serviettes.","desc_en":"Discreet beige stripes in a large 33 × 40 cm size, for a dinner or a buffet. Pack of 15 napkins.","price":3.9,"weight":"15 serviettes · 33 × 40 cm","origin_sv":"Suède","origin_fr":"Suède","origin_en":"Sweden","image_url":"https://fdagtzhodyxulhqbkkoz.supabase.co/storage/v1/object/public/svenska-media/products/nappe-sans-fond-1789462308273.png","badge":null,"is_bestseller":false,"is_new":true,"is_active":true,"rating":4.5,"reviews_count":0,"tags":[],"usage_sv":"","usage_fr":"","usage_en":"","ingredients_sv":"","ingredients_fr":"","ingredients_en":"","storage_sv":"","storage_fr":"","storage_en":"","sort_order":0,"created_at":"2026-09-15T08:42:44.008931+00:00","updated_at":"2026-10-24T16:07:57.43956+00:00","stock":null,"track_stock":true,"allergens_sv":"","allergens_fr":"","allergens_en":"","nutrition":{"sel":"","fibres":"","energie":"","portion":"","glucides":"","graisses":"","proteines":"","dont_sucres":"","dont_satures":""},"extra_images":[],"pickup_only":false,"ean":null,"sku":"","pack_size":1,"discount_type":null,"discount_value":null,"discount_start":null,"discount_end":null,"bundle_items":null,"manufacturer":null,"slug":"serviettes-en-papier-stripe-beige-d39ecb59","preorder":false,"preorder_ship_date":null,"preorder_end":null,"product_variants":[],"categories":{"slug":"art-de-la-table","name_en":"Tableware","name_fr":"Art de la table","name_sv":"Dukning","discount_end":null,"discount_type":null,"discount_start":null,"discount_value":null}};</script>
 </head>
 <body>
 <div id="header-root"></div>
@@ -574,7 +574,8 @@ function _renderBox(p) {
     b.textContent = (Number(it.qty) || 1) + ' × ';
     const pid = it.product_id || it.id;
     let lien;
-    if (pid && it.name_fr) {
+    /* Article masqué du site (vendu seulement dans la box) : nom sans lien, sa fiche n'existe pas. */
+    if (pid && it.name_fr && it.is_active !== false) {
       lien = document.createElement('a');
       lien.href = sdProductUrl((window.PRODUCTS || []).find(x => String(x.uuid || x.id) === String(pid)) || { name_fr: it.name_fr, id: pid });
       lien.textContent = nm;
@@ -586,7 +587,9 @@ function _renderBox(p) {
   }
   const note = document.createElement('p');
   note.className = 'pdp-box-note';
-  note.textContent = _T('Ingrédients et allergènes de chaque article sur sa fiche.', 'Ingredients and allergens for each item on its own page.', 'Ingredienser och allergener för varje vara på dess sida.');
+  const _tousEnLigne = items.every(it => it.is_active !== false);
+  note.textContent = !_tousEnLigne ? _T('Ingrédients et allergènes de chaque article ci-dessous.', 'Ingredients and allergens for each item below.', 'Ingredienser och allergener för varje vara nedan.')
+    : _T('Ingrédients et allergènes de chaque article sur sa fiche.', 'Ingredients and allergens for each item on its own page.', 'Ingredienser och allergener för varje vara på dess sida.');
   el.appendChild(titre); el.appendChild(ul); el.appendChild(note);
   el.style.display = '';
 }
