@@ -63,8 +63,9 @@
     <g:title>Swedish Cravings Kit Pepparkakor — Biscuits de Noël suédois, 885 g</g:title>
     <g:description>Le pepparkakor, c’est le biscuit de Noël suédois : fin, croquant, parfumé à la cannelle, au gingembre et au clou de girofle. Ce kit réunit la pâte à pain d’épices Gille, prête à étaler (500 g), et le glaçage blanc Dr. Oetker en tube (125 g) pour dessiner flocons, étoiles et petits cœurs, comme en Suède pendant l’Avent. De quoi faire une belle fournée de biscuits ou une maison en pain d’épices. Kit de Noël proposé uniquement en pré-commande.</g:description>
     <g:link>https://www.swedishcravings.fr/produit/kit-pepparkakor-biscuits-de-noel-suedois-0739b975</g:link>
-    <g:image_link>https://www.swedishcravings.fr/media/products/kit-pepparkakor-1793309791473.jpg</g:image_link>
+    <g:image_link>https://www.swedishcravings.fr/media/products/kit-pepparkakor-famille-1793311785080.jpg</g:image_link>
     <g:availability>preorder</g:availability>
+    <g:availability_date>2026-11-13T00:00+01:00</g:availability_date>
     <g:price>10.90 EUR</g:price>
     <g:brand>Swedish Cravings</g:brand>
     <g:condition>new</g:condition>
@@ -327,6 +328,25 @@
     <g:custom_label_1>prix-moins-3</g:custom_label_1>
     <g:custom_label_2>standard</g:custom_label_2>
     <g:custom_label_3>dips</g:custom_label_3>
+  </item>
+  <item>
+    <g:id>42fd5043-b84e-4aef-ada7-ef8f383df907</g:id>
+    <g:title>Fromage suédois, 400 g</g:title>
+    <g:description>D'une belle teinte jaune pâle, ce fromage à pâte ferme séduit par sa texture souple et fondante. Sa saveur douce, légèrement acidulée, en fait un compagnon idéal pour vos tartines matinales ou vos gratins. Un classique scandinave signé Wernerssons, maison fromagère depuis près de 100 ans.</g:description>
+    <g:link>https://www.swedishcravings.fr/produit/fromage-suedois-42fd5043</g:link>
+    <g:image_link>https://www.swedishcravings.fr/media/products/w-26593-1706-1783834374446-162636.jpg</g:image_link>
+    <g:availability>preorder</g:availability>
+    <g:availability_date>2026-11-13T00:00+01:00</g:availability_date>
+    <g:price>7.19 EUR</g:price>
+    <g:brand>Swedish Cravings</g:brand>
+    <g:condition>new</g:condition>
+    <g:identifier_exists>no</g:identifier_exists>
+    <g:google_product_category>Food, Beverages &amp; Tobacco &gt; Food Items</g:google_product_category>
+    <g:product_type>Épicerie &gt; Fromages &amp; tartinables</g:product_type>
+    <g:custom_label_0>marge-moyenne</g:custom_label_0>
+    <g:custom_label_1>prix-6-15</g:custom_label_1>
+    <g:custom_label_2>bestseller</g:custom_label_2>
+    <g:custom_label_3>fromages-tartinables</g:custom_label_3>
   </item>
   <item>
     <g:id>43aaba7d-f9a6-4b33-a07f-643e083007c3</g:id>
