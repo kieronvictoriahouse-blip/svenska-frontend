@@ -199,6 +199,10 @@
       stock:       typeof p.stock === 'number' ? p.stock : null,
       trackStock:  !!(p.track_stock),
       pickup_only: !!(p.pickup_only),
+      // Pré-commande (migration 065) : vendable sans stock jusqu'à preorderEnd (incluse)
+      preorder:     !!p.preorder,
+      preorderShip: p.preorder_ship_date || null,
+      preorderEnd:  p.preorder_end || null,
       createdAt:   p.created_at || null,
       // Adresse figée en base (produits.slug) : un renommage ne change plus l'URL
       slug:        typeof p.slug === 'string' ? p.slug : '',
@@ -423,7 +427,7 @@
             if (_cp[idStr]) return;
             var idInt = parseInt(idStr);
             var p = mapped.find(function(x) { return String(x.uuid || x.id) === idStr || (!isNaN(idInt) && x.id === idInt); });
-            if (p) { _cp[idStr] = {name:p.name,photo:p.photo,price:p.price,weight:p.weight,variants:p.variants||[]}; _dirty = true; }
+            if (p) { _cp[idStr] = {name:p.name,photo:p.photo,price:p.price,weight:p.weight,variants:p.variants||[],preorder:!!p.preorder,preorderShip:p.preorderShip||null,preorderEnd:p.preorderEnd||null}; _dirty = true; }
           });
           if (_dirty) localStorage.setItem('sd_cart_products', JSON.stringify(_cp));
         } catch(e) {}

@@ -52,7 +52,9 @@
     pickup: { fr: 'Retrait uniquement', en: 'Pickup only', sv: 'Endast upphämtning' },
     new: { fr: 'Nouveau', en: 'New', sv: 'Nyhet' },
     low: { fr: 'Stock limité', en: 'Limited stock', sv: 'Begränsat lager' },
-    best: { fr: 'Best-seller', en: 'Best-seller', sv: 'Bästsäljare' }
+    best: { fr: 'Best-seller', en: 'Best-seller', sv: 'Bästsäljare' },
+    // Pré-commande (migration 065) : vendu sans stock, expédié à partir d'une date
+    pre: { fr: 'Pré-commande', en: 'Pre-order', sv: 'Förbeställning' }
   };
 
   // Chaînes d'interface (FR / EN / SV)
@@ -186,7 +188,8 @@
     var eff = sale ? SDPrice.effective(p.price, p) : (p.price || 0);
     var c = p.category || null;
     var slug = c ? (c.slug || '') : '';
-    var tracked = !!p.trackStock && p.stock != null;
+    var pre = typeof sdPreorder === 'function' && sdPreorder(p);
+    var tracked = !pre && !!p.trackStock && p.stock != null;
     var out = typeof sdIsOut === 'function' ? sdIsOut(p) : (tracked && p.stock <= 0);
     var realTags = (p.tags || []).map(norm);
     var nn = norm((p.name && (p.name.fr || p.name[L()])) || '');
@@ -213,7 +216,8 @@
       price: eff, sale: sale, oldPrice: p.price || 0,
       weight: p.weight || '',
       origin: (typeof p.origin === 'object' && p.origin) ? (p.origin[L()] || p.origin.fr || '') : (p.origin || ''),
-      stock: out ? 'out' : (tracked && p.stock <= 2 ? 'low' : 'in'),
+      stock: pre ? 'pre' : (out ? 'out' : (tracked && p.stock <= 2 ? 'low' : 'in')),
+      preShip: pre && typeof sdPreorderShipText === 'function' ? sdPreorderShipText(p) : '',
       tags: tags,
       photo: p.photo || '',
       // Variantes ou retrait seul : on choisit sur la fiche, jamais d'ajout « à l'aveugle ».
@@ -287,7 +291,8 @@
         name: p.name, photo: p.photo, price: p.price, weight: p.weight,
         variants: p.variants || [], pickup_only: !!p.pickup_only,
         discountType: p.discountType || null, discountValue: p.discountValue != null ? p.discountValue : null,
-        discountStart: p.discountStart || null, discountEnd: p.discountEnd || null
+        discountStart: p.discountStart || null, discountEnd: p.discountEnd || null,
+        preorder: !!p.preorder, preorderShip: p.preorderShip || null, preorderEnd: p.preorderEnd || null
       };
       localStorage.setItem('sd_cart_products', JSON.stringify(cp));
     } catch (e) {}
@@ -406,6 +411,7 @@
     var flags = [];
     if (v.stock === 'out') flags.push(['out', tr(FLAG.out)]);
     else {
+      if (v.stock === 'pre') flags.push(['pre', tr(FLAG.pre)]);
       if (v.pickup) flags.push(['pickup', tr(FLAG.pickup)]);
       if (v.tags.new) flags.push(['new', tr(FLAG.new)]);
       else if (v.stock === 'low') flags.push(['low', tr(FLAG.low)]);
@@ -437,6 +443,7 @@
       '<div class="c3-cbody">' +
       '<h3 class="c3-name"><a class="prod-link" href="' + esc(v.url) + '">' + esc(v.name) + '</a></h3>' +
       meta +
+      (v.preShip ? '<p class="c3-preship">' + esc(v.preShip) + '</p>' : '') +
       '<div class="c3-prices">' + priceHTML(v) + '</div>' +
       '</div></article>';
   }

@@ -224,7 +224,7 @@
   <button type="button" class="btn-pay" id="pay-bar-btn" onclick="doCheckout()" tabindex="-1"></button>
 </div>
 <div id="footer-root"></div>
-<script src="js/app.js?v=37"></script>
+<script src="js/app.js?v=38"></script>
 <script>
 /* Mode de livraison par defaut : POINT RELAIS, pas le retrait.
    Le retrait etait presolectionne, si bien qu'un visiteur de Lille lisait
@@ -597,6 +597,7 @@ function _renderCartPage() {
 
   if (entries.length === 0) {
     window._lastTotal = null;
+    if (typeof sdAfficherPrecommande === 'function') sdAfficherPrecommande(null);
     root.innerHTML = `
       <div class="cart-page-empty">
         <div class="empty-icon">
@@ -616,6 +617,8 @@ function _renderCartPage() {
   let subtotal = 0;
   // Hors articles déjà en promotion : l'assiette des codes fidélité et ami.
   let _remisable = 0;
+  // Pré-commande : produit à la date d'expédition la plus tardive du panier
+  let _preLast = null;
   const itemRows = entries.map(([key, qty]) => {
     const _ri = key.indexOf('_');
     const idStr = _ri === -1 ? key : key.slice(0, _ri);
@@ -623,6 +626,8 @@ function _renderCartPage() {
     const _cpd = _sdCartProducts();
     const p = PRODUCTS.find(x => String(x.uuid || x.id) === idStr || x.id === parseInt(idStr)) || _cpd[idStr] || (window._SD_STATIC||[]).find(x => String(x.id) === idStr);
     if (!p) return '';
+    const _pre = typeof sdPreorder === 'function' && sdPreorder(p);
+    if (_pre && (!_preLast || String(p.preorderShip || '') > String(_preLast.preorderShip || ''))) _preLast = p;
     const v = variant ? p.variants?.find(x => x.label === variant) : p.variants?.[0];
     const _base = v ? v.price : p.price;
     const _onSale = !!(window.SDPrice && SDPrice.active(p));
@@ -639,6 +644,7 @@ function _renderCartPage() {
         <div class="cpr-info">
           <div class="cpr-name">${p.name?.[LANG] || p.name?.fr || ''}</div>
           <div class="cpr-sub">${variant || p.weight || ''}</div>
+          ${_pre ? `<div class="cpr-pre">${sdPreorderLabel()}${sdPreorderShipText(p) ? ' · ' + sdPreorderShipText(p) : ''}</div>` : ''}
           <div style="margin-top:10px;">
             <button class="cpr-del" onclick="removeItem('${key}');renderCartPageFull();" data-sv="Ta bort" data-fr="Supprimer" data-en="Remove">${LANG==='sv'?'Ta bort':LANG==='en'?'Remove':'Supprimer'}</button>
           </div>
@@ -651,6 +657,7 @@ function _renderCartPage() {
         <div class="cpr-price-wrap" style="text-align:right;">${_priceCell}</div>
       </div>`;
   }).join('');
+  if (typeof sdAfficherPrecommande === 'function') sdAfficherPrecommande(_preLast);
 
   // Produit "retrait uniquement" (frais, fragile…) dans le panier → toute la commande passe en click & collect
   const cartHasPickupOnly = entries.some(([key]) => {
@@ -1330,6 +1337,6 @@ window.addEventListener('sdapi:ready', () => { renderCartPageFull(); if (typeof 
 if (typeof PRODUCTS !== 'undefined' && PRODUCTS.length && typeof sdTrackViewCart === 'function') sdTrackViewCart();
 </script>
 <script>(function(){var _hr=document.getElementById("header-root");if(_hr&&typeof MutationObserver!=="undefined")new MutationObserver(function(){if(typeof updateCartBadge==="function")updateCartBadge();}).observe(_hr,{childList:true});})();</script>
-<script src="js/sd-api-client.js?v=13"></script>
+<script src="js/sd-api-client.js?v=14"></script>
 </body>
 </html>

@@ -19,7 +19,10 @@ const slugOf = p => (p && SLUG_OK.test(String(p.slug || ''))) ? p.slug : slugify
 const HOME_CATS = ['art-de-la-table', 'maison-deco'];
 const isHome = p => HOME_CATS.includes((p.categories && p.categories.slug) || '');
 const isBox = p => (p.tags || []).includes('box') || (Array.isArray(p.bundle_items) && p.bundle_items.length > 0);
-const isOut = p => p.track_stock === true && (p.stock || 0) <= 0;
+/* Pré-commande (back : migration 065) : vendable sans stock jusqu'à preorder_end incluse. */
+const isPreorder = p => !!(p && p.preorder === true
+  && (!p.preorder_end || new Date().toISOString().slice(0, 10) <= String(p.preorder_end).slice(0, 10)));
+const isOut = p => !isPreorder(p) && p.track_stock === true && (p.stock || 0) <= 0;
 
 // La marque réelle, pas un fourre-tout.
 const BRANDS = ['Marimekko', 'IHR', 'Ihr', 'OLW', 'Ahlgrens', 'Läkerol', 'Lakerol', 'Kavli', 'Fazer',
@@ -68,4 +71,4 @@ const mediaUrl = (u, site) => String(u || '').replace(SUPA_MEDIA, `${site}/media
 const PRIVE = /cost|marg|achat|purchase|supplier|fournisseur/i;
 const sansPrive = p => Object.fromEntries(Object.entries(p).filter(([k]) => !PRIVE.test(k)));
 
-module.exports = { slugify, slugOf, HOME_CATS, isHome, isBox, isOut, brandOf, isoPays, netQty, mediaUrl, sansPrive };
+module.exports = { slugify, slugOf, HOME_CATS, isHome, isBox, isOut, isPreorder, brandOf, isoPays, netQty, mediaUrl, sansPrive };

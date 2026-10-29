@@ -136,7 +136,10 @@ async function main() {
 
   const items = products.map(p => {
     const url = `${SITE}/produit/${lib.slugOf(p)}`;
-    const avail = (p.track_stock === true && (p.stock || 0) <= 0) ? 'out_of_stock' : 'in_stock';
+    /* Pré-commande (back : migration 065) : « preorder » + date de disponibilité, exigée par Google. */
+    const pre = lib.isPreorder(p);
+    const avail = pre ? 'preorder' : lib.isOut(p) ? 'out_of_stock' : 'in_stock';
+    const dispoLe = pre && /^\d{4}-\d{2}-\d{2}/.test(String(p.preorder_ship_date || '')) ? String(p.preorder_ship_date).slice(0, 10) + 'T00:00+01:00' : '';
     const price = (parseFloat(p.price) || 0).toFixed(2);
     const disc = discountOf(p);
     const catName = (p.categories && p.categories.name_fr) || '';
@@ -156,7 +159,8 @@ async function main() {
     <g:link>${url}</g:link>
     <g:image_link>${esc((p.image_url || '').replace(/^https?:\/\/[a-z0-9]+\.supabase\.co\/storage\/v1\/object\/public\/svenska-media\//i, `${SITE}/media/`))}</g:image_link>
     <g:availability>${avail}</g:availability>
-    <g:price>${price} EUR</g:price>
+${dispoLe ? `    <g:availability_date>${dispoLe}</g:availability_date>
+` : ''}    <g:price>${price} EUR</g:price>
     <g:brand>${esc(brandOf(p))}</g:brand>
     <g:condition>new</g:condition>
     ${/^\d{8,14}$/.test(String(p.ean || '').trim()) ? `<g:gtin>${esc(String(p.ean).trim())}</g:gtin>` : '<g:identifier_exists>no</g:identifier_exists>'}

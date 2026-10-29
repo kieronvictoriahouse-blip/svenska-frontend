@@ -178,7 +178,7 @@ span.var-btn.active { cursor:default; }
   .breadcrumb { font-size:11px; gap:4px; padding:10px 16px; flex-wrap:wrap; }
 }
 </style>
-<script>window.__PRODUCT_ID="e65f52c8-534b-46a6-9d41-7b6d724367bb";window.__SD_PRODUCT={"id":"e65f52c8-534b-46a6-9d41-7b6d724367bb","category_id":"2064dc5b-7ebf-4855-b3f2-5010642fcdda","name_sv":"Pappersservetter Marimekko Melooni Bordeaux","name_fr":"Serviettes en papier Marimekko Melooni Bordeaux","name_en":"Paper napkins Marimekko Melooni Bordeaux","subtitle_sv":"Maija Isolas Melooni (1963), lunchformat","subtitle_fr":"Melooni de Maija Isola (1963), format repas","subtitle_en":"Maija Isola's Melooni (1963), lunch size","desc_sv":"Melooni, ett stiliserat melonmönster som Maija Isola ritade för Marimekko 1963, i vinrött och rosa. 33 × 33 cm, till måltiden eller drinken. Förpackning med 20 servetter.","desc_fr":"Melooni, motif de melons stylisés dessiné par Maija Isola pour Marimekko en 1963, en bordeaux et rose. Format 33 × 33 cm, pour le repas ou l'apéro. Paquet de 20 serviettes.","desc_en":"Melooni, a stylised melon pattern designed by Maija Isola for Marimekko in 1963, in burgundy and pink. 33 × 33 cm, for a meal or drinks. Pack of 20 napkins.","price":4.89,"weight":"20 serviettes · 33 × 33 cm","origin_sv":null,"origin_fr":null,"origin_en":null,"image_url":"https://fdagtzhodyxulhqbkkoz.supabase.co/storage/v1/object/public/svenska-media/products/marimekko-melooni-bordeaux-1784926941768.jpg","badge":null,"is_bestseller":false,"is_new":false,"is_active":true,"rating":4.5,"reviews_count":0,"tags":[],"usage_sv":null,"usage_fr":null,"usage_en":null,"ingredients_sv":null,"ingredients_fr":null,"ingredients_en":null,"storage_sv":null,"storage_fr":null,"storage_en":null,"sort_order":4,"created_at":"2026-07-24T21:04:12.139373+00:00","updated_at":"2026-10-23T20:36:26.327974+00:00","stock":2,"track_stock":true,"allergens_sv":"","allergens_fr":"","allergens_en":"","nutrition":{},"extra_images":[],"pickup_only":false,"ean":null,"sku":"SC-0004","pack_size":1,"discount_type":null,"discount_value":null,"discount_start":null,"discount_end":null,"bundle_items":null,"manufacturer":null,"product_variants":[],"categories":{"slug":"art-de-la-table","name_en":"Tableware","name_fr":"Art de la table","name_sv":"Dukning","discount_end":null,"discount_type":null,"discount_start":null,"discount_value":null}};</script>
+<script>window.__PRODUCT_ID="e65f52c8-534b-46a6-9d41-7b6d724367bb";window.__SD_PRODUCT={"id":"e65f52c8-534b-46a6-9d41-7b6d724367bb","category_id":"2064dc5b-7ebf-4855-b3f2-5010642fcdda","name_sv":"Pappersservetter Marimekko Melooni Bordeaux","name_fr":"Serviettes en papier Marimekko Melooni Bordeaux","name_en":"Paper napkins Marimekko Melooni Bordeaux","subtitle_sv":"Maija Isolas Melooni (1963), lunchformat","subtitle_fr":"Melooni de Maija Isola (1963), format repas","subtitle_en":"Maija Isola's Melooni (1963), lunch size","desc_sv":"Melooni, ett stiliserat melonmönster som Maija Isola ritade för Marimekko 1963, i vinrött och rosa. 33 × 33 cm, till måltiden eller drinken. Förpackning med 20 servetter.","desc_fr":"Melooni, motif de melons stylisés dessiné par Maija Isola pour Marimekko en 1963, en bordeaux et rose. Format 33 × 33 cm, pour le repas ou l'apéro. Paquet de 20 serviettes.","desc_en":"Melooni, a stylised melon pattern designed by Maija Isola for Marimekko in 1963, in burgundy and pink. 33 × 33 cm, for a meal or drinks. Pack of 20 napkins.","price":4.89,"weight":"20 serviettes · 33 × 33 cm","origin_sv":null,"origin_fr":null,"origin_en":null,"image_url":"https://fdagtzhodyxulhqbkkoz.supabase.co/storage/v1/object/public/svenska-media/products/marimekko-melooni-bordeaux-1784926941768.jpg","badge":null,"is_bestseller":false,"is_new":false,"is_active":true,"rating":4.5,"reviews_count":0,"tags":[],"usage_sv":null,"usage_fr":null,"usage_en":null,"ingredients_sv":null,"ingredients_fr":null,"ingredients_en":null,"storage_sv":null,"storage_fr":null,"storage_en":null,"sort_order":4,"created_at":"2026-07-24T21:04:12.139373+00:00","updated_at":"2026-10-24T16:07:57.43956+00:00","stock":2,"track_stock":true,"allergens_sv":"","allergens_fr":"","allergens_en":"","nutrition":{},"extra_images":[],"pickup_only":false,"ean":null,"sku":"SC-0004","pack_size":1,"discount_type":null,"discount_value":null,"discount_start":null,"discount_end":null,"bundle_items":null,"manufacturer":null,"slug":"serviettes-en-papier-marimekko-melooni-bordeaux-e65f52c8","product_variants":[],"categories":{"slug":"art-de-la-table","name_en":"Tableware","name_fr":"Art de la table","name_sv":"Dukning","discount_end":null,"discount_type":null,"discount_start":null,"discount_value":null}};</script>
 </head>
 <body>
 <div id="header-root"></div>
@@ -298,7 +298,7 @@ span.var-btn.active { cursor:default; }
 </section>
 
 <div id="footer-root"></div>
-<script src="js/app.js?v=36"></script>
+<script src="js/app.js?v=38"></script>
 <script>
 let pdpQtyVal = 1;
 let selectedVariant = null;
@@ -398,10 +398,14 @@ function renderPDP(p) {
 
   // Stock : épuisé, stock limité ou en stock — jamais « Coming soon »
   const out = sdIsOut(p);
+  /* Pré-commande (migration 065) : vendue sans stock, expédiée à partir d'une date */
+  const pre = typeof sdPreorder === 'function' && sdPreorder(p);
+  const preShip = pre ? sdPreorderShipText(p) : '';
   const stockBadgeEl = document.getElementById('pdp-stock-badge');
   if (stockBadgeEl) {
     const tracked = p.trackStock && p.stock != null;
-    const [cls, txt] = out ? ['psb-out', _T('Épuisé', 'Sold out', 'Slut i lager')]
+    const [cls, txt] = pre ? ['psb-pre', sdPreorderLabel() + (preShip ? ' · ' + preShip : '')]
+      : out ? ['psb-out', _T('Épuisé', 'Sold out', 'Slut i lager')]
       : (tracked && p.stock <= 2) ? ['psb-low', _T('Stock limité', 'Limited stock', 'Begränsat lager')]
       : ['psb-ok', _T('En stock', 'In stock', 'I lager')];
     stockBadgeEl.innerHTML = `<span class="prod-stock-badge ${cls}" style="position:static;display:inline-block;padding:5px 14px;">${txt}</span>`;
@@ -409,13 +413,22 @@ function renderPDP(p) {
   [document.getElementById('btn-add-pdp'), document.querySelector('.sticky-atc-btn')].forEach(function (b) {
     if (!b) return;
     b.disabled = out;
-    b.textContent = out ? _T('Épuisé', 'Sold out', 'Slut i lager') : _T('Ajouter au panier', 'Add to cart', 'Lägg i korgen');
+    b.textContent = out ? _T('Épuisé', 'Sold out', 'Slut i lager')
+      : pre ? _T('Pré-commander', 'Pre-order', 'Förbeställ')
+      : _T('Ajouter au panier', 'Add to cart', 'Lägg i korgen');
   });
   const outNote = document.getElementById('pdp-out-note');
   if (outNote) {
     outNote.textContent = out ? _T('Bientôt de retour. En attendant, d’autres produits du même rayon vous attendent plus bas.',
-      'Back soon. Meanwhile, similar products are waiting further down.', 'Tillbaka snart. Under tiden finns liknande produkter längre ner.') : '';
-    outNote.hidden = !out;
+      'Back soon. Meanwhile, similar products are waiting further down.', 'Tillbaka snart. Under tiden finns liknande produkter längre ner.')
+      : pre ? (function () {
+          const d = sdPreorderDate(p);
+          return _T('Produit en pré-commande : vous le réservez maintenant, nous l’expédions ' + (d ? 'à partir du ' + d : 'dès sa réception') + '. Les autres articles de la même commande partent avec lui.',
+            'Pre-order item: reserve it now, we ship it ' + (d ? 'from ' + d : 'as soon as it arrives') + '. Other items in the same order ship with it.',
+            'Förbeställning: reservera nu, vi skickar den ' + (d ? 'från ' + d : 'så snart den kommer') + '. Övriga varor i samma beställning skickas samtidigt.');
+        })()
+      : '';
+    outNote.hidden = !out && !pre;
   }
   /* Épuisé : ni quantité ni bouton grisé, mais l'alerte de retour en stock */
   const addRow = document.querySelector('.add-row');
@@ -740,7 +753,7 @@ function selectThumbImg(el, url) {
 
 function changeQtyPdp(d) {
   // Plafonne la quantité au stock réel (produits en suivi de stock).
-  const _stock = (pdpProduct && pdpProduct.trackStock && pdpProduct.stock != null) ? pdpProduct.stock : Infinity;
+  const _stock = (pdpProduct && !(typeof sdPreorder === 'function' && sdPreorder(pdpProduct)) && pdpProduct.trackStock && pdpProduct.stock != null) ? pdpProduct.stock : Infinity;
   pdpQtyVal = Math.max(1, pdpQtyVal + d);
   if (_stock !== Infinity) pdpQtyVal = Math.min(pdpQtyVal, Math.max(1, _stock));
   document.getElementById('pdp-qty').textContent = pdpQtyVal;
@@ -979,6 +992,6 @@ async function chargerAvis(productId) {
   } catch (e) {}
 }
 </script>
-<script src="js/sd-api-client.js?v=13"></script>
+<script src="js/sd-api-client.js?v=14"></script>
 </body>
 </html>

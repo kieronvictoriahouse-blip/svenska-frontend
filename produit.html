@@ -288,7 +288,7 @@ span.var-btn.active { cursor:default; }
 </section>
 
 <div id="footer-root"></div>
-<script src="js/app.js?v=37"></script>
+<script src="js/app.js?v=38"></script>
 <script>
 let pdpQtyVal = 1;
 let selectedVariant = null;
@@ -388,10 +388,14 @@ function renderPDP(p) {
 
   // Stock : épuisé, stock limité ou en stock — jamais « Coming soon »
   const out = sdIsOut(p);
+  /* Pré-commande (migration 065) : vendue sans stock, expédiée à partir d'une date */
+  const pre = typeof sdPreorder === 'function' && sdPreorder(p);
+  const preShip = pre ? sdPreorderShipText(p) : '';
   const stockBadgeEl = document.getElementById('pdp-stock-badge');
   if (stockBadgeEl) {
     const tracked = p.trackStock && p.stock != null;
-    const [cls, txt] = out ? ['psb-out', _T('Épuisé', 'Sold out', 'Slut i lager')]
+    const [cls, txt] = pre ? ['psb-pre', sdPreorderLabel() + (preShip ? ' · ' + preShip : '')]
+      : out ? ['psb-out', _T('Épuisé', 'Sold out', 'Slut i lager')]
       : (tracked && p.stock <= 2) ? ['psb-low', _T('Stock limité', 'Limited stock', 'Begränsat lager')]
       : ['psb-ok', _T('En stock', 'In stock', 'I lager')];
     stockBadgeEl.innerHTML = `<span class="prod-stock-badge ${cls}" style="position:static;display:inline-block;padding:5px 14px;">${txt}</span>`;
@@ -399,13 +403,22 @@ function renderPDP(p) {
   [document.getElementById('btn-add-pdp'), document.querySelector('.sticky-atc-btn')].forEach(function (b) {
     if (!b) return;
     b.disabled = out;
-    b.textContent = out ? _T('Épuisé', 'Sold out', 'Slut i lager') : _T('Ajouter au panier', 'Add to cart', 'Lägg i korgen');
+    b.textContent = out ? _T('Épuisé', 'Sold out', 'Slut i lager')
+      : pre ? _T('Pré-commander', 'Pre-order', 'Förbeställ')
+      : _T('Ajouter au panier', 'Add to cart', 'Lägg i korgen');
   });
   const outNote = document.getElementById('pdp-out-note');
   if (outNote) {
     outNote.textContent = out ? _T('Bientôt de retour. En attendant, d’autres produits du même rayon vous attendent plus bas.',
-      'Back soon. Meanwhile, similar products are waiting further down.', 'Tillbaka snart. Under tiden finns liknande produkter längre ner.') : '';
-    outNote.hidden = !out;
+      'Back soon. Meanwhile, similar products are waiting further down.', 'Tillbaka snart. Under tiden finns liknande produkter längre ner.')
+      : pre ? (function () {
+          const d = sdPreorderDate(p);
+          return _T('Produit en pré-commande : vous le réservez maintenant, nous l’expédions ' + (d ? 'à partir du ' + d : 'dès sa réception') + '. Les autres articles de la même commande partent avec lui.',
+            'Pre-order item: reserve it now, we ship it ' + (d ? 'from ' + d : 'as soon as it arrives') + '. Other items in the same order ship with it.',
+            'Förbeställning: reservera nu, vi skickar den ' + (d ? 'från ' + d : 'så snart den kommer') + '. Övriga varor i samma beställning skickas samtidigt.');
+        })()
+      : '';
+    outNote.hidden = !out && !pre;
   }
   /* Épuisé : ni quantité ni bouton grisé, mais l'alerte de retour en stock */
   const addRow = document.querySelector('.add-row');
@@ -730,7 +743,7 @@ function selectThumbImg(el, url) {
 
 function changeQtyPdp(d) {
   // Plafonne la quantité au stock réel (produits en suivi de stock).
-  const _stock = (pdpProduct && pdpProduct.trackStock && pdpProduct.stock != null) ? pdpProduct.stock : Infinity;
+  const _stock = (pdpProduct && !(typeof sdPreorder === 'function' && sdPreorder(pdpProduct)) && pdpProduct.trackStock && pdpProduct.stock != null) ? pdpProduct.stock : Infinity;
   pdpQtyVal = Math.max(1, pdpQtyVal + d);
   if (_stock !== Infinity) pdpQtyVal = Math.min(pdpQtyVal, Math.max(1, _stock));
   document.getElementById('pdp-qty').textContent = pdpQtyVal;
@@ -969,6 +982,6 @@ async function chargerAvis(productId) {
   } catch (e) {}
 }
 </script>
-<script src="js/sd-api-client.js?v=13"></script>
+<script src="js/sd-api-client.js?v=14"></script>
 </body>
 </html>

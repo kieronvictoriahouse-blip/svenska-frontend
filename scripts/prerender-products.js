@@ -23,7 +23,7 @@
 const https = require('https');
 const fs = require('fs');
 const path = require('path');
-const { slugOf, isHome, isOut, brandOf, isoPays, netQty, mediaUrl, sansPrive } = require('./lib/produits');
+const { slugOf, isHome, isOut, isPreorder, brandOf, isoPays, netQty, mediaUrl, sansPrive } = require('./lib/produits');
 
 const BASE = process.env.SD_API_URL || 'https://admin.swedishcravings.fr';
 const SITE = 'https://www.swedishcravings.fr';
@@ -137,13 +137,15 @@ async function main() {
     const catSlug = (p.categories && p.categories.slug) || '';
     const img = mediaUrl(p.image_url, SITE) || `${SITE}/img/sc-logo-horizontal.jpg`;
     const price = (parseFloat(p.price) || 0).toFixed(2);
-    const avail = isOut(p) ? 'https://schema.org/OutOfStock' : 'https://schema.org/InStock';
+    const avail = isPreorder(p) ? 'https://schema.org/PreOrder'
+      : isOut(p) ? 'https://schema.org/OutOfStock' : 'https://schema.org/InStock';
     const alt = `${p.name_fr}${marque ? ' — ' + marque : ''}, ${catNom.toLowerCase()}`;
     const rayonUrl = catSlug && !isHome(p) ? `${SITE}/boutique?rayon=${encodeURIComponent(catSlug)}` : (isHome(p) ? `${SITE}/maison` : `${SITE}/boutique`);
 
     // ── JSON-LD Product ─────────────────────────────────────────────
     const offers = {
       '@type': 'Offer', price, priceCurrency: 'EUR', availability: avail, url,
+      ...(isPreorder(p) && p.preorder_ship_date ? { availabilityStarts: String(p.preorder_ship_date).slice(0, 10) } : {}),
       itemCondition: 'https://schema.org/NewCondition',
       seller: { '@type': 'Organization', name: 'Swedish Cravings' },
       shippingDetails: (parseFloat(p.price) || 0) >= liv.seuil

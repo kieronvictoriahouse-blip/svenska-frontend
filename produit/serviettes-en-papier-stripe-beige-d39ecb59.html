@@ -178,7 +178,7 @@ span.var-btn.active { cursor:default; }
   .breadcrumb { font-size:11px; gap:4px; padding:10px 16px; flex-wrap:wrap; }
 }
 </style>
-<script>window.__PRODUCT_ID="d39ecb59-916e-4477-a980-5ccc598ab135";window.__SD_PRODUCT={"id":"d39ecb59-916e-4477-a980-5ccc598ab135","category_id":"2064dc5b-7ebf-4855-b3f2-5010642fcdda","name_sv":"Pappersservetter Stripe Beige","name_fr":"Serviettes en papier Stripe Beige","name_en":"Paper napkins Stripe Beige","subtitle_sv":"Beige ränder, stort format","subtitle_fr":"Rayures beiges, grand format","subtitle_en":"Beige stripes, large size","desc_sv":"Diskreta beige ränder i stort format, 33 × 40 cm, till middagen eller buffén. Förpackning med 15 servetter.","desc_fr":"Des rayures beiges discrètes en grand format 33 × 40 cm, pour un dîner ou un buffet. Paquet de 15 serviettes.","desc_en":"Discreet beige stripes in a large 33 × 40 cm size, for a dinner or a buffet. Pack of 15 napkins.","price":3.9,"weight":"15 serviettes · 33 × 40 cm","origin_sv":"Suède","origin_fr":"Suède","origin_en":"Sweden","image_url":"https://fdagtzhodyxulhqbkkoz.supabase.co/storage/v1/object/public/svenska-media/products/nappe-sans-fond-1789462308273.png","badge":null,"is_bestseller":false,"is_new":true,"is_active":true,"rating":4.5,"reviews_count":0,"tags":[],"usage_sv":"","usage_fr":"","usage_en":"","ingredients_sv":"","ingredients_fr":"","ingredients_en":"","storage_sv":"","storage_fr":"","storage_en":"","sort_order":0,"created_at":"2026-09-15T08:42:44.008931+00:00","updated_at":"2026-10-23T20:36:26.327974+00:00","stock":null,"track_stock":true,"allergens_sv":"","allergens_fr":"","allergens_en":"","nutrition":{"sel":"","fibres":"","energie":"","portion":"","glucides":"","graisses":"","proteines":"","dont_sucres":"","dont_satures":""},"extra_images":[],"pickup_only":false,"ean":null,"sku":"","pack_size":1,"discount_type":null,"discount_value":null,"discount_start":null,"discount_end":null,"bundle_items":null,"manufacturer":null,"product_variants":[],"categories":{"slug":"art-de-la-table","name_en":"Tableware","name_fr":"Art de la table","name_sv":"Dukning","discount_end":null,"discount_type":null,"discount_start":null,"discount_value":null}};</script>
+<script>window.__PRODUCT_ID="d39ecb59-916e-4477-a980-5ccc598ab135";window.__SD_PRODUCT={"id":"d39ecb59-916e-4477-a980-5ccc598ab135","category_id":"2064dc5b-7ebf-4855-b3f2-5010642fcdda","name_sv":"Pappersservetter Stripe Beige","name_fr":"Serviettes en papier Stripe Beige","name_en":"Paper napkins Stripe Beige","subtitle_sv":"Beige ränder, stort format","subtitle_fr":"Rayures beiges, grand format","subtitle_en":"Beige stripes, large size","desc_sv":"Diskreta beige ränder i stort format, 33 × 40 cm, till middagen eller buffén. Förpackning med 15 servetter.","desc_fr":"Des rayures beiges discrètes en grand format 33 × 40 cm, pour un dîner ou un buffet. Paquet de 15 serviettes.","desc_en":"Discreet beige stripes in a large 33 × 40 cm size, for a dinner or a buffet. Pack of 15 napkins.","price":3.9,"weight":"15 serviettes · 33 × 40 cm","origin_sv":"Suède","origin_fr":"Suède","origin_en":"Sweden","image_url":"https://fdagtzhodyxulhqbkkoz.supabase.co/storage/v1/object/public/svenska-media/products/nappe-sans-fond-1789462308273.png","badge":null,"is_bestseller":false,"is_new":true,"is_active":true,"rating":4.5,"reviews_count":0,"tags":[],"usage_sv":"","usage_fr":"","usage_en":"","ingredients_sv":"","ingredients_fr":"","ingredients_en":"","storage_sv":"","storage_fr":"","storage_en":"","sort_order":0,"created_at":"2026-09-15T08:42:44.008931+00:00","updated_at":"2026-10-24T16:07:57.43956+00:00","stock":null,"track_stock":true,"allergens_sv":"","allergens_fr":"","allergens_en":"","nutrition":{"sel":"","fibres":"","energie":"","portion":"","glucides":"","graisses":"","proteines":"","dont_sucres":"","dont_satures":""},"extra_images":[],"pickup_only":false,"ean":null,"sku":"","pack_size":1,"discount_type":null,"discount_value":null,"discount_start":null,"discount_end":null,"bundle_items":null,"manufacturer":null,"slug":"serviettes-en-papier-stripe-beige-d39ecb59","product_variants":[],"categories":{"slug":"art-de-la-table","name_en":"Tableware","name_fr":"Art de la table","name_sv":"Dukning","discount_end":null,"discount_type":null,"discount_start":null,"discount_value":null}};</script>
 </head>
 <body>
 <div id="header-root"></div>
@@ -298,7 +298,7 @@ span.var-btn.active { cursor:default; }
 </section>
 
 <div id="footer-root"></div>
-<script src="js/app.js?v=36"></script>
+<script src="js/app.js?v=38"></script>
 <script>
 let pdpQtyVal = 1;
 let selectedVariant = null;
@@ -398,10 +398,14 @@ function renderPDP(p) {
 
   // Stock : épuisé, stock limité ou en stock — jamais « Coming soon »
   const out = sdIsOut(p);
+  /* Pré-commande (migration 065) : vendue sans stock, expédiée à partir d'une date */
+  const pre = typeof sdPreorder === 'function' && sdPreorder(p);
+  const preShip = pre ? sdPreorderShipText(p) : '';
   const stockBadgeEl = document.getElementById('pdp-stock-badge');
   if (stockBadgeEl) {
     const tracked = p.trackStock && p.stock != null;
-    const [cls, txt] = out ? ['psb-out', _T('Épuisé', 'Sold out', 'Slut i lager')]
+    const [cls, txt] = pre ? ['psb-pre', sdPreorderLabel() + (preShip ? ' · ' + preShip : '')]
+      : out ? ['psb-out', _T('Épuisé', 'Sold out', 'Slut i lager')]
       : (tracked && p.stock <= 2) ? ['psb-low', _T('Stock limité', 'Limited stock', 'Begränsat lager')]
       : ['psb-ok', _T('En stock', 'In stock', 'I lager')];
     stockBadgeEl.innerHTML = `<span class="prod-stock-badge ${cls}" style="position:static;display:inline-block;padding:5px 14px;">${txt}</span>`;
@@ -409,13 +413,22 @@ function renderPDP(p) {
   [document.getElementById('btn-add-pdp'), document.querySelector('.sticky-atc-btn')].forEach(function (b) {
     if (!b) return;
     b.disabled = out;
-    b.textContent = out ? _T('Épuisé', 'Sold out', 'Slut i lager') : _T('Ajouter au panier', 'Add to cart', 'Lägg i korgen');
+    b.textContent = out ? _T('Épuisé', 'Sold out', 'Slut i lager')
+      : pre ? _T('Pré-commander', 'Pre-order', 'Förbeställ')
+      : _T('Ajouter au panier', 'Add to cart', 'Lägg i korgen');
   });
   const outNote = document.getElementById('pdp-out-note');
   if (outNote) {
     outNote.textContent = out ? _T('Bientôt de retour. En attendant, d’autres produits du même rayon vous attendent plus bas.',
-      'Back soon. Meanwhile, similar products are waiting further down.', 'Tillbaka snart. Under tiden finns liknande produkter längre ner.') : '';
-    outNote.hidden = !out;
+      'Back soon. Meanwhile, similar products are waiting further down.', 'Tillbaka snart. Under tiden finns liknande produkter längre ner.')
+      : pre ? (function () {
+          const d = sdPreorderDate(p);
+          return _T('Produit en pré-commande : vous le réservez maintenant, nous l’expédions ' + (d ? 'à partir du ' + d : 'dès sa réception') + '. Les autres articles de la même commande partent avec lui.',
+            'Pre-order item: reserve it now, we ship it ' + (d ? 'from ' + d : 'as soon as it arrives') + '. Other items in the same order ship with it.',
+            'Förbeställning: reservera nu, vi skickar den ' + (d ? 'från ' + d : 'så snart den kommer') + '. Övriga varor i samma beställning skickas samtidigt.');
+        })()
+      : '';
+    outNote.hidden = !out && !pre;
   }
   /* Épuisé : ni quantité ni bouton grisé, mais l'alerte de retour en stock */
   const addRow = document.querySelector('.add-row');
@@ -740,7 +753,7 @@ function selectThumbImg(el, url) {
 
 function changeQtyPdp(d) {
   // Plafonne la quantité au stock réel (produits en suivi de stock).
-  const _stock = (pdpProduct && pdpProduct.trackStock && pdpProduct.stock != null) ? pdpProduct.stock : Infinity;
+  const _stock = (pdpProduct && !(typeof sdPreorder === 'function' && sdPreorder(pdpProduct)) && pdpProduct.trackStock && pdpProduct.stock != null) ? pdpProduct.stock : Infinity;
   pdpQtyVal = Math.max(1, pdpQtyVal + d);
   if (_stock !== Infinity) pdpQtyVal = Math.min(pdpQtyVal, Math.max(1, _stock));
   document.getElementById('pdp-qty').textContent = pdpQtyVal;
@@ -979,6 +992,6 @@ async function chargerAvis(productId) {
   } catch (e) {}
 }
 </script>
-<script src="js/sd-api-client.js?v=13"></script>
+<script src="js/sd-api-client.js?v=14"></script>
 </body>
 </html>

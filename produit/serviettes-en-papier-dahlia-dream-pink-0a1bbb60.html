@@ -178,7 +178,7 @@ span.var-btn.active { cursor:default; }
   .breadcrumb { font-size:11px; gap:4px; padding:10px 16px; flex-wrap:wrap; }
 }
 </style>
-<script>window.__PRODUCT_ID="0a1bbb60-4764-4189-94dc-a6b73cf01c4f";window.__SD_PRODUCT={"id":"0a1bbb60-4764-4189-94dc-a6b73cf01c4f","category_id":"2064dc5b-7ebf-4855-b3f2-5010642fcdda","name_sv":"Pappersservetter Dahlia Dream Pink","name_fr":"Serviettes en papier Dahlia Dream Pink","name_en":"Paper napkins Dahlia Dream Pink","subtitle_sv":"Dahlior på rosa botten, lunchformat","subtitle_fr":"Dahlias sur fond rose, format repas","subtitle_en":"Dahlias on a pink ground, lunch size","desc_sv":"Dahlior och ängsblommor på puderrosa botten. 33 × 33 cm, till eftermiddagsfikat, kalaset eller vårbordet. Förpackning med 20 servetter.","desc_fr":"Des dahlias et des fleurs des champs sur fond rose poudré. Format 33 × 33 cm, pour un goûter, un anniversaire ou une table de printemps. Paquet de 20 serviettes.","desc_en":"Dahlias and wild flowers on a powder-pink ground. 33 × 33 cm, for an afternoon fika, a birthday or a spring table. Pack of 20 napkins.","price":4.89,"weight":"20 serviettes · 33 × 33 cm","origin_sv":"Suède","origin_fr":"Suède","origin_en":"Sweden","image_url":"https://fdagtzhodyxulhqbkkoz.supabase.co/storage/v1/object/public/svenska-media/products/whatsapp-image-2026-07-24-at-18-05-37-1784911498929.jpeg","badge":null,"is_bestseller":false,"is_new":false,"is_active":true,"rating":4.5,"reviews_count":0,"tags":[],"usage_sv":"","usage_fr":"","usage_en":"","ingredients_sv":"","ingredients_fr":"","ingredients_en":"","storage_sv":"","storage_fr":"","storage_en":"","sort_order":0,"created_at":"2026-07-24T16:43:42.58467+00:00","updated_at":"2026-10-23T20:36:26.327974+00:00","stock":5,"track_stock":true,"allergens_sv":"","allergens_fr":"","allergens_en":"","nutrition":{"sel":"","fibres":"","energie":"","portion":"","glucides":"","graisses":"","proteines":"","dont_sucres":"","dont_satures":""},"extra_images":[],"pickup_only":false,"ean":null,"sku":"SC-0056","pack_size":1,"discount_type":null,"discount_value":null,"discount_start":null,"discount_end":null,"bundle_items":null,"manufacturer":null,"product_variants":[],"categories":{"slug":"art-de-la-table","name_en":"Tableware","name_fr":"Art de la table","name_sv":"Dukning","discount_end":null,"discount_type":null,"discount_start":null,"discount_value":null}};</script>
+<script>window.__PRODUCT_ID="0a1bbb60-4764-4189-94dc-a6b73cf01c4f";window.__SD_PRODUCT={"id":"0a1bbb60-4764-4189-94dc-a6b73cf01c4f","category_id":"2064dc5b-7ebf-4855-b3f2-5010642fcdda","name_sv":"Pappersservetter Dahlia Dream Pink","name_fr":"Serviettes en papier Dahlia Dream Pink","name_en":"Paper napkins Dahlia Dream Pink","subtitle_sv":"Dahlior på rosa botten, lunchformat","subtitle_fr":"Dahlias sur fond rose, format repas","subtitle_en":"Dahlias on a pink ground, lunch size","desc_sv":"Dahlior och ängsblommor på puderrosa botten. 33 × 33 cm, till eftermiddagsfikat, kalaset eller vårbordet. Förpackning med 20 servetter.","desc_fr":"Des dahlias et des fleurs des champs sur fond rose poudré. Format 33 × 33 cm, pour un goûter, un anniversaire ou une table de printemps. Paquet de 20 serviettes.","desc_en":"Dahlias and wild flowers on a powder-pink ground. 33 × 33 cm, for an afternoon fika, a birthday or a spring table. Pack of 20 napkins.","price":4.89,"weight":"20 serviettes · 33 × 33 cm","origin_sv":"Suède","origin_fr":"Suède","origin_en":"Sweden","image_url":"https://fdagtzhodyxulhqbkkoz.supabase.co/storage/v1/object/public/svenska-media/products/whatsapp-image-2026-07-24-at-18-05-37-1784911498929.jpeg","badge":null,"is_bestseller":false,"is_new":false,"is_active":true,"rating":4.5,"reviews_count":0,"tags":[],"usage_sv":"","usage_fr":"","usage_en":"","ingredients_sv":"","ingredients_fr":"","ingredients_en":"","storage_sv":"","storage_fr":"","storage_en":"","sort_order":0,"created_at":"2026-07-24T16:43:42.58467+00:00","updated_at":"2026-10-24T16:07:57.43956+00:00","stock":5,"track_stock":true,"allergens_sv":"","allergens_fr":"","allergens_en":"","nutrition":{"sel":"","fibres":"","energie":"","portion":"","glucides":"","graisses":"","proteines":"","dont_sucres":"","dont_satures":""},"extra_images":[],"pickup_only":false,"ean":null,"sku":"SC-0056","pack_size":1,"discount_type":null,"discount_value":null,"discount_start":null,"discount_end":null,"bundle_items":null,"manufacturer":null,"slug":"serviettes-en-papier-dahlia-dream-pink-0a1bbb60","product_variants":[],"categories":{"slug":"art-de-la-table","name_en":"Tableware","name_fr":"Art de la table","name_sv":"Dukning","discount_end":null,"discount_type":null,"discount_start":null,"discount_value":null}};</script>
 </head>
 <body>
 <div id="header-root"></div>
@@ -298,7 +298,7 @@ span.var-btn.active { cursor:default; }
 </section>
 
 <div id="footer-root"></div>
-<script src="js/app.js?v=36"></script>
+<script src="js/app.js?v=38"></script>
 <script>
 let pdpQtyVal = 1;
 let selectedVariant = null;
@@ -398,10 +398,14 @@ function renderPDP(p) {
 
   // Stock : épuisé, stock limité ou en stock — jamais « Coming soon »
   const out = sdIsOut(p);
+  /* Pré-commande (migration 065) : vendue sans stock, expédiée à partir d'une date */
+  const pre = typeof sdPreorder === 'function' && sdPreorder(p);
+  const preShip = pre ? sdPreorderShipText(p) : '';
   const stockBadgeEl = document.getElementById('pdp-stock-badge');
   if (stockBadgeEl) {
     const tracked = p.trackStock && p.stock != null;
-    const [cls, txt] = out ? ['psb-out', _T('Épuisé', 'Sold out', 'Slut i lager')]
+    const [cls, txt] = pre ? ['psb-pre', sdPreorderLabel() + (preShip ? ' · ' + preShip : '')]
+      : out ? ['psb-out', _T('Épuisé', 'Sold out', 'Slut i lager')]
       : (tracked && p.stock <= 2) ? ['psb-low', _T('Stock limité', 'Limited stock', 'Begränsat lager')]
       : ['psb-ok', _T('En stock', 'In stock', 'I lager')];
     stockBadgeEl.innerHTML = `<span class="prod-stock-badge ${cls}" style="position:static;display:inline-block;padding:5px 14px;">${txt}</span>`;
@@ -409,13 +413,22 @@ function renderPDP(p) {
   [document.getElementById('btn-add-pdp'), document.querySelector('.sticky-atc-btn')].forEach(function (b) {
     if (!b) return;
     b.disabled = out;
-    b.textContent = out ? _T('Épuisé', 'Sold out', 'Slut i lager') : _T('Ajouter au panier', 'Add to cart', 'Lägg i korgen');
+    b.textContent = out ? _T('Épuisé', 'Sold out', 'Slut i lager')
+      : pre ? _T('Pré-commander', 'Pre-order', 'Förbeställ')
+      : _T('Ajouter au panier', 'Add to cart', 'Lägg i korgen');
   });
   const outNote = document.getElementById('pdp-out-note');
   if (outNote) {
     outNote.textContent = out ? _T('Bientôt de retour. En attendant, d’autres produits du même rayon vous attendent plus bas.',
-      'Back soon. Meanwhile, similar products are waiting further down.', 'Tillbaka snart. Under tiden finns liknande produkter längre ner.') : '';
-    outNote.hidden = !out;
+      'Back soon. Meanwhile, similar products are waiting further down.', 'Tillbaka snart. Under tiden finns liknande produkter längre ner.')
+      : pre ? (function () {
+          const d = sdPreorderDate(p);
+          return _T('Produit en pré-commande : vous le réservez maintenant, nous l’expédions ' + (d ? 'à partir du ' + d : 'dès sa réception') + '. Les autres articles de la même commande partent avec lui.',
+            'Pre-order item: reserve it now, we ship it ' + (d ? 'from ' + d : 'as soon as it arrives') + '. Other items in the same order ship with it.',
+            'Förbeställning: reservera nu, vi skickar den ' + (d ? 'från ' + d : 'så snart den kommer') + '. Övriga varor i samma beställning skickas samtidigt.');
+        })()
+      : '';
+    outNote.hidden = !out && !pre;
   }
   /* Épuisé : ni quantité ni bouton grisé, mais l'alerte de retour en stock */
   const addRow = document.querySelector('.add-row');
@@ -740,7 +753,7 @@ function selectThumbImg(el, url) {
 
 function changeQtyPdp(d) {
   // Plafonne la quantité au stock réel (produits en suivi de stock).
-  const _stock = (pdpProduct && pdpProduct.trackStock && pdpProduct.stock != null) ? pdpProduct.stock : Infinity;
+  const _stock = (pdpProduct && !(typeof sdPreorder === 'function' && sdPreorder(pdpProduct)) && pdpProduct.trackStock && pdpProduct.stock != null) ? pdpProduct.stock : Infinity;
   pdpQtyVal = Math.max(1, pdpQtyVal + d);
   if (_stock !== Infinity) pdpQtyVal = Math.min(pdpQtyVal, Math.max(1, _stock));
   document.getElementById('pdp-qty').textContent = pdpQtyVal;
@@ -979,6 +992,6 @@ async function chargerAvis(productId) {
   } catch (e) {}
 }
 </script>
-<script src="js/sd-api-client.js?v=13"></script>
+<script src="js/sd-api-client.js?v=14"></script>
 </body>
 </html>

@@ -112,7 +112,20 @@ function sdProductUrl(p){if(!p)return'/boutique';if(p.slug&&SD_SLUG_OK.test(p.sl
    en suggestion à côté de l'épicerie ni dans le flux Shopping. */
 var SD_HOME_CATS=['art-de-la-table','maison-deco'];
 function sdIsHomeProduct(p){var c=p&&(p.category||p.categories);return!!(c&&SD_HOME_CATS.indexOf(c.slug)>-1);}
-function sdIsOut(p){return!!(p&&p.trackStock&&p.stock!=null&&p.stock<=0);}
+function sdIsOut(p){return!!(p&&!sdPreorder(p)&&p.trackStock&&p.stock!=null&&p.stock<=0);}
+/* Pré-commande (back : migration 065) : le produit se vend sans stock
+   jusqu'à sa date de fin incluse (preorderEnd), et part à partir de
+   preorderShip. Passé la fin, il redevient un produit ordinaire. */
+function sdPreorder(p){if(!p||!p.preorder)return false;var fin=String(p.preorderEnd||'').slice(0,10);return!fin||new Date().toISOString().slice(0,10)<=fin;}
+function sdPreorderDate(p){var d=String((p&&p.preorderShip)||'').slice(0,10);if(!/^\d{4}-\d{2}-\d{2}$/.test(d))return'';try{return new Date(d+'T12:00:00').toLocaleDateString(LANG==='sv'?'sv-SE':LANG==='en'?'en-GB':'fr-FR',{day:'numeric',month:'long'});}catch(e){return d;}}
+function sdPreorderShipText(p){var d=sdPreorderDate(p);return d?_sdT('Expédition à partir du '+d,'Ships from '+d,'Skickas från '+d):'';}
+function sdPreorderLabel(){return _sdT('Pré-commande','Pre-order','Förbeställning');}
+/* Badge et mentions de pré-commande : mousse (--lingon) + texte blanc,
+   distinct du rouge réservé aux promotions. Injecté une fois. */
+(function(){try{if(document.getElementById('sd-pre-style'))return;var s=document.createElement('style');s.id='sd-pre-style';
+s.textContent='.prod-stock-badge.psb-pre{background:var(--lingon);color:var(--snow);border-color:var(--lingon);}'
++'.cart-row-pre,.cpr-pre{font-family:var(--font-ui);font-size:11px;letter-spacing:.6px;color:var(--lingon);margin-top:3px;}';
+(document.head||document.documentElement).appendChild(s);}catch(e){}})();
 /* Recherche : sans accents (« lakerol » trouve « Läkerol »), tous les mots
    demandés, dans les trois langues, le sous-titre, la catégorie et les tags. */
 function sdNorm(s){return String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/ø/g,'o').replace(/æ/g,'ae').replace(/ß/g,'ss').replace(/[^a-z0-9]+/g,' ').trim();}
@@ -194,7 +207,7 @@ function sdTrackPurchase(order){try{if(!order)return;var total=parseFloat(order.
 // ── Stock : helpers partagés (panier + page produit) ─────────────────────────
 // Un produit sans suivi de stock (trackStock=false ou stock null) = stock illimité.
 function _sdFindProd(id){return ((typeof PRODUCTS!=='undefined'&&PRODUCTS)||[]).find(x=>x.id===id||x.uuid===id||String(x.id)===String(id)||String(x.uuid)===String(id))||(window._SD_STATIC||[]).find(x=>x.id===id||String(x.id)===String(id));}
-function _sdStock(p){return (!p||!p.trackStock||p.stock===null||p.stock===undefined)?Infinity:p.stock;}
+function _sdStock(p){return (!p||sdPreorder(p)||!p.trackStock||p.stock===null||p.stock===undefined)?Infinity:p.stock;}
 /* Recale le panier sur le stock reellement disponible.
    Un panier vit dans le localStorage : celui d'avant-hier peut demander
    3 boites d'un article dont il ne reste rien. Sans ce recalage, le
@@ -243,6 +256,20 @@ function sdMessageRevalidation(changes){
   if(!changes||!changes.length)return'';
   return changes.map(sdLigneRecalage).join('\n');
 }
+/* Pré-commande dans le panier : un bandeau au-dessus du panier annonce que
+   toute la commande partira ensemble, à la date d'expédition la plus
+   tardive. `p` = produit en pré-commande à cette date, ou null (retire). */
+function sdAfficherPrecommande(p){
+  var root=document.getElementById('cart-page-root');if(!root||!root.parentNode)return;
+  var n=document.getElementById('sd-precommande-note');
+  if(!p){if(n)n.remove();return;}
+  if(!n){n=document.createElement('div');n.id='sd-precommande-note';n.setAttribute('role','note');root.parentNode.insertBefore(n,root);}
+  n.style.cssText='margin:0 0 20px;padding:14px 18px;background:color-mix(in srgb,var(--lingon) 9%,var(--snow));border:1px solid color-mix(in srgb,var(--lingon) 35%,var(--snow));border-radius:1px;font-family:var(--font-body);font-size:16px;line-height:1.55;color:var(--slate);';
+  var d=sdPreorderDate(p);
+  n.textContent=d
+    ?_sdT('Votre panier contient un article en pré-commande : toute la commande partira ensemble, à partir du '+d+'.','Your cart contains a pre-order item: the whole order will ship together, from '+d+'.','Din varukorg innehåller en förbeställd vara: hela beställningen skickas tillsammans, från '+d+'.')
+    :_sdT('Votre panier contient un article en pré-commande : toute la commande partira ensemble, dès sa réception.','Your cart contains a pre-order item: the whole order will ship together, as soon as it arrives.','Din varukorg innehåller en förbeställd vara: hela beställningen skickas tillsammans, så snart den kommer.');
+}
 /* Affiche le recalage DANS la page panier (plus d'alerte bloquante du
    navigateur), et dit clairement que les commandes déjà passées ne sont
    pas touchées : seul le panier en cours est ajusté. */
@@ -268,7 +295,7 @@ function _sdStockMsg(kind,n){if(kind==='out')return LANG==='en'?'Out of stock':L
 /* Ajout au panier. Le tiroir s'ouvre et confirme lui-même l'ajout (bandeau
    en tête du tiroir, lu par les lecteurs d'écran) : le toast ne recouvre
    plus le bouton « Commander » sur mobile. */
-function addToCart(id,qty=1,variant=null){if(id===undefined||id===null||String(id)==='NaN'||String(id)==='undefined')return;const p=_sdFindProd(id);const cid=(p&&p.uuid)?p.uuid:id;const key=variant?`${cid}_${variant}`:`${cid}`;const stock=_sdStock(p);if(stock<=0){showToast(_sdStockMsg('out'));return;}const already=_sdCartQtyForProduct(cid);let add=qty;if(stock!==Infinity)add=Math.min(qty,Math.max(0,stock-already));if(add<=0){openCart();showToast(_sdStockMsg('max'));return;}cart[key]=(cart[key]||0)+add;saveCart();updateCartBadge();if(p){try{const cp=_sdCartProducts();cp[String(cid)]={name:p.name,photo:p.photo,price:p.price,weight:p.weight,variants:p.variants||[],pickup_only:!!p.pickup_only,discountType:p.discountType||null,discountValue:p.discountValue!=null?p.discountValue:null,discountStart:p.discountStart||null,discountEnd:p.discountEnd||null};localStorage.setItem('sd_cart_products',JSON.stringify(cp));}catch(e){}}sdTrackAddToCart(p,add);openCart();if(stock!==Infinity&&add<qty){showToast(_sdStockMsg('only',stock));}else if(p){const name=(p.name&&(p.name[LANG]||p.name.fr))||'';showToast(_sdT('Ajouté au panier : ','Added to cart: ','Tillagd i korgen: ')+name);}}
+function addToCart(id,qty=1,variant=null){if(id===undefined||id===null||String(id)==='NaN'||String(id)==='undefined')return;const p=_sdFindProd(id);const cid=(p&&p.uuid)?p.uuid:id;const key=variant?`${cid}_${variant}`:`${cid}`;const stock=_sdStock(p);if(stock<=0){showToast(_sdStockMsg('out'));return;}const already=_sdCartQtyForProduct(cid);let add=qty;if(stock!==Infinity)add=Math.min(qty,Math.max(0,stock-already));if(add<=0){openCart();showToast(_sdStockMsg('max'));return;}cart[key]=(cart[key]||0)+add;saveCart();updateCartBadge();if(p){try{const cp=_sdCartProducts();cp[String(cid)]={name:p.name,photo:p.photo,price:p.price,weight:p.weight,variants:p.variants||[],pickup_only:!!p.pickup_only,discountType:p.discountType||null,discountValue:p.discountValue!=null?p.discountValue:null,discountStart:p.discountStart||null,discountEnd:p.discountEnd||null,preorder:!!p.preorder,preorderShip:p.preorderShip||null,preorderEnd:p.preorderEnd||null};localStorage.setItem('sd_cart_products',JSON.stringify(cp));}catch(e){}}sdTrackAddToCart(p,add);openCart();if(stock!==Infinity&&add<qty){showToast(_sdStockMsg('only',stock));}else if(p){const name=(p.name&&(p.name[LANG]||p.name.fr))||'';showToast(_sdT('Ajouté au panier : ','Added to cart: ','Tillagd i korgen: ')+name);}}
 function openSnipcartCheckout(){closeCart(false);if(!/\/panier(\.html)?$/.test(window.location.pathname))window.location.href='/panier';}
 function _snipAdd(){}
 function changeQty(key,delta){var ri=key.indexOf('_');var cid=ri===-1?key:key.slice(0,ri);var p=_sdFindProd(cid);var stock=_sdStock(p);var target=(cart[key]||0)+delta;if(target>0&&stock!==Infinity){var others=_sdCartQtyForProduct(cid)-(cart[key]||0);var maxThis=stock-others;if(target>maxThis){target=Math.max(0,maxThis);showToast(_sdStockMsg('only',stock));}}if(target<=0)delete cart[key];else cart[key]=target;saveCart();updateCartBadge();renderCartDrawer();}
@@ -314,7 +341,7 @@ function renderCartDrawer(){
     const url=/^[0-9a-f]{8}-[0-9a-f-]{27}$/i.test(idStr)?sdProductUrl({name:p.name,uuid:idStr}):'';
     const price=onSale?`<span class="cart-row-price-old">${fmtPrice(base*qty)}</span><span class="cart-row-price cart-row-price--sale">${fmtPrice(line)}</span>`:`<span class="cart-row-price">${fmtPrice(line)}</span>`;
     const thumb=p.photo?`<img src="${_sdAttr(sdThumb(p.photo,300))}" alt="" width="60" height="60" loading="lazy" decoding="async">`:'';
-    return`<li class="cart-row" data-key="${_sdAttr(key)}"><div class="cart-row-thumb">${thumb}</div><div class="cart-row-info"><p class="cart-row-name">${url?`<a href="${_sdAttr(url)}" onclick="closeCart(false)">${nm}</a>`:nm}</p><p class="cart-row-sub">${_sdAttr(variant||p.weight||'')}</p><div class="cart-qty" role="group" aria-label="${_sdAttr(_sdT('Quantité : ','Quantity: ','Antal: ')+name)}"><button type="button" class="cq-btn" data-cart-act="dec" aria-label="${_sdT('Retirer un','Remove one','Ta bort en')}">−</button><span class="cq-num">${qty}</span><button type="button" class="cq-btn" data-cart-act="inc" aria-label="${_sdT('Ajouter un','Add one','Lägg till en')}">+</button></div></div><div class="cart-row-side">${price}<button type="button" class="cart-del" data-cart-act="del" aria-label="${_sdAttr(_sdT('Retirer du panier : ','Remove from cart: ','Ta bort ur korgen: ')+name)}">${_sdIcons.close}</button></div></li>`;
+    return`<li class="cart-row" data-key="${_sdAttr(key)}"><div class="cart-row-thumb">${thumb}</div><div class="cart-row-info"><p class="cart-row-name">${url?`<a href="${_sdAttr(url)}" onclick="closeCart(false)">${nm}</a>`:nm}</p><p class="cart-row-sub">${_sdAttr(variant||p.weight||'')}</p>${sdPreorder(p)?`<p class="cart-row-pre">${_sdAttr(sdPreorderLabel()+(sdPreorderShipText(p)?' · '+sdPreorderShipText(p):''))}</p>`:''}<div class="cart-qty" role="group" aria-label="${_sdAttr(_sdT('Quantité : ','Quantity: ','Antal: ')+name)}"><button type="button" class="cq-btn" data-cart-act="dec" aria-label="${_sdT('Retirer un','Remove one','Ta bort en')}">−</button><span class="cq-num">${qty}</span><button type="button" class="cq-btn" data-cart-act="inc" aria-label="${_sdT('Ajouter un','Add one','Lägg till en')}">+</button></div></div><div class="cart-row-side">${price}<button type="button" class="cart-del" data-cart-act="del" aria-label="${_sdAttr(_sdT('Retirer du panier : ','Remove from cart: ','Ta bort ur korgen: ')+name)}">${_sdIcons.close}</button></div></li>`;
   }).join('');
   const fr=SD_SHIP.rules(false),eu=SD_SHIP.rules(true);
   const remaining=fr.threshold-total;const free=remaining<=0;const shipCost=free?0:fr.cost;
@@ -399,7 +426,7 @@ function sdFooterNlSubmit(e){
 function productCardHTML(p){const name=p.name?.[LANG]||p.name?.fr||'';const bl=p.badge?getBadgeLabel(p.badge):'';const badge=bl?`<div class="prod-badge ${_sdAttr(p.badge)}">${bl}</div>`:'';const _onSale=!!(window.SDPrice&&SDPrice.active(p));const _salePrice=_onSale?SDPrice.effective(p.price,p):(p.price||0);const promoBadge=_onSale?`<div class="prod-badge badge-promo">${_sdT('Offre spéciale','Special offer','Erbjudande')}</div>`:'';const priceHtml=_onSale?`<span class="prod-price-old">${fmtPrice(p.price||0)}</span><span class="prod-price prod-price--sale">${fmtPrice(_salePrice)}</span>`:`<span class="prod-price">${fmtPrice(p.price||0)}</span>`;const origin=(p.origin&&typeof p.origin==='object')?(p.origin[LANG]||''):(p.origin||'');const addId=p.uuid?`'${_sdAttr(p.uuid)}'`:(typeof p.id==='string'?`'${_sdAttr(p.id)}'`:(+p.id||0));
   /* Poids : « 16 × 21 g » pour un lot (le « 16x » n'est plus coupé) */
   const q=sdNetQty(p.weight);const wLbl=q?q.label:String(p.weight||'').trim();const weightHtml=wLbl?`<span class="prod-weight">${_sdAttr(wLbl)}</span>`:'';
-  const _tracked=p.trackStock&&p.stock!==null&&p.stock!==undefined;const _isOut=_tracked&&p.stock<=0;let stockBadge='';if(_isOut)stockBadge=`<div class="prod-stock-badge psb-out">${_sdT('Épuisé','Sold out','Slut i lager')}</div>`;else if(_tracked&&p.stock<=2)stockBadge=`<div class="prod-stock-badge psb-low">${_sdT('Stock limité','Limited stock','Begränsat lager')}</div>`;
+  const _pre=sdPreorder(p);const _tracked=!_pre&&p.trackStock&&p.stock!==null&&p.stock!==undefined;const _isOut=_tracked&&p.stock<=0;let stockBadge='';if(_pre)stockBadge=`<div class="prod-stock-badge psb-pre">${sdPreorderLabel()}</div>`;else if(_isOut)stockBadge=`<div class="prod-stock-badge psb-out">${_sdT('Épuisé','Sold out','Slut i lager')}</div>`;else if(_tracked&&p.stock<=2)stockBadge=`<div class="prod-stock-badge psb-low">${_sdT('Stock limité','Limited stock','Begränsat lager')}</div>`;
   const addLbl=_isOut?name+' — '+_sdT('bientôt disponible','coming soon','kommer snart'):_sdT('Ajouter au panier : ','Add to cart: ','Lägg i korgen: ')+name;
   /* Catégorie réelle du back-office (comme la boutique et la recherche) */
   const cat=(p.category&&(p.category[LANG]||p.category.fr))||CAT_LABELS[p.cat]?.[LANG]||p.cat||'';
