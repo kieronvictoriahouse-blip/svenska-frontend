@@ -81,7 +81,7 @@
 </main>
 
 <div id="footer-root"></div>
-<script src="js/app.js?v=38"></script>
+<script src="js/app.js?v=39"></script>
 <script>
 /* Dépôt d'avis, atteint depuis l'e-mail post-achat : /avis?c=<id commande>.
    Le serveur (/api/reviews) vérifie que la commande est payée et qu'elle
@@ -172,7 +172,7 @@ document.addEventListener('submit', async function (e) {
   _av.busy[i] = true; bt.disabled = true; bt.textContent = _at('sending');
   var key = 'failed', ok = false;
   try {
-    var res = await fetch(SD_API_URL + '/api/reviews', {
+    var res = await sdFetch(SD_API_URL + '/api/reviews', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ order_id: _av.orderId, product_id: _av.produits[i].id, rating: _av.notes[i], comment: document.getElementById('tx-' + i).value.trim(), lang: LANG })
     });
@@ -194,7 +194,7 @@ initPage('');
   if (!_av.orderId) { _av.state = 'noLink'; _avRender(); return; }
   var order = null, failed = false;
   try {
-    var res = await fetch(SD_API_URL + '/api/orders/' + encodeURIComponent(_av.orderId) + '/public');
+    var res = await sdFetch(SD_API_URL + '/api/orders/' + encodeURIComponent(_av.orderId) + '/public');
     if (res.ok) { var d = await res.json(); order = d.order; }
     else if (res.status !== 404) failed = true;
   } catch (e) { failed = true; }
@@ -216,6 +216,6 @@ initPage('');
   _avRender();
 })();
 </script>
-<script src="js/sd-api-client.js?v=14"></script>
+<script src="js/sd-api-client.js?v=15"></script>
 </body>
 </html>

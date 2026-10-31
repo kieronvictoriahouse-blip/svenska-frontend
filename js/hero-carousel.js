@@ -24,7 +24,7 @@
   if (!hero || !media) return;
 
   var KEY = 'sd_hero_v1';
-  var BASE = typeof SD_API_URL !== 'undefined' ? SD_API_URL : '';
+  var BASE = (window.SD_SITE && window.SD_SITE.api) || (typeof SD_API_URL !== 'undefined' ? SD_API_URL : '');
   var FADE_MS = 1200;
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var SUPA_MEDIA = /^https?:\/\/[a-z0-9]+\.supabase\.co\/storage\/v1\/object\/public\/svenska-media\//i;
@@ -422,7 +422,11 @@
   var cachedRaw = null;
   try { cachedRaw = localStorage.getItem(KEY); if (cachedRaw) render(JSON.parse(cachedRaw)); } catch (e) { cachedRaw = null; }
 
-  fetch(BASE + '/api/hero')
+  /* Chargé avant app.js sur l'accueil : sdFetch n'existe pas encore. Repli
+     sur le même ?boutique= quand une autre vitrine a posé SD_SITE. */
+  var S = window.SD_SITE, heroUrl = BASE + '/api/hero';
+  if (!window.sdFetch && S && S.id && S.id !== 'sc') heroUrl += '?boutique=' + encodeURIComponent(S.id);
+  (window.sdFetch || fetch)(heroUrl)
     .then(function (r) { return r.ok ? r.json() : null; })
     .then(function (d) {
       if (!d || !d.mode) return;      // route absente ou en erreur : on garde ce qui est affiché

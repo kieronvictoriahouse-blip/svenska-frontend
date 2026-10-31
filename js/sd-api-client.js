@@ -6,7 +6,9 @@
   if (window._sdApiInitialized) return;
   window._sdApiInitialized = true;
 
-  const BASE = window.SD_API_URL || 'https://admin.swedishcravings.fr';
+  const BASE = (window.SD_SITE && window.SD_SITE.api) || window.SD_API_URL || 'https://admin.swedishcravings.fr';
+  /* Appels API via sdFetch (app.js) : ?boutique=<id> pour une autre vitrine ; fetch seul en repli */
+  const apiFetch = (url, opts) => (window.sdFetch || fetch)(url, opts);
 
   /* ── Remise par article ─────────────────────────────────────────
      Miroir EXACT de src/lib/product-price.ts côté serveur. Le prix
@@ -212,38 +214,38 @@
   const SDApi = {
     async getProducts(params = {}) {
       const qs = new URLSearchParams(params).toString();
-      const res = await fetch(`${BASE}/api/products${qs ? '?' + qs : ''}`);
+      const res = await apiFetch(`${BASE}/api/products${qs ? '?' + qs : ''}`);
       if (!res.ok) throw new Error('API error ' + res.status);
       const data = await res.json();
       return Array.isArray(data) ? data : (data.products || data.data || []);
     },
     async getProduct(id) {
-      const res = await fetch(`${BASE}/api/products/${id}`);
+      const res = await apiFetch(`${BASE}/api/products/${id}`);
       if (!res.ok) throw new Error('API error ' + res.status);
       return res.json();
     },
     async getCategories() {
-      const res = await fetch(`${BASE}/api/categories`);
+      const res = await apiFetch(`${BASE}/api/categories`);
       if (!res.ok) throw new Error('API error ' + res.status);
       return res.json();
     },
     async getHomepage() {
-      const res = await fetch(`${BASE}/api/homepage`);
+      const res = await apiFetch(`${BASE}/api/homepage`);
       if (!res.ok) throw new Error('API error ' + res.status);
       return res.json();
     },
     async getCms() {
-      const res = await fetch(`${BASE}/api/cms`);
+      const res = await apiFetch(`${BASE}/api/cms`);
       if (!res.ok) throw new Error('API error ' + res.status);
       return res.json();
     },
     async getWhiteLabel() {
-      const res = await fetch(`${BASE}/api/white-label`);
+      const res = await apiFetch(`${BASE}/api/white-label`);
       if (!res.ok) throw new Error('API error ' + res.status);
       return res.json();
     },
     async login(email, password) {
-      const res = await fetch(`${BASE}/api/auth/login`, {
+      const res = await apiFetch(`${BASE}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -333,7 +335,7 @@
         }
         var _fr = document.getElementById('footer-root');
         if (_fr) { _fr.innerHTML = renderFooter(); _fr.classList.add('wl-ready'); }
-        if (typeof setLang === 'function') setLang(window.LANG || localStorage.getItem('sd_lang') || 'fr');
+        if (typeof setLang === 'function') setLang(window.LANG || localStorage.getItem('sd_lang') || (window.SD_SITE && window.SD_SITE.defaultLang) || 'fr');
       }
     }
 

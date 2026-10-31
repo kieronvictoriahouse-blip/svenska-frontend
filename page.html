@@ -121,7 +121,7 @@
   <div class="pg-state" data-sv="Laddar…" data-fr="Chargement…" data-en="Loading…">Chargement…</div>
 </main>
 <div id="footer-root"></div>
-<script src="js/app.js?v=38"></script>
+<script src="js/app.js?v=39"></script>
 <script>
 /* Page CMS : servie à /a-propos (« Notre histoire »), ou page.html?slug=…
    Les pages légales ont leur version statique, à jour : on y renvoie. */
@@ -243,8 +243,8 @@ function _pgLoad() {
   var root = document.getElementById('page-content');
   root.setAttribute('aria-busy', 'true');
   root.innerHTML = '<div class="pg-state">' + (LANG === 'en' ? 'Loading…' : LANG === 'sv' ? 'Laddar…' : 'Chargement…') + '</div>';
-  var BASE = window.SD_API_URL || 'https://admin.swedishcravings.fr';
-  fetch(BASE + '/api/pages/' + encodeURIComponent(_pgSlug))
+  var BASE = (window.SD_SITE && SD_SITE.api) || window.SD_API_URL || 'https://admin.swedishcravings.fr';
+  sdFetch(BASE + '/api/pages/' + encodeURIComponent(_pgSlug))
     .then(function (r) {
       if (r.status === 404) return { page: null, missing: true };
       if (!r.ok) throw new Error('HTTP ' + r.status);
@@ -264,6 +264,6 @@ initPage(_pgSlug === 'a-propos' ? 'about' : _pgSlug);
 if (!PG_LEGAL[_pgSlug]) _pgLoad();
 </script>
 <script>(function(){var _hr=document.getElementById("header-root");if(_hr&&typeof MutationObserver!=="undefined")new MutationObserver(function(){if(typeof updateCartBadge==="function")updateCartBadge();}).observe(_hr,{childList:true});})();</script>
-<script src="js/sd-api-client.js?v=14"></script>
+<script src="js/sd-api-client.js?v=15"></script>
 </body>
 </html>
