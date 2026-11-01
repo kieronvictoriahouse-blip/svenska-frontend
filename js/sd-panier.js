@@ -402,7 +402,7 @@ function _renderCartPage() {
     const idStr = _ri === -1 ? key : key.slice(0, _ri);
     const variant = _ri === -1 ? undefined : key.slice(_ri + 1);
     const _cpd = _sdCartProducts();
-    const p = PRODUCTS.find(x => String(x.uuid || x.id) === idStr || x.id === parseInt(idStr)) || _cpd[idStr] || (window._SD_STATIC||[]).find(x => String(x.id) === idStr);
+    const p = PRODUCTS.find(x => String(x.uuid || x.id) === idStr || (/^\d+$/.test(idStr) && x.id === parseInt(idStr))) || _cpd[idStr] || (window._SD_STATIC||[]).find(x => String(x.id) === idStr);
     if (!p) return '';
     const _pre = typeof sdPreorder === 'function' && sdPreorder(p);
     if (_pre && (!_preLast || String(p.preorderShip || '') > String(_preLast.preorderShip || ''))) _preLast = p;
@@ -442,7 +442,7 @@ function _renderCartPage() {
     const _pi = key.indexOf('_');
     const idStr = _pi === -1 ? key : key.slice(0, _pi);
     const _cpp = _sdCartProducts();
-    const pp = PRODUCTS.find(x => String(x.uuid || x.id) === idStr || x.id === parseInt(idStr)) || _cpp[idStr] || (window._SD_STATIC||[]).find(x => String(x.id) === idStr);
+    const pp = PRODUCTS.find(x => String(x.uuid || x.id) === idStr || (/^\d+$/.test(idStr) && x.id === parseInt(idStr))) || _cpp[idStr] || (window._SD_STATIC||[]).find(x => String(x.id) === idStr);
     return !!(pp && pp.pickup_only);
   });
   if (cartHasPickupOnly && window._deliveryMode !== 'pickup') setDeliveryMode('pickup');
@@ -644,7 +644,7 @@ function _renderCartPage() {
     const _pi = key.indexOf('_');
     const idStr = _pi === -1 ? key : key.slice(0, _pi);
     const _cpp = _sdCartProducts();
-    const pp = PRODUCTS.find(x => String(x.uuid || x.id) === idStr || x.id === parseInt(idStr)) || _cpp[idStr] || (window._SD_STATIC||[]).find(x => String(x.id) === idStr);
+    const pp = PRODUCTS.find(x => String(x.uuid || x.id) === idStr || (/^\d+$/.test(idStr) && x.id === parseInt(idStr))) || _cpp[idStr] || (window._SD_STATIC||[]).find(x => String(x.id) === idStr);
     return !!(pp && pp.pickup_only);
   }).map(([key]) => key);
   const _pickupOnlyHtml = cartHasPickupOnly ? `<div class="pickup-only-note">${LANG==='sv'?'Din korg innehåller en färskvara som bara kan hämtas på plats: hela beställningen blir Click &amp; Collect.':LANG==='en'?'Your cart contains a fresh item available for pickup only, so the whole order is Click &amp; Collect.':'Votre panier contient un produit frais à retirer sur place : toute la commande passe en Click &amp; Collect.'}<button type="button" onclick="_retirerProduitsRetrait()">${LANG==='sv'?(_pickupOnlyKeys.length>1?'Ta bort dessa varor för leverans':'Ta bort varan för leverans'):LANG==='en'?(_pickupOnlyKeys.length>1?'Remove these items to get delivery':'Remove this item to get delivery'):(_pickupOnlyKeys.length>1?'Retirer ces produits pour être livré':'Retirer ce produit pour être livré')}</button></div>` : '';
@@ -811,7 +811,7 @@ async function applyPromoCode() {
   entries.forEach(([key, qty]) => {
     const ri = key.indexOf('_'); const idStr = ri===-1?key:key.slice(0,ri);
     const _cpd = _sdCartProducts();
-    const p = PRODUCTS.find(x => String(x.uuid||x.id)===idStr||(/^d+$/.test(idStr)&&x.id===parseInt(idStr)))||_cpd[idStr]||(window._SD_STATIC||[]).find(x=>String(x.id)===idStr);
+    const p = PRODUCTS.find(x => String(x.uuid||x.id)===idStr||(/^\d+$/.test(idStr)&&x.id===parseInt(idStr)))||_cpd[idStr]||(window._SD_STATIC||[]).find(x=>String(x.id)===idStr);
     if (!p) return;
     const variant = ri===-1?undefined:key.slice(ri+1);
     const v = variant?p.variants?.find(x=>x.label===variant):p.variants?.[0];
@@ -957,7 +957,7 @@ async function doCheckout() {
       Object.entries(cart).filter(([, q]) => q > 0).forEach(([key, qty]) => {
         const ri = key.indexOf('_'); const idStr = ri === -1 ? key : key.slice(0, ri);
         const _cpd = _sdCartProducts();
-        const p = PRODUCTS.find(x => String(x.uuid || x.id) === idStr || x.id === parseInt(idStr)) || _cpd[idStr] || (window._SD_STATIC || []).find(x => String(x.id) === idStr);
+        const p = PRODUCTS.find(x => String(x.uuid || x.id) === idStr || (/^\d+$/.test(idStr) && x.id === parseInt(idStr))) || _cpd[idStr] || (window._SD_STATIC || []).find(x => String(x.id) === idStr);
         if (!p) return;
         const variant = ri === -1 ? undefined : key.slice(ri + 1);
         const v = variant ? (p.variants || []).find(x => x.label === variant) : (p.variants || [])[0];

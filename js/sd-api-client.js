@@ -428,7 +428,7 @@
             var ri = key.indexOf('_'); var idStr = ri === -1 ? key : key.slice(0, ri);
             if (_cp[idStr]) return;
             var idInt = parseInt(idStr);
-            var p = mapped.find(function(x) { return String(x.uuid || x.id) === idStr || (!isNaN(idInt) && x.id === idInt); });
+            var p = mapped.find(function(x) { return String(x.uuid || x.id) === idStr || (/^\d+$/.test(idStr) && x.id === idInt); });
             if (p) { _cp[idStr] = {name:p.name,photo:p.photo,price:p.price,weight:p.weight,variants:p.variants||[],preorder:!!p.preorder,preorderShip:p.preorderShip||null,preorderEnd:p.preorderEnd||null}; _dirty = true; }
           });
           if (_dirty) localStorage.setItem('sd_cart_products', JSON.stringify(_cp));
