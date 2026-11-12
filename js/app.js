@@ -190,7 +190,25 @@ function sdThumbSet(u){return u&&String(u).indexOf('/media/')===0?sdThumb(u,300)
 function sdBoldAllergens(t){return _sdAttr(t).replace(SD_ALLERGENS,function(m,pre,word,off,str){if(/^butter$/i.test(word)&&/(cocoa|cacao)\s*$/i.test(str.slice(Math.max(0,off-7),off+pre.length)))return m;return pre+'<strong>'+word+'</strong>';});}
 function _doSekRefresh(){try{window.dispatchEvent(new Event('sd:currency'));}catch(e){}renderCartDrawer();if(typeof renderCart==='function')renderCart();sdFillSek();}
 function loadSekRate(){if(SD_SITE.currency!=='EUR')return;if(_sekRate>0){if(LANG==='sv')_doSekRefresh();return;}/* api.frankfurter.app redirige (301) vers .dev sans en-tête CORS : le navigateur refusait, les prix suédois restaient en euros */fetch('https://api.frankfurter.dev/v1/latest?base=EUR&symbols=SEK').then(function(r){return r.json();}).then(function(d){var rate=d&&d.rates&&d.rates.SEK;if(rate>0){_sekRate=rate;try{sessionStorage.setItem('_sekRate',String(rate));}catch(e){}if(LANG==='sv')_doSekRefresh();}}).catch(function(){});}
-function saveCart(){try{localStorage.setItem('sd_cart',JSON.stringify(cart));}catch(e){}}
+function saveCart(){try{localStorage.setItem('sd_cart',JSON.stringify(cart));}catch(e){}sdLiveCart();}
+/* Paniers en cours (back-office /admin/paniers) : un instantané ANONYME du
+   panier part au serveur à chaque changement et à chaque page vue tant qu'il
+   n'est pas vide — identifiant aléatoire du navigateur, articles, total, page.
+   Ni nom ni e-mail. Jamais bloquant : une erreur ici n'affecte pas le panier. */
+function _sdLiveSid(){try{var s=localStorage.getItem('sd_cart_sid');if(!s){s=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():(Date.now().toString(36)+Math.random().toString(36).slice(2,12));localStorage.setItem('sd_cart_sid',s);}return s;}catch(e){return null;}}
+var _sdLiveT=null;
+function sdLiveCart(){clearTimeout(_sdLiveT);_sdLiveT=setTimeout(_sdLiveEnvoi,1200);}
+function _sdLiveEnvoi(){try{
+  if(/^(localhost|127\.|\[::1\])/.test(location.hostname))return;
+  var cp=_sdCartProducts();
+  var items=Object.entries(cart).filter(function(e){return e[1]>0;}).map(function(e){var key=e[0],i=key.indexOf('_'),id=i===-1?key:key.slice(0,i);var p=(window.PRODUCTS||[]).find(function(x){return String(x.uuid||x.id)===id;})||cp[id]||{};var b=Number(p.price)||0;var px=window.SDPrice?SDPrice.effective(b,p):b;return{id:id,qty:e[1],name:p.name?(p.name.fr||p.name[LANG]||''):'',price:Math.round(px*100)/100,photo:p.photo||null};});
+  /* Un visiteur qui n'a jamais rempli de panier n'envoie rien. */
+  if(!items.length&&!localStorage.getItem('sd_cart_sid'))return;
+  var sid=_sdLiveSid();if(!sid)return;
+  var api=(window.SD_SITE&&SD_SITE.api)||window.SD_API_URL||'https://admin.swedishcravings.fr';
+  fetch(api+'/api/paniers/live',{method:'POST',headers:{'Content-Type':'application/json'},keepalive:true,body:JSON.stringify({sid:sid,items:items,page:location.pathname,lang:(typeof LANG!=='undefined'&&LANG)||'fr',mobile:window.matchMedia?matchMedia('(max-width: 760px)').matches:null})}).catch(function(){});
+}catch(e){}}
+window.addEventListener('load',function(){try{if(Object.values(cart).some(function(q){return q>0;}))sdLiveCart();}catch(e){}});
 /* Panier synchronisé entre onglets. La page de confirmation vide le panier
    après paiement, mais seulement dans SON onglet : un autre onglet ouvert
    gardait l'ancien panier en mémoire, le ré-écrivait, et le recalage sur le

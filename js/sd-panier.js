@@ -1023,6 +1023,8 @@ async function doCheckout() {
         ...(session?.token ? { customer_token: session.token } : {}),
         customer_email: _email,
         lang: LANG,
+        // Paniers en cours : rattache le panier suivi en direct à sa commande.
+        panier_sid: (function () { try { return localStorage.getItem('sd_cart_sid'); } catch (e) { return null; } })(),
         // Arrivée par un email de relance : le serveur y retrouve le cadeau éventuel.
         ...(window._reprise ? { reprise: window._reprise } : {}),
         promo_code: window._appliedPromo?.code || null,
@@ -1041,6 +1043,9 @@ async function doCheckout() {
       // Repère : on part vers Stripe. Si le client revient ici sans avoir
       // payé (cancel_url = panier), app.js proposera l'aide WhatsApp Victoria.
       try { sessionStorage.setItem('sd_from_stripe', '1'); } catch (e) {}
+      // Le panier suivi est désormais celui de cette commande : un panier
+      // rempli ensuite (retour sans payer, nouvel achat) part sous un nouvel identifiant.
+      try { localStorage.removeItem('sd_cart_sid'); } catch (e) {}
       window.location.href = data.url;
       return;                              // le bouton reste « … » jusqu'au départ
     }
