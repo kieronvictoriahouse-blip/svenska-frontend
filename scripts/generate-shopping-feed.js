@@ -38,6 +38,8 @@ const TYPE_BY_CAT = {
 /* Titres à la main pour les produits d'appel saisonniers (clé = 8 premiers car. de l'id). */
 const TITLE_OVERRIDES = {
   '10adc88a': 'Sucre perlé suédois (pärlsocker) pour kanelbullar – brioches à la cannelle, 500 g',
+  // Produit anglais (Lakeland) : le titre par défaut dirait « importé de Suède ».
+  'eaa240de': 'Papier cuisson doublé d’aluminium Lakeland 30 cm × 10 m – four 220 °C et congélateur',
 };
 function titleOf(p) {
   const ov = TITLE_OVERRIDES[String(p.id || '').slice(0, 8)];
