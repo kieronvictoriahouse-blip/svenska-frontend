@@ -107,6 +107,37 @@ const _XSELL_AVEC = {
 };
 function _xsellIsBox(p) { return (p.tags || []).some(function(t) { return String(t).toLowerCase() === 'box'; }); }
 function _xsellPrice(p) { return window.SDPrice ? SDPrice.effective(p.price, p) : p.price; }
+
+/* Micro-panier (un seul petit article) : on propose le lot qui va avec.
+   Un colis coûte 6,26 € au réel ; une boîte de Läkerol seule ne le paie pas.
+   Proposition, jamais d'obligation ni de minimum de commande. */
+function _packSuggestHtml(entries) {
+  if (entries.length !== 1 || entries[0][1] !== 1) return '';
+  const key = entries[0][0], i = key.indexOf('_'), id = i === -1 ? key : key.slice(0, i);
+  const all = window.PRODUCTS || [];
+  const p = all.find(function(x) { return String(x.uuid || x.id) === id; });
+  if (!p || _xsellPrice(p) > 6) return '';
+  const tags = function(x) { return (x.tags || []).map(function(t) { return String(t).toLowerCase(); }); };
+  if (tags(p).indexOf('lot') > -1 || _xsellIsBox(p)) return '';
+  const lots = all.filter(function(x) { return tags(x).indexOf('lot') > -1 && !sdIsOut(x); });
+  const cat = p.category && p.category.slug;
+  const pick = lots.find(function(x) { return cat === 'dips' && tags(x).indexOf('dips') > -1; })
+    || lots.find(function(x) { return cat === 'epices' && tags(x).indexOf('epices') > -1; })
+    || lots.find(function(x) { return tags(x).indexOf('decouverte') > -1; })
+    || lots[0];
+  if (!pick) return '';
+  const pid = pick.uuid || pick.id;
+  const nm = (pick.name && (pick.name[LANG] || pick.name.fr)) || '';
+  const lead = LANG === 'sv' ? 'Smaka mer i samma paket' : LANG === 'en' ? 'Taste more in the same parcel' : 'Goûtez-en plus dans le même colis';
+  const sub = LANG === 'sv' ? 'Billigare än styckvis.' : LANG === 'en' ? 'Cheaper than buying them one by one.' : 'Moins cher qu’à l’unité.';
+  const addTxt = LANG === 'sv' ? 'Lägg till' : LANG === 'en' ? 'Add' : 'Ajouter';
+  return '<div class="pack-suggest">'
+    + '<img src="' + _sdAttr(sdThumb(pick.photo || '', 300)) + '" width="72" height="72" alt="" loading="lazy" onerror="this.style.display=\'none\'">'
+    + '<div class="pack-suggest-txt"><strong>' + lead + '</strong><br><a href="' + _sdAttr(typeof sdProductUrl === 'function' ? sdProductUrl(pick) : '/produit?id=' + pid) + '">' + _sdAttr(nm) + '</a> · ' + fmtPrice(_xsellPrice(pick)) + '<br><span>' + sub + '</span></div>'
+    + '<button type="button" class="ship-upsell-btn" onclick="cartAddQuick(\'' + pid + '\')">+ ' + addTxt + '</button>'
+    + '</div>';
+}
+
 function _crossSellHtml(cartIds) {
   const voulus = new Set();
   (window.PRODUCTS || []).forEach(function(p) {
@@ -155,6 +186,9 @@ function onLangChange() { if (window._cartPageReady) renderCartPageFull(); }
 
 initPage('');
 document.body.classList.add('page-panier');
+
+/* Case « nouveautés » : décochée par défaut (consentement), mémorisée si cochée. */
+window._optin = (function () { try { return localStorage.getItem('sd_optin') === '1'; } catch (e) { return false; } })();
 
 /* Email du panier : pré-rempli avec la dernière saisie, sinon le compte. */
 window._custEmail = window._custEmail || (function () {
@@ -673,6 +707,7 @@ function _renderCartPage() {
           <span data-sv="Pris" data-fr="Prix" data-en="Price">${LANG==='sv'?'Pris':LANG==='en'?'Price':'Prix'}</span>
         </div>
         ${itemRows}
+        ${_packSuggestHtml(entries)}
         ${_giftBlockHtml}
       </div>
 
@@ -718,6 +753,7 @@ function _renderCartPage() {
           <input id="checkout-email-input" class="ck-input" type="email" autocomplete="email" inputmode="email" required aria-describedby="checkout-email-help checkout-email-err" value="${_sdAttr(window._custEmail||'')}" oninput="window._custEmail=this.value.trim();try{localStorage.setItem('sd_checkout_email',window._custEmail)}catch(e){};this.style.borderColor='';this.removeAttribute('aria-invalid');var er=document.getElementById('checkout-email-err');if(er)er.textContent='';" onchange="_revaliderCodePromo()" placeholder="${LANG==='sv'?'namn@exempel.se':LANG==='en'?'name@example.com':'prenom@exemple.fr'}">
           <div id="checkout-email-err" role="alert" style="font-family:var(--font-body);font-size:14px;color:#8E2A20;margin-top:6px;"></div>
           <p id="checkout-email-help" style="font-family:var(--font-body);font-size:13px;line-height:1.5;color:var(--dust);margin:6px 0 16px;">${LANG==='sv'?'För din orderbekräftelse.':LANG==='en'?'For your order confirmation.':'Pour votre confirmation de commande.'}</p>
+          <label class="ck-optin"><input type="checkbox" id="checkout-optin"${window._optin?' checked':''} onchange="window._optin=this.checked;try{localStorage.setItem('sd_optin',this.checked?'1':'0')}catch(e){}"> <span>${LANG==='sv'?'Jag vill få nyheter och erbjudanden (ungefär ett mejl i veckan, avsluta med ett klick).':LANG==='en'?'Send me new arrivals and offers (about one email a week, unsubscribe in one click).':'Je veux recevoir les nouveautés et offres (environ un e-mail par semaine, désinscription en un clic).'}</span></label>
         </div>
         <details class="order-note"${_noteOpen?' open':''} ontoggle="window._noteOpen=this.open">
           <summary>${LANG==='sv'?'Lägg till en kommentar':LANG==='en'?'Add a note to your order':'Ajouter une note à la commande'}</summary>
@@ -1023,6 +1059,8 @@ async function doCheckout() {
         ...(session?.token ? { customer_token: session.token } : {}),
         customer_email: _email,
         lang: LANG,
+        // Case « nouveautés » cochée : inscription à la newsletter au paiement.
+        newsletter_optin: !!window._optin,
         // Paniers en cours : rattache le panier suivi en direct à sa commande.
         panier_sid: (function () { try { return localStorage.getItem('sd_cart_sid'); } catch (e) { return null; } })(),
         // Arrivée par un email de relance : le serveur y retrouve le cadeau éventuel.

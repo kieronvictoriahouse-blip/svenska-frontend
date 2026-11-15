@@ -62,7 +62,18 @@
   gtag('set', 'ads_data_redaction', true);
   gtag('set', 'url_passthrough', true);
   gtag('js', new Date());
-  gtag('config', GA4_ID);
+  /* Trafic interne (Kieron, Victoria, tests) : ouvrir une fois le site avec
+     ?interne=1 sur chaque appareil (?interne=0 pour annuler). Les visites
+     partent alors avec traffic_type=internal et le filtre « Trafic interne »
+     de GA4 les écarte des rapports — sinon elles gonflent le canal Direct. */
+  var internal = false;
+  try {
+    var qi = /[?&]interne=([01])/.exec(location.search);
+    if (qi) localStorage.setItem('sd_internal', qi[1]);
+    internal = localStorage.getItem('sd_internal') === '1';
+  } catch (e) {}
+  window.sdInternal = internal;
+  gtag('config', GA4_ID, internal ? { traffic_type: 'internal' } : {});
   if (ADS_ID) gtag('config', ADS_ID, { allow_enhanced_conversions: true });
 
   window.SD_ADS = { id: ADS_ID, purchaseLabel: PURCHASE_LABEL };

@@ -618,6 +618,7 @@ function renderFooter(){
   +`<div class="footer-col"><h2${_sdTx('Butiken','La boutique','Shop')}</h2><ul>`
   +_sdFLink('/boutique','Hela butiken','Toute la boutique','Whole shop')
   +_sdFLink('/bonbons-suedois','Godis','Bonbons suédois','Swedish sweets')
+  +_sdFLink('/noel','Svensk jul','Noël suédois','Swedish Christmas')
   +_sdFLink('/boutique?rayon=chocolat','Choklad','Chocolat','Chocolate')
   +_sdFLink('/olw','OLW dippmix','Dips OLW','OLW dips')
   +_sdFLink('/ahlgrens-bilar','Ahlgrens Bilar','Ahlgrens Bilar','Ahlgrens Bilar')

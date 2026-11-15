@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <!-- Google tag + consentement (source unique : js/sd-consent.js) -->
-<script src="/js/sd-consent.js?v=2"></script>
+<script src="/js/sd-consent.js?v=3"></script>
 <meta charset="UTF-8">
 <link rel="icon" type="image/png" href="/img/favicon.png">
 <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
@@ -98,6 +98,15 @@
 .ship-upsell-btn{flex-shrink:0;background:var(--lingon);color:#fff;border:none;padding:9px 13px;font-family:var(--font-ui);font-size:10px;letter-spacing:1px;text-transform:uppercase;border-radius:4px;cursor:pointer;transition:background .15s,transform .12s;white-space:nowrap;}
 .ship-upsell-btn:hover{background:var(--lingon-mid);}
 .ship-upsell-btn:active{transform:scale(.96);}
+.pack-suggest{display:flex;align-items:center;gap:14px;margin:14px 0 4px;padding:14px 16px;background:var(--parchment);border:1px solid var(--linen);border-radius:4px;font-family:var(--font-body);font-size:15px;line-height:1.45;color:var(--slate);}
+.pack-suggest img{width:72px;height:72px;object-fit:cover;background:#F1EADC;border-radius:3px;flex-shrink:0;}
+.pack-suggest-txt{flex:1;min-width:0;}
+.pack-suggest-txt strong{color:var(--midnight);}
+.pack-suggest-txt a{color:var(--lingon);text-decoration:underline;text-underline-offset:3px;}
+.pack-suggest-txt span{font-size:13px;color:var(--dust);}
+@media(max-width:480px){.pack-suggest{flex-wrap:wrap}.pack-suggest .ship-upsell-btn{width:100%;min-height:44px}}
+.ck-optin{display:flex;gap:10px;align-items:flex-start;margin:-6px 0 16px;font-family:var(--font-body);font-size:14px;line-height:1.45;color:var(--slate);cursor:pointer;}
+.ck-optin input{width:18px;height:18px;margin:2px 0 0;flex-shrink:0;accent-color:var(--lingon);}
 @keyframes upsellIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
 
 /* ── Cadeau offert ── */
@@ -224,8 +233,8 @@
   <button type="button" class="btn-pay" id="pay-bar-btn" onclick="doCheckout()" tabindex="-1"></button>
 </div>
 <div id="footer-root"></div>
-<script src="js/app.js?v=40"></script>
-<script src="js/sd-panier.js?v=3"></script>
+<script src="js/app.js?v=41"></script>
+<script src="js/sd-panier.js?v=4"></script>
 <script>(function(){var _hr=document.getElementById("header-root");if(_hr&&typeof MutationObserver!=="undefined")new MutationObserver(function(){if(typeof updateCartBadge==="function")updateCartBadge();}).observe(_hr,{childList:true});})();</script>
 <script src="js/sd-api-client.js?v=16"></script>
 </body>
