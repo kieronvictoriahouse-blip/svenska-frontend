@@ -289,7 +289,7 @@
       var cp = JSON.parse(localStorage.getItem('sd_cart_products') || '{}');
       cp[String(p.uuid || p.id)] = {
         name: p.name, photo: p.photo, price: p.price, weight: p.weight,
-        variants: p.variants || [], pickup_only: !!p.pickup_only,
+        variants: p.variants || [], pickup_only: !!p.pickup_only, frais: !!p.frais,
         discountType: p.discountType || null, discountValue: p.discountValue != null ? p.discountValue : null,
         discountStart: p.discountStart || null, discountEnd: p.discountEnd || null,
         preorder: !!p.preorder, preorderShip: p.preorderShip || null, preorderEnd: p.preorderEnd || null

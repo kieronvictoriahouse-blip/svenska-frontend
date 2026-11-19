@@ -201,6 +201,8 @@
       stock:       typeof p.stock === 'number' ? p.stock : null,
       trackStock:  !!(p.track_stock),
       pickup_only: !!(p.pickup_only),
+      // Produit frais (migration 070) : Chronopost à domicile ou retrait, jamais en point relais
+      frais:       !!(p.frais),
       // Pré-commande (migration 065) : vendable sans stock jusqu'à preorderEnd (incluse)
       preorder:     !!p.preorder,
       preorderShip: p.preorder_ship_date || null,

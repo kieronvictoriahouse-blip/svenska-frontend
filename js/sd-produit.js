@@ -87,14 +87,22 @@ function renderPDP(p) {
   // Retrait uniquement (produit frais / non expédiable)
   const pickupNoteEl = document.getElementById('pdp-pickup-note');
   if (pickupNoteEl) {
+    /* Produit frais (migration 070) : expédié, mais seulement à domicile en
+       Chronopost, avec le supplément ; « retrait uniquement » l'emporte. */
+    const _frais = !p.pickup_only && !!p.frais;
+    const _supp = fmtPrice((window.SD_SHIP && SD_SHIP.frais) || 6.99);
     pickupNoteEl.textContent = p.pickup_only ? _T(
       'Retrait à l’atelier uniquement : ce produit frais ne peut pas être expédié. Commandez-le en Click & Collect.',
       'Workshop pickup only: this fresh item cannot be shipped. Order it via Click & Collect.',
-      'Endast upphämtning i ateljén: denna färskvara kan inte skickas. Beställ via Click & Collect.') : '';
-    pickupNoteEl.style.display = p.pickup_only ? '' : 'none';
+      'Endast upphämtning i ateljén: denna färskvara kan inte skickas. Beställ via Click & Collect.')
+      : _frais ? _T(
+      'Produit frais : livré à domicile par Chronopost en 24 h après l’expédition (supplément produits frais de ' + _supp + ', même port offert), ou à retirer à l’atelier. Pas d’envoi en point relais.',
+      'Fresh product: Chronopost delivers it to your home within 24 h of dispatch (fresh-product supplement ' + _supp + ', even with free shipping), or collect it at the workshop. No pickup-point delivery.',
+      'Färskvara: Chronopost levererar hem till dig inom 24 h efter avsändning (tillägg för färskvaror ' + _supp + ', även vid fri frakt), eller hämta i ateljén. Inte till utlämningsställen.') : '';
+    pickupNoteEl.style.display = (p.pickup_only || _frais) ? '' : 'none';
   }
   const shipEl = document.getElementById('pdp-ship');
-  if (shipEl) shipEl.textContent = p.pickup_only ? '' : sdShipLine();
+  if (shipEl) shipEl.textContent = (p.pickup_only || (!!p.frais)) ? '' : sdShipLine();
   const trustShip = document.getElementById('trust-ship');
   if (trustShip) { const r = SD_SHIP.rules(false); trustShip.textContent = _T('Livraison offerte dès ', 'Free delivery from ', 'Fri frakt från ') + sdPriceShort(r.threshold); }
 

@@ -220,7 +220,7 @@ window._reprise = (function () { try { return sessionStorage.getItem('sd_reprise
         d.items.forEach(function (it) { var k = String(it.id); cart[k] = Math.max(cart[k] || 0, it.qty); });
         saveCart(); updateCartBadge();
       }
-      if ((d.delivery_mode === 'pickup' && _SD_RETRAIT) || d.delivery_mode === 'mondial_relay') setDeliveryMode(d.delivery_mode);
+      if ((d.delivery_mode === 'pickup' && _SD_RETRAIT) || d.delivery_mode === 'mondial_relay' || d.delivery_mode === 'domicile_frais') setDeliveryMode(d.delivery_mode);
       /* Le point relais de la commande abandonnée revient avec le panier :
          le client n'a plus qu'à payer. */
       if (d.delivery_mode === 'mondial_relay' && d.relay_point && d.relay_point.id) {
@@ -481,6 +481,22 @@ function _renderCartPage() {
   });
   if (cartHasPickupOnly && window._deliveryMode !== 'pickup') setDeliveryMode('pickup');
 
+  /* Produit frais (back : migration 070) : jamais en point relais. Le panier
+     part en Chronopost à domicile (port normal + supplément, dû même port
+     offert) ou se retire à l'atelier. « Retrait uniquement » l'emporte. */
+  const _fraisKeys = cartHasPickupOnly ? [] : entries.filter(([key]) => {
+    const _fi = key.indexOf('_');
+    const idStr = _fi === -1 ? key : key.slice(0, _fi);
+    const pf = PRODUCTS.find(x => String(x.uuid || x.id) === idStr || (/^\d+$/.test(idStr) && x.id === parseInt(idStr))) || _sdCartProducts()[idStr] || (window._SD_STATIC||[]).find(x => String(x.id) === idStr);
+    return !!(pf && pf.frais);
+  }).map(([key]) => key);
+  const cartHasFrais = _fraisKeys.length > 0;
+  window._fraisKeys = _fraisKeys;
+  if (cartHasFrais && window._deliveryMode !== 'pickup' && window._deliveryMode !== 'domicile_frais') setDeliveryMode('domicile_frais');
+  if (!cartHasFrais && window._deliveryMode === 'domicile_frais') setDeliveryMode('mondial_relay');
+  const _isFrais = window._deliveryMode === 'domicile_frais';
+  const _fraisSupp = _isFrais ? ((window.SD_SHIP && SD_SHIP.frais) || 6.99) : 0;
+
   /* Miroir de INTERNATIONAL_COUNTRIES (back). La Suede y entre : elle
      etait proposee au client mais facturee au tarif France. La Suisse
      en sort — hors UE et 40 EUR TTC de port reel.
@@ -503,17 +519,20 @@ function _renderCartPage() {
     const unm = _unmRaw.length > 30 ? _unmRaw.slice(0, 30).trim() + '…' : _unmRaw;
     const addTxt = LANG==='sv'?'Lägg till':LANG==='en'?'Add':'Ajouter';
     const lead = LANG==='sv'?'Lägg till':LANG==='en'?'Add':'Ajoutez';
-    const tail = LANG==='sv'?'→ fri frakt':LANG==='en'?'→ free delivery':'→ livraison offerte';
+    const tail = LANG==='sv'?'→ fri frakt':LANG==='en'?(_isFrais?'→ free shipping':'→ free delivery'):(_isFrais?'→ port offert':'→ livraison offerte');
     return `<div class="ship-upsell">
         <img src="${_upProd.photo||''}" onerror="this.style.display='none'" alt="">
         <div class="ship-upsell-txt">${lead} <strong>${unm}</strong> (${fmtPrice(_upProd.price)}) ${tail}</div>
         <button class="ship-upsell-btn" onclick="cartAddQuick('${uid}')">+ ${addTxt}</button>
       </div>`;
   })() : '';
-  const _freeShipInner = `<div class="summary-ship-text">${LANG==='sv'?`${fmtPrice(remaining)} kvar till fri frakt`:LANG==='en'?`${fmtPrice(remaining)} away from free delivery`:`Plus que ${fmtPrice(remaining)} pour la livraison offerte`}</div>
+  // Produits frais : seul le port devient offert, le supplément reste.
+  const _freeShipInner = `<div class="summary-ship-text">${LANG==='sv'?`${fmtPrice(remaining)} kvar till fri frakt`:LANG==='en'?`${fmtPrice(remaining)} away from free ${_isFrais?'shipping':'delivery'}`:`Plus que ${fmtPrice(remaining)} pour ${_isFrais?'le port offert':'la livraison offerte'}`}</div>
         <div class="summary-bar"><div class="summary-bar-fill" style="width:${pct}%"></div></div>
         ${_upHtml}`;
-  const _freeShipTxt = _shipPromoLabel || (LANG === 'sv' ? 'Fri frakt' : LANG === 'en' ? 'Free delivery' : 'Livraison offerte');
+  const _freeShipTxt = _isFrais
+    ? (LANG === 'sv' ? 'Fri frakt' : LANG === 'en' ? 'Free shipping' : 'Port offert')
+    : _shipPromoLabel || (LANG === 'sv' ? 'Fri frakt' : LANG === 'en' ? 'Free delivery' : 'Livraison offerte');
   const _freeDoneInner = `<div class="summary-ship-text" style="color:var(--moss);">${_freeShipTxt} ✓</div>`;
   // Bandeau d'opération : rappelle l'offre tant que le seuil n'est pas atteint
   const _promoBanner = (_shipRules.promoActive && _shipPromoLabel && remaining > 0)
@@ -527,7 +546,8 @@ function _renderCartPage() {
   const _isFreeShip = _promoValid && window._appliedPromo.type === 'free_shipping';
   // Nudge "livraison gratuite" (barre + upsell), affiché en point relais où des frais s'appliquent
   const freeShipNudge = _isFreeShip ? '' : shipHtml;
-  const _effectiveShipping = (_isFreeShip || window._deliveryMode === 'pickup') ? 0 : shipping;
+  const _portBase = (_isFreeShip || window._deliveryMode === 'pickup') ? 0 : shipping;
+  const _effectiveShipping = _portBase + _fraisSupp;
   const _totalToPay = Math.max(0, subtotal - _discountAmt) + _effectiveShipping;
   const _promoLabel = LANG==='sv'?'Kampanjkod':LANG==='en'?'Promo code':'Code promo';
   const _promoApplyLabel = LANG==='sv'?'Tillämpa':LANG==='en'?'Apply':'Appliquer';
@@ -684,6 +704,16 @@ function _renderCartPage() {
   const _pickupOnlyHtml = cartHasPickupOnly ? `<div class="pickup-only-note">${LANG==='sv'?'Din korg innehåller en färskvara som bara kan hämtas på plats: hela beställningen blir Click &amp; Collect.':LANG==='en'?'Your cart contains a fresh item available for pickup only, so the whole order is Click &amp; Collect.':'Votre panier contient un produit frais à retirer sur place : toute la commande passe en Click &amp; Collect.'}<button type="button" onclick="_retirerProduitsRetrait()">${LANG==='sv'?(_pickupOnlyKeys.length>1?'Ta bort dessa varor för leverans':'Ta bort varan för leverans'):LANG==='en'?(_pickupOnlyKeys.length>1?'Remove these items to get delivery':'Remove this item to get delivery'):(_pickupOnlyKeys.length>1?'Retirer ces produits pour être livré':'Retirer ce produit pour être livré')}</button></div>` : '';
   window._pickupOnlyKeys = _pickupOnlyKeys;
 
+  /* Produits frais : pourquoi pas de point relais, ce que coûte la livraison,
+     et la sortie (retirer le produit) pour qui veut un point relais. */
+  const _fraisSuppTxt = fmtPrice((window.SD_SHIP && SD_SHIP.frais) || 6.99);
+  const _fraisNoteHtml = cartHasFrais ? `<div class="pickup-only-note">${LANG==='sv'
+    ? `Din varukorg innehåller en färskvara: den skickas inte till utlämningsställen. Den levereras hem till dig med Chronopost inom 24 h efter avsändning (tillägg för färskvaror ${_fraisSuppTxt}), eller hämtas i ateljén. Leveransadressen anges vid betalningen.`
+    : LANG==='en'
+    ? `Your cart contains a fresh product, which does not travel to pickup points. Chronopost delivers it to your home within 24 h of dispatch (fresh-product supplement ${_fraisSuppTxt}), or you collect it at the workshop. You enter the delivery address at payment.`
+    : `Votre panier contient un produit frais : il ne voyage pas en point relais. Chronopost vous le livre à domicile en 24 h après l’expédition (supplément produits frais de ${_fraisSuppTxt}), ou vous le retirez à l’atelier. L’adresse de livraison vous est demandée au paiement.`}<button type="button" onclick="_retirerProduitsFrais()">${LANG==='sv'?(_fraisKeys.length>1?'Ta bort dessa varor för att välja ett utlämningsställe':'Ta bort varan för att välja ett utlämningsställe'):LANG==='en'?(_fraisKeys.length>1?'Remove these items to choose a pickup point':'Remove this item to choose a pickup point'):(_fraisKeys.length>1?'Retirer ces produits pour choisir un point relais':'Retirer ce produit pour choisir un point relais')}</button></div>` : '';
+  const _homeShipLabel = fmtPrice(((_isFreeShip || subtotal >= freeThreshold) ? 0 : baseShipping) + ((window.SD_SHIP && SD_SHIP.frais) || 6.99));
+
   /* Click & Collect : où et comment, dès le choix (CGV art. livraison) */
   const _pickupInfoHtml = window._deliveryMode === 'pickup' ? `<div class="pickup-info">${LANG==='sv'?'Gratis upphämtning i vår ateljé i Étoile-sur-Rhône (Drôme). Vi kontaktar dig efter beställningen för att boka en tid.':LANG==='en'?'Free pickup at our workshop in Étoile-sur-Rhône (Drôme). We contact you after your order to book a time.':'Retrait gratuit à notre atelier d’Étoile-sur-Rhône (Drôme), sur rendez-vous : nous vous contactons après la commande pour fixer le créneau.'}</div>` : '';
 
@@ -694,9 +724,15 @@ function _renderCartPage() {
   const _promoOpen = !!(window._promoOpen || _promoInputVal || _promoMsgToShow);
   const _shipLineVal = window._deliveryMode === 'pickup'
     ? `<span style="color:var(--moss)">${LANG==='sv'?'Gratis':LANG==='en'?'Free':'Gratuit'}</span>`
-    : _effectiveShipping === 0 ? `<span style="color:var(--moss)">${LANG==='sv'?'Gratis':LANG==='en'?'Free':'Offerte'}</span>` : fmtPrice(_effectiveShipping);
+    : _portBase === 0 ? `<span style="color:var(--moss)">${LANG==='sv'?'Gratis':LANG==='en'?'Free':'Offerte'}</span>` : fmtPrice(_portBase);
   const _shipLineLbl = (LANG==='sv'?'Leverans':LANG==='en'?'Shipping':'Livraison')
-    + (window._deliveryMode === 'mondial_relay' && window._relayCarrierName ? ` <small style="color:var(--dust)">(${_sdAttr(window._relayCarrierName)})</small>` : '');
+    + (window._deliveryMode === 'mondial_relay' && window._relayCarrierName ? ` <small style="color:var(--dust)">(${_sdAttr(window._relayCarrierName)})</small>` : '')
+    + (_isFrais ? ` <small style="color:var(--dust)">(Chronopost 24 h)</small>` : '');
+  // Le supplément frais sur sa propre ligne : le client voit ce qui reste dû port offert.
+  const _fraisLineHtml = _isFrais ? `<div class="summary-line">
+          <span>${LANG==='sv'?'Tillägg för färskvaror':LANG==='en'?'Fresh-product supplement':'Supplément produits frais'}</span>
+          <span>${fmtPrice(_fraisSupp)}</span>
+        </div>` : '';
 
   root.innerHTML = `
     <div class="cart-page-layout">
@@ -714,14 +750,17 @@ function _renderCartPage() {
       <div class="cart-page-summary">
         <h2 class="summary-title" data-sv="Orderöversikt" data-fr="Récapitulatif" data-en="Order summary">${LANG==='sv'?'Orderöversikt':LANG==='en'?'Order summary':'Récapitulatif'}</h2>
         <div class="delivery-toggle" role="group" aria-label="${LANG==='sv'?'Leveranssätt':LANG==='en'?'Delivery method':'Mode de livraison'}">
-          <button type="button" class="dt-btn${window._deliveryMode==='mondial_relay'?' active':''}" aria-pressed="${window._deliveryMode==='mondial_relay'}"${cartHasPickupOnly?' disabled':''} onclick="setDeliveryMode('mondial_relay');renderCartPageFull()">
+          ${cartHasFrais ? `<button type="button" class="dt-btn${_isFrais?' active':''}" aria-pressed="${_isFrais}" onclick="setDeliveryMode('domicile_frais');renderCartPageFull()">
+            ${LANG==='sv'?'Chronopost hem':LANG==='en'?'Chronopost home':'Chronopost domicile'}<small>${_homeShipLabel} · 24 h</small>
+          </button>` : `<button type="button" class="dt-btn${window._deliveryMode==='mondial_relay'?' active':''}" aria-pressed="${window._deliveryMode==='mondial_relay'}"${cartHasPickupOnly?' disabled':''} onclick="setDeliveryMode('mondial_relay');renderCartPageFull()">
             ${LANG==='sv'?'Utlämningsställe':LANG==='en'?'Pickup point':'Point relais'}<small>${_relayShipLabel}</small>
-          </button>
+          </button>`}
           ${(window._relayCountry || _SD_PAYS) !== _SD_PAYS || !_SD_RETRAIT ? '' : `<button type="button" class="dt-btn${window._deliveryMode==='pickup'?' active':''}" aria-pressed="${window._deliveryMode==='pickup'}" onclick="setDeliveryMode('pickup');renderCartPageFull()">
             Click &amp; Collect<small>${LANG==='sv'?'Gratis · Drôme':LANG==='en'?'Free · Drôme':'Gratuit · Drôme'}</small>
           </button>`}
         </div>
         ${_pickupOnlyHtml}
+        ${_fraisNoteHtml}
         ${_pickupInfoHtml}
         ${relayPickerHtml}
         <div class="summary-line">
@@ -733,7 +772,8 @@ function _renderCartPage() {
           <span>${_shipLineLbl}</span>
           <span>${_shipLineVal}</span>
         </div>
-        ${window._deliveryMode==='mondial_relay' ? freeShipNudge : ''}
+        ${_fraisLineHtml}
+        ${(window._deliveryMode==='mondial_relay' || _isFrais) ? freeShipNudge : ''}
         <div class="promo-section">
           ${_promoOpen ? `
           <label class="ck-label" for="promo-input">${_promoLabel}</label>
@@ -788,6 +828,13 @@ function _renderCartPage() {
 /* Retire les produits « retrait uniquement » et rend la livraison possible */
 function _retirerProduitsRetrait() {
   (window._pickupOnlyKeys || []).forEach(k => removeItem(k));
+  setDeliveryMode('mondial_relay');
+  renderCartPageFull();
+}
+
+/* Retire les produits frais : le point relais redevient possible */
+function _retirerProduitsFrais() {
+  (window._fraisKeys || []).forEach(k => removeItem(k));
   setDeliveryMode('mondial_relay');
   renderCartPageFull();
 }
@@ -1114,7 +1161,7 @@ async function doCheckout() {
       window._selectedRelay = null;
       renderCartPageFull();
       document.querySelector('.relay-picker')?.scrollIntoView({ block: 'center' });
-    } else if (data.error && /^(BAD_EMAIL|PICKUP_ONLY|COUNTRY_NOT_SERVED|BAD_QUANTITY)$/.test(data.code || '')) {
+    } else if (data.error && /^(BAD_EMAIL|PICKUP_ONLY|COUNTRY_NOT_SERVED|BAD_QUANTITY|FRESH_HOME_ONLY|FRESH_DELIVERY_ONLY)$/.test(data.code || '')) {
       // Refus métier : le serveur envoie déjà le message dans la langue du client.
       _showPayError(String(data.error));
     } else {
